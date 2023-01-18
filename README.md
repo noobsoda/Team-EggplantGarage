@@ -12,3 +12,10 @@
 
 - Figma study
 - 프로토타입 제작
+
+## 2023.01.18
+
+- Figma Design System 적용
+- Prototype 제작
+- 구매방식 확정
+  ![DesignSystem](./img/Prototype_20230118.png)
