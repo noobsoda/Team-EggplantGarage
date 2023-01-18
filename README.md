@@ -110,3 +110,7 @@
 - jpa db 테이블에 맞춰서 Entity 작성
   유저 Create 테스트
   ![Jpa DB](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/ad95aa10da16508c511ba227e6ec79d9/image.png)
+- JPA Auditing 적용 및 UserController에 Logger 적용
+
+- **JPA Auditing으로 생성/수정 시간 자동 저장하기 적용**
+  https://cceeun.tistory.com/162

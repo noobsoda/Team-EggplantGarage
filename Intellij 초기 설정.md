@@ -27,6 +27,3 @@ VALUE : Bearer JWT Token
 
 헤더 이름은 AUTHORIZATION이여야 하고
 VALUE 앞에 Bearer 를 붙여야 한다.
-
-- **JPA Auditing으로 생성/수정 시간 자동 저장하기 적용**
-  https://cceeun.tistory.com/162
