@@ -15,3 +15,9 @@
 1. React 학습
 2. 기능 명세서 작성
 3. SpringBoot, Gradle, SpringSecurity, JPA, JWT 학습
+
+## 2023-01-18
+1. 기능 명세서 작성
+2. Flutter 학습
+3. 개발환경 설정
+4. skeleton code 학습
