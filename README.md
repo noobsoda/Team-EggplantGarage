@@ -143,3 +143,14 @@ let [name, nameUpdate] = useState(["남기성", "A806"]);
 
 - https://aljjabaegi.tistory.com/659
 - https://www.inflearn.com/course/%EC%8A%A4%ED%94%84%EB%A7%81%EB%B6%80%ED%8A%B8-jwt/
+
+
+
+# 2023.01.18 프로젝트 업데이트
+
+- 기능명세서(Main)  develop
+
+  ![image-20230118174914708](README.assets/image-20230118174757567.png)
+
+- 개발환경 설정 (Node.js 16.19.0, React 17)
+- skeleton code 분석 및 학습
