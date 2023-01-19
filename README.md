@@ -19,3 +19,9 @@
 - Prototype 제작
 - 구매방식 확정
   ![DesignSystem](./img/Prototype_20230118.png)
+
+## 2023.01.19
+
+- 정기 팀미팅
+- Prototype 1차 완성
+- React 학습시작
