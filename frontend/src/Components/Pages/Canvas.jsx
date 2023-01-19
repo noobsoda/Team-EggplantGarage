@@ -4,14 +4,16 @@ import { useState } from "react";
 export default function Canvas() {
   const canvasRef = useRef(null);
   const [ctx, setCtx] = useState(null);
+  const [pos, setPos] = useState([0, 0]);
   const [isdrawing, setIsDrawing] = useState(false);
 
   useEffect(() => {
     const canvas = canvasRef.current; //canvas를 useRef로 가져온다.
-
+    canvas.width = 400;
+    canvas.height = 600;
     const context = canvas.getContext("2d");
 
-    context.strokeStyle = "black";
+    context.strokeStyle = "red";
     context.lineWidth = 2.4;
 
     canvasRef.current = context;
@@ -23,6 +25,9 @@ export default function Canvas() {
     setIsDrawing(true);
 
     ctx.beginPath();
+
+    setPos([offsetX, offsetY]);
+
     ctx.moveTo(offsetX, offsetY);
   }
 
@@ -30,13 +35,17 @@ export default function Canvas() {
     setIsDrawing(false);
   }
 
-  function move(e) {
+  function drawSquare(e) {
     const { offsetX, offsetY } = e.nativeEvent;
-    if (isdrawing) {
-      ctx.lineTo(offsetX, offsetY);
-      ctx.stroke();
-      console.log(`${offsetX} ${offsetY}`);
-    }
+    if (!isdrawing) return;
+    ctx.clearRect(
+      0,
+      0,
+      canvasRef.current.canvas.clientWidth,
+      canvasRef.current.canvas.clientHeight
+    );
+    ctx.strokeStyle = "red";
+    ctx.strokeRect(pos[0], pos[1], offsetX - pos[0], offsetY - pos[1]);
   }
   return (
     <>
@@ -44,7 +53,7 @@ export default function Canvas() {
         ref={canvasRef}
         onMouseUp={finishDrawing}
         onMouseDown={startDrawing}
-        onMouseMove={move}
+        onMouseMove={drawSquare}
       ></canvas>
     </>
   );
