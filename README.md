@@ -114,3 +114,11 @@
 
 - **JPA Auditing으로 생성/수정 시간 자동 저장하기 적용**
   https://cceeun.tistory.com/162
+
+## 0119 작업내용
+
+- API 명세서 수정
+- 회원관리 email, nickname 중복 체크 Rest APi 추가
+- React 통합 빌드 테스트 성공
+- 웹 소켓 참고할 곳
+  https://learnote-dev.com/java/Spring-%EA%B2%8C%EC%8B%9C%ED%8C%90-API-%EB%A7%8C%EB%93%A4%EA%B8%B0-webSocket%EC%9C%BC%EB%A1%9C-%EC%B1%84%ED%8C%85%EC%84%9C%EB%B2%84-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0/
