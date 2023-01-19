@@ -21,14 +21,14 @@ import java.time.LocalDateTime;
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userNo = null;
+    private Long userId = null;
     @Column(unique = true)
-    private String userId;
+    private String userEmail;
     private String userName;
     private String userNickname;
-    private String phone;
-    private String bank;
-    private String account;
+    private String userPhone;
+    private String userBank;
+    private String userAccount;
     @CreatedDate
     private LocalDateTime createAt;
     private String refreshToken;
