@@ -154,3 +154,15 @@ let [name, nameUpdate] = useState(["남기성", "A806"]);
 
 - 개발환경 설정 (Node.js 16.19.0, React 17)
 - skeleton code 분석 및 학습
+
+
+
+## 2023.01.19 프로젝트 업데이트
+
+- 정기 팀미팅
+
+- API 명세서 작성
+
+  ![image-20230119170116829](README.assets/image-20230119170116829.png)
+
+- skeleton code 분석 및 학습
