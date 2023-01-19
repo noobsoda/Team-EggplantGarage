@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
+
+import java.util.Optional;
 //import com.ssafy.db.repository.UserRepositorySupport;
 
 /**
@@ -47,8 +49,24 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getUserByUserEmail(String userEmail) {
 		// 디비에 유저 정보 조회 (userId 를 통한 조회).
-		User user = userRepository.findByUserEmail(userEmail).get();
-		return user;
+		//User user = userRepository.findByUserEmail(userEmail).get();
+		Optional<User> user = userRepository.findByUserEmail(userEmail);
+		if(user.isPresent()){
+			return user.get();
+		}else{
+			return null;
+		}
+
+	}
+
+	@Override
+	public User getUserByUserNickname(String userNickname) {
+		Optional<User> user = userRepository.findByUserNickname(userNickname);
+		if(user.isPresent()){
+			return user.get();
+		}else{
+			return null;
+		}
 	}
 
 	@Override

@@ -25,6 +25,7 @@ public class User{
     @Column(unique = true)
     private String userEmail;
     private String userName;
+    @Column(unique = true)
     private String userNickname;
     private String userPhone;
     private String userBank;

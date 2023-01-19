@@ -77,6 +77,40 @@ public class UserController {
 
 		return ResponseEntity.status(200).body(UserRes.of(user));
 	}
+	@GetMapping("/email/{userEmail}")
+	@ApiOperation(value = "사용가능한 이메일 확인", notes = "입력한 이메일이 사용 가능한지 확인한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "사용 가능"),
+			@ApiResponse(code = 409, message = "사용자 존재"),
+	})
+	//유저 이메일 중복이 있는지 확인하는 메소드
+	public ResponseEntity<? extends BaseResponseBody> checkUserEmail(@PathVariable("userEmail") String userEmail) {
+
+		User user = userService.getUserByUserEmail(userEmail);
+		if(user != null){
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 사용자 ID입니다."));
+		}else{
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "현재 ID는 사용 가능합니다"));
+		}
+
+	}
+	@GetMapping("/nickname/{userNickname}")
+	@ApiOperation(value = "사용가능한 닉네임 확인", notes = "입력한 닉네임이 사용 가능한지 확인한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "사용 가능"),
+			@ApiResponse(code = 409, message = "사용자 존재"),
+	})
+	//유저 닉네임 중복이 있는지 확인하는 메소드
+	public ResponseEntity<? extends BaseResponseBody> checkUserNickname(@PathVariable("userNickname") String userNickname) {
+
+		User user = userService.getUserByUserNickname(userNickname);
+		if(user != null){
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 사용자 닉네임입니다."));
+		}else{
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "현재 닉네임은 사용 가능합니다"));
+		}
+
+	}
 
 	@DeleteMapping()
 	@ApiOperation(value = "회원 본인 정보 삭제", notes = "로그인한 회원 본인의 정보를 삭제한다.")
