@@ -51,12 +51,12 @@ version '1.0-SNAPSHOT'
 sourceCompatibility = '1.8'
 
 //통합 빌드 느려서 잠깐 꺼놓기
-/*node {
+node {
     download = true
     version = '16.19.0'
     // Set the work directory where node_modules should be located
     nodeModulesDir = file("${project.projectDir}/../frontend")
-}*/
+}
 
 configurations {
     providedRuntime
@@ -79,7 +79,8 @@ configurations {
 //통합 빌드 느려서 잠깐 꺼놓기
 /*processResources.dependsOn 'webpack'*/
 
-def frontendDir = "$projectDir/src/main/frontend"
+
+def frontendDir = "$projectDir/../frontend"
 
 sourceSets {
     main {
