@@ -173,3 +173,9 @@ let [name, nameUpdate] = useState(["남기성", "A806"]);
 
 - Skeleton code 분석 및 학습
 - 메인화면 기능 구현에 대한 학습
+
+- 와이어프레임
+
+  ![image-20230120155142957](README.assets/image-20230120155142957.png)
+
+![image-20230120155306148](README.assets/image-20230120155306148.png)
