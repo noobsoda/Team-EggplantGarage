@@ -166,3 +166,10 @@ let [name, nameUpdate] = useState(["남기성", "A806"]);
   ![image-20230119170116829](README.assets/image-20230119170116829.png)
 
 - skeleton code 분석 및 학습
+
+
+
+## 2023.01.20 프로젝트 업데이트
+
+- Skeleton code 분석 및 학습
+- 메인화면 기능 구현에 대한 학습
