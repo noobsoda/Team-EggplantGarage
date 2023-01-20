@@ -1,6 +1,6 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-buildscript{
+buildscript {
     ext {
         springBootVer = '2.4.5'
         querydslVer = '4.4.0'
@@ -73,18 +73,17 @@ configurations {
 // npm install
 
 
-
-
 // processResources is a Java task. Run the webpack bundling before this task using the 'build' task in the package.json
 //통합 빌드 느려서 잠깐 꺼놓기
 /*processResources.dependsOn 'webpack'*/
 
-
+// 리액트 통합 빌드 [시작]
 def frontendDir = "$projectDir/../frontend"
 
 sourceSets {
     main {
-        resources { srcDirs = ["$projectDir/src/main/resources"]
+        resources {
+            srcDirs = ["$projectDir/src/main/resources"]
         }
     }
 }
@@ -97,8 +96,8 @@ task installReact(type: Exec) {
     group = BasePlugin.BUILD_GROUP
     if (System.getProperty('os.name').toLowerCase(Locale.ROOT).contains('windows')) {
         commandLine "npm.cmd", "audit", "fix"
-        commandLine 'npm.cmd', 'install' }
-    else {
+        commandLine 'npm.cmd', 'install'
+    } else {
         commandLine "npm", "audit", "fix" commandLine 'npm', 'install'
     }
 }
@@ -121,6 +120,8 @@ task copyReactBuildFiles(type: Copy) {
     into "$projectDir/src/main/resources/dist"
 }
 
+//리액트 통합 빌드 [끝]
+
 //set build time and inject value to application.properties
 def buildTime() {
     def date = new Date()
@@ -139,9 +140,9 @@ processResources {
         project.properties.findAll().each {
             prop ->
                 if (prop.value != null) {
-                    filter(ReplaceTokens, tokens: [ (prop.key): String.valueOf(prop.value)])
-                    filter(ReplaceTokens, tokens: [ ('project.' + prop.key): String.valueOf(prop.value)])
-                    filter(ReplaceTokens, tokens: [ ('project.ext.' + prop.key): String.valueOf(prop.value)])
+                    filter(ReplaceTokens, tokens: [(prop.key): String.valueOf(prop.value)])
+                    filter(ReplaceTokens, tokens: [('project.' + prop.key): String.valueOf(prop.value)])
+                    filter(ReplaceTokens, tokens: [('project.ext.' + prop.key): String.valueOf(prop.value)])
                 }
         }
     }
@@ -180,6 +181,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE")
+    implementation("org.apache.commons:commons-lang3:3.8.1")
     testImplementation("org.springframework.security:spring-security-test")
     annotationProcessor("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("mysql:mysql-connector-java")
@@ -221,7 +223,7 @@ dependencies {
     testImplementation("com.jayway.jsonpath:json-path:2.4.0")
 
     implementation("com.auth0:java-jwt:3.10.3")
-    
+
     implementation("io.springfox:springfox-swagger2:3.0.0")
     implementation("io.springfox:springfox-swagger-ui:3.0.0")
     implementation("io.springfox:springfox-data-rest:3.0.0")

@@ -36,6 +36,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
@@ -44,31 +45,31 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    		registry.addResourceHandler("/resources/**")
-    				.addResourceLocations("/WEB-INF/resources/");
-    		
-    		registry.addResourceHandler("swagger-ui.html")
-    				.addResourceLocations("classpath:/META-INF/resources/");
+        registry.addResourceHandler("/resources/**")
+                .addResourceLocations("/WEB-INF/resources/");
 
-    		registry.addResourceHandler("/webjars/**")
-    				.addResourceLocations("classpath:/META-INF/resources/webjars/");
-    		
-    		/*
-    		 * 
-    		 * Front-end에서 참조하는 URL을 /dist로 매핑
-    		 * 
-    		 */
+        registry.addResourceHandler("swagger-ui.html")
+                .addResourceLocations("classpath:/META-INF/resources/");
+
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
+
+        /*
+         *
+         * Front-end에서 참조하는 URL을 /dist로 매핑
+         *
+         */
         registry.addResourceHandler("/static/css/**")
-        			.addResourceLocations("classpath:/dist/static/css/");
-        	registry.addResourceHandler("/static/fonts/**")
-        			.addResourceLocations("classpath:/dist/static/fonts/");
+                .addResourceLocations("classpath:/dist/static/css/");
+        registry.addResourceHandler("/static/fonts/**")
+                .addResourceLocations("classpath:/dist/static/fonts/");
         registry.addResourceHandler("/static/icons/**")
-				.addResourceLocations("classpath:/dist/static/icons/");
+                .addResourceLocations("classpath:/dist/static/icons/");
         registry.addResourceHandler("/static/img/**")
-			.addResourceLocations("classpath:/dist/static/img/");
+                .addResourceLocations("classpath:/dist/static/img/");
         registry.addResourceHandler("/static/js/**")
-				.addResourceLocations("classpath:/dist/static/js/");
-        
+                .addResourceLocations("classpath:/dist/static/js/");
+
     }
 
     public Filter requestLoggingFilter() {
@@ -87,9 +88,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registration.addUrlPatterns("/api/*");
         return registration;
     }
+
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    Logger logger(InjectionPoint injectionPoint){
+    Logger logger(InjectionPoint injectionPoint) {
         return LoggerFactory.getLogger((injectionPoint.getMethodParameter().getContainingClass()));
     }
 }

@@ -25,17 +25,17 @@ import com.ssafy.db.entity.User;
  * 요청 헤더에 jwt 토큰이 있는 경우, 토큰 검증 및 인증 처리 로직 정의.
  */
 public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
-	private UserService userService;
-	
-	public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
-		super(authenticationManager);
-		this.userService = userService;
-	}
+    private UserService userService;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		// Read the Authorization header, where the JWT Token should be
+    public JwtAuthenticationFilter(AuthenticationManager authenticationManager, UserService userService) {
+        super(authenticationManager);
+        this.userService = userService;
+    }
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+        // Read the Authorization header, where the JWT Token should be
         String header = request.getHeader(JwtTokenUtil.HEADER_STRING);
 
         // If header does not contain BEARER or is null delegate to Spring impl and exit
@@ -43,7 +43,7 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             filterChain.doFilter(request, response);
             return;
         }
-        
+
         try {
             // If header is present, try grab user principal from database and perform authorization
             Authentication authentication = getAuthentication(request);
@@ -53,11 +53,11 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             ResponseBodyWriteUtil.sendError(request, response, ex);
             return;
         }
-        
+
         filterChain.doFilter(request, response);
-	}
-	
-	@Transactional(readOnly = true)
+    }
+
+    @Transactional(readOnly = true)
     public Authentication getAuthentication(HttpServletRequest request) throws Exception {
         String token = request.getHeader(JwtTokenUtil.HEADER_STRING);
         // 요청 헤더에 Authorization 키값에 jwt 토큰이 포함된 경우에만, 토큰 검증 및 인증 처리 로직 실행.
@@ -67,19 +67,19 @@ public class JwtAuthenticationFilter extends BasicAuthenticationFilter {
             JwtTokenUtil.handleError(token);
             DecodedJWT decodedJWT = verifier.verify(token.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
             String userEmail = decodedJWT.getSubject();
-            
+
             // Search in the DB if we find the user by token subject (username)
             // If so, then grab user details and create spring auth token using username, pass, authorities/roles
             if (userEmail != null) {
-                    // jwt 토큰에 포함된 계정 정보(userId) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
-            		User user = userService.getUserByEmail(userEmail);
-                if(user != null) {
-                        // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
-                		SsafyUserDetails userDetails = new SsafyUserDetails(user);
-                		UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(userEmail,
-                				null, userDetails.getAuthorities());
-                		jwtAuthentication.setDetails(userDetails);
-                		return jwtAuthentication;
+                // jwt 토큰에 포함된 계정 정보(userId) 통해 실제 디비에 해당 정보의 계정이 있는지 조회.
+                User user = userService.getUserByEmail(userEmail);
+                if (user != null) {
+                    // 식별된 정상 유저인 경우, 요청 context 내에서 참조 가능한 인증 정보(jwtAuthentication) 생성.
+                    SsafyUserDetails userDetails = new SsafyUserDetails(user);
+                    UsernamePasswordAuthenticationToken jwtAuthentication = new UsernamePasswordAuthenticationToken(userEmail,
+                            null, userDetails.getAuthorities());
+                    jwtAuthentication.setDetails(userDetails);
+                    return jwtAuthentication;
                 }
             }
             return null;

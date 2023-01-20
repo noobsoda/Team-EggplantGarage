@@ -6,7 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class WebController {
 
-    @GetMapping(value =  {"", "/test", "/notice","/list", "/introduce", "/smallbus", "/limousine", "/bigbus", "/request", "/search", "/search/my"})
+    //리액트 url 라우팅 설정
+    @GetMapping(value = {"", "/test", "/notice", "/list", "/introduce", "/smallbus", "/limousine", "/bigbus", "/request", "/search", "/search/my"})
     public String forward() {
         return "forward:/index.html";
     }
