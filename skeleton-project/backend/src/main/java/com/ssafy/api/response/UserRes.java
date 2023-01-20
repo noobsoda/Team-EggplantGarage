@@ -17,17 +17,17 @@ import java.time.LocalDateTime;
 @ApiModel("UserResponse")
 public class UserRes{
 	@ApiModelProperty(name="User Email")
-	String userEmail;
+	String email;
 	@ApiModelProperty(name="User Name")
-	String userName;
+	String name;
 	@ApiModelProperty(name="User Nickname")
-	String userNickname;
-	@ApiModelProperty(name="User Phone")
-	String userPhone;
-	@ApiModelProperty(name="User Bank")
-	String userBank;
-	@ApiModelProperty(name="User Accound")
-	String userAccount;
+	String nickname;
+	@ApiModelProperty(name="phoneNumber")
+	String phoneNumber;
+	@ApiModelProperty(name="bankName")
+	String bankName;
+	@ApiModelProperty(name="bankAddress")
+	String bankAddress;
 	@ApiModelProperty(name="User CreateAt")
 	LocalDateTime createAt;
 
@@ -35,13 +35,13 @@ public class UserRes{
 	
 	public static UserRes of(User user) {
 		UserRes res = new UserRes();
-		res.setUserEmail(user.getUserEmail());
-		res.setUserName(user.getUserName());
-		res.setUserNickname(user.getUserNickname());
-		res.setUserPhone(user.getUserPhone());
-		res.setUserBank(user.getUserBank());
-		res.setUserAccount(user.getUserAccount());
-		res.setCreateAt(user.getCreateAt());
+		res.setEmail(user.getEmail());
+		res.setName(user.getName());
+		res.setNickname(user.getNickname());
+		res.setPhoneNumber(user.getPhoneNumber());
+		res.setBankName(user.getBankName());
+		res.setBankAddress(user.getBankAddress());
+		res.setCreateAt(user.getCreatedAt());
 
 		return res;
 	}

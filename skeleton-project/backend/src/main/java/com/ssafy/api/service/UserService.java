@@ -9,9 +9,9 @@ import com.ssafy.db.entity.User;
  */
 public interface UserService {
 	User createUser(UserRegisterPostReq userRegisterInfo);
-	User getUserByUserEmail(String userEmail);
+	User getUserByEmail(String email);
 
-	User getUserByUserNickname(String userNickname);
-	boolean deleteUser(String userId, UserDeleteReq userDeleteReq);
+	User getUserByNickname(String nickname);
+	boolean deleteUserByEmail(String email, UserDeleteReq userDeleteReq);
 
 }

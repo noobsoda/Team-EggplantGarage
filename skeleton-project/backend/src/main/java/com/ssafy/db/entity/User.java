@@ -18,23 +18,22 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @EntityListeners(AuditingEntityListener.class)
-public class User{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId = null;
-    @Column(unique = true)
-    private String userEmail;
-    private String userName;
-    @Column(unique = true)
-    private String userNickname;
-    private String userPhone;
-    private String userBank;
-    private String userAccount;
-    @CreatedDate
-    private LocalDateTime createAt;
-    private String refreshToken;
+public class User extends BaseEntity {
 
+    @Column(unique = true)
+    private String email;
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String userPassword;
+    private String password;
+    private String name;
+    @Column(unique = true)
+    private String nickname;
+    private String phoneNumber;
+    private String bankName;
+    private String bankAddress;
+    @CreatedDate
+    private LocalDateTime createdAt;
+    private String refreshToken;
+
+
 }

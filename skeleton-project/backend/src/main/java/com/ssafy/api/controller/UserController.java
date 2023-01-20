@@ -73,20 +73,20 @@ public class UserController {
 		 */
 		SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
 		String userEmail = userDetails.getUsername();
-		User user = userService.getUserByUserEmail(userEmail);
+		User user = userService.getUserByEmail(userEmail);
 
 		return ResponseEntity.status(200).body(UserRes.of(user));
 	}
-	@GetMapping("/email/{userEmail}")
+	@GetMapping("/email/{email}")
 	@ApiOperation(value = "사용가능한 이메일 확인", notes = "입력한 이메일이 사용 가능한지 확인한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "사용 가능"),
 			@ApiResponse(code = 409, message = "사용자 존재"),
 	})
 	//유저 이메일 중복이 있는지 확인하는 메소드
-	public ResponseEntity<? extends BaseResponseBody> checkUserEmail(@PathVariable("userEmail") String userEmail) {
+	public ResponseEntity<? extends BaseResponseBody> checkUserEmail(@PathVariable("email") String email) {
 
-		User user = userService.getUserByUserEmail(userEmail);
+		User user = userService.getUserByEmail(email);
 		if(user != null){
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 사용자 ID입니다."));
 		}else{
@@ -94,16 +94,16 @@ public class UserController {
 		}
 
 	}
-	@GetMapping("/nickname/{userNickname}")
+	@GetMapping("/nickname/{nickname}")
 	@ApiOperation(value = "사용가능한 닉네임 확인", notes = "입력한 닉네임이 사용 가능한지 확인한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "사용 가능"),
 			@ApiResponse(code = 409, message = "사용자 존재"),
 	})
 	//유저 닉네임 중복이 있는지 확인하는 메소드
-	public ResponseEntity<? extends BaseResponseBody> checkUserNickname(@PathVariable("userNickname") String userNickname) {
+	public ResponseEntity<? extends BaseResponseBody> checkUserNickname(@PathVariable("nickname") String nickname) {
 
-		User user = userService.getUserByUserNickname(userNickname);
+		User user = userService.getUserByNickname(nickname);
 		if(user != null){
 			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 사용자 닉네임입니다."));
 		}else{
@@ -125,7 +125,7 @@ public class UserController {
 
 		SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
 		String userEmail = userDetails.getUsername();
-		if (userService.deleteUser(userEmail, userDeleteReq)) {
+		if (userService.deleteUserByEmail(userEmail, userDeleteReq)) {
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 		} else {
 			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));

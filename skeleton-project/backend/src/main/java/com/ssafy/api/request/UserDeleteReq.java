@@ -11,5 +11,5 @@ import lombok.Setter;
 @ApiModel("UserDeleteRequest")
 public class UserDeleteReq {
     @ApiModelProperty(name="유저 Password", example="your_password")
-    String userPassword;
+    String password;
 }
