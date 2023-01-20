@@ -122,3 +122,9 @@
 - React 통합 빌드 테스트 성공
 - 웹 소켓 참고할 곳
   https://learnote-dev.com/java/Spring-%EA%B2%8C%EC%8B%9C%ED%8C%90-API-%EB%A7%8C%EB%93%A4%EA%B8%B0-webSocket%EC%9C%BC%EB%A1%9C-%EC%B1%84%ED%8C%85%EC%84%9C%EB%B2%84-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0/
+
+## 0120 작업내용
+
+- 통합 빌드 수정 완료 및 리소스 참조 수정
+- 회원 정보 Patch 추가
+- jwt refresh token 알아보기
