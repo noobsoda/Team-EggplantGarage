@@ -134,3 +134,4 @@
 - Kurento 미디어 서버 개인 ec2에 올리기 성공
 - WebRTC 튜토리얼 코드 실행 성공
   ![성공](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/b0f964ddfc4d6d4a91fd7507c8f15ed3/image.png)
+  - 참고 URL https://scshim.tistory.com/6
