@@ -4,7 +4,7 @@ const fontSize = {
 };
 const color = {
   red: "#D3385A",
-  purple: "#422657",
+  purple: "#693FAA",
   green: "#008489",
   darkgrey: "#484848",
   grey: "#979797",
