@@ -135,3 +135,8 @@
 - WebRTC 튜토리얼 코드 실행 성공
   ![성공](https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/b0f964ddfc4d6d4a91fd7507c8f15ed3/image.png)
   - 참고 URL https://scshim.tistory.com/6
+
+## 0125 작업내용
+
+- 중간발표 PPT 작성(기술 스택, 피드백)
+- Docker에 OpenVidu 설치 및 튜토리얼 소스 실행
