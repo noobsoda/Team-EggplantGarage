@@ -30,13 +30,8 @@ public class LiveController {
     @GetMapping("/categories")
     @ApiOperation(value = "카테고리 전원 조회", notes = "모든 방의 카테고리를 조회한다.")
     @ApiResponses({@ApiResponse(code = 200, message = "성공"), @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "사용자 없음"), @ApiResponse(code = 500, message = "서버 오류")})
-    public ResponseEntity<UserRes> getUserInfo() {
-        /**
-         * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저
-         * 식별.
-         * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access
-         * Denied"}) 발생.
-         */
+    public ResponseEntity<UserRes> getCategoryInfo() {
+
 
 
 
