@@ -3,6 +3,7 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.ReviewWritePostReq;
 import com.ssafy.db.entity.Review;
 import com.ssafy.db.repository.ReviewRepository;
+import com.ssafy.db.repository.ReviewRepositorySupport;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,23 @@ public class ReviewServiceImpl implements ReviewService{
     @Autowired
     ReviewRepository reviewRepository;
 
+    @Autowired
+    ReviewRepositorySupport reviewRepositorySupport;
+
     @Override
     public Review writeReview(ReviewWritePostReq reviewWriteInfo) {
         Review review = new Review();
-        review.setProduct_id(reviewWriteInfo.getProduct_id());
+        review.setProductId(reviewWriteInfo.getProductId());
         review.setContent(reviewWriteInfo.getContent());
         review.setScore(reviewWriteInfo.getScore());
-        review.set_seller(reviewWriteInfo.is_seller());
-        review.set_visible(reviewWriteInfo.is_visible());
+        review.setSeller(reviewWriteInfo.isSeller());
+        review.setVisible(reviewWriteInfo.isVisible());
         return reviewRepository.save(review);
+    }
+
+    @Override
+    public Review getReviewByProductId(long productId) {
+        Review review = reviewRepositorySupport.findReviewByProductId(productId).get();
+        return review;
     }
 }

@@ -12,7 +12,7 @@ public class ReviewRepositorySupport {
     private JPAQueryFactory jpaQueryFactory;
     QReview qReview = QReview.review;
 
-    public Optional<Review> findReviewById(long id) {
+    public Optional<Review> findReviewByProductId(long id) {
         Review review = jpaQueryFactory.select(qReview).from(qReview)
                 .where(qReview.id.eq(id)).fetchOne();
         if(review == null) return Optional.empty();

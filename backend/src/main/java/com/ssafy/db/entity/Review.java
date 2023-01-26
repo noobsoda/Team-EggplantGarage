@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 @Setter
 @EntityListeners(AuditingEntityListener.class)
 public class Review extends BaseEntity {
-    private long product_id;
+    private long productId;
     private String content;
     private double score;
-    private boolean is_seller;
-    private boolean is_visible;
-    private LocalDateTime created_at;
+    private boolean isSeller;
+    private boolean isVisible;
+    private LocalDateTime createdAt;
 }

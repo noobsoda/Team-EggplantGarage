@@ -5,4 +5,6 @@ import com.ssafy.db.entity.Review;
 
 public interface ReviewService {
     Review writeReview(ReviewWritePostReq review);
+
+    Review getReviewByProductId(long productId);
 }
