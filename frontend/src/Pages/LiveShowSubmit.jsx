@@ -1,5 +1,5 @@
 import React from "react";
-import BigButton from "../Atoms/Buttons/BigButtonColor";
+import BigBtn from "../Atoms/Buttons/BigBtn";
 
 export default function LiveShowSubmit() {
   function test() {
@@ -7,7 +7,7 @@ export default function LiveShowSubmit() {
   }
   return (
     <div>
-      <BigButton name="NEXT" buttonClick={test}></BigButton>
+      <BigBtn name="NEXT" buttonClick={test}></BigBtn>
     </div>
   );
 }

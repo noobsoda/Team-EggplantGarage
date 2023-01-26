@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const ExtraSmallButton = styled.button`
+const StyledExtraSmallButton = styled.button`
   width: 64px;
   height: 24px;
   border-radius: 8px;
@@ -9,10 +9,10 @@ const ExtraSmallButton = styled.button`
   color: ${({ theme }) => theme.color.white};
 `;
 
-export default function ExtraSmallButtonColor({ name, buttonClick }) {
+export default function ExtraSmallButton({ name, buttonClick }) {
   return (
-    <ExtraSmallButton className="body2-bold" onClick={buttonClick}>
+    <StyledExtraSmallButton className="body2-bold" onClick={buttonClick}>
       {name}
-    </ExtraSmallButton>
+    </StyledExtraSmallButton>
   );
 }

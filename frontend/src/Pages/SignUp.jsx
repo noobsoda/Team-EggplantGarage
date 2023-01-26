@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import BigButton from "../Atoms/Buttons/BigButtonColor";
+import BigBtn from "../Atoms/Buttons/BigBtn";
 
 export default function Main() {
   const navigate = useNavigate();
@@ -10,7 +10,7 @@ export default function Main() {
   return (
     <div>
       회원가입
-      <BigButton name="이메일로 가입하기" buttonClick={goToEmail}></BigButton>
+      <BigBtn name="이메일로 가입하기" buttonClick={goToEmail}></BigBtn>
     </div>
   );
 }
