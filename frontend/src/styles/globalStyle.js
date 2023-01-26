@@ -107,7 +107,13 @@ const GlobalStyle = createGlobalStyle`
         font-size: 12px;
         line-height: 16px;
     }
-
+    .tapbar{
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 400;
+        font-size: 10px;
+        line-height: 16px;
+    }
     .body2-bold{
         font-family: 'Inter';
         font-style: normal;
