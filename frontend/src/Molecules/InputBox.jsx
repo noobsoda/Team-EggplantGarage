@@ -1,5 +1,5 @@
 import React from "react";
-import BigInput from "../Atoms/Inputs/BigInputBox";
+import BigInput from "../Atoms/Inputs/BigInput";
 import RedParagraph from "../Atoms/Text/RedParagraph";
 
 export default function InputBox({ placehold, text, isCheck }) {

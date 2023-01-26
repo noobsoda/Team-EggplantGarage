@@ -6,7 +6,7 @@ const StyledBox = styled.div`
   width: 360px;
 `;
 
-export default function ProductSubmit() {
+export default function ProductSubmitBox() {
   return (
     <StyledBox>
       <div>

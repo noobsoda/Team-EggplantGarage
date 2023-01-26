@@ -13,6 +13,6 @@ const StyledInput = styled.input`
   }
 `;
 
-export default function CheckBox({ boxId }) {
+export default function Check({ boxId }) {
   return <StyledInput id={boxId} type="checkbox" />;
 }

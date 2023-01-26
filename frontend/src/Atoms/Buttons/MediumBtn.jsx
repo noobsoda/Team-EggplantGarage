@@ -1,18 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledButton = styled.button`
-  width: 80px;
+const StyledMediumBtn = styled.button`
+  width: 136px;
   height: 40px;
   border-radius: 8px;
   background-color: ${({ theme }) => theme.color.red};
   color: ${({ theme }) => theme.color.white};
 `;
 
-export default function SmallStrokeButton({ name, buttonClick }) {
+export default function MediumBtn({ name, buttonClick }) {
   return (
-    <StyledButton className="body1-header" onClick={buttonClick}>
+    <StyledMediumBtn className="body1-header" onClick={buttonClick}>
       {name}
-    </StyledButton>
+    </StyledMediumBtn>
   );
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import CategoryButton from "../Molecules/CategoryButton";
+import CategoryButton from "../Molecules/CategoryBtn";
 import Select from "../Atoms/Select/BigSelect";
 export default function CategoryBox() {
   return (

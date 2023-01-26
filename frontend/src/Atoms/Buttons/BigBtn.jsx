@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const BigButton = styled.button`
+const StyledBigBtn = styled.button`
   width: 280px;
   height: 40px;
   border-radius: 8px;
@@ -9,10 +9,10 @@ const BigButton = styled.button`
   color: ${({ theme }) => theme.color.white};
 `;
 
-export default function BigButtonColor({ name, buttonClick }) {
+export default function BigBtn({ name, buttonClick }) {
   return (
-    <BigButton className="body1-header" onClick={buttonClick}>
+    <StyledBigBtn className="body1-header" onClick={buttonClick}>
       {name}
-    </BigButton>
+    </StyledBigBtn>
   );
 }

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import BigButton from "../Atoms/Buttons/BigButtonColor";
+import BigBtn from "../Atoms/Buttons/BigBtn";
 import TitleCategoryBox from "../Templates/LiveShowSubmit/TitleCategoryBox";
 import PictureSubmitBox from "../Templates/LiveShowSubmit/PictureSubmitBox";
 import ProductSubmitBox from "../Templates/LiveShowSubmit/ProductSubmitBox";
@@ -41,8 +41,7 @@ export default function LiveShowSubmit() {
           <ProductListBox />
         </StyledBox>
       </StyledWindow>
-      <BigButton name="NEXT" buttonClick={nextStep}></BigButton>
-
+      <BigBtn name="NEXT" buttonClick={nextStep}></BigBtn>
       <ProuctModifyBox />
     </div>
   );

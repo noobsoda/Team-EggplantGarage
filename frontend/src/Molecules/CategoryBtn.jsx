@@ -15,7 +15,7 @@ const StyledInnerBox = styled.div`
   margin: 0 8px;
 `;
 
-export default function CategoryButton({ categoryName }) {
+export default function CategoryBtn({ categoryName }) {
   return (
     <StyledBox className="body2-bold">
       <StyledInnerBox>

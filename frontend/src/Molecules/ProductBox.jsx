@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../Atoms/Buttons/ExtraSmallButtonColor";
+import Button from "../Atoms/Buttons/ExtraSmallBtn";
 import styled from "styled-components";
 
 const StyledBox = styled.div`

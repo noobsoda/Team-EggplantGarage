@@ -1,8 +1,8 @@
 import React from "react";
-import InputBox from "../../Atoms/Inputs/BigInputBox";
+import InputBox from "../../Atoms/Inputs/BigInput";
 import Checkbox from "../../Molecules/CheckBox";
-import Button from "../../Atoms/Buttons/SmallButtonColor";
-export default function TitleCategoryBox() {
+import Button from "../../Atoms/Buttons/SmallBtn";
+export default function ProductModifyBox() {
   return (
     <div>
       <h1 className="page-header">물품 수정</h1>

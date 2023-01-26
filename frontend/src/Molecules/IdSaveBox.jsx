@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import CheckBox from "../Atoms/Inputs/CheckBox";
+import CheckBox from "../Atoms/Inputs/Check";
 
 const StyledLabel = styled.label`
   display: inline-block;

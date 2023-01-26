@@ -5,7 +5,7 @@ import styled from "styled-components";
 const StyledBox = styled.div`
   width: 360px;
 `;
-export default function TitleCategoryBox() {
+export default function ProductListBox() {
   return (
     <StyledBox>
       <h1 className="page-header">물품 목록</h1>

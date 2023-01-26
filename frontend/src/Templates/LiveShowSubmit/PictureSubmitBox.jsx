@@ -9,7 +9,7 @@ const StyledGreenBox = styled.div`
   color: ${({ theme }) => theme.color.green};
 `;
 
-export default function TitleCategoryBox() {
+export default function PictureSubmitBox() {
   return (
     <StyledBox>
       <h1 className="page-header">물품 등록</h1>
