@@ -1,7 +1,7 @@
 import React from "react";
 import InputBox from "../Atoms/Inputs/BigInputBox";
 import Button from "../Atoms/Buttons/BigButtonColor";
-import CheckBox from "../Molecules/IdSave";
+import CheckBox from "../Molecules/IdSaveBox";
 import Link from "../Atoms/A/Link";
 import RedSpan from "../Atoms/Text/RedSpan";
 

@@ -11,7 +11,7 @@ const StyledLabel = styled.label`
   }
 `;
 
-export default function IdSave() {
+export default function IdSaveBox() {
   return (
     <div>
       <CheckBox boxId="id-save" type="checkbox" />
