@@ -6,6 +6,9 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter
 @Setter
 @ApiModel("ReviewResponse")
@@ -20,5 +23,16 @@ public class ReviewRes {
         res.setContent(review.getContent());
         res.setScore(review.getScore());
         return res;
+    }
+
+    public static List<ReviewRes> of(List<Review> reviewList)  {
+        List<ReviewRes> resList = new ArrayList<>();
+        ReviewRes res = new ReviewRes();
+        for (Review review: reviewList) {
+            res.setContent(review.getContent());
+            res.setScore(review.getScore());
+            resList.add(res);
+        }
+        return resList;
     }
 }

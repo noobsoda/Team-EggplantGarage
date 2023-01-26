@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service("reviewService")
 public class ReviewServiceImpl implements ReviewService{
     private final Logger logger;
@@ -37,5 +39,11 @@ public class ReviewServiceImpl implements ReviewService{
     public Review getReviewByProductId(long productId) {
         Review review = reviewRepositorySupport.findReviewByProductId(productId).get();
         return review;
+    }
+
+    @Override
+    public List<Review> getReviewByIsSeller(long sellerId) {
+        List<Review> reviewList = reviewRepositorySupport.findReviewByIsSeller(sellerId).get();
+        return reviewList;
     }
 }
