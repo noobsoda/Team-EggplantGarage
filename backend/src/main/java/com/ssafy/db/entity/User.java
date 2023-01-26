@@ -17,9 +17,7 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
 public class User extends BaseEntity {
-
     @Column(unique = true)
     private String email;
     @JsonIgnore
@@ -31,8 +29,6 @@ public class User extends BaseEntity {
     private String phoneNumber;
     private String bankName;
     private String bankAddress;
-    @CreatedDate
-    private LocalDateTime createdAt;
     private String refreshToken;
 
 
