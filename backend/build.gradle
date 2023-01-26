@@ -78,7 +78,7 @@ configurations {
 /*processResources.dependsOn 'webpack'*/
 
 // 리액트 통합 빌드 [시작]
-def frontendDir = "$projectDir/../frontend"
+/*def frontendDir = "$projectDir/../frontend"
 
 sourceSets {
     main {
@@ -118,7 +118,7 @@ task copyReactBuildFiles(type: Copy) {
     dependsOn "buildReact"
     from "$frontendDir/build"
     into "$projectDir/src/main/resources/dist"
-}
+}*/
 
 //리액트 통합 빌드 [끝]
 
