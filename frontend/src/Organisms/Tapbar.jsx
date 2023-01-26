@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import HomeBox from "../Molecules/Boxes/HomeBox";
+import TapbarBox from "../Molecules/TapbarBox";
+import { useNavigate } from "react-router-dom";
 
 const StyledTapbar = styled.div`
   width: 360px;
@@ -8,13 +9,48 @@ const StyledTapbar = styled.div`
   display: flex;
 `;
 export default function Tapbar() {
+  const array = [
+    {
+      category: "home",
+      name: "홈",
+      src: "/image/tapbar/home-icon.svg",
+    },
+    {
+      category: "search",
+      name: "검색",
+      src: "/image/tapbar/search-icon.svg",
+    },
+    {
+      category: "like",
+      name: "좋아요",
+      src: "/image/tapbar/like-icon.svg",
+    },
+    {
+      category: "chat",
+      name: "채팅",
+      src: "/image/tapbar/chat-icon.svg",
+    },
+    {
+      category: "mypage",
+      name: "마이페이지",
+      src: "/image/tapbar/mypage-icon.svg",
+    },
+  ];
+  const navigate = useNavigate();
+  function goTo(location) {
+    navigate("/" + location);
+  }
   return (
     <StyledTapbar>
-      <HomeBox></HomeBox>
-      <HomeBox></HomeBox>
-      <HomeBox></HomeBox>
-      <HomeBox></HomeBox>
-      <HomeBox></HomeBox>
+      {array.map((box) => {
+        return (
+          <TapbarBox
+            name={box.name}
+            imgSrc={box.src}
+            clicked={() => goTo(box.category)}
+          />
+        );
+      })}
     </StyledTapbar>
   );
 }
