@@ -7,6 +7,9 @@ const StyledTapbar = styled.div`
   width: 360px;
   height: 56px;
   display: flex;
+  position: absolute;
+  top: 584px;
+  left: 0px;
 `;
 export default function Tapbar() {
   const array = [
