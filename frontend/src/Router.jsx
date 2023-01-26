@@ -4,6 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 //라우터에 맞는 페이지 지정
 import Main from "./Pages/Main";
 import LiveShowSubmit from "./Pages/LiveShowSubmit";
+import LiveShowSeller from "./Pages/LiveShowSeller";
 import SignUp from "./Pages/SignUp";
 import SignUpEmail from "./Pages/SignUpEmail";
 import Login from "./Pages/Login";
@@ -17,6 +18,7 @@ const Router = () => {
     { path: "/", element: <Main /> },
     { path: "/home", element: <Main /> },
     { path: "/liveshowsubmit", element: <LiveShowSubmit /> },
+    { path: "/liveshowseller", element: <LiveShowSeller /> },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
     { path: "/signupemail", element: <SignUpEmail /> },
