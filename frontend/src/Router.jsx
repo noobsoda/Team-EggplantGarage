@@ -7,6 +7,7 @@ import LiveShowSubmit from "./Pages/LiveShowSubmit";
 import SignUp from "./Pages/SignUp";
 import SignUpEmail from "./Pages/SignUpEmail";
 import Login from "./Pages/Login";
+import LiveShowSeller from "./Pages/LiveShowSeller";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -15,6 +16,7 @@ const Router = () => {
       element: <Main />,
     },
     { path: "/liveshowsubmit", element: <LiveShowSubmit /> },
+    { path: "/liveshowseller", element: <LiveShowSeller /> },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
     { path: "/signupemail", element: <SignUpEmail /> },
