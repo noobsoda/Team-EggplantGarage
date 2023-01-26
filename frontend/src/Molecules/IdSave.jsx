@@ -17,7 +17,7 @@ export default function IdSave() {
       <CheckBox boxId="id-save" type="checkbox" />
 
       <StyledLabel htmlFor="id-save">
-        <span class="body2-regular">아이디 저장</span>
+        <span className="body2-regular">아이디 저장</span>
       </StyledLabel>
     </div>
   );

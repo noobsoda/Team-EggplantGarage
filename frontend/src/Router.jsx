@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "./Pages/Main";
 import LiveShowSubmit from "./Pages/LiveShowSubmit";
 import SignUp from "./Pages/SignUp";
+import SignUpEmail from "./Pages/SignUpEmail";
 import Login from "./Pages/Login";
 
 const Router = () => {
@@ -16,6 +17,7 @@ const Router = () => {
     { path: "/liveshowsubmit", element: <LiveShowSubmit /> },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
+    { path: "/signupemail", element: <SignUpEmail /> },
   ]);
 
   return (
