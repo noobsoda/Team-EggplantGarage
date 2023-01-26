@@ -140,3 +140,11 @@
 
 - 중간발표 PPT 작성(기술 스택, 피드백)
 - Docker에 OpenVidu 설치 및 튜토리얼 소스 실행
+
+## 0126 작업내용
+
+- JPA DB Entity 작성
+  - @ManyOne 등 사용하여 1대N 구성
+  - 복합키는 어려워서 아직 미 진행
+- WebRTC API 구현중 QueryDSL 동적쿼리 때문에 공부하고 진행중
+- 중간 발표 피드백
