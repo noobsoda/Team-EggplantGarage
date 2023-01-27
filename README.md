@@ -261,3 +261,364 @@ CSA의 매터 정보: https://csa-iot.org/all-solutions/matter
 
 - 메인화면 API 구현
 - 팀미팅(중간발표 피드백)
+
+
+
+# 2023.01.27 TIL. [Back-End] Modern Java와 Python
+
+### 모던 자바
+
+함수형 프로그래밍 도입 이후 큰 변화가 있던 java8 이후
+
+### 특징
+
+함수형 패러다임 도입 쉬운 동시성 도입 모듈성 강화 개발자 편의 API 추가
+
+### Java 간략한 역사
+
+Java1 : 1996년 가급적 LTS버전을 사용하기를 권장
+
+### Python 간략한 역사
+
+Python 1994년
+
+### 예제
+
+모던자바
+
+```
+list.stream().filter(s -> s.length() >= 5 && s.length() <= 10).map(s -> s.toUpperCase()).forEach(System.out::println); 
+```
+
+파이썬
+
+```
+[s.upper() for s in str_lst if len(s) in range(5, 11)] 
+```
+
+## 함수형
+
+- 함수를 일급 시민(first class citizen)에 포함
+- 자바는 객체 지향이라 순수 함수형은 아니고 객체 지향으로 함수를 쓸 수 있게 한 것 (익명 클래스의 번거로움을 람다로 간편하게, 메서드 참조로 재사용 코드 블록을 주입(동작 파라미터화)하고 조합(pipeline)할 수 있게 됨) 
+- 익명 클래스 -> 람다 -> 재사용
+- 스트림의 기반
+- 병렬처리와 조화
+
+- 함수를 일급 시민에 포함 자바는 객체 지향이라 순수 함수형은 아니고 객체 지향으로 함수를 쓸 수 있게 한 것 익명 클래스 -> 람다 -> 재사용
+
+- 주요 패키지, 클래스
+
+  - @FunctionallInterface
+
+  - java.util.function
+
+  - Consumer, Supplier, Function, Predicate,...
+
+  - Operator
+
+  - 기본형 Int, Long, Double
+
+## 함수형 - 람다, 메서드 참조
+
+- 람다(lambda) = 익명 함수, 익명 클래스를 대체
+
+- 함수형 인터페이스(이름 있는 람다) : 하나의 추상 메서드를 가진 인터페이스 
+
+- 메서드 참조 : 메서드나 생성자를 참조하기 (::slightly_smiling_face:
+
+- 예시 (문자열 리스트를 길이에 따라 정렬)
+
+```java
+Collections.sort(words, new Comparator<String>() {    public int compare(String o1, String o2) {        return Integer.compare(o1.length(), o2.length()); }); 
+```
+
+```java
+Collections.sort(words, (o1, o2) -> Integer.compare(o1.length(), o2.length())); 
+```
+
+```java
+Collections.sort(words, Comparator.comparingInt(String::length)); 
+```
+
+```java
+words.sort(Comparator.comparingInt(String::length)); 
+```
+
+## 스트림
+
+- 컬렉션 + 함수형, 데이터 처리 연산을 지원하도록 소스에서 추출된 연속된 요소
+
+  - 외부 순환(for, while,...) VS 내부 순환(VM아 이것 좀 해줘...)
+
+  - SQL처럼 선언형 스타일로 데이터를 처리
+
+  - 쉽게 병렬처리 적용: parallelStream 메서드
+
+- 주요 패키지, 클래스, 메서드
+
+  - java.util.stream
+
+  - BaseStream, Stream
+
+  - map(), filter(), reduce(), min() ...
+
+  - C.stream(), C.parallelStream()
+
+## 스트림 - 주요 개념
+
+```
+                                Predicate   Function       Collector/consumer
+```
+
+collection -> stream —-> filter —-> map ——---> collect ——-—————-> Collection
+
+```
+                  ——————————————————| close
+```
+
+### 중간 연산과 최종 연산
+
+- 중간 연산은 스트림을 반환, 여러 연산을 조합할 수 있음
+- 최종 연산을 스트림을 모두 소비하고 닫음
+- 스트림은 1회용(최종 연산 이후 **사용불가**)
+
+### 스트림 예제
+
+직원 리스트 → 부서별 직원 리스트
+
+```java
+Map<Department, List<Employee>> byDept = employees.stream().collect(Collectors.groupingBy(Employee::getDepartment));
+```
+
+직원 리스트 → 부서별 급여 합계
+
+```java
+Map<Department, Integer> totalByDept = employees.stream().collect(Collectors.groupingBy(Employee::getDepartment, Collectors.summingInt(Employee::getSalary)));
+```
+
+좋은 직원, 안 좋은 직원 나누기
+
+```java
+Map<Boolean, List<Employee>> byGood = employees.stream().collect(Collectors.partitioningBy(Employee::isGood));
+```
+
+## 한편 파이썬은…
+
+원래 함수형(v1.0, since1994)
+
+내장 컬렉션 = 리스트, 맵(딕셔너리), 튜플, 세트,…
+
+lambda, itertools, functools, generator
+
+### 예제
+
+map, filter, reduce
+
+```python
+from functools import 
+reduce reduce(lambda x, y: x + y, a)
+```
+
+### 파이썬스럽다 : List Comprehension
+
+```python
+a = [1, 2, 3, 4, 5] 
+b = [2, 4, 6, 8, 10] 
+sum([m for m in [    
+    a[i] * b[i] for i in range(0, len(a))]    
+     if m % 2 == 0])
+```
+
+## 병렬/동시성 concurrent
+
+- 저수준 병렬 처리의 어려움(Thread, Lock, synchronized)
+
+- 안전하고 쉬운 병렬처리 방법 제공
+
+- 많이 사용되는 패턴들을 언어 차원에서  API로 지원
+
+- ExecutorService에서 스레드 관리
+
+- 고수준 추상화, Thread Safety, 비동기 지원
+
+### 주요 패키지, 클래스
+
+- java.util.concurrent
+
+- Executor(s), ExecutorService
+
+- xxThreadPool, ForkJoinPool
+
+- Future, CompletableFuture
+
+- Runnable, Callable
+
+## 비동기 지원 Async
+
+- 동기 / 비동기 and 블록 / 넌블록
+
+- 작업이 끝날 때 까지 기다리기 VS 하고있어 나중에 물어볼게
+
+- Future: 비동기 연산 지원, 완료확인/대기/결과조회/취소
+
+- CompletableFuture: Future 작업 연결, 순서정의 등
+
+## 면접 다수 출제 : 동기(blocking) 비동기(non block) 싱크
+
+### 예제… 스프링에서
+
+상황: 하나에 3초 정도 걸리는 API 5개를 호출해야 함
+
+문제 → 10초 이상 대기하게 되면 사용자가 도망감
+
+- 병렬이를 모르는 개발자
+
+```java
+api.callApi(someParam); 3초 
+api.callApi(someParam); 3초 
+api.callApi(someParam); 3초 
+api.callApi(someParam); 3초 
+api.callApi(someParam); 3초 
+api.callApi(someParam); 3초
+```
+
+- 병렬이를 아는 개발자
+
+여러 API 호출을 병렬로 실행
+
+```java
+for (ApiService api : apis) {    
+    apiResults.add(api.callApi(param)); 
+}
+for (CompletableFuture<Void> future : apiResult) {
+    future.get();
+}
+```
+
+```java
+@Async public CompletableFuture<Void> callApi(String param) {    
+    // api를 호출    return new CompletableFuture<>();
+}
+```
+
+## 한편 파이썬은… multiprocessing
+
+파이썬은 느려요..? 일부만 맞는 얘기
+
+GIL 문제: 스레드 활용을 제한하는 요소
+
+multiprocessing
+
+asyncio, coroutine
+
+future, executors, ThreadPoolExecutor...어? 앞에서 봤는데??
+
+✓ future, executors, ThreadPoolExecutor.. 어 앞어서 봤는데?
+
+```python
+with futures.ThreadPoolExecutor(max_workers=4) as executor:
+    future_list = []
+    for paramm in sorted(param_list):
+        future = executor.submit(single_function, paramm)
+        future_list.append(future)
+    results = [] 
+for future in futures.as_completed(future_list):
+    res = future.result()
+```
+
+### 한편 파이썬은 … asyncio
+
+✓ Asyncio로 I/O를 효율적으로 처라하자
+
+```python
+import asyncio import aiohttp
+```
+
+```python
+async def slow_api_call(client, time=3):
+    url = "https://httpbin.org/delay/{time}"
+    async with client get(url) as resp:
+        result await resp.text()
+    
+    return result
+```
+
+```python
+async def runner (params):
+    async with aiohttp.ClientSession() as session:
+        tasks = [slow_api_call(session, t) for t in params]
+            resp = ""
+        for future in asyncio.as_completed (tasks):
+            data = await future
+            resp += data
+    return resp
+```
+
+## 마지막으로 오늘 못 다룬 것들
+
+✓ Reactive (Flow API)
+
+ ✓인터페이스에 구현을 포함
+
+ √ 모듈화 
+
+√ try-with resources(AutoCloseable) 
+
+✓ Optional ✓ http client 
+
+√ 타입 추론(var) 향상된 switch 문 
+
+√ 컬렉션 API 개선
+
+ √ 새로운 GC 알고리즘 
+
+√ 날짜와 시간 API 개선
+
+ √ Fork-Join 프레임워크 
+
+✓ Spliterator 
+
+√ 성능 개선 
+
+√ 각종 데코레이터 
+
+√ match-case (Structural Pattern Matching)
+
+ √ 상세한 에러 메시지  
+
+√ 안쓰는 기능들 정리(deprecated)
+
+ ✓ Context Manager
+
+ √ 예외 처리 강화 
+
+√타입 안정성 강화(타입 힌트)
+
+ ✓제너레이터 
+
+✓ etc...
+
+## 마지막으로…3
+
+✓ Java Support Tools
+
+ ✓ visualVM, jconsole
+
+ ✓jps/jstack/jstat/jhat/jmap 
+
+✓ jshell 
+
+✓ flight recorder, jmx, Spring Actuator
+
+ ✓ Python Tools 
+
+✓ profile(cProfile), memory_profiler, vProf 
+
+✓ snakeviz
+
+
+
+# 2023.01.27 프로젝트 업데이트
+
+- 메인화면 API 구현
+- 중간발표
