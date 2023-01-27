@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../Atoms/Buttons/ExtraSmallBtn";
+import SmallNumBox from "../../Atoms/Text/SmallNumBox";
 import styled from "styled-components";
 
 const StyledBox = styled.div`
@@ -14,12 +14,14 @@ export default function ChatRoomBox({ name, price, onClick }) {
   return (
     <StyledBox>
       <div>
-        <div>상대방</div>
-        <div>메세지</div>
+        <span className="body2-bold">상대방</span>
+        <span className="body2-regular">메세지</span>
       </div>
       <div>
-        <div>오후1:40</div>
-        <div>3</div>
+        <span className="body3-bold">오후1:40</span>
+        <div>
+          <SmallNumBox number="3" />
+        </div>
       </div>
     </StyledBox>
   );
