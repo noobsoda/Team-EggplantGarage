@@ -43,3 +43,7 @@
 ## 2023-01-26
 1. 리뷰 API 제작
 2. 중간발표 PPT 수정
+
+## 2023-01-27
+1. Back-End : Modern Java와 Python 학습
+2. 중간발표 PPT 수정
