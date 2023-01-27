@@ -306,3 +306,12 @@ https://5sangs.tistory.com/255
 https://bgpark.tistory.com/132
 
 Docker, docker 구분함
+
+### Docker Build 다했는데 포트번호로 안들어가지는 경우
+
+application.properties에서 address, contextPath 삭제하니 잘 실행 된다
+
+server.address=0.0.0.0
+server.servlet.contextPath=/
+
+server.port도 삭제해도 잘 실행되지만 포트 변경하려면 필요할듯 하다
