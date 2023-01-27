@@ -1,11 +1,12 @@
 import React from "react";
-import Tapbar from "../Organisms/Tapbar";
+import Header from "../Organisms/Header";
+import Page from "../Atoms/Page";
 
 export default function Chat() {
   return (
-    <div>
+    <Page>
+      <Header isName="True" headerName="채팅 목록" />
       야호 여기 채팅페이지에요
-      <Tapbar />
-    </div>
+    </Page>
   );
 }

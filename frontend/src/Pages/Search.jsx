@@ -1,11 +1,18 @@
 import React from "react";
-import Tapbar from "../Organisms/Tapbar";
+import Header from "../Organisms/Header";
+import Page from "../Atoms/Page";
+import Body from "../Atoms/Body";
+import SmallSelect from "../Atoms/Select/SmallSelect";
 
 export default function Search() {
   return (
-    <div>
-      야호 여기 검색페이지
-      <Tapbar />
-    </div>
+    <Page>
+      <Header isSearch="True" />
+      <Body>
+        <SmallSelect name="지역설정" />
+        <SmallSelect name="지역설정" />
+        <SmallSelect name="지역설정" />
+      </Body>
+    </Page>
   );
 }

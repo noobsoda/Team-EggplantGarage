@@ -1,17 +1,14 @@
 import React from "react";
-import MainHeader from "../Organisms/MainHeader";
+import Header from "../Organisms/Header";
 import MainBody from "../Organisms/MainBody";
-import Tapbar from "../Organisms/Tapbar";
+import Page from "../Atoms/Page";
 
 export default function Main() {
   return (
-    <div>
+    <Page>
       {/* 헤더 */}
-      <MainHeader />
-      <hr />
+      <Header isLogo="True" />
       <MainBody />
-      <hr />
-      <Tapbar />
-    </div>
+    </Page>
   );
 }
