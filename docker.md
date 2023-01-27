@@ -283,3 +283,26 @@ docker rm 명령어로 컨테이너 삭제를 할 수 있습니다. 컨테이너
 
 `docker rm snowdeer_docker`
 docker run 명령을 이용해서 컨테이너를 실행할 때 --rm 옵션을 붙이면 컨테이너 종료시 해당 컨테이너가 자동으로 삭제되기 때문에 편리하게 연습용으로 편리하게 사용할 수 있습니다.
+
+### Docker compose 설치
+
+https://iseunghan.tistory.com/m/408
+
+### Docker Ubuntu 설치
+
+https://docs.docker.com/engine/install/ubuntu/
+
+### Docker Compose 설정
+
+https://skyblue300a.tistory.com/14
+
+Mysql 올리기
+https://5sangs.tistory.com/255
+
+## 에러 모음
+
+### Docker COPY failed: no source files were specified 에러 해결법
+
+https://bgpark.tistory.com/132
+
+Docker, docker 구분함

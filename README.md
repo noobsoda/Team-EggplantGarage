@@ -148,3 +148,10 @@
   - 복합키는 어려워서 아직 미 진행
 - WebRTC API 구현중 QueryDSL 동적쿼리 때문에 공부하고 진행중
 - 중간 발표 피드백
+
+## 0127 작업내용
+
+- 젠킨스 빌드 성공
+- docker-compose 작성해서 mysql, adminer, project 도커 실행 성공
+  - project -> mysql 연결 중 에러 발생
+    - 2002 connection confused 아직 미해결
