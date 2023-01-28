@@ -315,3 +315,7 @@ server.address=0.0.0.0
 server.servlet.contextPath=/
 
 server.port도 삭제해도 잘 실행되지만 포트 변경하려면 필요할듯 하다
+
+## Gitlab Webhook 설정
+
+https://zunoxi.tistory.com/106
