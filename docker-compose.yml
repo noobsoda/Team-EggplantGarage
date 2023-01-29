@@ -45,11 +45,16 @@ services:
     image: nginx
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./nginx/conf.d:/etc/nginx/conf.d
+      - /var/log/nginx:/var/log/nginx
+      - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - application
     networks:
       - test_network
+    environment:
+      - TZ=Asia/Seoul
 networks:
   test_network:
