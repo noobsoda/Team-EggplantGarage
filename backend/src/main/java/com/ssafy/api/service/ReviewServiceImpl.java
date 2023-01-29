@@ -1,7 +1,10 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.ReviewWritePostReq;
+import com.ssafy.db.entity.Product;
 import com.ssafy.db.entity.Review;
+import com.ssafy.db.repository.ProductRepository;
+import com.ssafy.db.repository.ProductRepositorySupport;
 import com.ssafy.db.repository.ReviewRepository;
 import com.ssafy.db.repository.ReviewRepositorySupport;
 import org.slf4j.Logger;
@@ -22,12 +25,20 @@ public class ReviewServiceImpl implements ReviewService{
     ReviewRepository reviewRepository;
 
     @Autowired
+    ProductRepository productRepository;
+
+    @Autowired
     ReviewRepositorySupport reviewRepositorySupport;
+
+    @Autowired
+    ProductRepositorySupport productRepositorySupport;
 
     @Override
     public Review writeReview(ReviewWritePostReq reviewWriteInfo) {
         Review review = new Review();
-        review.setProductId(reviewWriteInfo.getProductId());
+        Product product = productRepositorySupport.findById(reviewWriteInfo.getProductId()).get();
+
+        review.setProduct(product);
         review.setContent(reviewWriteInfo.getContent());
         review.setScore(reviewWriteInfo.getScore());
         review.setSeller(reviewWriteInfo.isSeller());
@@ -36,14 +47,14 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public Review getReviewByProductId(long productId) {
-        Review review = reviewRepositorySupport.findReviewByProductId(productId).get();
-        return review;
+    public List<Review> getSellerReviews(long sellerId) {
+        List<Review> reviewList = reviewRepositorySupport.findByProductLiveUserIdAndIsSellerTrue(sellerId).get();
+        return reviewList;
     }
 
     @Override
-    public List<Review> getReviewByIsSeller(long sellerId) {
-        List<Review> reviewList = reviewRepositorySupport.findReviewByIsSeller(sellerId).get();
+    public List<Review> getBuyerReviews(long buyerId) {
+        List<Review> reviewList = reviewRepositorySupport.findByProductUserIdAndIsSellerFalse(buyerId).get();
         return reviewList;
     }
 }

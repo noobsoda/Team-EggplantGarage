@@ -38,22 +38,22 @@ public class ReviewController {
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Created"));
     }
 
-    @GetMapping()
-    @ApiOperation(value = "리뷰 1건 조회", notes = "1건의 리뷰 정보를 응답한다.")
-    @ApiResponses({@ApiResponse(code = 200, message = "성공"), @ApiResponse(code = 404, message = "리뷰 없음"), @ApiResponse(code = 500, message = "서버 오류")})
-    public ResponseEntity<ReviewRes> getReviewByProductId(@ApiParam(value = "상품 id", required = true) long productId) {
-
-        Review review = reviewService.getReviewByProductId(productId);
-
-        return ResponseEntity.status(200).body(ReviewRes.of(review));
-    }
-
     @GetMapping("/seller/{sellerId}")
     @ApiOperation(value = "판매자 리뷰 조회", notes = "판매자 리뷰 정보를 응답한다.")
     @ApiResponses({@ApiResponse(code = 200, message = "성공"), @ApiResponse(code = 404, message = "리뷰 없음"), @ApiResponse(code = 500, message = "서버 오류")})
     public ResponseEntity<List<ReviewRes>> getReviewBySellerId(@ApiParam(value = "판매자 id", required = true) @PathVariable("sellerId") long sellerId) {
 
-        List<Review> reviewList = reviewService.getReviewByIsSeller(sellerId);
+        List<Review> reviewList = reviewService.getSellerReviews(sellerId);
+
+        return ResponseEntity.status(200).body(ReviewRes.of(reviewList));
+    }
+
+    @GetMapping("/buyer/{buyerId}")
+    @ApiOperation(value = "구매자 리뷰 조회", notes = "구매자 리뷰 정보를 응답한다.")
+    @ApiResponses({@ApiResponse(code = 200, message = "성공"), @ApiResponse(code = 404, message = "리뷰 없음"), @ApiResponse(code = 500, message = "서버 오류")})
+    public ResponseEntity<List<ReviewRes>> getReviewBuyerId(@ApiParam(value = "구매자 id", required = true) @PathVariable("buyerId") long buyerId) {
+
+        List<Review> reviewList = reviewService.getBuyerReviews(buyerId);
 
         return ResponseEntity.status(200).body(ReviewRes.of(reviewList));
     }
