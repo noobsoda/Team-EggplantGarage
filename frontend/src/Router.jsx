@@ -2,15 +2,30 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 //라우터에 맞는 페이지 지정
-import Test from "./Components/Pages/Test";
+import Main from "./Pages/Main";
+import LiveShowSubmit from "./Pages/LiveShowSubmit";
+import LiveShowSeller from "./Pages/LiveShowSeller";
+import SignUp from "./Pages/SignUp";
+import SignUpEmail from "./Pages/SignUpEmail";
+import Login from "./Pages/Login";
+import Search from "./Pages/Search";
+import Mypage from "./Pages/Mypage";
+import Chat from "./Pages/Chat";
+import Like from "./Pages/Like";
 
 const Router = () => {
   const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Test />,
-    },
-    { path: "/test", element: <div>test두번째</div> },
+    { path: "/", element: <Main /> },
+    { path: "/home", element: <Main /> },
+    { path: "/liveshowsubmit", element: <LiveShowSubmit /> },
+    { path: "/liveshowseller", element: <LiveShowSeller /> },
+    { path: "/login", element: <Login /> },
+    { path: "/signup", element: <SignUp /> },
+    { path: "/signupemail", element: <SignUpEmail /> },
+    { path: "/search", element: <Search /> },
+    { path: "/like", element: <Like /> },
+    { path: "/chat", element: <Chat /> },
+    { path: "/mypage", element: <Mypage /> },
   ]);
 
   return (
