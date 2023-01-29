@@ -328,3 +328,7 @@ https://zunoxi.tistory.com/106
 
 https://ayoteralab.tistory.com/entry/Spring-Boot-24-https-TLS-SSL-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0
 key 생성
+
+## 안쓰는 Docker image 제거하기
+
+docker image prune -a 
