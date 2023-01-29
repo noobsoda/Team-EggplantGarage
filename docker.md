@@ -316,6 +316,11 @@ server.servlet.contextPath=/
 
 server.port도 삭제해도 잘 실행되지만 포트 변경하려면 필요할듯 하다
 
+### Nginx 설정
+https://velog.io/@mooh2jj/docker-compose%EB%A1%9C-SprongBoot-MySql-DB%EC%97%90-Nginx-%EC%B6%94%EA%B0%80#%EC%B0%B8%EA%B3%A0
+로컬에선 잘 됨
+
 ## Gitlab Webhook 설정
 
 https://zunoxi.tistory.com/106
+
