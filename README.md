@@ -165,3 +165,13 @@
 - Nginx docker-compose에 추가
   - 프록시 설정 완료 
   - 80 -> 8000 포트 포워딩 완료
+
+## 0130 작업내용
+  - Nginx에 letsencrypt SSL 적용
+    - docker-compoise로 작업 완료
+    - https 인증 적용 확인
+  - Spring boot, key 생성해서 ssl 적용
+    - Nginx 443 포트포워딩해서 연결되는거 확인 
+    - 나중에 spring 컨테이너 ports 닫고 expose로만 사용하기
+    - openvidu ssl 발급받고 똑같이 적용하기
+    

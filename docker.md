@@ -324,3 +324,7 @@ https://velog.io/@mooh2jj/docker-compose%EB%A1%9C-SprongBoot-MySql-DB%EC%97%90-N
 
 https://zunoxi.tistory.com/106
 
+## spring boot ssl 설정
+
+https://ayoteralab.tistory.com/entry/Spring-Boot-24-https-TLS-SSL-%EC%A0%81%EC%9A%A9%ED%95%98%EA%B8%B0
+key 생성
