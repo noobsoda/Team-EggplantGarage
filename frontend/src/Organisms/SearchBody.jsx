@@ -1,27 +1,25 @@
 import React from "react";
 import styled from "styled-components";
-import CategoryNav from "../Molecules/CategoryNav";
-import LiveshowItem from "./LiveshowItem";
 import Body from "../Atoms/Body";
+import LiveshowItem from "./LiveshowItem";
 
 const FlexDiv = styled.div`
   width: 280px;
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
 `;
-
-export default function MainBody() {
+//카테고리, 검색어, 지역, 정렬 넣어서 뽑아내기
+export default function SearchBody({ category, keyword, location, sort }) {
   return (
     <Body>
-      <div className="page-header">지역 Liveshow</div>
       <FlexDiv>
         <LiveshowItem />
         <LiveshowItem />
         <LiveshowItem />
-      </FlexDiv>
-      <div className="page-header">전국 Liveshow</div>
-      <CategoryNav />
-      <FlexDiv>
+        <LiveshowItem />
+        <LiveshowItem />
+        <LiveshowItem />
         <LiveshowItem />
         <LiveshowItem />
         <LiveshowItem />

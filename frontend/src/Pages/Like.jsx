@@ -1,11 +1,12 @@
 import React from "react";
-import Tapbar from "../Organisms/Tapbar";
+import Header from "../Organisms/Header";
+import Page from "../Atoms/Page";
 
 export default function Like() {
   return (
-    <div>
+    <Page>
+      <Header isName="True" headerName="좋아요 목록" />
       야호 여기 좋아요페이지
-      <Tapbar />
-    </div>
+    </Page>
   );
 }
