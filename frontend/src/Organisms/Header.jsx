@@ -3,6 +3,7 @@ import styled from "styled-components";
 import LeftBtn from "../Atoms/IconButtons/LeftBtn";
 import MenuBtn from "../Atoms/IconButtons/MenuBtn";
 import InputBox from "../Molecules/InputBox";
+import { useNavigate } from "react-router-dom";
 
 const StyledHeader = styled.div`
   width: 344px;
@@ -14,6 +15,10 @@ const StyledHeader = styled.div`
 `;
 
 export default function Header({ isLogo, isSearch, isName, headerName }) {
+  const navigate = useNavigate();
+  function menuClicked() {
+    navigate("/category");
+  }
   return (
     <StyledHeader>
       <LeftBtn />
@@ -24,7 +29,8 @@ export default function Header({ isLogo, isSearch, isName, headerName }) {
       ) : (
         <></>
       )}
-      {isLogo ? <MenuBtn></MenuBtn> : <></>}
+
+      {isLogo ? <MenuBtn buttonClick={() => menuClicked()} /> : <></>}
       {isName ? <div className="page-header">{headerName}</div> : <></>}
       {isName ? <div></div> : <></>}
     </StyledHeader>
