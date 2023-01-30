@@ -9,11 +9,16 @@ const StyledSelect = styled.select`
   color: ${({ theme }) => theme.color.darkgrey};
 `;
 
-export default function BigSelect({ options }) {
+export default function BigSelect({ options, onChange }) {
   return (
-    <StyledSelect className="body1-regular">
+    <StyledSelect className="body1-regular" onChange={onChange}>
+      <option value="">선택</option>
       {options.map((ele) => {
-        return <option key={ele}>{ele}</option>;
+        return (
+          <option key={ele} value={ele}>
+            {ele}
+          </option>
+        );
       })}
     </StyledSelect>
   );
