@@ -157,21 +157,27 @@
     - 2002 connection confused 아직 미해결
 
 ## 0128 작업내용
+
 - 깃랩 웹훅 연결 성공
 - jenkins shell 사용해서 자동으로 docker-compose down, up 성공
 - 프론트 백엔드 통합빌드 배포 성공
 - 순서
-  - 깃 푸시 ->(웹훅) jenkins ->(npm 설치, gradle 빌드 /var/jenkins/workspace/Eggplantgarage에서 build/libs/*.jar파일 생성, shell에서 docker compose down, up 진행) 도커에 이미지 올라가서 배포
+  - 깃 푸시 ->(웹훅) jenkins ->(npm 설치, gradle 빌드 /var/jenkins/workspace/Eggplantgarage에서 build/libs/\*.jar파일 생성, shell에서 docker compose down, up 진행) 도커에 이미지 올라가서 배포
 - Nginx docker-compose에 추가
-  - 프록시 설정 완료 
+  - 프록시 설정 완료
   - 80 -> 8000 포트 포워딩 완료
 
+## 0129 작업내용
+
+- Nginx에 letsencrypt SSL 적용
+  - docker-compoise로 작업 완료
+  - https 인증 적용 확인
+- Spring boot, key 생성해서 ssl 적용
+  - Nginx 443 포트포워딩해서 연결되는거 확인
+  - 나중에 spring 컨테이너 ports 닫고 expose로만 사용하기
+  - openvidu ssl 발급받고 똑같이 적용하기
+
 ## 0130 작업내용
-  - Nginx에 letsencrypt SSL 적용
-    - docker-compoise로 작업 완료
-    - https 인증 적용 확인
-  - Spring boot, key 생성해서 ssl 적용
-    - Nginx 443 포트포워딩해서 연결되는거 확인 
-    - 나중에 spring 컨테이너 ports 닫고 expose로만 사용하기
-    - openvidu ssl 발급받고 똑같이 적용하기
-    
+
+- WebRTC Rest-api 방 생성 추가
+- 도커 컴포즈 수정
