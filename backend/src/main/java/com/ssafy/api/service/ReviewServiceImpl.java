@@ -48,13 +48,13 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<Review> getSellerReviews(long sellerId) {
-        List<Review> reviewList = reviewRepositorySupport.findByProductLiveUserIdAndIsSellerTrue(sellerId).get();
+        List<Review> reviewList = reviewRepositorySupport.findByIsSellerTrue(sellerId).get();
         return reviewList;
     }
 
     @Override
     public List<Review> getBuyerReviews(long buyerId) {
-        List<Review> reviewList = reviewRepositorySupport.findByProductUserIdAndIsSellerFalse(buyerId).get();
+        List<Review> reviewList = reviewRepositorySupport.findByIsSellerFalse(buyerId).get();
         return reviewList;
     }
 }

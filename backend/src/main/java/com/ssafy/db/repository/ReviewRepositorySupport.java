@@ -16,18 +16,19 @@ public class ReviewRepositorySupport {
     QReview qReview = QReview.review;
     QProduct qProduct = QProduct.product;
 
-    public Optional<List<Review>> findByProductLiveUserIdAndIsSellerTrue(long sellerId){
-        List<Review> reviewList = jpaQueryFactory.select(qReview).from(qReview, qProduct)
-                .where((qProduct.live.user.id.eq(sellerId)).and(qReview.product.id.eq(qProduct.id)).and((qReview.isSeller.eq(true)))).orderBy(qReview.createdAt.desc()).fetch();
-        if(reviewList.isEmpty()) return Optional.empty();
+    public Optional<List<Review>> findByIsSellerTrue(long sellerId){
+        List<Review> reviewList = jpaQueryFactory.selectFrom(qReview)
+                .innerJoin(qReview.product, qProduct).on(qProduct.live.user.id.eq(sellerId))
+                .where(qReview.isSeller.eq(true))
+                .fetch();
         return Optional.ofNullable(reviewList);
     }
-    public Optional<List<Review>> findByProductUserIdAndIsSellerFalse(long buyerId){
-        List<Review> reviewList = jpaQueryFactory.select(qReview).from(qReview, qProduct)
-                .where((qProduct.user.id.eq(buyerId)).and(qReview.product.id.eq(qProduct.id)).and((qReview.isSeller.eq(false)))).orderBy(qReview.createdAt.desc()).fetch();
-        if(reviewList.isEmpty()) return Optional.empty();
+    public Optional<List<Review>> findByIsSellerFalse(long buyerId){
+        List<Review> reviewList = jpaQueryFactory.selectFrom(qReview)
+                .innerJoin(qReview.product, qProduct).on(qProduct.user.id.eq(buyerId))
+                .where(qReview.isSeller.eq(false))
+                .fetch();
         return Optional.ofNullable(reviewList);
     }
-
 }
 

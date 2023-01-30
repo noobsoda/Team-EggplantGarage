@@ -27,8 +27,8 @@ public class ReviewRes {
 
     public static List<ReviewRes> of(List<Review> reviewList)  {
         List<ReviewRes> resList = new ArrayList<>();
-        ReviewRes res = new ReviewRes();
         for (Review review: reviewList) {
+            ReviewRes res = new ReviewRes();
             res.setContent(review.getContent());
             res.setScore(review.getScore());
             resList.add(res);
