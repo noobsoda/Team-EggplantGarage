@@ -6,6 +6,7 @@ import com.ssafy.db.entity.QProduct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -19,6 +20,14 @@ public class ProductRepositorySupport {
                 .where(qProduct.id.eq(id)).fetchOne();
         if(product == null) return Optional.empty();
         return Optional.ofNullable(product);
+    }
+
+    public Optional<List<Product>> findByProductUserId(long buyerId) {
+        List<Product> productList =
+                jpaQueryFactory.selectFrom(qProduct)
+                .where(qProduct.user.id.eq(buyerId))
+                .fetch();
+        return Optional.ofNullable(productList);
     }
 }
 

@@ -54,7 +54,7 @@ public class ReviewController {
     public ResponseEntity<List<ReviewRes>> getReviewBuyerId(@ApiParam(value = "구매자 id", required = true) @PathVariable("buyerId") long buyerId) {
 
         List<Review> reviewList = reviewService.getBuyerReviews(buyerId);
-        logger.info(reviewList.toString());
+
         return ResponseEntity.status(200).body(ReviewRes.of(reviewList));
     }
 }
