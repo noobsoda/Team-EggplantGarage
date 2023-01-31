@@ -7,6 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -54,12 +55,16 @@ public class FileService {
         File.separator :  프로그램이 실행 중인 OS에 해당하는 구분자를 리턴(win : \ mac : / )
         StringUtils.cleanPath : Normalize the path by suppressing sequences like "path/.." and inner simple dots. /나, . 떼어주는 역할
         */
-
+        try {
+            Files.copy(file.getInputStream(), copyOfLocation, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         return copyOfLocation;
     }
 
-/*    public FileInfoRes fileUpload(Long idx){
+    /*public FileInfoRes fileUpload(Long idx){
         Image imgInfo = imageRepository.findById(idx).get();
         String filePath = imgInfo.getFilePath();
         String fileType = imgInfo.getContentType();
