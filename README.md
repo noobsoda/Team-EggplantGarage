@@ -628,3 +628,160 @@ async def runner (params):
 # 2023.01.30 프로젝트 업데이트
 
 - 메인 - 카테고리 구현
+
+# 2023.01.31 TIL. [Back-End] SpringBoot JPA
+
+## Learning Goals
+
+1. SpringBoot JPA가 무엇인지 알 수 있다.
+2. SpringBoot JPA로 DB모델 설계를 할 수 있다.
+3. SpringBoot JPA로 CRUD를 할 수 있다.
+
+## Object-Relational Mapping
+
+객체 관계 매핑 위키백과, 우리 모두의 백과사전 객체 관계 매핑(Object-relational mapping: ORM)은 데이터베이스와 객체 지향 프로그래밍 언어 간의 호환되지 않는 데이터를 변환하는 프로그래밍 기 법이다. 객체 지향 언어에서 사용할 수 있는 가상 객체 데이터베이스를 구축하는 방법이다. 객체 관계 매핑을 가능하게 하는 상용 또는 무료 소프트웨 어 패키지들이 있고, 경우에 따라서는 독자적으로 개발하기도한다. Javax.persistence, JPA API, Entity Manager Factory, Entity Transaction, Entity, Entity Manager, Query, Persistence
+
+@Entity JpaRepository
+
+꿀팁: 키값을 오토인크리먼트로 하면 키값 -1인경우가 있을까없을까 - 없다
+
+unsigned로 하는것이 꿀팁
+
+```java
+spring.datasource.url=jdbc: h2:mem:testdb 
+    
+spring.jpa.generate-ddl=true
+spring.jpa.hibernate.ddl-auto=create 
+
+spring.jpa.show-sql=true 
+spring.jpa.properties.hibernate.format_sql=true logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace
+```
+
+## 프로퍼티 설정
+
+[application.properties](http://application.properties/) 또는 application.yml
+
+```java
+spring.jpa.generate-ddl=true 
+spring.jpa.hibernate.ddl-auto-update 
+
+spring.jpa.show-sql=true 
+spring.jpa.properties.hibernate.format_sql=true logging.level.org.hibernate.type.descriptor.sql.BasicBinder=trace
+```
+
+```java
+import lombok.ToString; 
+
+@Entity 
+@NoArgsConstructor 
+@Getter 
+@Setter 
+@ToString 
+public class Board {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)    
+    @Column(columnDefinition = "INT UNSIGNED")    
+    private int uid;    
+    
+    @OneToMany (mapped By "boardUid")    
+    private List<Reply> reply = new ArrayList<>();
+    private String user;
+    private LocalDateTime createdDate;
+    private String ip;
+    private String title;
+    private String contents;
+    private int how;
+    
+    @Builder
+    public Board(String user, LocalDateTime createDate, String ip, String title, ....   
+         this.user = user;
+         this.createDate = createDate;
+```
+
+## Relationship Mapping
+
+단방향?양방향?
+
+조회테이블? 참조테이블?
+
+```java
+@OneToOne
+@OneToMany
+@ManyToOne
+@JoinColumn
+```
+
+일대일? 일대다? 다대일? 다대다?
+
+## 대중성
+
+일대일(1:1) @OneToOne 
+
+일대다(1:N) @OneToMany 
+
+다대일(N:1) @ Many ToOne
+
+ 다대다(N:M) @Many ToMany 
+
+일대다 != 다대일 1:N != N:1 
+
+게시물을 조회 하고 댓글을 가져올 것인가? 댓글을 조회 하고 그것이 어떤 게시글을 가져올 것인가? →비즈니스 로직에 따라 다르다!
+
+## 방향성
+
+@JoinColumn
+
+Object A → Object B
+
+Object B → Object A
+
+Object A ↔ Object B
+
+이런 양방향은 JPA에서는 지양해주세요!
+
+## 연관 관계의 주인
+
+@OneToMany(**mappedBy**="boardFk") 
+
+// @JoinColumn(name="boardFk") 
+
+양방향일경우 어떤 테이블 기준으로
+
+데이터를 삭제 하면 그것에 관련된 데이터들을 다 삭제 할 것인가?
+
+ →FK 키 관리 주인을 설정해 준다. 
+
+→→ '다' 쪽이 주인이다. 
+
+→→→ @Many ToOne 은 항상 주인이다.
+
+## SpringBoot JPA Docs
+
+
+
+## 스프링부트 JPA docs
+
+https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+
+## Summary & Quiz
+
+- SpringBoot JPA는 (***\***)라는 ORM 프레임워크를 사용해서 구현한다.
+
+Hibernate     
+
+- 기본적으로 제공되는 레파짓토리 메소드이름 중에 조회에 사용되는 메소드는 (****)로 시작되는 메소드이다.
+
+find     
+
+- JPA를 사용할 때 꼭 구현해 줘야 하는 두가지는 (★★★)와 레파짓토리 이다.
+
+Entity(엔티티)   
+
+- 연관관계를 설정할 때에는 3가지를 설정해 주어야 하는데 다중성, (***), 연관관계 주인을 설정해 주어야 한다.
+
+방향성(단방향, 양방향)
+
+# 2023.01.31 프로젝트 업데이트
+
+- 메인 - 카테고리 구현 마무리
+- 메인 - 검색 구현
