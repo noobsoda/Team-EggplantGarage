@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 
+//초기 center는 lng lat redux에 저장한값을 이용하는 것으로 하자
+//초기화 하면 현재 내 위치로 옮겨주기. 적용눌렀을때는 지금 떠있는 상태로.
+//이 lat lng 현재 내위치를 뽑는건 라이브 시작하기에도 그냥 적용 할 수 있는 것
 const MapContainer = () => {
   const { kakao } = window;
   useEffect(
