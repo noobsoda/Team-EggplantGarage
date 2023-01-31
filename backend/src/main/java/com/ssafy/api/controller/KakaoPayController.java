@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import com.querydsl.core.Tuple;
 import com.ssafy.api.request.KakaoPayReq;
 import com.ssafy.api.response.KakaoPayApprovalRes;
 import com.ssafy.api.response.KakaoPayReadyRes;
@@ -21,12 +22,16 @@ import java.util.Optional;
 @Log
 @RequestMapping("/api/v1/kakaoPay")
 public class KakaoPayController {
-    @Setter(onMethod_ = @Autowired)
-    private KakaoPayService kakaoPayService;
-    private KakaoPayApprovalRes kakaoPayApprovalRes;
-    private Optional<Bundle> bundle;
-    private BundleRepository bundleRepository;
-    private BundleRepositorySupport bundleRepositorySupport;
+//    @Setter(onMethod_ = @Autowired)
+    @Autowired
+    KakaoPayService kakaoPayService;
+    KakaoPayApprovalRes kakaoPayApprovalRes;
+    @Autowired
+    Optional<Bundle> bundle;
+    @Autowired
+    BundleRepository bundleRepository;
+    @Autowired
+    BundleRepositorySupport bundleRepositorySupport;
 
     @GetMapping("/test")
     public String test() {
@@ -36,12 +41,20 @@ public class KakaoPayController {
 
     @PostMapping()
     public KakaoPayReadyRes kakaoPay(@RequestBody KakaoPayReq kakaoPayReq) {
-        bundle = bundleRepository.findById(kakaoPayReq.getBundleId());
-        Optional<List<Bundle>> bundleList = bundleRepositorySupport.findBundleListById(kakaoPayReq.getBundleId());
-        int quantity = bundleList.get().size();
-
         log.info("POST: kakaoPay 결제 준비");
         System.out.println("kakaoPay -> POST");
+        System.out.println("id: " + kakaoPayReq.getBundleId());
+
+        bundle = bundleRepository.findById(kakaoPayReq.getBundleId());
+//        bundle = bundleRepositorySupport.findBundle(kakaoPayReq.getBundleId());
+        System.out.println("bundle: " + bundle.get());
+        System.out.println("bundle: " + bundle.get().getId());
+        System.out.println("bundle: " + bundle.get().getUser().getId());
+        System.out.println("bundle: " + bundle.get().getPrice());
+
+        List<Tuple> bundleList = bundleRepositorySupport.findBundleListById(kakaoPayReq.getBundleId()).get();
+        int quantity = bundleList.size();
+        System.out.println("수량: " + quantity);
 
         KakaoPayReadyRes kakaoPayReadyRes = kakaoPayService.KakaoPayReady(bundle.get(), quantity);
 
@@ -57,14 +70,18 @@ public class KakaoPayController {
     @GetMapping("/success")
     public KakaoPayApprovalRes kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
         log.info("GET: kakaoPaySuccess");
+        System.out.println("결제 승인");
         System.out.println("order id: " + kakaoPayApprovalRes.getPartner_order_id() + ", user id: " + kakaoPayApprovalRes.getPartner_user_id());
+
         ResponseEntity<KakaoPayApprovalRes> kakaoPResponseEntity = kakaoPayService.kakaoPaySuccess(kakaoPayApprovalRes, pg_token);
         System.out.println("kakaoPaySuccess -> pg_token: " + pg_token);
+        System.out.println("승인 받고나서: " + kakaoPResponseEntity.toString());
 
         // 화면 쪽에 정보를 전송
 //        model.addAttribute("info", kakaoPayService.kakaoPaySuccess(pg_token));
         bundle.get().setPaid(true);
 //        bundleRepository.save(bundle);
+
         return kakaoPayApprovalRes;
     }
 }
