@@ -27,6 +27,16 @@ public class ProductRepositorySupport {
                 jpaQueryFactory.selectFrom(qProduct)
                 .where(qProduct.user.id.eq(buyerId))
                 .fetch();
+        if(productList.isEmpty()) return Optional.empty();
+        return Optional.ofNullable(productList);
+    }
+
+    public Optional<List<Product>> findByProductLiveId(long liveId) {
+        List<Product> productList =
+                jpaQueryFactory.selectFrom(qProduct)
+                        .where(qProduct.live.id.eq(liveId))
+                        .fetch();
+        if(productList.isEmpty()) return Optional.empty();
         return Optional.ofNullable(productList);
     }
 }

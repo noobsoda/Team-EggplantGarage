@@ -28,4 +28,10 @@ public class ProductServiceImpl implements ProductService{
         List<Product> productList = productRepositorySupport.findByProductUserId(buyerId).get();
         return productList;
     }
+
+    @Override
+    public List<Product> getHistoryByLiveId(long liveId) {
+        List<Product> productList = productRepositorySupport.findByProductLiveId(liveId).get();
+        return productList;
+    }
 }

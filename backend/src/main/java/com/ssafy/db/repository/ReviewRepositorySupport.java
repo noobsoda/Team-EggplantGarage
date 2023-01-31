@@ -21,6 +21,7 @@ public class ReviewRepositorySupport {
                 .innerJoin(qReview.product, qProduct).on(qProduct.live.user.id.eq(sellerId))
                 .where(qReview.isSeller.eq(true))
                 .fetch();
+        if(reviewList.isEmpty()) return Optional.empty();
         return Optional.ofNullable(reviewList);
     }
     public Optional<List<Review>> findByIsSellerFalse(long buyerId){
@@ -28,6 +29,7 @@ public class ReviewRepositorySupport {
                 .innerJoin(qReview.product, qProduct).on(qProduct.user.id.eq(buyerId))
                 .where(qReview.isSeller.eq(false))
                 .fetch();
+        if(reviewList.isEmpty()) return Optional.empty();
         return Optional.ofNullable(reviewList);
     }
 }

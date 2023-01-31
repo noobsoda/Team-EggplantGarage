@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ProductService {
     List<Product> getHistoryByBuyerId(long buyerId);
+
+    List<Product> getHistoryByLiveId(long liveId);
 }
