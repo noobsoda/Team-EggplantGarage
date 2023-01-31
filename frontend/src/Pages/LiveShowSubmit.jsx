@@ -9,6 +9,9 @@ import ProductListBox from "../Templates/LiveShowSubmit/ProductListBox";
 import ProuctModifyBox from "../Templates/LiveShowSubmit/ProductModifyBox";
 import Tapbar from "../Organisms/Tapbar";
 
+const StyledDiv = styled.div`
+  position: relative;
+`;
 const StyledBox = styled.div`
   display: flex;
   width: 1440px;
@@ -61,7 +64,7 @@ export default function LiveShowSubmit() {
     });
   }
   return (
-    <div>
+    <StyledDiv>
       <StyledWindow>
         <StyledBox phase={step}>
           <TitleCategoryBox
@@ -86,6 +89,6 @@ export default function LiveShowSubmit() {
 
       <Tapbar />
       {isModify ? <ProuctModifyBox /> : <></>}
-    </div>
+    </StyledDiv>
   );
 }

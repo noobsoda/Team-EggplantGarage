@@ -4,6 +4,7 @@ import PictureBox from "../../Organisms/PictureBox";
 
 const StyledBox = styled.div`
   width: 360px;
+  height: 640px;
 `;
 const StyledGreenBox = styled.div`
   color: ${({ theme }) => theme.color.green};
