@@ -49,7 +49,7 @@ const getWebcam = (callback) => {
   }
 };
 
-export default function PictureBox() {
+export default function PictureBox({ setOriImgSrc }) {
   const videoRef = useRef(null); //비디오 태그
   const canvasRef = useRef(null); //비디오를 담는 canvas
   const canvasRef2 = useRef(null); //회전후 결과를 담는 canvas
@@ -58,7 +58,7 @@ export default function PictureBox() {
 
   useEffect(() => {
     getWebcam((stream) => {
-      setPlaying(true);
+      setPlaying(true); // 비디오가 실행되지 않으면 오류발생해서 true했다가 다시 false로
       videoRef.current.srcObject = stream;
       setPlaying(false);
     });
@@ -111,7 +111,7 @@ export default function PictureBox() {
 
     //캔버스의 값을 이미지화
     setImgSrc(canvasRef2.current.toDataURL("image/webp"));
-
+    setOriImgSrc(canvasRef2.current.toDataURL("image/webp"));
     startOrStop(); //촬영 정지
   }
 

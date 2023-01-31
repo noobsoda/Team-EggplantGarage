@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import MidBtn from "../Atoms/Buttons/MediumBtn";
 import BigBtn from "../Atoms/Buttons/BigBtn";
@@ -26,6 +26,8 @@ const StyledWindow = styled.div`
 `;
 
 export default function LiveShowSubmit() {
+  const [imgSrc, setImgSrc] = useState("//:0"); //회전후 결과를 담는 canvas
+
   const [step, setStep] = useState(0);
   const [isModify, setIsModify] = useState(false);
 
@@ -73,8 +75,8 @@ export default function LiveShowSubmit() {
             onCategoryChange={onChange}
             delCategory={delCategory}
           />
-          <PictureSubmitBox />
-          <ProductSubmitBox />
+          <PictureSubmitBox setOriImgSrc={setImgSrc} />
+          <ProductSubmitBox imgSrc={imgSrc} />
           <ProductListBox />
         </StyledBox>
       </StyledWindow>
