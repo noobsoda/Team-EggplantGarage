@@ -9,7 +9,4 @@ import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
-    Optional<List<Review>> findByProductLiveUserIdAndIsSellerTrue(long sellerId);
-
-    Optional<List<Review>> findByProductUserIdAndIsSellerFalse(long buyerId);
 }

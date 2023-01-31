@@ -36,7 +36,7 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public Review writeReview(ReviewWritePostReq reviewWriteInfo) {
         Review review = new Review();
-        Product product = productRepositorySupport.findById(reviewWriteInfo.getProductId()).get();
+        Product product = productRepository.findById(reviewWriteInfo.getProductId()).get();
 
         review.setProduct(product);
         review.setContent(reviewWriteInfo.getContent());
@@ -48,13 +48,13 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<Review> getSellerReviews(long sellerId) {
-        List<Review> reviewList = reviewRepositorySupport.findByIsSellerTrue(sellerId).get();
+        List<Review> reviewList = reviewRepositorySupport.findReviewBySellerId(sellerId).get();
         return reviewList;
     }
 
     @Override
     public List<Review> getBuyerReviews(long buyerId) {
-        List<Review> reviewList = reviewRepositorySupport.findByIsSellerFalse(buyerId).get();
+        List<Review> reviewList = reviewRepositorySupport.findReviewByBuyerId(buyerId).get();
         return reviewList;
     }
 }

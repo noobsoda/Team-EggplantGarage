@@ -15,25 +15,16 @@ public class ProductRepositorySupport {
     private JPAQueryFactory jpaQueryFactory;
     QProduct qProduct = QProduct.product;
 
-    public Optional<Product> findById(long id) {
-        Product product = jpaQueryFactory.select(qProduct).from(qProduct)
-                .where(qProduct.id.eq(id)).fetchOne();
-        if(product == null) return Optional.empty();
-        return Optional.ofNullable(product);
-    }
-
-    public Optional<List<Product>> findByProductUserId(long buyerId) {
-        List<Product> productList =
-                jpaQueryFactory.selectFrom(qProduct)
+    public Optional<List<Product>> findProductByBuyerId(long buyerId) {
+        List<Product> productList = jpaQueryFactory.selectFrom(qProduct)
                 .where(qProduct.user.id.eq(buyerId))
                 .fetch();
         if(productList.isEmpty()) return Optional.empty();
         return Optional.ofNullable(productList);
     }
 
-    public Optional<List<Product>> findByProductLiveId(long liveId) {
-        List<Product> productList =
-                jpaQueryFactory.selectFrom(qProduct)
+    public Optional<List<Product>> findProductByLiveId(long liveId) {
+        List<Product> productList = jpaQueryFactory.selectFrom(qProduct)
                         .where(qProduct.live.id.eq(liveId))
                         .fetch();
         if(productList.isEmpty()) return Optional.empty();

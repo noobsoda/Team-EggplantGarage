@@ -25,7 +25,7 @@ public class LiveServiceImpl implements LiveService{
 
     @Override
     public List<Live> getHistoryBySellerId(long sellerId) {
-        List<Live> liveList = liveRepositorySupport.findByLiveUserId(sellerId).get();
+        List<Live> liveList = liveRepositorySupport.findLiveBySellerId(sellerId).get();
         return liveList;
     }
 }

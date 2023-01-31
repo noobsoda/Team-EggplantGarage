@@ -16,7 +16,7 @@ public class ReviewRepositorySupport {
     QReview qReview = QReview.review;
     QProduct qProduct = QProduct.product;
 
-    public Optional<List<Review>> findByIsSellerTrue(long sellerId){
+    public Optional<List<Review>> findReviewBySellerId(long sellerId){
         List<Review> reviewList = jpaQueryFactory.selectFrom(qReview)
                 .innerJoin(qReview.product, qProduct).on(qProduct.live.user.id.eq(sellerId))
                 .where(qReview.isSeller.eq(true))
@@ -24,7 +24,7 @@ public class ReviewRepositorySupport {
         if(reviewList.isEmpty()) return Optional.empty();
         return Optional.ofNullable(reviewList);
     }
-    public Optional<List<Review>> findByIsSellerFalse(long buyerId){
+    public Optional<List<Review>> findReviewByBuyerId(long buyerId){
         List<Review> reviewList = jpaQueryFactory.selectFrom(qReview)
                 .innerJoin(qReview.product, qProduct).on(qProduct.user.id.eq(buyerId))
                 .where(qReview.isSeller.eq(false))

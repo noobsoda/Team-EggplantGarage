@@ -17,7 +17,7 @@ public class LiveRepositorySupport {
     private JPAQueryFactory jpaQueryFactory;
     QLive qLive = QLive.live;
 
-    public Optional<List<Live>> findByLiveUserId(long sellerId) {
+    public Optional<List<Live>> findLiveBySellerId(long sellerId) {
         List<Live> liveList = jpaQueryFactory.selectFrom(qLive)
                 .where(qLive.user.id.eq(sellerId))
                 .fetch();

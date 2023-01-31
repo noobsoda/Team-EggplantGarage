@@ -25,13 +25,13 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public List<Product> getHistoryByBuyerId(long buyerId) {
-        List<Product> productList = productRepositorySupport.findByProductUserId(buyerId).get();
+        List<Product> productList = productRepositorySupport.findProductByBuyerId(buyerId).get();
         return productList;
     }
 
     @Override
     public List<Product> getHistoryByLiveId(long liveId) {
-        List<Product> productList = productRepositorySupport.findByProductLiveId(liveId).get();
+        List<Product> productList = productRepositorySupport.findProductByLiveId(liveId).get();
         return productList;
     }
 }
