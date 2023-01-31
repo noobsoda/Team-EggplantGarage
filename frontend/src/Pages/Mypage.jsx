@@ -3,6 +3,7 @@ import Header from "../Organisms/Header";
 import Page from "../Atoms/Page";
 import Body from "../Atoms/Body";
 import styled from "styled-components";
+import ItemCard from "../Molecules/Cards/ItemCard";
 
 const Info = styled.div`
   width: 280px;
@@ -53,7 +54,14 @@ export default function Mypage() {
           <button className="body1-header">구매내역</button>
           <button className="body1-header">판매내역</button>
         </SelectBar>
-        <PurchaseHistory></PurchaseHistory>
+        {/* 이부분 따로 컴포넌트화 시켜서 빼서 켜고 닫히게 해야함 */}
+        <PurchaseHistory>
+          <ItemCard />
+          <ItemCard />
+          <ItemCard />
+          <ItemCard />
+          <ItemCard />
+        </PurchaseHistory>
       </Body>
     </Page>
   );
