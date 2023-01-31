@@ -24,4 +24,5 @@ public class LiveRegisterPostReq {
     private String location;
 
 
+
 }

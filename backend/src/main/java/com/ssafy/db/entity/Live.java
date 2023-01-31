@@ -1,15 +1,18 @@
 package com.ssafy.db.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Live extends BaseEntity {
     private String title;
     private String description;
@@ -24,4 +27,11 @@ public class Live extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")
     private User user;
+
+    @OneToMany(mappedBy = "live")
+    private List<LiveCategory> liveCategoryList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "live")
+    private List<UserLive> userLiveList = new ArrayList<>();
+
 }

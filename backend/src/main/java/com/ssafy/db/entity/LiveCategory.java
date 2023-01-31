@@ -14,17 +14,18 @@ public class LiveCategory {
     private Long id = null;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "live_id")
     private Live live;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category;
 
-    public static LiveCategory of(Live live, Category category){
+    /*public static LiveCategory of(Live live, Category category){
         LiveCategory liveCategory = new LiveCategory();
         liveCategory.setLive(live);
         liveCategory.setCategory(category);
         return liveCategory;
-    }
+    }*/
 
 
 }
