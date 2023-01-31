@@ -22,11 +22,11 @@ export default function ProductSubmitBox({ imgSrc }) {
   const [pos, setPos] = useState([0, 0]); //클릭시 위치로 시작 위치가 된다.
   const [isdrawing, setIsDrawing] = useState(false); //현재 그리고 있는지 여부
 
-  const [ctx, setCtx] = useState(null);
+  const [ctx, setCtx] = useState(null); //실제 그리는 영역의 canvas
 
-  const [img, setImg] = useState(undefined);
+  const [img, setImg] = useState(undefined); //원본 이미지
 
-  const [ratio, setRatio] = useState(0.0);
+  const [ratio, setRatio] = useState(0.0); //원본이미지와 canvas의 비율
 
   useEffect(() => {
     const img = new Image();
@@ -48,6 +48,8 @@ export default function ProductSubmitBox({ imgSrc }) {
     const result = resultCanvas.current;
     result.width = 500;
     result.height = 500;
+
+    //비율 계산
 
     setCtx(drawCanvas.current.getContext("2d"));
   }, [imgSrc]);
@@ -85,12 +87,7 @@ export default function ProductSubmitBox({ imgSrc }) {
   function drawSquareImage(e) {
     const { offsetX, offsetY } = e.nativeEvent;
     if (!isdrawing) return;
-    ctx.clearRect(
-      0,
-      0,
-      drawCanvas.current.canvas.clientWidth,
-      drawCanvas.current.canvas.clientHeight
-    );
+    ctx.clearRect(0, 0, drawCanvas.current.width, drawCanvas.current.height);
     ctx.drawImage(img, 0, 0, img.width, img.height);
     ctx.strokeStyle = "red";
     ctx.strokeRect(pos[0], pos[1], offsetX - pos[0], offsetY - pos[1]);
@@ -105,7 +102,7 @@ export default function ProductSubmitBox({ imgSrc }) {
     console.log(ratio);
     console.log(`${pos[0] * ratio} ${pos[1] * ratio}`);
     console.log(`${width * ratio} ${height * ratio}`);
-    resultCanvas.current.drawImage(
+    resultCanvas.current.getContext("2d").drawImage(
       img,
       pos[0] / ratio, //이미지 x좌표
       pos[1] / ratio, //이미지 y좌표
