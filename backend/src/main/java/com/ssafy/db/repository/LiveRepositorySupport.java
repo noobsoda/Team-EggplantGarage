@@ -18,8 +18,10 @@ public class LiveRepositorySupport {
     QLive qLive = QLive.live;
 
     public Optional<List<Live>> findLiveBySellerId(long sellerId) {
-        List<Live> liveList = jpaQueryFactory.selectFrom(qLive)
+        List<Live> liveList = jpaQueryFactory
+                .selectFrom(qLive)
                 .where(qLive.user.id.eq(sellerId))
+                .orderBy(qLive.createdAt.desc())
                 .fetch();
         if(liveList.isEmpty()) return Optional.empty();
         return Optional.ofNullable(liveList);

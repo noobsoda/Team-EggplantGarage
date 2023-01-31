@@ -16,17 +16,21 @@ public class ProductRepositorySupport {
     QProduct qProduct = QProduct.product;
 
     public Optional<List<Product>> findProductByBuyerId(long buyerId) {
-        List<Product> productList = jpaQueryFactory.selectFrom(qProduct)
+        List<Product> productList = jpaQueryFactory
+                .selectFrom(qProduct)
                 .where(qProduct.user.id.eq(buyerId))
+                .orderBy(qProduct.createdAt.desc())
                 .fetch();
         if(productList.isEmpty()) return Optional.empty();
         return Optional.ofNullable(productList);
     }
 
     public Optional<List<Product>> findProductByLiveId(long liveId) {
-        List<Product> productList = jpaQueryFactory.selectFrom(qProduct)
-                        .where(qProduct.live.id.eq(liveId))
-                        .fetch();
+        List<Product> productList = jpaQueryFactory
+                .selectFrom(qProduct)
+                .where(qProduct.live.id.eq(liveId))
+                .orderBy(qProduct.createdAt.desc())
+                .fetch();
         if(productList.isEmpty()) return Optional.empty();
         return Optional.ofNullable(productList);
     }
