@@ -1,22 +1,32 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.request.KakaoPayReq;
+import com.ssafy.api.response.KakaoPayApprovalRes;
+import com.ssafy.api.response.KakaoPayReadyRes;
 import com.ssafy.api.service.KakaoPayService;
+import com.ssafy.db.entity.Bundle;
+import com.ssafy.db.repository.BundleRepository;
+import com.ssafy.db.repository.BundleRepositorySupport;
 import lombok.Setter;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+import java.util.Optional;
+
+@RestController
 @Log
 @RequestMapping("/api/v1/kakaoPay")
 public class KakaoPayController {
     @Setter(onMethod_ = @Autowired)
     private KakaoPayService kakaoPayService;
+    private KakaoPayApprovalRes kakaoPayApprovalRes;
+    private Optional<Bundle> bundle;
+    private BundleRepository bundleRepository;
+    private BundleRepositorySupport bundleRepositorySupport;
 
     @GetMapping("/test")
     public String test() {
@@ -25,24 +35,36 @@ public class KakaoPayController {
     }
 
     @PostMapping()
-    public String kakaoPay() {
-//        KakaoPayReadyVO kakaoPayReadyVO = kakaoPayService.KakaoPayReady();
-        log.info("POST: kakaoPay 결제 준비");
+    public KakaoPayReadyRes kakaoPay(@RequestBody KakaoPayReq kakaoPayReq) {
+        bundle = bundleRepository.findById(kakaoPayReq.getBundleId());
+        Optional<List<Bundle>> bundleList = bundleRepositorySupport.findBundleListById(kakaoPayReq.getBundleId());
+        int quantity = bundleList.get().size();
 
-//        kakaoPayApprovalVO = new KakaoPayApprovalVO("TC0ONETIME", kakaoPayReadyVO.getTid(),
-//                    "가맹점 주문번호", "가맹점 회원 id");
+        log.info("POST: kakaoPay 결제 준비");
         System.out.println("kakaoPay -> POST");
-        return "redirect:" + kakaoPayService.KakaoPayReady().getNext_redirect_pc_url();
+
+        KakaoPayReadyRes kakaoPayReadyRes = kakaoPayService.KakaoPayReady(bundle.get(), quantity);
+
+        kakaoPayApprovalRes = new KakaoPayApprovalRes(
+                kakaoPayReadyRes.getTid(),
+                String.valueOf(bundle.get().getId()),
+                String.valueOf(bundle.get().getUser().getId()));
+        return  kakaoPayReadyRes;
+
+//        return "redirect:" + kakaoPayService.KakaoPayReady().getNext_redirect_pc_url();
     }
 
     @GetMapping("/success")
-    public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Model model) {
+    public KakaoPayApprovalRes kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
         log.info("GET: kakaoPaySuccess");
+        System.out.println("order id: " + kakaoPayApprovalRes.getPartner_order_id() + ", user id: " + kakaoPayApprovalRes.getPartner_user_id());
+        ResponseEntity<KakaoPayApprovalRes> kakaoPResponseEntity = kakaoPayService.kakaoPaySuccess(kakaoPayApprovalRes, pg_token);
         System.out.println("kakaoPaySuccess -> pg_token: " + pg_token);
 
         // 화면 쪽에 정보를 전송
-        model.addAttribute("info", kakaoPayService.kakaoPayInfo(pg_token));
-//        return "redirect:" + "http://localhost:8080/api/v1/kakaoPay/success.html";
-        return null;
+//        model.addAttribute("info", kakaoPayService.kakaoPaySuccess(pg_token));
+        bundle.get().setPaid(true);
+//        bundleRepository.save(bundle);
+        return kakaoPayApprovalRes;
     }
 }

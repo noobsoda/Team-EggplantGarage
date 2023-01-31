@@ -4,12 +4,9 @@ import com.ssafy.db.entity.Bundle;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
-import java.util.List;
 
 @Repository
 public interface BundleRepository extends JpaRepository<Bundle, Long> {
     Optional<Bundle> findById(long id);
-//    Optional<List<Bundle>>
 }
