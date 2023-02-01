@@ -81,11 +81,16 @@ export default function LiveShowSubmit() {
             productList={productList}
             setProductList={setProductList}
           />
-          <ProductListBox />
+          <ProductListBox imgSrc={imgSrc} productList={productList} />
         </StyledBox>
       </StyledWindow>
       {step === 0 ? (
         <BigBtn name="NEXT" buttonClick={nextStep} />
+      ) : step === 3 ? (
+        <>
+          <MidBtn name="PREV" buttonClick={backStep} />
+          <MidBtn name="방송시작" buttonClick={nextStep} />
+        </>
       ) : (
         <>
           <MidBtn name="PREV" buttonClick={backStep} />
