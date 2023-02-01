@@ -15,6 +15,7 @@ import Like from "./Pages/Like";
 import Category from "./Pages/Category";
 import InfoEdit from "./Pages/InfoEdit";
 import LiveshowDetail from "./Pages/LiveshowDetail";
+import WriteReview from "./Pages/WriteReview";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -32,6 +33,7 @@ const Router = () => {
     { path: "/category", element: <Category /> },
     { path: "/infoedit", element: <InfoEdit /> },
     { path: "/liveshowdetail", element: <LiveshowDetail /> },
+    { path: "/writereview", element: <WriteReview /> },
   ]);
 
   return (

@@ -9,10 +9,10 @@ const StyledPurchasedHistory = styled.div`
 export default function PurchasedHistory() {
   return (
     <StyledPurchasedHistory>
-      <ItemCard buttonType={"check"} />
+      <ItemCard buttonType={"purchasedhistory"} />
       <ItemCard buttonType={"check"} />
       <ItemCard buttonType={"one"} />
-      <ItemCard buttonType={"two"} />
+      <ItemCard buttonType={"purchasedhistory"} />
     </StyledPurchasedHistory>
   );
 }

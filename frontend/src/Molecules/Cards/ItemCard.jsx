@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import ExtraSmallButton from "../../Atoms/Buttons/ExtraSmallBtn";
 import Check from "../../Atoms/Inputs/Check";
+import { useNavigate } from "react-router-dom";
 
 const StyledItemCard = styled.div`
   width: 280px;
@@ -35,6 +36,7 @@ const ItemBtn = styled.div`
   align-items: center;
 `;
 export default function ItemCard({ item, buttonType }) {
+  const navigate = useNavigate();
   return (
     <StyledItemCard>
       <ItemImage />
@@ -54,8 +56,21 @@ export default function ItemCard({ item, buttonType }) {
       <ItemBtn>
         {buttonType === "check" ? <Check /> : <></>}
         {buttonType === "one" ? <ExtraSmallButton name="한개" /> : <></>}
-        {buttonType === "two" ? <ExtraSmallButton name="두개" /> : <></>}
-        {buttonType === "two" ? <ExtraSmallButton name="두개" /> : <></>}
+        {buttonType === "purchasedhistory" ? (
+          <ExtraSmallButton name="대화하기" />
+        ) : (
+          <></>
+        )}
+        {buttonType === "purchasedhistory" ? (
+          <ExtraSmallButton
+            name="리뷰작성"
+            buttonClick={() => {
+              navigate("/writereview");
+            }}
+          />
+        ) : (
+          <></>
+        )}
       </ItemBtn>
     </StyledItemCard>
   );
