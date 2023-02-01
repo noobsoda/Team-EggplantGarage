@@ -12,6 +12,7 @@ import Search from "./Pages/Search";
 import Mypage from "./Pages/Mypage";
 import Chat from "./Pages/Chat";
 import Like from "./Pages/Like";
+import Category from "./Pages/Category";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -26,6 +27,7 @@ const Router = () => {
     { path: "/like", element: <Like /> },
     { path: "/chat", element: <Chat /> },
     { path: "/mypage", element: <Mypage /> },
+    { path: "/category", element: <Category /> },
   ]);
 
   return (

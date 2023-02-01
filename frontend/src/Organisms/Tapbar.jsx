@@ -50,6 +50,7 @@ export default function Tapbar() {
           <TapbarBox
             name={box.name}
             imgSrc={box.src}
+            key={box.name}
             clicked={() => goTo(box.category)}
           />
         );

@@ -4,12 +4,13 @@ import PictureBox from "../../Organisms/PictureBox";
 
 const StyledBox = styled.div`
   width: 360px;
+  height: 640px;
 `;
 const StyledGreenBox = styled.div`
   color: ${({ theme }) => theme.color.green};
 `;
 
-export default function PictureSubmitBox() {
+export default function PictureSubmitBox({ setOriImgSrc }) {
   return (
     <StyledBox>
       <h1 className="page-header">물품 등록</h1>
@@ -19,7 +20,7 @@ export default function PictureSubmitBox() {
         <p>사진 내 물품을 선택 후 물품 등록이 시작됩니다.</p>
       </StyledGreenBox>
 
-      <PictureBox />
+      <PictureBox setOriImgSrc={setOriImgSrc} />
     </StyledBox>
   );
 }

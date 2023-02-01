@@ -2,15 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import CategoryNav from "../Molecules/CategoryNav";
 import LiveshowItem from "./LiveshowItem";
+import Body from "../Atoms/Body";
 
-const StyledMainBody = styled.div``;
 const FlexDiv = styled.div`
+  width: 280px;
   display: flex;
+  justify-content: space-between;
 `;
 
 export default function MainBody() {
   return (
-    <StyledMainBody>
+    <Body>
       <div className="page-header">지역 Liveshow</div>
       <FlexDiv>
         <LiveshowItem />
@@ -24,6 +26,6 @@ export default function MainBody() {
         <LiveshowItem />
         <LiveshowItem />
       </FlexDiv>
-    </StyledMainBody>
+    </Body>
   );
 }
