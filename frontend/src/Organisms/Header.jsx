@@ -21,7 +21,7 @@ export default function Header({ isLogo, isSearch, isName, headerName }) {
   }
   return (
     <StyledHeader>
-      <LeftBtn />
+      <LeftBtn buttonClick={() => navigate(-1)} />
       {isSearch ? <InputBox /> : <></>}
       {isSearch ? <div></div> : <></>}
       {isLogo ? (

@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "styled-components";
+import ExtraSmallButton from "../../Atoms/Buttons/ExtraSmallBtn";
+import Check from "../../Atoms/Inputs/Check";
 
 const StyledItemCard = styled.div`
   width: 280px;
@@ -8,6 +10,7 @@ const StyledItemCard = styled.div`
   border: 1.5px solid #d3385a;
   background-color: ${({ theme }) => theme.color.white};
   display: flex;
+  margin: 8px 0;
 `;
 const ItemImage = styled.div`
   width: 72px;
@@ -21,19 +24,39 @@ const ItemImage = styled.div`
 const ItemInfo = styled.div`
   width: 136px;
   height: 72px;
-  background-color: grey;
+  background-color: white;
 `;
 const ItemBtn = styled.div`
   width: 72px;
   height: 72px;
-  background-color: yellow;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
 `;
-export default function ItemCard({ item, button1Click, button2Click }) {
+export default function ItemCard({ item, buttonType }) {
   return (
     <StyledItemCard>
       <ItemImage />
-      <ItemInfo></ItemInfo>
-      <ItemBtn></ItemBtn>
+      <ItemInfo>
+        <div className="body1-header" style={{ padding: "8px" }}>
+          제품명
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <div className="body2-bold" style={{ padding: "8px" }}>
+            제안자
+          </div>
+          <div className="body2-bold" style={{ padding: "8px" }}>
+            즉시구매가
+          </div>
+        </div>
+      </ItemInfo>
+      <ItemBtn>
+        {buttonType === "check" ? <Check /> : <></>}
+        {buttonType === "one" ? <ExtraSmallButton name="한개" /> : <></>}
+        {buttonType === "two" ? <ExtraSmallButton name="두개" /> : <></>}
+        {buttonType === "two" ? <ExtraSmallButton name="두개" /> : <></>}
+      </ItemBtn>
     </StyledItemCard>
   );
 }
