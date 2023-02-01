@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,5 +31,8 @@ public class Product extends BaseEntity {
             @JoinColumn(name = "seller_id", referencedColumnName = "seller_id")
     })
     private Live live;
+
+    @OneToMany(mappedBy = "product")
+    private List<BundledItemsRelation> bundledItemsRelationList;
 
 }

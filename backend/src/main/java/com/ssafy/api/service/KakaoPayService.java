@@ -3,7 +3,10 @@ package com.ssafy.api.service;
 import com.ssafy.api.response.KakaoPayApprovalRes;
 import com.ssafy.api.response.KakaoPayReadyRes;
 import com.ssafy.db.entity.Bundle;
+import com.ssafy.db.entity.BundledItemsRelation;
+import com.ssafy.db.repository.BundledItemsRelationRepository;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -13,6 +16,8 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @Log
@@ -22,10 +27,25 @@ public class KakaoPayService {
     private KakaoPayReadyRes kakaoPayReadyRes;
     private KakaoPayApprovalRes kakaoPayApprovalRes;
 
+    @Autowired
+    BundledItemsRelationRepository bundledItemsRelationRepository;
+
+    @Autowired
+    Optional<BundledItemsRelation> bundledItemsRelation;
+
     // 결제 준비
-    public KakaoPayReadyRes KakaoPayReady(Bundle bundle, int quantity) {
+    public KakaoPayReadyRes KakaoPayReady(Bundle bundle) {
         System.out.println("Service: 결제 준비 시작");
-        System.out.println("KakaoPayReady -> bundle: " + bundle + " quantity: " + quantity);
+
+        Optional<List<BundledItemsRelation>> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundle.getId());
+
+        int quantity = bundledItemsRelationList.get().size();
+        System.out.println("수량: " + quantity);
+
+        String productName = bundledItemsRelationList.get().get(0).getProduct().getName();
+        if(quantity > 1) productName += " 외 " + (quantity-1) + "개";
+
+        System.out.println("상품명: " + productName);
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -37,7 +57,7 @@ public class KakaoPayService {
         params.add("cid", "TC0ONETIME"); // 가맹점 코드
         params.add("partner_order_id", String.valueOf(bundle.getId())); // 가맹점 주문번호
         params.add("partner_user_id", String.valueOf(bundle.getUser().getId())); // 가맹점 회원 id
-        params.add("item_name", "상품명 이름 가져오기"); // 상품명
+        params.add("item_name", productName); // 상품명
         params.add("quantity", String.valueOf(quantity)); // 상품 수량
         params.add("total_amount", String.valueOf(bundle.getPrice())); // 상품 총액
         params.add("tax_free_amount", "100"); // 상품 비과세 금액
@@ -60,6 +80,11 @@ public class KakaoPayService {
     // 결제 승인
     public ResponseEntity<KakaoPayApprovalRes> kakaoPaySuccess(KakaoPayApprovalRes kakaoPayApprovalRes, String pg_token) {
         System.out.println("Service: 결제 승인 단계 시작");
+        System.out.println("결제 고유번호: " + kakaoPayApprovalRes.getTid());
+        System.out.println("getPartner_order_id: " + kakaoPayApprovalRes.getPartner_order_id());
+        System.out.println("getPartner_user_id: " + kakaoPayApprovalRes.getPartner_user_id());
+        System.out.println("pg_token: " + pg_token);
+
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -74,7 +99,7 @@ public class KakaoPayService {
         params.add("partner_user_id", kakaoPayApprovalRes.getPartner_user_id()); // 가맹점 회원 id, 결제 준비 API 요청과 일치해야 함
         params.add("pg_token", pg_token); // 결제승인 요청을 인증하는 토큰
         // 사용자 결제 수단 선택 완료 시, approval_url로 redirection해줄 때 pg_token을 query string으로 전달
-        params.add("total_amount", kakaoPayApprovalRes.getAmount().toString()); // 상품 총액, 결제 준비 API 요청과 일치해야 함
+//        params.add("total_amount", kakaoPayApprovalRes.getAmount().toString()); // 상품 총액, 결제 준비 API 요청과 일치해야 함
 
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<>(params, headers);
 

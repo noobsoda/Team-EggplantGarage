@@ -1,10 +1,14 @@
 package com.ssafy.api.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class KakaoPayApprovalRes {
     private String aid, tid, cid, sid;
     private String partner_order_id, partner_user_id, payment_method_type;
