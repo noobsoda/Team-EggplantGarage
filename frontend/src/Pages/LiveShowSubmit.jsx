@@ -31,13 +31,20 @@ export default function LiveShowSubmit() {
   const [step, setStep] = useState(0);
   const [isModify, setIsModify] = useState(false);
 
-  const [title, setTitle] = useState({ value: "", check: true });
-  const [categorys, setCategorys] = useState({ value: [], check: true });
-  const [image, setImage] = useState({ value: "", check: true });
-  const [productList, setProductList] = useState({ value: [], check: true });
+  const [title, setTitle] = useState({ value: "", check: false });
+  const [categorys, setCategorys] = useState({ value: [], check: false });
+  const [productList, setProductList] = useState({ value: [], check: false });
 
   function nextStep() {
     if (step === 3) return;
+
+    //이미지를 등록해야 다음으로
+    if (step === 1) {
+      if (imgSrc === "//:0") {
+        alert("사진을 찍어주세요");
+        return;
+      }
+    }
     setStep(step + 1);
   }
 
@@ -48,7 +55,11 @@ export default function LiveShowSubmit() {
 
   //제목 입력
   function titleValue(e) {
-    setTitle(e.target.value);
+    if (e.target.value === "") {
+      setTitle({ value: e.target.value, check: false });
+    } else {
+      setTitle({ value: e.target.value, check: true });
+    }
   }
 
   //카테고리 입력
@@ -62,8 +73,31 @@ export default function LiveShowSubmit() {
   function delCategory(categoryName) {
     setCategorys({
       value: categorys.value.filter((ele) => ele !== categoryName),
-      check: true,
+      check: categorys.value.length === 1 ? false : true, //1개남았을때 삭제하면 false, 그외는 true
     });
+  }
+
+  /**
+   * 방송 시작을 위한 정보 전송
+   */
+  function goLive() {
+    console.log("방송시작");
+    //제목
+    console.log(`방송 제목 ${title.value},${title.check}`);
+
+    //카테고리들
+    console.log(`카테고리 ${categorys.value},${categorys.check}`);
+
+    //이미지 소스
+    // console.log(`이미지 ${imgSrc}`);
+
+    //물품정보
+    //---제품 이미지 위치
+    //---제품명
+    //---제품가격
+    console.log(`물품 리스트 ${productList.value},${productList.check}`);
+
+    //판매자(나) 이메일
   }
   return (
     <StyledDiv>
@@ -89,7 +123,7 @@ export default function LiveShowSubmit() {
       ) : step === 3 ? (
         <>
           <MidBtn name="PREV" buttonClick={backStep} />
-          <MidBtn name="방송시작" buttonClick={nextStep} />
+          <MidBtn name="방송시작" buttonClick={goLive} />
         </>
       ) : (
         <>
