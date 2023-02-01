@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import InputBox from "../../Molecules/InputBox";
 import Checkbox from "../../Molecules/CheckBox";
-import SmallBtn from "../../Atoms/Buttons/SmallBtn";
+import SmallBtn from "../../Atoms/Buttons/ExtraSmallBtn";
 
 import styled from "styled-components";
 const StyledBox = styled.div`
@@ -16,7 +16,7 @@ const StyledCanvas = styled.canvas`
   width: 360px;
 `;
 
-const StyledDrawCanvas = styled.canvas`
+const StyledResultCanvas = styled.canvas`
   width: 100px;
   height: 100px;
 `;
@@ -36,6 +36,10 @@ export default function ProductSubmitBox({ imgSrc }) {
   const [img, setImg] = useState(undefined); //원본 이미지
 
   const [ratio, setRatio] = useState(0.0); //원본이미지와 canvas의 비율
+
+  //제품명, 제품가격
+  const [productName, setProductName] = useState("");
+  const [productPrice, setProductPrice] = useState("");
 
   useEffect(() => {
     const img = new Image();
@@ -96,6 +100,7 @@ export default function ProductSubmitBox({ imgSrc }) {
   function finishDrawing(e) {
     const { offsetX, offsetY } = e.nativeEvent;
     CropImage(offsetX / ratio - startPos[0], offsetY / ratio - startPos[1]);
+    setEndPos([offsetX / ratio, offsetY / ratio]);
     setIsDrawing(false);
   }
 
@@ -129,7 +134,7 @@ export default function ProductSubmitBox({ imgSrc }) {
    * @param {*} height
    */
   function CropImage(width, height) {
-    resultCanvas.current.getContext("2d").drawImage(
+    resultCtx.drawImage(
       img,
       startPos[0], //이미지 x좌표
       startPos[1], //이미지 y좌표
@@ -142,6 +147,50 @@ export default function ProductSubmitBox({ imgSrc }) {
     );
   }
 
+  /**
+   * 제품 명
+   */
+  function onProductName(e) {
+    setProductName(e.target.value);
+  }
+
+  /**
+   * 제품 가격
+   */
+  function onProductPrice(e) {
+    setProductPrice(e.target.value);
+  }
+
+  /**
+   * 상품 등록 진행
+   */
+  function addProduct() {
+    console.log(
+      `${productName},${productPrice},${Math.round(startPos[0])},${Math.round(
+        startPos[1]
+      )},${Math.round(endPos[0])},${Math.round(endPos[1])}`
+    );
+
+    //초기화
+    reset();
+  }
+
+  function reset() {
+    //초기화
+    setProductName("");
+    setProductPrice("");
+    setStartPos([0, 0]);
+    setEndPos([0, 0]);
+
+    // canvas 초기화
+    ctx.drawImage(img, 0, 0, img.width, img.height);
+    resultCtx.clearRect(
+      0,
+      0,
+      resultCanvas.current.width,
+      resultCanvas.current.height
+    );
+  }
   return (
     <StyledBox>
       <div>
@@ -153,13 +202,21 @@ export default function ProductSubmitBox({ imgSrc }) {
           onMouseMove={drawSquareImage}
         ></StyledCanvas>
         <button>그리기</button>
-        <canvas ref={resultCanvas}></canvas>
+        <StyledResultCanvas ref={resultCanvas}></StyledResultCanvas>
         <SmallBtn name="제거"></SmallBtn>
-        <SmallBtn name="들록"></SmallBtn>
+        <SmallBtn name="등록" buttonClick={addProduct}></SmallBtn>
       </div>
-      <InputBox placehold="제품명을 입력하세요" />
+      <InputBox
+        placehold="제품명을 입력하세요"
+        onChange={onProductName}
+        value={productName}
+      />
       <Checkbox id="price" text="즉시구매가" />
-      <InputBox placehold="즉시구매가를 입력하세요" />
+      <InputBox
+        placehold="즉시구매가를 입력하세요"
+        onChange={onProductPrice}
+        value={productPrice}
+      />
     </StyledBox>
   );
 }
