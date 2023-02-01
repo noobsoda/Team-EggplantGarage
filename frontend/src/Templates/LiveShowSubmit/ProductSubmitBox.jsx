@@ -21,7 +21,11 @@ const StyledResultCanvas = styled.canvas`
   height: 100px;
 `;
 
-export default function ProductSubmitBox({ imgSrc }) {
+export default function ProductSubmitBox({
+  imgSrc,
+  productList,
+  setProductList,
+}) {
   const originCanvas = useRef(undefined); //원본 그림 저장
   const drawCanvas = useRef(undefined); //실제 그리는 영역
   const resultCanvas = useRef(undefined); //잘라진 영역 확인
@@ -41,6 +45,8 @@ export default function ProductSubmitBox({ imgSrc }) {
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
 
+  const [id, setId] = useState(0);
+
   useEffect(() => {
     const img = new Image();
     img.src = imgSrc;
@@ -57,13 +63,13 @@ export default function ProductSubmitBox({ imgSrc }) {
       setImg(img);
 
       //확인
-      console.log(`${img.width}과 ${img.height}`); //480,360
-      console.log(`${drawCanvas.current.width}, ${drawCanvas.current.height}`);
+      //console.log(`${img.width}과 ${img.height}`); //480,360
+      //console.log(`${drawCanvas.current.width}, ${drawCanvas.current.height}`);
       //캔버스에 그려진 크기  480, 360
       //실제 캔버스 크기 360, 270
-      console.log(
-        `${resultCanvas.current.width}, ${resultCanvas.current.height}`
-      );
+      // console.log(
+      //   `${resultCanvas.current.width}, ${resultCanvas.current.height}`
+      // );
     };
 
     //결과 캔버스
@@ -165,13 +171,25 @@ export default function ProductSubmitBox({ imgSrc }) {
    * 상품 등록 진행
    */
   function addProduct() {
-    console.log(
-      `${productName},${productPrice},${Math.round(startPos[0])},${Math.round(
-        startPos[1]
-      )},${Math.round(endPos[0])},${Math.round(endPos[1])}`
-    );
-
+    setProductList({
+      value: [
+        ...productList.value,
+        {
+          id: id,
+          productName: productName,
+          productPrice: productPrice,
+          lefttopX: startPos[0],
+          lefttopY: startPos[1],
+          rightbottomX: endPos[0],
+          rightbottomY: endPos[1],
+        },
+      ],
+      check: true,
+    });
+    //상품 구분 번호
+    setId(id + 1);
     //초기화
+    console.log(productList);
     reset();
   }
 

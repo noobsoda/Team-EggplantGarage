@@ -34,7 +34,7 @@ export default function LiveShowSubmit() {
   const [title, setTitle] = useState({ value: "", check: true });
   const [categorys, setCategorys] = useState({ value: [], check: true });
   const [image, setImage] = useState({ value: "", check: true });
-  const [product, setProduct] = useState({ value: [], check: true });
+  const [productList, setProductList] = useState({ value: [], check: true });
 
   function nextStep() {
     if (step === 3) return;
@@ -76,7 +76,11 @@ export default function LiveShowSubmit() {
             delCategory={delCategory}
           />
           <PictureSubmitBox setOriImgSrc={setImgSrc} />
-          <ProductSubmitBox imgSrc={imgSrc} />
+          <ProductSubmitBox
+            imgSrc={imgSrc}
+            productList={productList}
+            setProductList={setProductList}
+          />
           <ProductListBox />
         </StyledBox>
       </StyledWindow>
