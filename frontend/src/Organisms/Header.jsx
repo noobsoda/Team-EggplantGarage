@@ -12,6 +12,8 @@ const StyledHeader = styled.div`
   justify-content: space-between;
   padding: 8px 8px 8px;
   align-items: center;
+  border-bottom: solid 0.5px;
+  border-bottom-color: ${({ theme }) => theme.color.lightgrey};
 `;
 
 export default function Header({ isLogo, isSearch, isName, headerName }) {

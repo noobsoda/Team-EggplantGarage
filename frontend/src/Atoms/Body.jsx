@@ -6,9 +6,7 @@ const StyledBody = styled.div`
   width: 280px;
   height: 508px;
   border-top: solid 0.5px;
-  border-bottom: solid 0.5px;
   border-top-color: ${({ theme }) => theme.color.lightgrey};
-  border-bottom-color: ${({ theme }) => theme.color.lightgrey};
 `;
 
 export default function Body(props) {

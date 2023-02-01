@@ -8,6 +8,7 @@ const StyledSalesHistory = styled.div`
   justify-content: space-between;
   flex-wrap: wrap;
 `;
+
 export default function SalesHistory() {
   return (
     <StyledSalesHistory>
