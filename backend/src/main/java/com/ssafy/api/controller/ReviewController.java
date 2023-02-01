@@ -5,7 +5,6 @@ import com.ssafy.api.response.ReviewRes;
 import com.ssafy.api.service.ReviewService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Review;
-import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
