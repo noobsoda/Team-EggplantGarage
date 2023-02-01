@@ -35,7 +35,7 @@ const ItemBtn = styled.div`
   justify-content: space-evenly;
   align-items: center;
 `;
-export default function ItemCard({ item, buttonType }) {
+export default function ItemCard({ item, buttonType, isReview }) {
   const navigate = useNavigate();
   return (
     <StyledItemCard>
@@ -61,11 +61,21 @@ export default function ItemCard({ item, buttonType }) {
         ) : (
           <></>
         )}
-        {buttonType === "purchasedhistory" ? (
+        {buttonType === "purchasedhistory" && isReview ? (
           <ExtraSmallButton
-            name="리뷰작성"
+            name="후기작성"
             buttonClick={() => {
               navigate("/writereview");
+            }}
+          />
+        ) : (
+          <></>
+        )}
+        {buttonType === "purchasedhistory" && !isReview ? (
+          <ExtraSmallButton
+            name="후기열람"
+            buttonClick={() => {
+              navigate("/review");
             }}
           />
         ) : (
