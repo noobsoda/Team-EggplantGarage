@@ -9,4 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
+    Optional<List<Review>> findByProduct_Live_User_IdAndIsSellerTrueOrderByCreatedAtDesc(long sellerId);
+    Optional<List<Review>> findByProduct_User_IdAndIsSellerFalseOrderByCreatedAtDesc(long buyerId);
+    boolean existsByProduct_IdAndIsSellerTrue(long productId);
+    boolean existsByProduct_IdAndIsSellerFalse(long productId);
 }
