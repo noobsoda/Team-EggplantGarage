@@ -15,12 +15,12 @@ const StyledInnerBox = styled.div`
   margin: 0 8px;
 `;
 
-export default function CategoryBtn({ categoryName }) {
+export default function CategoryBtn({ categoryName, onClose }) {
   return (
     <StyledBox className="body2-bold">
       <StyledInnerBox>
         <span>{categoryName}</span>
-        <button>X</button>
+        <button onClick={() => onClose(categoryName)}>X</button>
       </StyledInnerBox>
     </StyledBox>
   );

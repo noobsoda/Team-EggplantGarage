@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../Atoms/Buttons/ExtraSmallBtn";
+import ImageBox from "../Atoms/canvas/ImageBox";
 import styled from "styled-components";
 
 const StyledBox = styled.div`
@@ -26,10 +27,26 @@ const StyledButtonBox = styled.div`
   flex-direction: column;
 `;
 
-export default function ProductBox({ name, price, onClick }) {
+export default function ProductBox({
+  name,
+  price,
+  onClick,
+  imgSrc,
+  leftTopX,
+  rightBottomX,
+  leftTopY,
+  rightBottomY,
+}) {
   return (
     <StyledBox>
-      <StyledPicBox></StyledPicBox>
+      <ImageBox
+        imgSrc={imgSrc}
+        leftTopX={leftTopX}
+        rightBottomX={rightBottomX}
+        leftTopY={leftTopY}
+        rightBottomY={rightBottomY}
+        boxSize="75"
+      />
       <StyledInfoBox>
         <p className="body1-header">{name}</p>
         <p className="body2-bold">{price}원</p>
