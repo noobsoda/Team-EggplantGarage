@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.request.LiveCategoriesReq;
 import com.ssafy.api.request.LiveRegisterPostReq;
 import com.ssafy.api.response.LiveDetailGetRes;
 import com.ssafy.api.service.FileService;
@@ -11,6 +12,7 @@ import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -41,11 +43,8 @@ public class LiveController {
     @PostMapping("/{email}")
     @ApiOperation(value = "방 생성", notes = "방을 생성한다.")
     @ApiResponses({@ApiResponse(code = 201, message = "Created"), @ApiResponse(code = 401, message = "만료됨"), @ApiResponse(code = 403, message = "인증 실패"), @ApiResponse(code = 500, message = "서버 오류")})
-    public ResponseEntity<? extends BaseResponseBody> postLiveCreate(@ApiParam(value = "방 생성 정보", required = true) LiveRegisterPostReq liveRegisterInfo,
-        MultipartFile img, @PathVariable("email") String email) {
-
-        Path path = fileService.fileSave(img);
-        String thumbnailUrl = path.toString();
+    public ResponseEntity<? extends BaseResponseBody> postLiveCreate(@RequestBody @ApiParam(value = "방 생성 정보", required = true) LiveRegisterPostReq liveRegisterInfo,
+                                                                     @PathVariable("email") String email) {
 
         //유저 확인
         User user = userService.getUserByEmail(email);
@@ -57,12 +56,33 @@ public class LiveController {
         }
         //db에 저장 및 생성
         else {
-            liveService.CreateLive(liveRegisterInfo, user, thumbnailUrl);
+            liveService.CreateLive(liveRegisterInfo, user);
             return ResponseEntity.status(201).body(BaseResponseBody.of(201, "방 생성 성공"));
         }
 
 
     }
+    @PostMapping("/save/img/{email}")
+    @ApiOperation(value = "이미지 저장", notes = "이미지 DB 저장 후, idx 반환")
+    public ResponseEntity<? extends BaseResponseBody> postSaveImg(@RequestParam MultipartFile img, @PathVariable("email") String email){
+        Path path = fileService.fileSave(img);
+        String thumbnailUrl = path.toString();
+        //이메일로 아이디 찾고
+        User user = userService.getUserByEmail(email);
+        //그 아이디로 셀러 아이디 조회하고 해당 객체에 이미지 넣기
+        if(liveService.postLiveByThumbnailUrl(user.getId(), thumbnailUrl)){
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "이미지 넣기 성공"));
+        }else{
+            return ResponseEntity.status(204).body(BaseResponseBody.of(204, "해당 라이브가 없습니다"));
+
+        }
+
+    }
+   /* @PostMapping("/load/img")
+    @ApiOperation(value = "이미지 로드", notes = "idx를 통해 DB에서 해당하는 이미지 경로, 타입 반환")
+    public ResponseEntity<FileInfoRes> uploadImg(@RequestParam Long idx){
+        return new ResponseEntity<>(fileService.fileUpload(idx), HttpStatus.OK);
+    }*/
     @GetMapping("/detail")
     @ApiOperation(value = "방 상세정보 조회", notes = "방의 상세 정보와 유저 목록을 조회한다.")
     public ResponseEntity<LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, String> urlMap){
@@ -72,12 +92,25 @@ public class LiveController {
 
         logger.info("msg:{}", liveDetailGetRes);
 
-        /*LiveDetailGetRes liveDetailGetRes = LiveDetailGetRes.builder()
-
-                .build();*/
-
         return ResponseEntity.status(200).body(liveDetailGetRes);
     }
+    //카테고리 넣기
+    @PostMapping("/category/{email}")
+    @ApiOperation(value = "방 카테고리 저장", notes = "방의 카테고리를 저장한다..")
+    public ResponseEntity<? extends  BaseResponseBody> postLiveDetailInfo(@RequestBody @ApiParam(value = "방 생성 정보", required = true) LiveCategoriesReq liveCategoriesReq,
+                                                               @PathVariable("email") String email){
+
+        //이메일로 아이디 찾고
+        User user = userService.getUserByEmail(email);
+
+        if(liveService.postLiveByCategories(user.getId(), liveCategoriesReq)){
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "카테고리 넣기 성공"));
+        }else{
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "해당 라이브가 없습니다"));
+
+        }
+    }
+    //상품넣기
 
 
 }

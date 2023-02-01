@@ -1,10 +1,13 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.LiveCategoriesReq;
+import com.ssafy.api.request.LiveCategoryReq;
 import com.ssafy.api.request.LiveRegisterPostReq;
 import com.ssafy.api.response.LiveDetailGetRes;
 import com.ssafy.api.response.UserEntryRes;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.CategoryRepository;
+import com.ssafy.db.repository.LiveCategoryRepository;
 import com.ssafy.db.repository.LiveRepository;
 import com.ssafy.db.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,26 +23,28 @@ public class LiveServiceImpl implements LiveService {
 
     private final LiveRepository liveRepository;
     private final CategoryRepository categoryRepository;
-
     private final UserRepository userRepository;
+    private final LiveCategoryRepository liveCategoryRepository;
 
     @Autowired
-    public LiveServiceImpl(LiveRepository liveRepository, CategoryRepository categoryRepository, UserRepository userRepository){
+    public LiveServiceImpl(LiveRepository liveRepository, CategoryRepository categoryRepository, UserRepository userRepository, LiveCategoryRepository liveCategoryRepository) {
         this.liveRepository = liveRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
+        this.liveCategoryRepository = liveCategoryRepository;
     }
+
     @Override
-    public Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user, String thumbnailUrl) {
-        Live live = new Live();
-        live.setSession_id(liveRegisterInfo.getSession_id());
-        live.setTitle(liveRegisterInfo.getTitle());
-        live.setDescription(liveRegisterInfo.getDescription());
-        live.setUrl(liveRegisterInfo.getUrl());
-        live.setLive(liveRegisterInfo.isLive());
-        live.setLocation(liveRegisterInfo.getLocation());
-        live.setThumbnailUrl(thumbnailUrl);
-        live.setUser(user);
+    public Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user) {
+        Live live = Live.builder()
+                .session_id(liveRegisterInfo.getSession_id())
+                .title(liveRegisterInfo.getTitle())
+                .description(liveRegisterInfo.getDescription())
+                .url(liveRegisterInfo.getUrl())
+                .isLive(liveRegisterInfo.isLive())
+                .location(liveRegisterInfo.getLocation())
+                .user(user)
+                .build();
 
 
         return liveRepository.save(live);
@@ -49,8 +54,60 @@ public class LiveServiceImpl implements LiveService {
     public boolean getLiveCheckUrlByUrl(String url) {
         // 디비에 방송 url 정보 조회
         Optional<Live> oLive = liveRepository.findByUrl(url);
-        if(!oLive.isPresent())
+        if (!oLive.isPresent())
             return false;
+        return true;
+    }
+
+    @Override
+    public boolean postLiveByThumbnailUrl(Long sellerId, String thumbnailUrl) {
+
+        List<Live> liveList = liveRepository.findAllByUser_Id(sellerId);
+
+
+        if (liveList == null) return false;
+
+        for (Live live : liveList) {
+            //현재 라이브를 하고 있을 때만 썸네일 바꾸기
+            if (live.isLive()) {
+                live.setThumbnailUrl(thumbnailUrl);
+                liveRepository.save(live);
+            }
+        }
+
+
+        return true;
+    }
+
+    @Override
+    public boolean postLiveByCategories(Long sellerId, LiveCategoriesReq liveCategoriesReq) {
+        List<Live> liveList = liveRepository.findAllByUser_Id(sellerId);
+
+        if (liveList == null) return false;
+
+        for (Live live : liveList) {
+
+            //현재 라이브를 하고 있을 때만 카테고리 넣어주기
+            if (live.isLive()) {
+                live.getLiveCategoryList();
+                List<LiveCategory> liveCategoryList = new ArrayList<>();
+
+                for(LiveCategoryReq liveCategoryReq : liveCategoriesReq.getLiveCategoryReqList()){
+                    Optional<Category> oCategory = categoryRepository.findByName(liveCategoryReq.getCategoryName());
+                    Category category = oCategory.orElse(null);
+
+                    liveCategoryList.add(LiveCategory.builder()
+                            .category(category)
+                            .live(live)
+                            .build());
+
+                }
+                liveCategoryRepository.saveAll(liveCategoryList);
+
+
+                liveRepository.save(live);
+            }
+        }
         return true;
     }
 
@@ -59,22 +116,22 @@ public class LiveServiceImpl implements LiveService {
     public LiveDetailGetRes getLiveDetailByUrl(String url) {
         // 디비에 방송 url 정보 조회
         Optional<Live> oLive = liveRepository.findByUrl(url);
-        if(!oLive.isPresent())
+        if (!oLive.isPresent())
             return null;
-        Live live = oLive.get();
+        Live live = oLive.orElse(null);
 
         //라이브 카테고리 헬퍼 테이블 순회
         List<LiveCategory> liveCategories = live.getLiveCategoryList();
         List<Category> categoryList = new ArrayList<>();
 
-        for(Iterator<LiveCategory> it = liveCategories.iterator(); it.hasNext();){
+        for (Iterator<LiveCategory> it = liveCategories.iterator(); it.hasNext(); ) {
             LiveCategory liveCategory = it.next();
             //카테고리 아이디와 연관된 카테고리 테이블 조회
 
             categoryList.add(Category.builder()
-                            .id(liveCategory.getCategory().getId())
-                            .name(liveCategory.getCategory().getName())
-                            .build());
+                    .id(liveCategory.getCategory().getId())
+                    .name(liveCategory.getCategory().getName())
+                    .build());
         }
         //라이브 카테고리 조회 끝
 
@@ -85,7 +142,7 @@ public class LiveServiceImpl implements LiveService {
         List<UserLive> userLiveList = live.getUserLiveList();
         List<UserEntryRes> userEntryList = new ArrayList<>();
 
-        for(Iterator<UserLive> it = userLiveList.iterator(); it.hasNext();) {
+        for (Iterator<UserLive> it = userLiveList.iterator(); it.hasNext(); ) {
             UserLive userLive = it.next();
             //유저 아이디와 연관된 유저 테이블 조회
 
@@ -97,7 +154,7 @@ public class LiveServiceImpl implements LiveService {
             userEntryList.add(userEntryRes);
         }
 
-        
+
         //불러온 값 넣어주기
         LiveDetailGetRes liveDetailGetRes = LiveDetailGetRes.builder()
                 .id(live.getId())
@@ -111,7 +168,6 @@ public class LiveServiceImpl implements LiveService {
                 .isLive(live.isLive())
                 .userEntryResList(userEntryList)
                 .build();
-
 
 
         return liveDetailGetRes;

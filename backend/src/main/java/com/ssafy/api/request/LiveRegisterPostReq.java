@@ -5,6 +5,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ApiModel("LiveRegisterPostReq")
@@ -22,7 +24,6 @@ public class LiveRegisterPostReq {
     private boolean isLive;
     @ApiModelProperty(name = "방송 주소", example = "대전광역시 덕명구")
     private String location;
-
 
 
 }
