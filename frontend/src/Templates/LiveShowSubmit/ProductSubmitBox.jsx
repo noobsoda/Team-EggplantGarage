@@ -1,6 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import InputBox from "../../Molecules/InputBox";
 import Checkbox from "../../Molecules/CheckBox";
+import SmallBtn from "../../Atoms/Buttons/SmallBtn";
+
 import styled from "styled-components";
 const StyledBox = styled.div`
   width: 360px;
@@ -14,15 +16,22 @@ const StyledCanvas = styled.canvas`
   width: 360px;
 `;
 
+const StyledDrawCanvas = styled.canvas`
+  width: 100px;
+  height: 100px;
+`;
+
 export default function ProductSubmitBox({ imgSrc }) {
   const originCanvas = useRef(undefined); //원본 그림 저장
   const drawCanvas = useRef(undefined); //실제 그리는 영역
   const resultCanvas = useRef(undefined); //잘라진 영역 확인
 
-  const [pos, setPos] = useState([0, 0]); //클릭시 위치로 시작 위치가 된다.
+  const [startPos, setStartPos] = useState([0, 0]); //클릭시 위치로 시작 위치가 된다.
+  const [endPos, setEndPos] = useState([0, 0]);
   const [isdrawing, setIsDrawing] = useState(false); //현재 그리고 있는지 여부
 
   const [ctx, setCtx] = useState(null); //실제 그리는 영역의 canvas
+  const [resultCtx, setResultCtx] = useState(null);
 
   const [img, setImg] = useState(undefined); //원본 이미지
 
@@ -42,16 +51,27 @@ export default function ProductSubmitBox({ imgSrc }) {
       drawCanvas.current.height = img.height;
       drawCanvas.current.getContext("2d").drawImage(img, 0, 0);
       setImg(img);
+
+      //확인
+      console.log(`${img.width}과 ${img.height}`); //480,360
+      console.log(`${drawCanvas.current.width}, ${drawCanvas.current.height}`);
+      //캔버스에 그려진 크기  480, 360
+      //실제 캔버스 크기 360, 270
+      console.log(
+        `${resultCanvas.current.width}, ${resultCanvas.current.height}`
+      );
     };
 
     //결과 캔버스
     const result = resultCanvas.current;
-    result.width = 500;
-    result.height = 500;
+    result.width = 100;
+    result.height = 100;
 
     //비율 계산
-
+    setResultCtx(resultCanvas.current.getContext("2d"));
     setCtx(drawCanvas.current.getContext("2d"));
+
+    setRatio(0.75);
   }, [imgSrc]);
 
   /**
@@ -63,11 +83,11 @@ export default function ProductSubmitBox({ imgSrc }) {
     const { offsetX, offsetY } = e.nativeEvent;
     setIsDrawing(true);
 
-    ctx.beginPath();
+    ctx.beginPath(); //선그리기 시작
 
-    setPos([offsetX, offsetY]);
+    setStartPos([offsetX / ratio, offsetY / ratio]); //현제 위치
 
-    ctx.moveTo(offsetX, offsetY);
+    ctx.moveTo(offsetX, offsetY); //선 그리기 시작
   }
   /**
    * 마우스 그리기 종료
@@ -75,7 +95,7 @@ export default function ProductSubmitBox({ imgSrc }) {
    */
   function finishDrawing(e) {
     const { offsetX, offsetY } = e.nativeEvent;
-    CropImage(offsetX - pos[0], offsetY - pos[1]);
+    CropImage(offsetX / ratio - startPos[0], offsetY / ratio - startPos[1]);
     setIsDrawing(false);
   }
 
@@ -87,10 +107,20 @@ export default function ProductSubmitBox({ imgSrc }) {
   function drawSquareImage(e) {
     const { offsetX, offsetY } = e.nativeEvent;
     if (!isdrawing) return;
+    //canvas지우기
     ctx.clearRect(0, 0, drawCanvas.current.width, drawCanvas.current.height);
+    //이미지 다시 그리기
     ctx.drawImage(img, 0, 0, img.width, img.height);
+    //빨간 선
     ctx.strokeStyle = "red";
-    ctx.strokeRect(pos[0], pos[1], offsetX - pos[0], offsetY - pos[1]);
+    //사각형 그리기
+
+    ctx.strokeRect(
+      startPos[0],
+      startPos[1],
+      offsetX / ratio - startPos[0],
+      offsetY / ratio - startPos[1]
+    );
   }
 
   /**
@@ -99,19 +129,16 @@ export default function ProductSubmitBox({ imgSrc }) {
    * @param {*} height
    */
   function CropImage(width, height) {
-    console.log(ratio);
-    console.log(`${pos[0] * ratio} ${pos[1] * ratio}`);
-    console.log(`${width * ratio} ${height * ratio}`);
     resultCanvas.current.getContext("2d").drawImage(
       img,
-      pos[0] / ratio, //이미지 x좌표
-      pos[1] / ratio, //이미지 y좌표
-      width / ratio, //자를 이미지 크기
-      height / ratio, //자를 이미지
+      startPos[0], //이미지 x좌표
+      startPos[1], //이미지 y좌표
+      width, //자를 이미지 크기
+      height, //자를 이미지
       0,
       0,
-      500,
-      500
+      100,
+      100
     );
   }
 
@@ -125,9 +152,10 @@ export default function ProductSubmitBox({ imgSrc }) {
           onMouseDown={startDrawing}
           onMouseMove={drawSquareImage}
         ></StyledCanvas>
-        <button>제거</button>
         <button>그리기</button>
         <canvas ref={resultCanvas}></canvas>
+        <SmallBtn name="제거"></SmallBtn>
+        <SmallBtn name="들록"></SmallBtn>
       </div>
       <InputBox placehold="제품명을 입력하세요" />
       <Checkbox id="price" text="즉시구매가" />
