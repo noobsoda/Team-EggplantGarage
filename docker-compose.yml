@@ -22,6 +22,15 @@ services:
       - '--collation-server=utf8mb4_unicode_ci'
     networks:
       - test_network
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - '3000:3000'
 
   application:
     build:
@@ -37,6 +46,9 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       - database-mysql
+    volumes:
+      - './backend/:/app'
+      - '/app/node_modules'
     networks:
       - test_network
 
