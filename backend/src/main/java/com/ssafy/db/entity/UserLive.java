@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public class UserLive{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = null;
+    private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     private Live live;
     @ManyToOne(fetch = FetchType.LAZY)
