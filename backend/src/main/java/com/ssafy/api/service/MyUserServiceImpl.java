@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.entity.User;
-import com.ssafy.db.repository.UserRepository;
+import com.ssafy.db.repository.MyUserRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -20,15 +20,15 @@ import java.util.Optional;
  * 유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
 @Service("userService")
-public class UserServiceImpl implements UserService {
+public class MyUserServiceImpl implements UserService {
     private final Logger logger;
 
-    public UserServiceImpl(Logger logger) {
+    public MyUserServiceImpl(Logger logger) {
         this.logger = logger;
     }
 
     @Autowired
-    UserRepository userRepository;
+    MyUserRepository userRepository;
 
 /*	@Autowired
 	UserRepositorySupport userRepositorySupport;*/
