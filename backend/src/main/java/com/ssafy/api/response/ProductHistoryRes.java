@@ -1,6 +1,7 @@
 package com.ssafy.api.response;
 
 import com.ssafy.db.entity.Product;
+import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @ApiModel("ProductHistoryResponse")
 public class ProductHistoryRes {
     @ApiModelProperty(name = "Product name")
-    private String name;
+    private String productName;
     @ApiModelProperty(name = "Product soldPrice")
     private int soldPrice;
     @ApiModelProperty(name = "Product isPaid")
@@ -28,12 +29,16 @@ public class ProductHistoryRes {
     private int rightBottomY;
     @ApiModelProperty(name = "Product imageUrl")
     private String imageUrl;
+    @ApiModelProperty(name = "User id")
+    private long userId;
+    @ApiModelProperty(name = "User name")
+    private String userName;
     @ApiModelProperty(name = "Product imageUrl")
-    private boolean existReview;
+    private long reviewId;
 
-    public static ProductHistoryRes of(Product product, boolean existReview)  {
+    public static ProductHistoryRes of(Product product, User user, long reviewId)  {
         ProductHistoryRes res = ProductHistoryRes.builder()
-                .name(product.getName())
+                .productName(product.getName())
                 .soldPrice(product.getSoldPrice())
                 .isPaid(product.isPaid())
                 .leftTopX(product.getLeftTopX())
@@ -41,7 +46,9 @@ public class ProductHistoryRes {
                 .rightBottomX(product.getRightBottomX())
                 .rightBottomY(product.getRightBottomY())
                 .imageUrl(product.getImageUrl())
-                .existReview(existReview)
+                .userId(user.getId())
+                .userName(user.getName())
+                .reviewId(reviewId)
                 .build();
         return res;
     }

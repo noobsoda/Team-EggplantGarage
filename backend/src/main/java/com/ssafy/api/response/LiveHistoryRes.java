@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 @ApiModel("LiveHistoryResponse")
 public class LiveHistoryRes {
+    @ApiModelProperty(name = "Live id")
+    private long liveId;
     @ApiModelProperty(name = "Live title")
     private String title;
     @ApiModelProperty(name = "Live thumbnailUrl")
@@ -23,6 +25,7 @@ public class LiveHistoryRes {
 
     public static LiveHistoryRes of(Live live)  {
         LiveHistoryRes res = LiveHistoryRes.builder()
+                .liveId(live.getId())
                 .title(live.getTitle())
                 .thumbnailUrl(live.getThumbnailUrl())
                 .createdAt(live.getCreatedAt())
