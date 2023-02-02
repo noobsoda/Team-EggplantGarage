@@ -9,8 +9,10 @@ const StyledSmallSelect = styled.button`
   color: ${({ theme }) => theme.color.darkgrey};
 `;
 
-export default function SmallSelect({ name }) {
+export default function SmallSelect({ name, buttonClick }) {
   return (
-    <StyledSmallSelect className="body2-regular">{name}</StyledSmallSelect>
+    <StyledSmallSelect className="body2-regular" onClick={buttonClick}>
+      {name}
+    </StyledSmallSelect>
   );
 }
