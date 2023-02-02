@@ -26,9 +26,6 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    volumes:
-      - './frontend:/app'
-      - '/app/node_modules'
     ports:
       - '3000:3000'
     networks:
@@ -48,9 +45,6 @@ services:
       SPRING_DATASOURCE_PASSWORD: root
     depends_on:
       - database-mysql
-    volumes:
-      - './backend/:/app'
-      - '/app/node_modules'
     networks:
       - test_network
 
@@ -65,6 +59,7 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - application
+      - frontend
     networks:
       - test_network
 networks:
