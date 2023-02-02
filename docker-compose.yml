@@ -61,8 +61,6 @@ services:
       - SERVER_PORT=5442
       - OPENVIDU_URL=http://localhost:5443
       - OPENVIDU_SECRET=OPENVIDU_SECRET
-    networks:
-      - test_network
 
 networks:
   test_network:
