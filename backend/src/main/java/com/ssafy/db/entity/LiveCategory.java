@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class LiveCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id = null;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "live_id")
