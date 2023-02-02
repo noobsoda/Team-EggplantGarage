@@ -98,14 +98,13 @@ public class UserController {
 
     }
 
-    @DeleteMapping()
+    @PatchMapping("/delete/{email}")
     @ApiOperation(value = "회원 본인 정보 삭제", notes = "로그인한 회원 본인의 정보를 삭제한다.")
     @ApiResponses({@ApiResponse(code = 200, message = "성공"), @ApiResponse(code = 401, message = "인증 실패"),})
-    public ResponseEntity<? extends BaseResponseBody> deleteUser(@ApiIgnore Authentication authentication, @RequestBody @ApiParam(value = "회원탈퇴 정보", required = true) UserDeleteReq userDeleteReq) {
+    public ResponseEntity<? extends BaseResponseBody> deleteUser(@RequestBody @ApiParam(value = "회원탈퇴 정보", required = true) UserDeleteReq userDeleteReq,
+                                                                 @PathVariable("email") String email) {
 
-        SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
-        String userEmail = userDetails.getUsername();
-        if (userService.deleteUserByEmail(userEmail, userDeleteReq)) {
+        if (userService.deleteUserByEmail(email, userDeleteReq)) {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
         } else {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));

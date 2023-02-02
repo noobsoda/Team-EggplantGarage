@@ -3,13 +3,15 @@ package com.ssafy.db.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 유저 모델 정의.
@@ -17,9 +19,10 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@EntityListeners(AuditingEntityListener.class)
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
 public class User extends BaseEntity {
-
     @Column(unique = true)
     private String email;
     @JsonIgnore
@@ -31,9 +34,11 @@ public class User extends BaseEntity {
     private String phoneNumber;
     private String bankName;
     private String bankAddress;
-    @CreatedDate
-    private LocalDateTime createdAt;
     private String refreshToken;
 
+    private boolean isDelete;
+
+    @OneToMany(mappedBy = "user")
+    private List<Live> liveList = new ArrayList<>();
 
 }

@@ -79,14 +79,18 @@ public class MyUserServiceImpl implements UserService {
 
         //해당 유저의 비밀번호와 아이디가 일치하면 delete하고 true 아니라면 false
 
-        User user = userRepository.findByEmail(email).get();
+        Optional<User> Ouser = userRepository.findByEmail(email);
+        if(!Ouser.isPresent())
+            return false;
+
+        User user = Ouser.get();
         if (passwordEncoder.matches(userDeleteReq.getPassword(), user.getPassword())) {
             //딜리트 하기전 해당 유저가 생성한 방 모두 삭제
             //해당 유저가 찜한 목록을 삭제한다.
             //해당 유저의 묶음 구매 목록을 삭제한다.
-
+            user.setDelete(true);
             //해당 유저 정보를 삭제한다.
-            userRepository.delete(user);
+            userRepository.save(user);
             return true;
         } else {
             return false;
