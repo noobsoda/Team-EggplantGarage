@@ -51,7 +51,6 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt
     depends_on:
       - application
-      - frontend
     networks:
       - test_network
 networks:
