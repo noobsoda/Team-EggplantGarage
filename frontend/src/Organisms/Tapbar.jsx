@@ -10,6 +10,10 @@ const StyledTapbar = styled.div`
   position: absolute;
   top: 584px;
   left: 0px;
+  z-index: 1;
+  background-color: white;
+  border-top: 0.5px solid;
+  border-top-color: ${({ theme }) => theme.color.lightgrey};
 `;
 export default function Tapbar() {
   const array = [

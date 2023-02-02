@@ -2,16 +2,15 @@ import React from "react";
 import styled from "styled-components";
 import Tapbar from "../Organisms/Tapbar";
 
-const StyledPage = styled.div`
-  width: 360px;
-  height: 640px;
+const StyledFlexBox = styled.div`
+  display: flex;
 `;
 
-export default function Page(props) {
+export default function FlexBox(props) {
   return (
-    <StyledPage>
+    <StyledFlexBox>
       {props.children}
       <Tapbar />
-    </StyledPage>
+    </StyledFlexBox>
   );
 }

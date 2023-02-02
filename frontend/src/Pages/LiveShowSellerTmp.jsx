@@ -8,7 +8,6 @@ const APPLICATION_SERVER_URL = "http://localhost:5000/";
 
 export default function LiveShowSeller({ hostSessionId }) {
   //해당 세션 아이디를 받아서 해당 라이브로 접속하기
-  hostSessionId = "ssessionA1212";
 
   const [myUserName, setMyUserName] = useState(
     "Participant" + Math.floor(Math.random() * 100)
@@ -19,9 +18,7 @@ export default function LiveShowSeller({ hostSessionId }) {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const [currentVideoDevice, setCurrentVideoDevice] = useState(undefined);
-  useEffect(() => {
-    joinSession();
-  }, []);
+
   async function getToken() {
     //sessionid생성
     const sessionId = await createSession(hostSessionId);
@@ -56,17 +53,17 @@ export default function LiveShowSeller({ hostSessionId }) {
     const OVidu = new OpenVidu();
     // --- 2) Init a session ---
     setOV(OVidu);
+    setSession(OVidu.initSession());
+
+    var mySession = session;
+
     // --- 3) Specify the actions when events take place in the session ---
 
     // On every new Stream received...
-    console.log("?");
-    console.log(OVidu.initSession());
-    console.log("-------");
-    OVidu.initSession().on("streamCreated", (event) => {
-      console.log("스트림 생성이요");
+    mySession.on("streamCreated", (event) => {
       // Subscribe to the Stream to receive it. Second parameter is undefined
       // so OpenVidu doesn't create an HTML video by its own
-      var subscriber = OVidu.initSession().subscribe(event.stream, undefined);
+      var subscriber = mySession.subscribe(event.stream, undefined);
       var subscribersTmp = subscribers;
       subscribersTmp.push(subscriber);
 
@@ -75,15 +72,13 @@ export default function LiveShowSeller({ hostSessionId }) {
     });
 
     // On every Stream destroyed...
-    OVidu.initSession().on("streamDestroyed", (event) => {
-      console.log("스트림 종료");
+    mySession.on("streamDestroyed", (event) => {
       // Remove the stream from 'subscribers' array
       deleteSubscriber(event.stream.streamManager);
     });
 
     // On every asynchronous exception...
-    OVidu.initSession().on("exception", (exception) => {
-      console.log("예외요");
+    mySession.on("exception", (exception) => {
       console.warn(exception);
     });
 
@@ -93,15 +88,14 @@ export default function LiveShowSeller({ hostSessionId }) {
     getToken().then((token) => {
       // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
       // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      OVidu.initSession()
+      mySession
         .connect(token, { clientData: myUserName })
         .then(async () => {
           // --- 5) Get your own camera stream ---
-          console.log("초기화 시작, 토큰 받음");
-          console.log(token);
+
           // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
           // element: we will manage it on our own) and with the desired properties
-          let publisher = await OVidu.initPublisherAsync(undefined, {
+          let publisher = await OV.initPublisherAsync(undefined, {
             audioSource: undefined, // The source of audio. If undefined default microphone
             videoSource: undefined, // The source of video. If undefined default webcam
             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
@@ -114,10 +108,10 @@ export default function LiveShowSeller({ hostSessionId }) {
 
           // --- 6) Publish your stream ---
 
-          OVidu.initSession().publish(publisher);
+          mySession.publish(publisher);
 
           // Obtain the current video device in use
-          var devices = await OVidu.getDevices();
+          var devices = await OV.getDevices();
           var videoDevices = devices.filter(
             (device) => device.kind === "videoinput"
           );
@@ -163,6 +157,8 @@ export default function LiveShowSeller({ hostSessionId }) {
     }
 
     // Empty all properties...
+    setOV(null);
+    setSession(undefined);
     setSubscribers([]);
     setMainStreamManager(undefined);
     setPublisher(undefined);
@@ -212,33 +208,52 @@ export default function LiveShowSeller({ hostSessionId }) {
 
   return (
     <div className="container">
-      <div id="main-video" className="col-md-6">
-        <UserVideoComponent streamManager={mainStreamManager} />
-        <input
-          className="btn btn-large btn-success"
-          type="button"
-          id="buttonSwitchCamera"
-          onClick={switchCamera}
-          value="Switch Camera"
-        />
-      </div>
+      {session !== undefined ? (
+        <div id="session">
+          <div id="session-header">
+            <h1 id="session-title">{hostSessionId}</h1>
+            <input
+              className="btn btn-large btn-danger"
+              type="button"
+              id="buttonLeaveSession"
+              onClick={leaveSession}
+              value="Leave session"
+            />
+          </div>
 
-      {subscribers.map((sub, i) => (
-        <div
-          key={i}
-          className="stream-container col-md-6 col-xs-6"
-          onClick={() => handleMainVideoStream(sub)}
-        >
-          <UserVideoComponent streamManager={sub} />
+          {mainStreamManager !== undefined ? (
+            <div id="main-video" className="col-md-6">
+              <UserVideoComponent streamManager={mainStreamManager} />
+              <input
+                className="btn btn-large btn-success"
+                type="button"
+                id="buttonSwitchCamera"
+                onClick={switchCamera}
+                value="Switch Camera"
+              />
+            </div>
+          ) : null}
+          <div id="video-container" className="col-md-6">
+            {publisher !== undefined ? (
+              <div
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(publisher)}
+              >
+                <UserVideoComponent streamManager={publisher} />
+              </div>
+            ) : null}
+            {subscribers.map((sub, i) => (
+              <div
+                key={i}
+                className="stream-container col-md-6 col-xs-6"
+                onClick={() => handleMainVideoStream(sub)}
+              >
+                <UserVideoComponent streamManager={sub} />
+              </div>
+            ))}
+          </div>
         </div>
-      ))}
-
-      <div
-        className="stream-container col-md-6 col-xs-6"
-        onClick={() => handleMainVideoStream(publisher)}
-      >
-        <UserVideoComponent streamManager={publisher} />
-      </div>
+      ) : null}
     </div>
   );
 }
