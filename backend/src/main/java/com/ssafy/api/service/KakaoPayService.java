@@ -4,7 +4,9 @@ import com.ssafy.api.response.KakaoPayApprovalRes;
 import com.ssafy.api.response.KakaoPayReadyRes;
 import com.ssafy.db.entity.Bundle;
 import com.ssafy.db.entity.BundledItemsRelation;
+import com.ssafy.db.entity.Product;
 import com.ssafy.db.repository.BundledItemsRelationRepository;
+import com.ssafy.db.repository.ProductRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -14,6 +16,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.transaction.Transactional;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -21,6 +24,7 @@ import java.util.Optional;
 
 @Service
 @Log
+@Transactional
 public class KakaoPayService {
     private static final String HOST = "https://kapi.kakao.com";
     private static final String ADMIN = "7ad3ade6c404bf95e1713af49e12b31f";
@@ -31,13 +35,16 @@ public class KakaoPayService {
     BundledItemsRelationRepository bundledItemsRelationRepository;
 
     @Autowired
-    Optional<BundledItemsRelation> bundledItemsRelation;
+    Optional<List<BundledItemsRelation>> bundledItemsRelationList;
+
+    @Autowired
+    ProductRepository productRepository;
 
     // 결제 준비
     public KakaoPayReadyRes KakaoPayReady(Bundle bundle) {
         System.out.println("Service: 결제 준비 시작");
 
-        Optional<List<BundledItemsRelation>> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundle.getId());
+        bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundle.getId());
 
         int quantity = bundledItemsRelationList.get().size();
         System.out.println("수량: " + quantity);
@@ -106,7 +113,40 @@ public class KakaoPayService {
         try {
             kakaoPayApprovalRes = restTemplate.postForObject(new URI(HOST + "/v1/payment/approve"), body, KakaoPayApprovalRes.class);
             log.info("결제 승인: " + kakaoPayApprovalRes);
-            // 아직 미완성
+
+//            for(BundledItemsRelation bundledItemsRelation : bundledItemsRelationList.get()) {
+//                System.out.println("여기");
+//                System.out.println(bundledItemsRelation.getProduct().getId());
+//                bundledItemsRelation.getProduct().setPaid(true);
+//                bundledItemsRelationRepository.save(bundledItemsRelation);
+//            }
+//
+//            System.out.println("몇개: " + bundledItemsRelationList.get().size());
+//            for(int i = 0; i < bundledItemsRelationList.get().size(); i++) {
+//                System.out.println(i + " 번째");
+//                System.out.println(bundledItemsRelationList.get().get(i).getBundle().getId());
+//            }
+//            System.out.println("---------");
+//            Product product = bundledItemsRelationList.get().get(0).getProduct();
+//            System.out.println(product.getName());
+//
+//            Product product = null;
+//
+//            product.setBundledItemsRelationList(bundledItemsRelationList.get());
+//            System.out.println("크기: " + product.getBundledItemsRelationList().size());
+//            for(int i = 0; i < product.getBundledItemsRelationList().size(); i++) {
+//                System.out.println(i + " 번째");
+//
+//                System.out.println(product.getBundledItemsRelationList().get(i).getProduct().getName());
+//            }
+//            for(int i = 0; i < bund   ledItemsRelationList.get().size(); i++) {
+//                System.out.println(i + " 번째");
+//                System.out.println(bundledItemsRelationList.get().get(i).getProduct().getName());
+//                Product product =    get(i).getProduct();
+//
+//                productRepository.save(product);
+//            }
+
 //            return kakaoPayApprovalRes;
             return new ResponseEntity<>(kakaoPayApprovalRes, HttpStatus.OK);
         } catch (RestClientException | URISyntaxException e){
