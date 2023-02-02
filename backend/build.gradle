@@ -78,7 +78,7 @@ configurations {
 /*processResources.dependsOn 'webpack'*/
 
 // 리액트 통합 빌드 [시작]
-/*def frontendDir = "$projectDir/../frontend"
+def frontendDir = "$projectDir/../frontend"
 
 sourceSets {
     main {
@@ -118,7 +118,7 @@ task copyReactBuildFiles(type: Copy) {
     dependsOn "buildReact"
     from "$frontendDir/build"
     into "$projectDir/src/main/resources/dist"
-}*/
+}
 
 //리액트 통합 빌드 [끝]
 
@@ -229,6 +229,8 @@ dependencies {
     implementation("io.springfox:springfox-data-rest:3.0.0")
     implementation("io.springfox:springfox-bean-validators:3.0.0")
     implementation("io.springfox:springfox-boot-starter:3.0.0")
+    // https://mvnrepository.com/artifact/javax.interceptor/javax.interceptor-api
+    implementation 'javax.interceptor:javax.interceptor-api:1.2.2'
 
     compile("javax.annotation:javax.annotation-api:1.2")
 

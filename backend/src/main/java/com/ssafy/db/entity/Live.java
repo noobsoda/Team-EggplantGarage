@@ -31,9 +31,9 @@ public class Live extends BaseEntity implements Serializable {
     private User user;
 
     @OneToMany(mappedBy = "live")
-    private List<LiveCategory> liveCategoryList = new ArrayList<>();
+    private List<LiveCategory> liveCategoryList;
 
     @OneToMany(mappedBy = "live")
-    private List<UserLive> userLiveList = new ArrayList<>();
+    private List<UserLive> userLiveList;
 
 }
