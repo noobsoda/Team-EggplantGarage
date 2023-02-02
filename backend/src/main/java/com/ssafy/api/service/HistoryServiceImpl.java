@@ -5,6 +5,7 @@ import com.ssafy.api.response.ProductHistoryRes;
 import com.ssafy.db.entity.Live;
 import com.ssafy.db.entity.Product;
 import com.ssafy.db.entity.Review;
+import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.LiveRepository;
 import com.ssafy.db.repository.ProductRepository;
 import com.ssafy.db.repository.ReviewRepository;
@@ -51,8 +52,8 @@ public class HistoryServiceImpl implements HistoryService{
         for (Product product : productList) {
             Optional<Review> review  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
             long reviewId = (review.isPresent()) ? review.get().getId() : 0;
-            String sellerName = product.getLive().getUser().getName();
-            ProductHistoryRes res = ProductHistoryRes.of(product, sellerName, reviewId);
+            User seller = product.getLive().getUser();
+            ProductHistoryRes res = ProductHistoryRes.of(product, seller, reviewId);
             resList.add(res);
         }
         return resList;
@@ -65,8 +66,8 @@ public class HistoryServiceImpl implements HistoryService{
         for (Product product : productList) {
             Optional<Review> review = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId());
             long reviewId = (review.isPresent()) ? review.get().getId() : 0;
-            String buyerName = product.getUser().getName();
-            ProductHistoryRes res = ProductHistoryRes.of(product, buyerName, reviewId);
+            User buyer = product.getUser();
+            ProductHistoryRes res = ProductHistoryRes.of(product, buyer, reviewId);
             resList.add(res);
         }
         return resList;
