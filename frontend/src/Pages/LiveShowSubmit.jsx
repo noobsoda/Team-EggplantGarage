@@ -1,4 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 import MidBtn from "../Atoms/Buttons/MediumBtn";
 import BigBtn from "../Atoms/Buttons/BigBtn";
@@ -26,6 +28,8 @@ const StyledWindow = styled.div`
 `;
 
 export default function LiveShowSubmit() {
+  const navigate = useNavigate();
+
   const [imgSrc, setImgSrc] = useState("//:0"); //회전후 결과를 담는 canvas
 
   const [step, setStep] = useState(0);
@@ -98,6 +102,8 @@ export default function LiveShowSubmit() {
     console.log(`물품 리스트 ${productList.value},${productList.check}`);
 
     //판매자(나) 이메일
+
+    navigate("/liveshowseller/12");
   }
   return (
     <StyledDiv>

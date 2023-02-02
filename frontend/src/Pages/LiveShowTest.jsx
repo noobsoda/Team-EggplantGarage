@@ -1,14 +1,16 @@
-import { OpenVidu } from "openvidu-browser";
 import React, { useState, useCallback, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../Atoms/Video/LiveVideo";
 import { getToken } from "../util/api/liveApi";
-import { useNavigate } from "react-router-dom";
 
-export default function LiveShowSeller({ hostSessionId }) {
+export default function LiveShowSeller({}) {
+  const { id } = useParams();
+  console.log(id);
   //해당 세션 아이디를 받아서 해당 라이브로 접속하기
   //seller는 방송하기를 위한 카메라세팅, 카메라 접근권한이 필요하다.
 
-  hostSessionId = "SessionA";
+  const hostSessionId = id; //방 아이디
 
   const navigate = useNavigate();
 
@@ -54,9 +56,12 @@ export default function LiveShowSeller({ hostSessionId }) {
 
     //스트림 생성
     mySession.on("streamCreated", (event) => {
-      console.log("스트림 생성이요");
+      console.log("~~~~~~~~~~~~~~~~~~~스트림 생성이요");
       var subscriber = mySession.subscribe(event.stream, undefined);
       var mySubscribers = subscribers;
+
+      //방송중 확인 필요
+
       mySubscribers.push(subscriber);
 
       console.log("--------------서브스크라이버 추가요~");

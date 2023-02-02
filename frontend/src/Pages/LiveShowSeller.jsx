@@ -1,10 +1,13 @@
 import { OpenVidu } from "openvidu-browser";
 import React, { useCallback, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import UserVideoComponent from "../Atoms/Video/LiveVideo";
 import { getToken } from "../util/api/liveApi";
 
-export default function LiveShowSeller({ hostSessionId }) {
-  hostSessionId = "SessionA"; //방 아이디
+export default function LiveShowSeller() {
+  const { id } = useParams();
+  console.log(id);
+  const hostSessionId = id; //방 아이디
 
   const [myUserName, setMyUserName] = useState("admin"); //방생성한 사람 이름
   const [session, setSession] = useState(undefined);
@@ -14,6 +17,11 @@ export default function LiveShowSeller({ hostSessionId }) {
   const [currentVideoDevice, setCurrentVideoDevice] = useState(undefined);
 
   const [OV, setTestOV] = useState(new OpenVidu());
+
+  useEffect(() => {
+    //판매자가 방 생성
+    joinSession();
+  }, []);
 
   const leaveSession = useCallback(() => {
     // --- 7) 세션에서 나옴
@@ -37,9 +45,6 @@ export default function LiveShowSeller({ hostSessionId }) {
       window.removeEventListener("beforeunload", onbeforeunload);
     };
   }, [leaveSession]);
-  useEffect(() => {
-    joinSession();
-  }, []);
 
   function joinSession() {
     //const OVidu = new OpenVidu(); //오픈비두 생성
