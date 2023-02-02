@@ -4,6 +4,7 @@ import com.ssafy.api.response.LiveHistoryRes;
 import com.ssafy.api.response.ProductHistoryRes;
 import com.ssafy.db.entity.Live;
 import com.ssafy.db.entity.Product;
+import com.ssafy.db.entity.Review;
 import com.ssafy.db.repository.LiveRepository;
 import com.ssafy.db.repository.ProductRepository;
 import com.ssafy.db.repository.ReviewRepository;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service("historyService")
 public class HistoryServiceImpl implements HistoryService{
@@ -47,8 +49,9 @@ public class HistoryServiceImpl implements HistoryService{
         List<Product> productList = productRepository.findByUser_IdOrderByCreatedAtDesc(buyerId).get();
         List<ProductHistoryRes> resList = new ArrayList<>();
         for (Product product : productList) {
-            boolean existReview = reviewRepository.existsByProduct_IdAndIsSellerFalse(product.getId());
-            ProductHistoryRes res = ProductHistoryRes.of(product, existReview);
+            Optional<Review> review  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
+            long reviewId = (review.isPresent()) ? review.get().getId() : 0;
+            ProductHistoryRes res = ProductHistoryRes.of(product, reviewId);
             resList.add(res);
         }
         return resList;
@@ -59,8 +62,9 @@ public class HistoryServiceImpl implements HistoryService{
         List<Product> productList = productRepository.findByLive_IdOrderByCreatedAtDesc(liveId).get();
         List<ProductHistoryRes> resList = new ArrayList<>();
         for (Product product : productList) {
-            boolean existReview = reviewRepository.existsByProduct_IdAndIsSellerTrue(product.getId());
-            ProductHistoryRes res = ProductHistoryRes.of(product, existReview);
+            Optional<Review> review = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId());
+            long reviewId = (review.isPresent()) ? review.get().getId() : 0;
+            ProductHistoryRes res = ProductHistoryRes.of(product, reviewId);
             resList.add(res);
         }
         return resList;
