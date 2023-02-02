@@ -29,9 +29,9 @@ public class ProductHistoryRes {
     @ApiModelProperty(name = "Product imageUrl")
     private String imageUrl;
     @ApiModelProperty(name = "Product imageUrl")
-    private boolean existReview;
+    private long reviewId;
 
-    public static ProductHistoryRes of(Product product, boolean existReview)  {
+    public static ProductHistoryRes of(Product product, long reviewId)  {
         ProductHistoryRes res = ProductHistoryRes.builder()
                 .name(product.getName())
                 .soldPrice(product.getSoldPrice())
@@ -41,7 +41,7 @@ public class ProductHistoryRes {
                 .rightBottomX(product.getRightBottomX())
                 .rightBottomY(product.getRightBottomY())
                 .imageUrl(product.getImageUrl())
-                .existReview(existReview)
+                .reviewId(reviewId)
                 .build();
         return res;
     }
