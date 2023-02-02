@@ -53,5 +53,16 @@ services:
       - application
     networks:
       - test_network
+  openvidu:
+    image: openvidu/openvidu-call:2.25.0
+    restart: on-failure
+    network_mode: host
+    environment:
+      - SERVER_PORT=5442
+      - OPENVIDU_URL=http://localhost:5443
+      - OPENVIDU_SECRET=OPENVIDU_SECRET
+    networks:
+      - test_network
+
 networks:
   test_network:
