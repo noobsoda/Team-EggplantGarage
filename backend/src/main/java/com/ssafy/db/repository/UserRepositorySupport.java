@@ -14,8 +14,11 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class UserRepositorySupport {
-    @Autowired
     private JPAQueryFactory jpaQueryFactory;
+    @Autowired
+    public UserRepositorySupport(JPAQueryFactory jpaQueryFactory){
+        this.jpaQueryFactory = jpaQueryFactory;
+    }
     QUser qUser = QUser.user;
 
     public Optional<User> findUserById(String email) {

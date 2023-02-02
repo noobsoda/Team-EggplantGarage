@@ -13,6 +13,10 @@ import Mypage from "./Pages/Mypage";
 import Chat from "./Pages/Chat";
 import Like from "./Pages/Like";
 import Category from "./Pages/Category";
+import InfoEdit from "./Pages/InfoEdit";
+import LiveshowDetail from "./Pages/LiveshowDetail";
+import WriteReview from "./Pages/WriteReview";
+import Review from "./Pages/Review";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -28,6 +32,10 @@ const Router = () => {
     { path: "/chat", element: <Chat /> },
     { path: "/mypage", element: <Mypage /> },
     { path: "/category", element: <Category /> },
+    { path: "/infoedit", element: <InfoEdit /> },
+    { path: "/liveshowdetail", element: <LiveshowDetail /> },
+    { path: "/writereview", element: <WriteReview /> },
+    { path: "/review", element: <Review /> },
   ]);
 
   return (
