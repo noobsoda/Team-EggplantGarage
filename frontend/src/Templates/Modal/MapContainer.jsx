@@ -26,6 +26,7 @@ const MapContainer = () => {
       let geocoder = new kakao.maps.services.Geocoder();
       if (navigator.geolocation) {
         // GeoLocation을 이용해서 접속 위치를 얻어옵니다
+        //이부분만 있으면 라이브쇼 시작할때 위도 경도도 가져올 수 있음
         navigator.geolocation.getCurrentPosition(function (position) {
           let lat = position.coords.latitude, // 위도
             lng = position.coords.longitude; // 경도

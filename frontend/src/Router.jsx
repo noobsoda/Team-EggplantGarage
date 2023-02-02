@@ -17,6 +17,7 @@ import InfoEdit from "./Pages/InfoEdit";
 import LiveshowDetail from "./Pages/LiveshowDetail";
 import WriteReview from "./Pages/WriteReview";
 import Review from "./Pages/Review";
+import LiveshowBuyer from "./Pages/LiveshowBuyer";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -24,6 +25,7 @@ const Router = () => {
     { path: "/home", element: <Main /> },
     { path: "/liveshowsubmit", element: <LiveShowSubmit /> },
     { path: "/liveshowseller", element: <LiveShowSeller /> },
+    { path: "/liveshowbuyer", element: <LiveshowBuyer /> },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
     { path: "/signupemail", element: <SignUpEmail /> },
