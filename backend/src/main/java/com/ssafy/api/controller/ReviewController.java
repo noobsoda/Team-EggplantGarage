@@ -31,9 +31,7 @@ public class ReviewController {
     @ApiOperation(value = "리뷰 생성", notes = "리뷰를 등록합니다.")
     @ApiResponses({@ApiResponse(code = 201, message = "생성 성공"), @ApiResponse(code = 500, message = "서버 오류")})
     public ResponseEntity<? extends BaseResponseBody> writeReview(@RequestBody @ApiParam(value = "리뷰 정보", required = true) ReviewWritePostReq reviewWriteInfo) {
-
         Review review = reviewService.writeReview(reviewWriteInfo);
-
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Created"));
     }
 
@@ -42,9 +40,9 @@ public class ReviewController {
     @ApiResponses({@ApiResponse(code = 200, message = "성공"), @ApiResponse(code = 404, message = "리뷰 없음"), @ApiResponse(code = 500, message = "서버 오류")})
     public ResponseEntity<List<ReviewRes>> getReviewBySellerId(@ApiParam(value = "판매자 id", required = true) @PathVariable("sellerId") long sellerId) {
 
-        List<Review> reviewList = reviewService.getSellerReviews(sellerId);
+        List<ReviewRes> resList = reviewService.getSellerReviews(sellerId);
 
-        return ResponseEntity.status(200).body(ReviewRes.of(reviewList));
+        return ResponseEntity.status(200).body(resList);
     }
 
     @GetMapping("/buyer/{buyerId}")
@@ -52,8 +50,18 @@ public class ReviewController {
     @ApiResponses({@ApiResponse(code = 200, message = "성공"), @ApiResponse(code = 404, message = "리뷰 없음"), @ApiResponse(code = 500, message = "서버 오류")})
     public ResponseEntity<List<ReviewRes>> getReviewBuyerId(@ApiParam(value = "구매자 id", required = true) @PathVariable("buyerId") long buyerId) {
 
-        List<Review> reviewList = reviewService.getBuyerReviews(buyerId);
+        List<ReviewRes> resList = reviewService.getBuyerReviews(buyerId);
 
-        return ResponseEntity.status(200).body(ReviewRes.of(reviewList));
+        return ResponseEntity.status(200).body(resList);
+    }
+
+    @GetMapping("/{reviewId}")
+    @ApiOperation(value = "리뷰 1건 조회", notes = "1건의 리뷰 정보를 응답한다.")
+    @ApiResponses({@ApiResponse(code = 200, message = "성공"), @ApiResponse(code = 404, message = "리뷰 없음"), @ApiResponse(code = 500, message = "서버 오류")})
+    public ResponseEntity<ReviewRes> getReview(@ApiParam(value = "리뷰 id", required = true) @PathVariable("reviewId") long reviewId) {
+
+        ReviewRes res = reviewService.getReview(reviewId);
+
+        return ResponseEntity.status(200).body(res);
     }
 }
