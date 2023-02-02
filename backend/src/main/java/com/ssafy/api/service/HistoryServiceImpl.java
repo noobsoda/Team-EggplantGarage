@@ -51,7 +51,8 @@ public class HistoryServiceImpl implements HistoryService{
         for (Product product : productList) {
             Optional<Review> review  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
             long reviewId = (review.isPresent()) ? review.get().getId() : 0;
-            ProductHistoryRes res = ProductHistoryRes.of(product, reviewId);
+            String sellerName = product.getLive().getUser().getName();
+            ProductHistoryRes res = ProductHistoryRes.of(product, sellerName, reviewId);
             resList.add(res);
         }
         return resList;
@@ -64,7 +65,8 @@ public class HistoryServiceImpl implements HistoryService{
         for (Product product : productList) {
             Optional<Review> review = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId());
             long reviewId = (review.isPresent()) ? review.get().getId() : 0;
-            ProductHistoryRes res = ProductHistoryRes.of(product, reviewId);
+            String buyerName = product.getUser().getName();
+            ProductHistoryRes res = ProductHistoryRes.of(product, buyerName, reviewId);
             resList.add(res);
         }
         return resList;
