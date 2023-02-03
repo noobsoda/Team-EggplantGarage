@@ -6,10 +6,8 @@ export default function LiveVideo({ streamManager }) {
     <div>
       {streamManager !== undefined ? (
         <div className="streamcomponent">
+          <h1>hi</h1>
           <OpenViduVideoComponent streamManager={streamManager} />
-          <div>
-            <p>testtest</p>
-          </div>
         </div>
       ) : null}
     </div>

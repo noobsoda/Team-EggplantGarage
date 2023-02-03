@@ -31,8 +31,7 @@ public class KakaoPayController {
     @PostMapping()
     public String kakaoPay(@RequestBody KakaoPayReq kakaoPayReq) {
         log.info("POST: kakaoPay 결제 준비");
-        System.out.println("kakaoPay -> POST");
-        System.out.println("id: " + kakaoPayReq.getBundleId());
+        System.out.println("POST: kakaoPay 결제 준비");
 
         bundle = bundleRepository.findById(kakaoPayReq.getBundleId());
 
@@ -51,9 +50,8 @@ public class KakaoPayController {
 
     @GetMapping("/success")
     public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
-        log.info("GET: kakaoPaySuccess");
-        System.out.println("결제 승인");
-        System.out.println("order id: " + kakaoPayApprovalRes.getPartner_order_id() + ", user id: " + kakaoPayApprovalRes.getPartner_user_id());
+        log.info("GET: kakaoPaySuccess 결제 승인");
+        System.out.println("GET: kakaoPaySuccess 결제 승인");
 
         ResponseEntity<KakaoPayApprovalRes> kakaoPResponseEntity = kakaoPayService.kakaoPaySuccess(kakaoPayApprovalRes, pg_token);
         System.out.println("kakaoPaySuccess -> pg_token: " + pg_token);
