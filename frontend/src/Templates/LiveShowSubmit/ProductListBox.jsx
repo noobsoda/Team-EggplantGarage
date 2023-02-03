@@ -1,5 +1,5 @@
 import React from "react";
-import ProductBox from "../../Molecules/ProductBox";
+import ProductBox from "../../Molecules/Cards/ProductBox";
 import styled from "styled-components";
 
 const StyledBox = styled.div`

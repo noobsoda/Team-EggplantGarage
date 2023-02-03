@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import PictureBox from "../../Organisms/PictureBox";
+import PictureBox from "../../Organisms/Camera/PictureBox";
 
 const StyledBox = styled.div`
   width: 360px;

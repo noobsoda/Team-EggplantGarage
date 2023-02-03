@@ -2,23 +2,23 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 //라우터에 맞는 페이지 지정
-import Main from "./Pages/Main";
-import LiveShowSubmit from "./Pages/LiveShowSubmit";
-import LiveShowSeller from "./Pages/LiveShowSeller";
-import LiveShow from "./Pages/LiveShowTest";
-import SignUp from "./Pages/SignUp";
-import SignUpEmail from "./Pages/SignUpEmail";
-import Login from "./Pages/Login";
-import Search from "./Pages/Search";
-import Mypage from "./Pages/Mypage";
-import Chat from "./Pages/Chat";
-import Like from "./Pages/Like";
-import Category from "./Pages/Category";
-import InfoEdit from "./Pages/InfoEdit";
-import LiveshowDetail from "./Pages/LiveshowDetail";
-import WriteReview from "./Pages/WriteReview";
-import Review from "./Pages/Review";
-import LiveshowBuyer from "./Pages/LiveshowBuyer";
+import Main from "./Pages/Main/Main";
+import LiveShowSubmit from "./Pages/LiveShow/LiveShowSubmit";
+import LiveShowSeller from "./Pages/LiveShow//LiveShowSeller";
+import LiveShow from "./Pages/LiveShow//LiveShowTest";
+import SignUp from "./Pages/User/SignUp";
+import SignUpEmail from "./Pages/User/SignUpEmail";
+import Login from "./Pages/User/Login";
+import Search from "./Pages/Search/Search";
+import Mypage from "./Pages/Mypage/Mypage";
+import Chat from "./Pages/Chat/Chat";
+import Like from "./Pages/Like/Like";
+import Category from "./Pages/Main/Category";
+import InfoEdit from "./Pages/Mypage/InfoEdit";
+import LiveshowDetail from "./Pages/LiveShow/LiveshowDetail";
+import WriteReview from "./Pages/Mypage/WriteReview";
+import Review from "./Pages/Mypage/Review";
+import LiveshowBuyer from "./Pages/LiveShow/LiveshowBuyer";
 
 const Router = () => {
   const router = createBrowserRouter([
