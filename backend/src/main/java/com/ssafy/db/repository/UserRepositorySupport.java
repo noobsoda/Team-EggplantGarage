@@ -19,7 +19,6 @@ public class UserRepositorySupport {
         this.jpaQueryFactory = jpaQueryFactory;
     }
     QUser qUser = QUser.user;
-    QUser qUser = QUser.user;
 
     public Optional<User> findUserById(String email) {
         User user = jpaQueryFactory.select(qUser).from(qUser)
