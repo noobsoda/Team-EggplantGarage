@@ -9,14 +9,13 @@ import PictureSubmitBox from "../Templates/LiveShowSubmit/PictureSubmitBox";
 import ProductSubmitBox from "../Templates/LiveShowSubmit/ProductSubmitBox";
 import ProductListBox from "../Templates/LiveShowSubmit/ProductListBox";
 import ProuctModifyBox from "../Templates/LiveShowSubmit/ProductModifyBox";
-import Tapbar from "../Organisms/Tapbar";
+import Page from "../Atoms/Page";
+import Header from "../Organisms/Header";
 
-const StyledDiv = styled.div`
-  position: relative;
-`;
 const StyledBox = styled.div`
   display: flex;
   width: 1440px;
+
   transform: ${(props) => `translateX(${-props.phase * 360}px)`};
   transition: transform 0.2s ease-in-out;
 `;
@@ -25,6 +24,12 @@ const StyledWindow = styled.div`
   display: flex;
   overflow: hidden;
   width: 360px;
+`;
+const BtnFlex = styled.div`
+  position: absolute;
+  left: 0px;
+  bottom: 72px;
+  margin: 0 40px;
 `;
 
 export default function LiveShowSubmit() {
@@ -106,7 +111,8 @@ export default function LiveShowSubmit() {
     navigate("/liveshowseller/12");
   }
   return (
-    <StyledDiv>
+    <Page>
+      <Header isName={true} headerName="라이브쇼 등록" />
       <StyledWindow>
         <StyledBox phase={step}>
           <TitleCategoryBox
@@ -124,22 +130,23 @@ export default function LiveShowSubmit() {
           <ProductListBox imgSrc={imgSrc} productList={productList} />
         </StyledBox>
       </StyledWindow>
-      {step === 0 ? (
-        <BigBtn name="NEXT" buttonClick={nextStep} />
-      ) : step === 3 ? (
-        <>
-          <MidBtn name="PREV" buttonClick={backStep} />
-          <MidBtn name="방송시작" buttonClick={goLive} />
-        </>
-      ) : (
-        <>
-          <MidBtn name="PREV" buttonClick={backStep} />
-          <MidBtn name="NEXT" buttonClick={nextStep} />
-        </>
-      )}
+      <BtnFlex>
+        {step === 0 ? (
+          <BigBtn name="NEXT" buttonClick={nextStep} />
+        ) : step === 3 ? (
+          <>
+            <MidBtn name="PREV" buttonClick={backStep} />
+            <MidBtn name="방송시작" buttonClick={goLive} />
+          </>
+        ) : (
+          <>
+            <MidBtn name="PREV" buttonClick={backStep} />
+            <MidBtn name="NEXT" buttonClick={nextStep} />
+          </>
+        )}
+      </BtnFlex>
 
-      <Tapbar />
       {isModify ? <ProuctModifyBox /> : <></>}
-    </StyledDiv>
+    </Page>
   );
 }
