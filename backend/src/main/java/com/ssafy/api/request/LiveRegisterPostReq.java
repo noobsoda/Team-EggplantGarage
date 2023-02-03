@@ -5,15 +5,13 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @ApiModel("LiveRegisterPostReq")
 public class LiveRegisterPostReq {
 
     @ApiModelProperty(name = "세션 아이디", example = "ses_YnDaGYNcd7")
-    private String session_id;
+    private String sessionId;
     @ApiModelProperty(name = "방송 제목", example = "GarageSale Open")
     private String title;
     @ApiModelProperty(name = "방송 설명", example = "Do you know GarageSale?")
@@ -22,8 +20,10 @@ public class LiveRegisterPostReq {
     private String url;
     @ApiModelProperty(name = "방송 여부", example = "true")
     private boolean isLive;
-    @ApiModelProperty(name = "방송 주소", example = "대전광역시 덕명구")
-    private String location;
+    @ApiModelProperty(name = "방송 위도", example = "105.11")
+    private Double latitude;
+    @ApiModelProperty(name = "방송 경도", example = "202.22")
+    private Double longitude;
 
 
 }
