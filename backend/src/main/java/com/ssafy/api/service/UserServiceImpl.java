@@ -2,15 +2,14 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.UserDeleteReq;
 import com.ssafy.api.request.UserInfoPatchReq;
+import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.db.entity.User;
+import com.ssafy.db.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import com.ssafy.api.request.UserRegisterPostReq;
-import com.ssafy.db.entity.User;
-import com.ssafy.db.repository.MyUserRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -20,15 +19,15 @@ import java.util.Optional;
  * 유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
 @Service("userService")
-public class MyUserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService {
     private final Logger logger;
 
-    public MyUserServiceImpl(Logger logger) {
+    public UserServiceImpl(Logger logger) {
         this.logger = logger;
     }
 
     @Autowired
-    MyUserRepository userRepository;
+    UserRepository userRepository;
 
 /*	@Autowired
 	UserRepositorySupport userRepositorySupport;*/
