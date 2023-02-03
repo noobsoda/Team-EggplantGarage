@@ -189,7 +189,6 @@ export default function ProductSubmitBox({
     //상품 구분 번호
     setId(id + 1);
     //초기화
-    console.log(productList);
     reset();
   }
 

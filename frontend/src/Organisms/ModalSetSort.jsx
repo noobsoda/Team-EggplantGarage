@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import MediumBtn from "../Atoms/Buttons/MediumBtn";
-import Modal from "../Atoms/Modal";
+import ModalSmall from "../Atoms/ModalSmall";
 import ModalBody from "../Templates/Modal/ModalBody";
 
 const Header = styled.div`
@@ -25,7 +25,7 @@ export default function ModalSetSort({ setModalOpen }) {
     closeModal();
   };
   return (
-    <Modal>
+    <ModalSmall>
       <div height="24px" className="page-header">
         　
       </div>
@@ -39,6 +39,6 @@ export default function ModalSetSort({ setModalOpen }) {
         <MediumBtn name="초기화" />
         <MediumBtn name="적용" buttonClick={apply} />
       </ModalBody>
-    </Modal>
+    </ModalSmall>
   );
 }

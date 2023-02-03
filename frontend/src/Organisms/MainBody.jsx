@@ -19,18 +19,22 @@ export default function MainBody() {
   }
   return (
     <Body>
-      <div className="page-header">지역 Liveshow</div>
+      <div className="page-header" style={{ marginBottom: "8px" }}>
+        지역 Liveshow
+      </div>
       <FlexDiv>
-        <LiveshowItem />
-        <LiveshowItem />
-        <LiveshowItem />
+        <LiveshowItem isViewer={true} />
+        <LiveshowItem isViewer={true} />
+        <LiveshowItem isViewer={true} />
       </FlexDiv>
-      <div className="page-header">전국 Liveshow</div>
+      <div className="page-header" style={{ marginBottom: "8px" }}>
+        전국 Liveshow
+      </div>
       <CategoryNav />
       <FlexDiv>
-        <LiveshowItem />
-        <LiveshowItem />
-        <LiveshowItem />
+        <LiveshowItem isViewer={true} />
+        <LiveshowItem isViewer={true} />
+        <LiveshowItem isViewer={true} />
       </FlexDiv>
       <LiveStartBtn buttonClick={startLive} />
     </Body>

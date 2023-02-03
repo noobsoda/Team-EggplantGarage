@@ -7,10 +7,5 @@ const StyledFlexBox = styled.div`
 `;
 
 export default function FlexBox(props) {
-  return (
-    <StyledFlexBox>
-      {props.children}
-      <Tapbar />
-    </StyledFlexBox>
-  );
+  return <StyledFlexBox>{props.children}</StyledFlexBox>;
 }
