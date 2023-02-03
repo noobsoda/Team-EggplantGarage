@@ -47,6 +47,13 @@ public class LiveServiceImpl implements LiveService {
                 .location(liveRegisterInfo.getLocation())
                 .user(user)
                 .build();
+        
+        //유저라이브 헬퍼 테이블에 본인도 넣어주기
+        UserLive userLive = UserLive.builder()
+                .live(live)
+                .user(user)
+                .build();
+        userLiveRepository.save(userLive);
 
 
         return liveRepository.save(live);
