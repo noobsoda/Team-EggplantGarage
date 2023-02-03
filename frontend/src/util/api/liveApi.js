@@ -1,4 +1,4 @@
-import { api } from "./api";
+import { OVApi } from "./api";
 
 /**
  * 세션에서 토큰 가져오기
@@ -13,18 +13,30 @@ async function getToken(hostSessionId) {
 }
 
 async function createSession(sessionId) {
-  const response = await api.post("api/sessions", {
-    customSessionId: sessionId,
-  });
-  return response.data; // The sessionId
+  let data = { customSessionId: sessionId };
+  const response = await OVApi.post("/openvidu/api/sessions", data)
+    .then(({ data }) => {
+      return data.id;
+    })
+    .catch((e) => {
+      var error = Object.assign({}, e);
+      if (error?.response?.status === 409) {
+        return sessionId;
+      }
+    });
+  return response;
 }
 
 async function createToken(sessionId) {
-  const response = await api.post(
-    "api/sessions/" + sessionId + "/connections",
-    {}
-  );
-  return response.data; // The token
+  //role
+  const data = { role: "PUBLISHER" };
+  const response = await OVApi.post(
+    "/openvidu/api/sessions/" + sessionId + "/connection",
+    data
+  ).catch((e) => {
+    console.log(e);
+  });
+  return response.data.token; // The token
 }
 
 export { getToken };
