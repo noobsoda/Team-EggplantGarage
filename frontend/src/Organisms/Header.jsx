@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import LeftBtn from "../Atoms/IconButtons/LeftBtn";
 import MenuBtn from "../Atoms/IconButtons/MenuBtn";
-import InputBox from "../Molecules/InputBox";
+import SearchInput from "../Atoms/Inputs/SearchInput";
 import { useNavigate } from "react-router-dom";
 
 const StyledHeader = styled.div`
@@ -24,7 +24,7 @@ export default function Header({ isLogo, isSearch, isName, headerName }) {
   return (
     <StyledHeader>
       <LeftBtn buttonClick={() => navigate(-1)} />
-      {isSearch ? <InputBox /> : <></>}
+      {isSearch ? <SearchInput /> : <></>}
       {isSearch ? <div></div> : <></>}
       {isLogo ? (
         <img width="112" height="27" src="/image/logo.png" alt="" />
