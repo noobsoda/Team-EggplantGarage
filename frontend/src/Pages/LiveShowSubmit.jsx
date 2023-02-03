@@ -85,12 +85,12 @@ export default function LiveShowSubmit() {
    * 방송 시작을 위한 정보 전송
    */
   function goLive() {
-    console.log("방송시작");
+    // console.log("방송시작");
     //제목
-    console.log(`방송 제목 ${title.value},${title.check}`);
+    // console.log(`방송 제목 ${title.value},${title.check}`);
 
     //카테고리들
-    console.log(`카테고리 ${categorys.value},${categorys.check}`);
+    // console.log(`카테고리 ${categorys.value},${categorys.check}`);
 
     //이미지 소스
     // console.log(`이미지 ${imgSrc}`);
@@ -99,7 +99,7 @@ export default function LiveShowSubmit() {
     //---제품 이미지 위치
     //---제품명
     //---제품가격
-    console.log(`물품 리스트 ${productList.value},${productList.check}`);
+    // console.log(`물품 리스트 ${productList.value},${productList.check}`);
 
     //판매자(나) 이메일
 

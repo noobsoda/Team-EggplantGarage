@@ -22,7 +22,6 @@ export default function ImageBox({
   useEffect(() => {
     const img = new Image();
     img.src = imgSrc;
-    console.log(boxSize);
     img.onload = function () {
       const result = resultCanvas.current;
       result.width = boxSize;

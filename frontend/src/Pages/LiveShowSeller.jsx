@@ -5,18 +5,16 @@ import UserVideoComponent from "../Atoms/Video/LiveVideo";
 import { getToken } from "../util/api/liveApi";
 
 export default function LiveShowSeller() {
-  const { id } = useParams();
-  console.log(id);
-  const hostSessionId = id; //방 아이디
+  const { sessionId } = useParams(); //방 아이디
 
-  const [myUserName, setMyUserName] = useState("admin"); //방생성한 사람 이름
+  const [myUserName] = useState("admin"); //방생성한 사람 이름
   const [session, setSession] = useState(undefined);
-  const [mainStreamManager, setMainStreamManager] = useState(undefined); // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
+  const [, setMainStreamManager] = useState(undefined); // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
-  const [currentVideoDevice, setCurrentVideoDevice] = useState(undefined);
+  const [, setCurrentVideoDevice] = useState(undefined);
 
-  const [OV, setTestOV] = useState(new OpenVidu());
+  const [OV] = useState(new OpenVidu());
 
   useEffect(() => {
     //판매자가 방 생성
@@ -25,9 +23,7 @@ export default function LiveShowSeller() {
 
   const leaveSession = useCallback(() => {
     // --- 7) 세션에서 나옴
-    console.log("나옴");
     const mySession = session;
-    console.log(mySession);
     if (mySession) {
       mySession.disconnect();
     }
@@ -37,7 +33,7 @@ export default function LiveShowSeller() {
   }, [session]);
 
   useEffect(() => {
-    const onbeforeunload = (event) => {
+    const onbeforeunload = () => {
       leaveSession();
     };
     window.addEventListener("beforeunload", onbeforeunload); // componentDidMount
@@ -54,31 +50,31 @@ export default function LiveShowSeller() {
 
     //스트림 생성
     mySession.on("streamCreated", (event) => {
-      console.log("스트림 생성이요");
+      var subscriber = mySession.subscribe(event.stream, undefined);
+      var mySubscribers = subscribers;
+
+      mySubscribers.push(subscriber);
+
+      setSubscribers(mySubscribers);
     });
 
     // On every Stream destroyed...
     mySession.on("streamDestroyed", (event) => {
       // Remove the stream from 'subscribers' array
-      console.log("나갔다.");
-      console.log(event.stream.streamManager);
       deleteSubscriber(event.stream.streamManager);
     });
 
     // On every asynchronous exception...
     mySession.on("exception", (exception) => {
-      console.log("예외요");
       console.warn(exception);
     });
 
     // --- 4) 토큰을 받아서 연결을 한다.
-    getToken(hostSessionId).then((token) => {
+    getToken(sessionId).then((token) => {
       mySession
         .connect(token, { clientData: myUserName }) //해당 토큰을 가지고 유저명과 함께 연결을 진행
         .then(async () => {
-          // --- 5) Get your own camera stream ---
-          console.log("토큰 받음");
-          console.log(token);
+          // --- 5) 카메라 세팅 ---
 
           //퍼블리셔의 정보
           let publisher = await OV.initPublisherAsync(undefined, {
@@ -86,7 +82,7 @@ export default function LiveShowSeller() {
             videoSource: undefined, // The source of video. If undefined default webcam
             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-            resolution: "640x480", // The resolution of your video
+            resolution: "1280x720", // The resolution of your video
             frameRate: 30, // The frame rate of your video
             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
             mirror: false, // Whether to mirror your local video or not
