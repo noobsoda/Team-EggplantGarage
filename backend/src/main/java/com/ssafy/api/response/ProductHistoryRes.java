@@ -1,6 +1,7 @@
 package com.ssafy.api.response;
 
 import com.ssafy.db.entity.Product;
+import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -13,7 +14,7 @@ import lombok.Setter;
 @ApiModel("ProductHistoryResponse")
 public class ProductHistoryRes {
     @ApiModelProperty(name = "Product name")
-    private String name;
+    private String productName;
     @ApiModelProperty(name = "Product soldPrice")
     private int soldPrice;
     @ApiModelProperty(name = "Product isPaid")
@@ -28,12 +29,18 @@ public class ProductHistoryRes {
     private int rightBottomY;
     @ApiModelProperty(name = "Product imageUrl")
     private String imageUrl;
-    @ApiModelProperty(name = "Product imageUrl")
-    private long reviewId;
+    @ApiModelProperty(name = "Other id")
+    private long otherId;
+    @ApiModelProperty(name = "Other name")
+    private String otherName;
+    @ApiModelProperty(name = "My review id")
+    private long myReviewId;
+    @ApiModelProperty(name = "Other review id")
+    private long otherReviewId;
 
-    public static ProductHistoryRes of(Product product, long reviewId)  {
+    public static ProductHistoryRes of(Product product, User user, long myReviewId, long otherReviewId)  {
         ProductHistoryRes res = ProductHistoryRes.builder()
-                .name(product.getName())
+                .productName(product.getName())
                 .soldPrice(product.getSoldPrice())
                 .isPaid(product.isPaid())
                 .leftTopX(product.getLeftTopX())
@@ -41,7 +48,10 @@ public class ProductHistoryRes {
                 .rightBottomX(product.getRightBottomX())
                 .rightBottomY(product.getRightBottomY())
                 .imageUrl(product.getImageUrl())
-                .reviewId(reviewId)
+                .otherId(user.getId())
+                .otherName(user.getName())
+                .myReviewId(myReviewId)
+                .otherReviewId(otherReviewId)
                 .build();
         return res;
     }
