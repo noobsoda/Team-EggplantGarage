@@ -8,8 +8,7 @@ const StyledTapbar = styled.div`
   height: 56px;
   display: flex;
   position: absolute;
-  top: 584px;
-  left: 0px;
+  bottom: 0;
   z-index: 1;
   background-color: white;
   border-top: 0.5px solid;
