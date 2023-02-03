@@ -8,9 +8,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Log
 @Service("bundleService")
@@ -34,9 +32,11 @@ public class BundleServiceImpl implements BundleService {
         Bundle bundle = new Bundle();
 
         bundle.setUser(userRepository.findById(bundleReq.getBuyerId()).get());
+        bundle.setLive(liveRepository.findById(bundleReq.getLiveId()).get());
         bundle.setPrice(bundleReq.getSoldPrice());
         bundle.setPaid(false);
-        bundle.setLive(liveRepository.findById(bundleReq.getLiveId()).get());
+        bundle.setApproval(false);
+        bundle.setRefuse(false);
 
         Long bundleId = bundleRepository.save(bundle).getId();
 
@@ -49,25 +49,19 @@ public class BundleServiceImpl implements BundleService {
             bundledItemsRelationRepository.save(bundledItemsRelation);
         }
 
+        // bundleId 프론트한테 보내줘야함
         return bundleId;
     }
 
     @Override
     public List<Bundle> getSuggestList(Long liveId) {
-//        List<Bundle> suggestAllList = bundleRepository.findAllByLive_Id(liveId).get();
-        List<Bundle> suggestList = bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalse(liveId).get();
-//        int size = suggestAllList.size();
-//        System.out.println("size: " + size);
+        return bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalse(liveId).get();
+    }
 
-//        List<Bundle> uncheckedSuggestList = new ArrayList<>();
-//        for(int i = 0; i < size; i++) {
-//            System.out.println(suggestAllList.get(i).isApproval());
-//            if(suggestAllList.get(i).isApproval() == false && suggestAllList.get(i).isRefuse() == false) {
-//                System.out.println("여기: " + suggestAllList.get(i).getPrice());
-//                uncheckedSuggestList.add(suggestAllList.get(i));
-//            }
-//        }
-        return suggestList;
+    @Override
+    public void deleteBundle(long bundleId) {
+        bundledItemsRelationRepository.deleteAllByBundle_Id(bundleId);
+        bundleRepository.deleteBundleById(bundleId);
     }
 
 }

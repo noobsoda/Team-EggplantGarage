@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface BundleRepository extends JpaRepository<Bundle, Long> {
     Optional<Bundle> findById(long id);
     Optional<List<Bundle>> findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalse(long id);
-
+    void deleteBundleById(long id);
 }

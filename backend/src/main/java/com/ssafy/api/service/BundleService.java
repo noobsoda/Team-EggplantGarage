@@ -8,4 +8,5 @@ import java.util.List;
 public interface BundleService {
     Long addBundle(BundleReq bundleReq);
     List<Bundle> getSuggestList(Long liveId);
+    void deleteBundle(long bundleId);
 }
