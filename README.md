@@ -193,3 +193,12 @@
   - 방 상세보기에서 상품 상세보기도 추가해야 함
   - 빌더 패턴 적용
 - jenkins docker-compose up 문제점 확인 완료 -> 젠킨스에서 값은 그대로 있지만 docker-dompose up 하면 적용이 안됨
+
+## 0203 작업내용
+
+- 배포 Openvidu SSL 추가
+- 방 상세보기 변경, 위치 수정
+
+  방 상세보기 상품리스트 추가, [live] location -> 위도, 경도 수정,
+  방 상세보기 API url->sessionId 검색
+  이미지 불러오기 아직 미완
