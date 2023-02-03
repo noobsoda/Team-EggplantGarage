@@ -1,6 +1,6 @@
 import React from "react";
 import InputBox from "../../Atoms/Inputs/BigInput";
-import Checkbox from "../../Molecules/CheckBox";
+import Checkbox from "../../Molecules/Input/CheckBox";
 import Button from "../../Atoms/Buttons/SmallBtn";
 export default function ProductModifyBox() {
   return (

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
-import InputBox from "../../Molecules/InputBox";
-import Checkbox from "../../Molecules/CheckBox";
+import InputBox from "../../Molecules/Input/InputBox";
+import Checkbox from "../../Molecules/Input/CheckBox";
 import SmallBtn from "../../Atoms/Buttons/ExtraSmallBtn";
 
 import styled from "styled-components";

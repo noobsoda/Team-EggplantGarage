@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import InputBox from "../../Molecules/InputBox";
-import InputButtonBox from "../../Molecules/InputButtonBox";
+import InputBox from "../../Molecules/Input/InputBox";
+import InputButtonBox from "../../Molecules/Input/InputButtonBox";
 import BigInputBox from "../../Atoms/Inputs/BigInput";
 import BigColorBtn from "../../Atoms/Buttons/BigBtn";
 import styled from "styled-components";
