@@ -29,14 +29,16 @@ public class ProductHistoryRes {
     private int rightBottomY;
     @ApiModelProperty(name = "Product imageUrl")
     private String imageUrl;
-    @ApiModelProperty(name = "User id")
-    private long userId;
-    @ApiModelProperty(name = "User name")
-    private String userName;
-    @ApiModelProperty(name = "Product imageUrl")
-    private long reviewId;
+    @ApiModelProperty(name = "Other id")
+    private long otherId;
+    @ApiModelProperty(name = "Other name")
+    private String otherName;
+    @ApiModelProperty(name = "My review id")
+    private long myReviewId;
+    @ApiModelProperty(name = "Other review id")
+    private long otherReviewId;
 
-    public static ProductHistoryRes of(Product product, User user, long reviewId)  {
+    public static ProductHistoryRes of(Product product, User user, long myReviewId, long otherReviewId)  {
         ProductHistoryRes res = ProductHistoryRes.builder()
                 .productName(product.getName())
                 .soldPrice(product.getSoldPrice())
@@ -46,9 +48,10 @@ public class ProductHistoryRes {
                 .rightBottomX(product.getRightBottomX())
                 .rightBottomY(product.getRightBottomY())
                 .imageUrl(product.getImageUrl())
-                .userId(user.getId())
-                .userName(user.getName())
-                .reviewId(reviewId)
+                .otherId(user.getId())
+                .otherName(user.getName())
+                .myReviewId(myReviewId)
+                .otherReviewId(otherReviewId)
                 .build();
         return res;
     }
