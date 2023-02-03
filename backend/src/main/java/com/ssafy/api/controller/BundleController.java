@@ -20,13 +20,13 @@ public class BundleController {
 
     @PostMapping()
     public ResponseEntity<?> addBundle(@RequestBody BundleReq bundleReq) {
-        log.info("POST: 승인 받은 묶음 상품 추가");
-        System.out.println("POST: 승인 받은 묶음 상품 추가");
+//        log.info("POST: 승인 받은 묶음 상품 추가");
+//        System.out.println("POST: 승인 받은 묶음 상품 추가");
 
         Long bundleId = bundleService.addBundle(bundleReq);
-        System.out.println("bundleId: " + bundleId);
+//        System.out.println("bundleId: " + bundleId);
 
-        // 그 다음 카카오페이로 가기
+        // 그 다음 카카오페이로 가서 결제하기
         
         return ResponseEntity.status(200).body("묶음 상품 등록 성공");
     }
