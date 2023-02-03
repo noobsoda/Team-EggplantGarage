@@ -26,5 +26,15 @@ async function createToken(sessionId) {
   );
   return response.data; // The token
 }
+////////////////////////////////////////////////////////////
 
-export { getToken };
+/**
+ * 모든 live 조회
+ */
+async function getAllLives(success, fail) {
+  const lives = await api.get(`/api/v1/lives`).then(success);
+  // .catch();
+  return lives;
+}
+
+export { getToken, getAllLives };

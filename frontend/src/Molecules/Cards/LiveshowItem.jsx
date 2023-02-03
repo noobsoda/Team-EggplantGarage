@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import LiveshowCard from "./LiveshowCard";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ const StyledLiveshowItem = styled.div`
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
 */
-export default function LiveshowItem({ liveshow, isViewer }) {
+export default function LiveshowItem({ isViewer, show = {} }) {
   //useState , event
   const navigate = useNavigate();
   function goTo() {
@@ -22,9 +22,9 @@ export default function LiveshowItem({ liveshow, isViewer }) {
   }
   return (
     <StyledLiveshowItem onClick={goTo}>
-      <LiveshowCard />
-      <div className="body2-regular">라이브쇼 제목</div>
-      <div className="body2-regular">판매자명</div>
+      <LiveshowCard viewerCnt={show.joinUsersNum} imgSrc={show.thumbnailUrl} />
+      {show && <div className="body2-regular">{show.title}</div>}
+      {show && <div className="body2-regular">{show.owner}</div>}
     </StyledLiveshowItem>
   );
 }

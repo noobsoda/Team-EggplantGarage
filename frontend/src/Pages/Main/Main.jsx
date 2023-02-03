@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Header from "../../Templates/Layout/Header";
 import Body from "../../Templates/Layout/Body";
 import Page from "../../Templates/Layout/Page";
@@ -7,6 +7,8 @@ import LiveshowItem from "../../Molecules/Cards/LiveshowItem";
 import LiveStartBtn from "../../Atoms/IconButtons/LiveStartBtn";
 import CategoryNav from "../../Molecules/Category/CategoryNav";
 import { useNavigate } from "react-router-dom";
+import { getAllLives } from "../../util/api/liveApi";
+import { useEffect } from "react";
 
 const FlexDiv = styled.div`
   width: 280px;
@@ -15,10 +17,18 @@ const FlexDiv = styled.div`
 `;
 
 export default function Main() {
+  const [allLives, setAllLives] = useState(undefined);
+  //liveContentList 까지 가야됨.
   const navigate = useNavigate();
   function startLive() {
     navigate("/liveshowsubmit");
   }
+  useEffect(() => {
+    getAllLives(({ data }) => {
+      setAllLives(data.liveContentList);
+    });
+  }, []);
+
   return (
     <Page>
       {/* 헤더 */}
@@ -37,9 +47,10 @@ export default function Main() {
         </div>
         <CategoryNav />
         <FlexDiv>
-          <LiveshowItem isViewer={true} />
-          <LiveshowItem isViewer={true} />
-          <LiveshowItem isViewer={true} />
+          {allLives &&
+            allLives.map((show) => {
+              return <LiveshowItem key={show.id} show={show} isViewer={true} />;
+            })}
         </FlexDiv>
         <LiveStartBtn buttonClick={startLive} />
       </Body>
