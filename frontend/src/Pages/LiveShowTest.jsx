@@ -1,15 +1,20 @@
+import React, { useState, useCallback, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
-import React, { useCallback, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import UserVideoComponent from "../Atoms/Video/LiveVideo";
 import { getToken } from "../util/api/liveApi";
 
-export default function LiveShowSeller() {
+export default function LiveShowSeller({}) {
   const { id } = useParams();
   console.log(id);
+  //해당 세션 아이디를 받아서 해당 라이브로 접속하기
+  //seller는 방송하기를 위한 카메라세팅, 카메라 접근권한이 필요하다.
+
   const hostSessionId = id; //방 아이디
 
-  const [myUserName, setMyUserName] = useState("admin"); //방생성한 사람 이름
+  const navigate = useNavigate();
+
+  const [myUserName, setMyUserName] = useState("참가자");
   const [session, setSession] = useState(undefined);
   const [mainStreamManager, setMainStreamManager] = useState(undefined); // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
   const [publisher, setPublisher] = useState(undefined);
@@ -17,12 +22,6 @@ export default function LiveShowSeller() {
   const [currentVideoDevice, setCurrentVideoDevice] = useState(undefined);
 
   const [OV, setTestOV] = useState(new OpenVidu());
-
-  useEffect(() => {
-    //판매자가 방 생성
-    joinSession();
-  }, []);
-
   const leaveSession = useCallback(() => {
     // --- 7) 세션에서 나옴
     console.log("나옴");
@@ -35,7 +34,6 @@ export default function LiveShowSeller() {
     setSubscribers([]);
     setMainStreamManager(undefined);
   }, [session]);
-
   useEffect(() => {
     const onbeforeunload = (event) => {
       leaveSession();
@@ -46,6 +44,10 @@ export default function LiveShowSeller() {
     };
   }, [leaveSession]);
 
+  useEffect(() => {
+    joinSession();
+  }, []);
+
   function joinSession() {
     //const OVidu = new OpenVidu(); //오픈비두 생성
     // --- 2) Init a session ---
@@ -54,7 +56,18 @@ export default function LiveShowSeller() {
 
     //스트림 생성
     mySession.on("streamCreated", (event) => {
-      console.log("스트림 생성이요");
+      console.log("~~~~~~~~~~~~~~~~~~~스트림 생성이요");
+      var subscriber = mySession.subscribe(event.stream, undefined);
+      var mySubscribers = subscribers;
+
+      //방송중 확인 필요
+
+      mySubscribers.push(subscriber);
+
+      console.log("--------------서브스크라이버 추가요~");
+      console.log(mySubscribers);
+
+      setSubscribers(mySubscribers);
     });
 
     // On every Stream destroyed...
@@ -82,37 +95,19 @@ export default function LiveShowSeller() {
 
           //퍼블리셔의 정보
           let publisher = await OV.initPublisherAsync(undefined, {
-            audioSource: undefined, // The source of audio. If undefined default microphone
-            videoSource: undefined, // The source of video. If undefined default webcam
-            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-            publishVideo: true, // Whether you want to start publishing with your video enabled or not
-            resolution: "640x480", // The resolution of your video
-            frameRate: 30, // The frame rate of your video
+            //audioSource: undefined, // The source of audio. If undefined default microphone
+            //videoSource: undefined, // The source of video. If undefined default webcam
+            publishAudio: false, // Whether you want to start publishing with your audio unmuted or not
+            publishVideo: false, // Whether you want to start publishing with your video enabled or not
+            //resolution: "640x480", // The resolution of your video
+            //frameRate: 30, // The frame rate of your video
             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-            mirror: false, // Whether to mirror your local video or not
+            //mirror: false, // Whether to mirror your local video or not
           });
 
           // --- 6)
-          //판매자가 방송 시작
           mySession.publish(publisher);
 
-          // 장비를 받는다.
-          var devices = await OV.getDevices();
-          var videoDevices = devices.filter(
-            (device) => device.kind === "videoinput"
-          );
-          //현재 판매자의 방송 장비를 확인
-          var currentVideoDeviceId = publisher.stream
-            .getMediaStream()
-            .getVideoTracks()[0]
-            .getSettings().deviceId;
-          var currentVideoDevice = videoDevices.find(
-            (device) => device.deviceId === currentVideoDeviceId
-          );
-
-          // 퍼블리셔 설정
-          setCurrentVideoDevice(currentVideoDevice);
-          setPublisher(publisher);
           setMainStreamManager(publisher);
         })
         .catch((error) => {
@@ -132,46 +127,15 @@ export default function LiveShowSeller() {
       let index = tmp_subscribers.indexOf(streamManager, 0);
       if (index > -1) {
         tmp_subscribers.splice(index, 1);
-        setSubscribers(tmp_subscribers); // 이거 안 되면 구조분해할당으로 업데이트 할 것
+        setSubscribers(tmp_subscribers);
+      }
+      if (getNicknameTag(streamManager) === "admin") {
+        alert("방송이 종료되었습니다.");
+        navigate("/home");
       }
     },
-    [subscribers]
+    [subscribers, navigate]
   );
-  // async function switchCamera() {
-  //   try {
-  //     const devices = await OV.getDevices();
-  //     var videoDevices = devices.filter(
-  //       (device) => device.kind === "videoinput"
-  //     );
-
-  //     if (videoDevices && videoDevices.length > 1) {
-  //       var newVideoDevice = videoDevices.filter(
-  //         (device) => device.deviceId !== currentVideoDevice.deviceId
-  //       );
-
-  //       if (newVideoDevice.length > 0) {
-  //         // Creating a new publisher with specific videoSource
-  //         // In mobile devices the default and first camera is the front one
-  //         var newPublisher = OV.initPublisher(undefined, {
-  //           videoSource: newVideoDevice[0].deviceId,
-  //           publishAudio: true,
-  //           publishVideo: true,
-  //           mirror: true,
-  //         });
-
-  //         //newPublisher.once("accessAllowed", () => {
-  //         await session.unpublish(mainStreamManager);
-
-  //         await session.publish(newPublisher);
-  //         setCurrentVideoDevice(newVideoDevice[0]);
-  //         setMainStreamManager(newPublisher);
-  //         setPublisher(newPublisher);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
 
   function getNicknameTag(streamManager) {
     // Gets the nickName of the user
@@ -179,8 +143,15 @@ export default function LiveShowSeller() {
   }
 
   return (
-    <div className="container">
-      <UserVideoComponent streamManager={publisher} />
+    <div>
+      {subscribers
+        .filter((sub) => getNicknameTag(sub) === "admin")
+        .map((sub, i) => (
+          <div key={i} className="stream-container col-md-6 col-xs-6">
+            {getNicknameTag(sub)}
+            <UserVideoComponent streamManager={sub} />
+          </div>
+        ))}
     </div>
   );
 }

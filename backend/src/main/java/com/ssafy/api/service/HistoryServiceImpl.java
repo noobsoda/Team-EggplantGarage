@@ -50,10 +50,13 @@ public class HistoryServiceImpl implements HistoryService{
         List<Product> productList = productRepository.findByUser_IdOrderByCreatedAtDesc(buyerId).get();
         List<ProductHistoryRes> resList = new ArrayList<>();
         for (Product product : productList) {
-            Optional<Review> review  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
-            long reviewId = (review.isPresent()) ? review.get().getId() : 0;
+            Optional<Review> myReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
+            long myReviewId = (myReview.isPresent()) ? myReview.get().getId() : 0;
+            Optional<Review> otherReview  = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId());
+            long otherReviewId = (otherReview.isPresent()) ? otherReview.get().getId() : 0;
+
             User seller = product.getLive().getUser();
-            ProductHistoryRes res = ProductHistoryRes.of(product, seller, reviewId);
+            ProductHistoryRes res = ProductHistoryRes.of(product, seller, myReviewId, otherReviewId);
             resList.add(res);
         }
         return resList;
@@ -64,10 +67,13 @@ public class HistoryServiceImpl implements HistoryService{
         List<Product> productList = productRepository.findByLive_IdOrderByCreatedAtDesc(liveId).get();
         List<ProductHistoryRes> resList = new ArrayList<>();
         for (Product product : productList) {
-            Optional<Review> review = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId());
-            long reviewId = (review.isPresent()) ? review.get().getId() : 0;
+            Optional<Review> myReview = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId());
+            long myReviewId = (myReview.isPresent()) ? myReview.get().getId() : 0;
+            Optional<Review> otherReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
+            long otherReviewId = (otherReview.isPresent()) ? otherReview.get().getId() : 0;
+
             User buyer = product.getUser();
-            ProductHistoryRes res = ProductHistoryRes.of(product, buyer, reviewId);
+            ProductHistoryRes res = ProductHistoryRes.of(product, buyer, myReviewId, otherReviewId);
             resList.add(res);
         }
         return resList;
