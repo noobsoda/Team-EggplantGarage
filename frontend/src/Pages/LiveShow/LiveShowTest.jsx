@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../Atoms/Video/LiveVideo";
-import { getToken } from "../../util/api/liveApi";
+import { getToken, closeSession } from "../../util/api/liveApi";
 
 export default function LiveShowSeller({}) {
   const { sessionId } = useParams();
@@ -71,7 +71,7 @@ export default function LiveShowSeller({}) {
     });
 
     // --- 4) 토큰을 받아서 연결을 한다.
-    getToken(sessionId).then((token) => {
+    getToken(sessionId, "SUBSCRIBER").then((token) => {
       mySession
         .connect(token, { clientData: myUserName }) //해당 토큰을 가지고 유저명과 함께 연결을 진행
         .then(async () => {
@@ -135,6 +135,13 @@ export default function LiveShowSeller({}) {
             <UserVideoComponent streamManager={sub} />
           </div>
         ))}
+      <button
+        onClick={() => {
+          leaveSession();
+        }}
+      >
+        종료
+      </button>
     </div>
   );
 }

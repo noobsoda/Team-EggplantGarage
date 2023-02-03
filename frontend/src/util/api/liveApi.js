@@ -5,11 +5,11 @@ import { OVApi } from "./api";
  * @param {*} hostSessionId
  * @returns
  */
-async function getToken(hostSessionId) {
+async function getToken(hostSessionId, role) {
   //sessionid생성
   const sessionId = await createSession(hostSessionId);
   //sessionid로 토큰 생성
-  return await createToken(sessionId);
+  return await createToken(sessionId, role);
 }
 
 async function createSession(sessionId) {
@@ -27,9 +27,15 @@ async function createSession(sessionId) {
   return response;
 }
 
-async function createToken(sessionId) {
+/**
+ *
+ * @param {*} sessionId
+ * @param {*} role  PUBLISHER , SUBSCRIBER
+ * @returns
+ */
+async function createToken(sessionId, role) {
   //role
-  const data = { role: "PUBLISHER" };
+  const data = { role: role };
   const response = await OVApi.post(
     "/openvidu/api/sessions/" + sessionId + "/connection",
     data
@@ -39,4 +45,18 @@ async function createToken(sessionId) {
   return response.data.token; // The token
 }
 
-export { getToken };
+async function closeSession(sessionId) {
+  const response = await OVApi.delete("/openvidu/api/sessions/" + sessionId)
+    .then(({ data }) => {
+      return data.id;
+    })
+    .catch((e) => {
+      var error = Object.assign({}, e);
+      if (error?.response?.status === 409) {
+        return sessionId;
+      }
+    });
+  return response;
+}
+
+export { getToken, closeSession };
