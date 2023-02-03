@@ -1,19 +1,20 @@
 import React from "react";
 import styled from "styled-components";
-import Body from "../../Templates/Layout/Body";
 import LiveshowItem from "../../Molecules/Cards/LiveshowItem";
 
-const FlexDiv = styled.div`
+const Container = styled.div`
   width: 280px;
   display: flex;
-  justify-content: space-between;
   flex-wrap: wrap;
+  box-sizing: border-box;
+  row-gap: 8px;
+  column-gap: 8px;
 `;
 //카테고리, 검색어, 지역, 정렬 넣어서 뽑아내기
 export default function SearchBody({ category, keyword, location, sort }) {
   return (
-    <Body>
-      <FlexDiv>
+    <>
+      <Container>
         <LiveshowItem />
         <LiveshowItem />
         <LiveshowItem />
@@ -23,7 +24,8 @@ export default function SearchBody({ category, keyword, location, sort }) {
         <LiveshowItem />
         <LiveshowItem />
         <LiveshowItem />
-      </FlexDiv>
-    </Body>
+        <LiveshowItem />
+      </Container>
+    </>
   );
 }

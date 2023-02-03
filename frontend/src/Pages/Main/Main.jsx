@@ -9,6 +9,7 @@ import CategoryNav from "../../Molecules/Category/CategoryNav";
 import { useNavigate } from "react-router-dom";
 import { getAllLives } from "../../util/api/liveApi";
 import { useEffect } from "react";
+import Container from "../../Templates/Layout/Container";
 
 const FlexDiv = styled.div`
   width: 280px;
@@ -37,21 +38,22 @@ export default function Main() {
         <div className="page-header" style={{ marginBottom: "8px" }}>
           지역 Liveshow
         </div>
-        <FlexDiv>
+        <Container>
           <LiveshowItem isViewer={true} />
           <LiveshowItem isViewer={true} />
           <LiveshowItem isViewer={true} />
-        </FlexDiv>
+          <LiveshowItem isViewer={true} />
+        </Container>
         <div className="page-header" style={{ marginBottom: "8px" }}>
           전국 Liveshow
         </div>
         <CategoryNav />
-        <FlexDiv>
+        <Container>
           {allLives &&
             allLives.map((show) => {
               return <LiveshowItem key={show.id} show={show} isViewer={true} />;
             })}
-        </FlexDiv>
+        </Container>
         <LiveStartBtn buttonClick={startLive} />
       </Body>
     </Page>

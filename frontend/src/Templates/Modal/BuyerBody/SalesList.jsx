@@ -9,7 +9,7 @@ const StyledBody = styled.div`
 
 export default function SalesList({ setModalOpen }) {
   return (
-    <StyledBody>
+    <>
       <ItemCard />
       <ItemCard />
       <ItemCard />
@@ -22,6 +22,6 @@ export default function SalesList({ setModalOpen }) {
       <ItemCard />
       <ItemCard />
       <ItemCard />
-    </StyledBody>
+    </>
   );
 }

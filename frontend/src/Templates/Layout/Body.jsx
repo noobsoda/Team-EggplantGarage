@@ -4,9 +4,10 @@ import styled from "styled-components";
 const StyledBody = styled.div`
   padding: 8px 40px 8px;
   width: 280px;
-  height: 508px;
-  border-top: solid 0.5px;
-  border-top-color: ${({ theme }) => theme.color.lightgrey};
+  height: calc(100% - 128.8px);
+  // overflow-y: auto;
+  overflow: hidden;
+  overflow-y: auto;
 `;
 
 export default function Body(props) {

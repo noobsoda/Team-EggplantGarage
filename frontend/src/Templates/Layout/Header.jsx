@@ -7,13 +7,13 @@ import { useNavigate } from "react-router-dom";
 
 const StyledHeader = styled.div`
   width: 344px;
-  height: 40px;
+  height: 56px;
   display: flex;
   justify-content: space-between;
-  padding: 8px 8px 8px;
   align-items: center;
   border-bottom: solid 0.5px;
   border-bottom-color: ${({ theme }) => theme.color.lightgrey};
+  box-sizing: border-box;
 `;
 
 export default function Header({ isLogo, isSearch, isName, headerName }) {

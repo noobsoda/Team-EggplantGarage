@@ -4,8 +4,9 @@ import LiveshowCard from "./LiveshowCard";
 import { useNavigate } from "react-router-dom";
 
 const StyledLiveshowItem = styled.div`
-  width: 88px;
   height: 192px;
+  width: 88px;
+  box-sizing: content-box;
 `;
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  

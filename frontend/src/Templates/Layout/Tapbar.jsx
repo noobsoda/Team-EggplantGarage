@@ -7,12 +7,13 @@ const StyledTapbar = styled.div`
   width: 360px;
   height: 56px;
   display: flex;
-  position: absolute;
-  bottom: 0;
+  // position: absolute;
+  // bottom: 0;
   z-index: 1;
   background-color: white;
   border-top: 0.5px solid;
   border-top-color: ${({ theme }) => theme.color.lightgrey};
+  box-sizing: border-box;
 `;
 export default function Tapbar() {
   const array = [

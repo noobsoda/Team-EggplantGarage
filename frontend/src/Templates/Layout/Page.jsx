@@ -4,7 +4,7 @@ import Tapbar from "./Tapbar";
 
 const StyledPage = styled.div`
   width: 360px;
-  height: 640px;
+  height: 100%;
 `;
 
 export default function Page(props) {

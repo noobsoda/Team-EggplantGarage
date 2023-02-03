@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import SmallBtn from "../../Atoms/Buttons/SmallBtn";
 import Modal from "../../Atoms/Modal/Modal";
-import FlexBox from "../../Atoms/FlexBox";
 import { useState } from "react";
 import SalesList from "../../Templates/Modal/BuyerBody/SalesList";
 import SuggestionList from "../../Templates/Modal/BuyerBody/SuggestionList";
@@ -19,6 +18,14 @@ const CloseBtn = styled.button`
   background: url("/image/close.svg");
   background-repeat: no-repeat;
   background-position: 16px 0px;
+`;
+const FlexBox = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+const StyledBody = styled.div`
+  padding: 8px 40px 8px;
+  width: 280px;
 `;
 export default function ModalBuyer({ setModalOpen }) {
   const closeModal = () => {
@@ -39,21 +46,24 @@ export default function ModalBuyer({ setModalOpen }) {
           물건목록
         </div>
       </Header>
-      <FlexBox>
-        <SmallBtn
-          name="제안목록"
-          buttonClick={() => {
-            setIsSuggestion(false);
-          }}
-        />
-        <SmallBtn
-          name="판매목록"
-          buttonClick={() => {
-            setIsSuggestion(true);
-          }}
-        />
-      </FlexBox>
-      {isSuggestion ? <SalesList /> : <SuggestionList />}
+      <StyledBody>
+        <FlexBox>
+          <SmallBtn
+            name="제안목록"
+            buttonClick={() => {
+              setIsSuggestion(false);
+            }}
+          />
+          <div style={{ width: "8px" }}></div>
+          <SmallBtn
+            name="판매목록"
+            buttonClick={() => {
+              setIsSuggestion(true);
+            }}
+          />
+        </FlexBox>
+        {isSuggestion ? <SalesList /> : <SuggestionList />}
+      </StyledBody>
     </Modal>
   );
 }

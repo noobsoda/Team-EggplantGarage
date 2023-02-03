@@ -9,10 +9,10 @@ const StyledBody = styled.div`
 
 export default function SuggestionList() {
   return (
-    <StyledBody>
+    <>
       <ItemCard />
       <ItemCard />
       <ItemCard />
-    </StyledBody>
+    </>
   );
 }
