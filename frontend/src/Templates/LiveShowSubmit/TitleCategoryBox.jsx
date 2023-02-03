@@ -1,6 +1,6 @@
 import React from "react";
 import InputBox from "../../Atoms/Inputs/BigInput";
-import CategoryBox from "../../Organisms/CategoryBox";
+import CategorySelect from "../../Molecules/Category/CategorySelect";
 import styled from "styled-components";
 
 const StyledBox = styled.div`
@@ -45,7 +45,7 @@ export default function TitleCategoryBox({
         isCheck={true}
         inputValue={onTitleChange}
       />
-      <CategoryBox
+      <CategorySelect
         options={options}
         onChange={onCategoryChange}
         categorys={categorys}

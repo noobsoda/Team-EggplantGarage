@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Tapbar from "../Organisms/Tapbar";
 
 const StyledFlexBox = styled.div`
   display: flex;

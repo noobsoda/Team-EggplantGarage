@@ -1,19 +1,27 @@
 import React from "react";
 import styled from "styled-components";
-
-const StyledCategoryBtn = styled.button`
-  // 이부분이 잘모르겠는게 안에 텍스트 내용에 따라서 사이즈가 바뀔것.
-  width: 64px;
+const StyledBox = styled.div`
+  width: 88px;
   height: 24px;
-  border-radius: 8px;
+  border-radius: 12px;
   background-color: ${({ theme }) => theme.color.red};
   color: ${({ theme }) => theme.color.white};
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 `;
 
-export default function CategoryBtn({ name, buttonClick }) {
+const StyledInnerBox = styled.div`
+  margin: 0 8px;
+`;
+
+export default function CategoryBtn({ categoryName, onClose }) {
   return (
-    <StyledCategoryBtn className="body2-bold" onClick={buttonClick}>
-      카테고리
-    </StyledCategoryBtn>
+    <StyledBox className="body2-bold">
+      <StyledInnerBox>
+        <span>{categoryName}</span>
+        <button onClick={() => onClose(categoryName)}>X</button>
+      </StyledInnerBox>
+    </StyledBox>
   );
 }
