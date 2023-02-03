@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import CategoryNav from "../Molecules/CategoryNav";
+import CategoryNav from "../../Molecules/Category/CategoryNav";
 import LiveshowItem from "../../Molecules/Cards/LiveshowItem";
-import Body from "../Atoms/Body";
+import Body from "../../Templates/Layout/Body";
 import LiveStartBtn from "../../Atoms/IconButtons/LiveStartBtn";
 import { useNavigate } from "react-router-dom";
 

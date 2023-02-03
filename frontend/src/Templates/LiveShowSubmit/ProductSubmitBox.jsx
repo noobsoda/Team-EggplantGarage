@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from "react";
-import InputBox from "../../Molecules/InputBox";
+import InputBox from "../../Molecules/Input/InputBox";
 import Checkbox from "../../Molecules/Input/CheckBox";
 import SmallBtn from "../../Atoms/Buttons/ExtraSmallBtn";
 

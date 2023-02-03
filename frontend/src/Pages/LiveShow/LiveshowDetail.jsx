@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "../Organisms/Header";
-import Page from "../Templates/Page";
-import Body from "../Atoms/Body";
+import Header from "../../Templates/Layout/Header";
+import Page from "../../Templates/Layout/Page";
+import Body from "../../Templates/Layout/Body";
 import ItemCard from "../../Molecules/Cards/ItemCard";
 
 export default function LiveshowDetail() {

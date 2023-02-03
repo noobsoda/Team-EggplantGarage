@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import TapbarBox from "../Molecules/TapbarBox";
+import TapbarBox from "../../Molecules/Box/TapbarBox";
 import { useNavigate } from "react-router-dom";
 
 const StyledTapbar = styled.div`

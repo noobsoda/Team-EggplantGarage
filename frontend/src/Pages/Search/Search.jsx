@@ -1,15 +1,15 @@
 import React from "react";
-import Header from "../Organisms/Header";
-import Page from "../Templates/Page";
+import Header from "../../Templates/Layout/Header";
+import Page from "../../Templates/Layout/Page";
+import Body from "../../Templates/Layout/Body";
 import SearchBody from "../../Organisms/Search/SearchBody";
 import SmallSelect from "../../Atoms/Select/SmallSelect";
 import { useLocation } from "react-router-dom";
 import { useState } from "react";
-import ModalSetLocation from "../Organisms/ModalSetLocation";
+import ModalSetLocation from "../../Organisms/Modal/ModalSetLocation";
 import ModalSetCategory from "../../Organisms/Modal/ModalSetCategory";
-import ModalSetSort from "../Organisms/ModalSetSort";
+import ModalSetSort from "../../Organisms/Modal/ModalSetSort";
 import styled from "styled-components";
-import Body from "../Atoms/Body";
 
 const FlexBox = styled.div`
   display: flex;

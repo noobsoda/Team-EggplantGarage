@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import LeftBtn from "../Atoms/IconButtons/LeftBtn";
-import MenuBtn from "../Atoms/IconButtons/MenuBtn";
-import SearchInput from "../Atoms/Inputs/SearchInput";
+import LeftBtn from "../../Atoms/IconButtons/LeftBtn";
+import MenuBtn from "../../Atoms/IconButtons/MenuBtn";
+import SearchInput from "../../Atoms/Inputs/SearchInput";
 import { useNavigate } from "react-router-dom";
 
 const StyledHeader = styled.div`

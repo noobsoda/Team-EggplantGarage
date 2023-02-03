@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import CategoryBtn from "../../Atoms/Buttons/CategoryBtn";
+import CategoryNavBtn from "../../Atoms/Buttons/CategoryNavBtn";
 
 const StyledCategoryNav = styled.div`
   width: 280px;
@@ -14,10 +14,10 @@ export default function CategoryNav({ liveshow, buttonClick }) {
   //useState , event
   return (
     <StyledCategoryNav>
-      <CategoryBtn></CategoryBtn>
-      <CategoryBtn></CategoryBtn>
-      <CategoryBtn></CategoryBtn>
-      <CategoryBtn></CategoryBtn>
+      <CategoryNavBtn></CategoryNavBtn>
+      <CategoryNavBtn></CategoryNavBtn>
+      <CategoryNavBtn></CategoryNavBtn>
+      <CategoryNavBtn></CategoryNavBtn>
     </StyledCategoryNav>
   );
 }

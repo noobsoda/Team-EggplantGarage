@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Body from "../Atoms/Body";
+import Body from "../../Templates/Layout/Body";
 import LiveshowItem from "../../Molecules/Cards/LiveshowItem";
 
 const FlexDiv = styled.div`

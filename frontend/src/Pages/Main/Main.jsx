@@ -1,7 +1,7 @@
 import React from "react";
-import Header from "../Organisms/Header";
-import MainBody from "../Organisms/MainBody";
-import Page from "../Templates/Page";
+import MainBody from "../../Organisms/Body/MainBody";
+import Header from "../../Templates/Layout/Header";
+import Page from "../../Templates/Layout/Page";
 
 export default function Main() {
   return (

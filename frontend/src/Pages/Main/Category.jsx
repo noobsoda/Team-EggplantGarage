@@ -1,6 +1,6 @@
 import React from "react";
-import Header from "../Organisms/Header";
-import Page from "../Templates/Page";
+import Header from "../../Templates/Layout/Header";
+import Page from "../../Templates/Layout/Page";
 import CategoryBody from "../../Organisms/Body/CategoryBody";
 
 export default function Category() {

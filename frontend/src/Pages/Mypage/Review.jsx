@@ -1,15 +1,11 @@
 import React from "react";
-import Header from "../Organisms/Header";
-import Page from "../Templates/Page";
-import Body from "../Atoms/Body";
-import Rating from "@mui/material/Rating";
-import TextInput from "../../Atoms/Inputs/TextInput";
-import BigBtn from "../../Atoms/Buttons/BigBtn";
-import ItemCard from "../../Molecules/Cards/ItemCard";
+import Header from "../../Templates/Layout/Header";
+import Page from "../../Templates/Layout/Page";
+import Body from "../../Templates/Layout/Body";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import ReviewSent from "../Organisms/ReviewSent";
-import ReviewReceived from "../Organisms/ReviewReceived";
+import ReviewSent from "../../Organisms/Mypage/ReviewSent";
+import ReviewReceived from "../../Organisms/Mypage/ReviewReceived";
 
 export default function Review() {
   const [value, setValue] = useState(5);

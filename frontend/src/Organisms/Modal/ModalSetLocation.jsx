@@ -3,7 +3,7 @@ import styled from "styled-components";
 import MediumBtn from "../../Atoms/Buttons/MediumBtn";
 import Modal from "../../Atoms/Modal/Modal";
 import ModalBody from "../../Templates/Modal/ModalBody";
-import MapContainer from "../../Templates/Modal/MapContainer";
+import MapContainer from "./MapContainer";
 
 const Header = styled.div`
   width: 360px;

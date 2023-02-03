@@ -9,8 +9,8 @@ import PictureSubmitBox from "../../Templates/LiveShowSubmit/PictureSubmitBox";
 import ProductSubmitBox from "../../Templates/LiveShowSubmit/ProductSubmitBox";
 import ProductListBox from "../../Templates/LiveShowSubmit/ProductListBox";
 import ProuctModifyBox from "../../Templates/LiveShowSubmit/ProductModifyBox";
-import Page from "../Templates/Page";
-import Header from "../Organisms/Header";
+import Header from "../../Templates/Layout/Header";
+import Page from "../../Templates/Layout/Page";
 
 const StyledBox = styled.div`
   display: flex;
