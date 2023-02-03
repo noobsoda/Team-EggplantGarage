@@ -113,7 +113,8 @@ public class KakaoPayService {
             User user = bundledItemsRelationList.get().get(0).getBundle().getUser();
 
             for(int i = 0; i < quantity; i++) {
-                bundledItemsRelationList.get().get(i).getProduct().setUser(user);
+
+                bundledItemsRelationList.get().get(i).getProduct().setBuyerId(user.getId());
                 bundledItemsRelationList.get().get(i).getProduct().setSoldAt(LocalDateTime.now());
                 bundledItemsRelationList.get().get(i).getProduct().setSoldPrice(soldPrice);
                 bundledItemsRelationList.get().get(i).getProduct().setPaid(true);
