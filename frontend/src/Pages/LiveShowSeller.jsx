@@ -1,126 +1,103 @@
 import { OpenVidu } from "openvidu-browser";
-import React, { useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import UserVideoComponent from "../Atoms/Video/LiveVideo";
-import axios from "axios";
-import { useEffect } from "react";
+import { getToken } from "../util/api/liveApi";
 
-const APPLICATION_SERVER_URL = "http://localhost:5000/";
+export default function LiveShowSeller() {
+  const { sessionId } = useParams(); //방 아이디
 
-export default function LiveShowSeller({ hostSessionId }) {
-  //해당 세션 아이디를 받아서 해당 라이브로 접속하기
-  hostSessionId = "ssessionA1212";
-
-  const [myUserName, setMyUserName] = useState(
-    "Participant" + Math.floor(Math.random() * 100)
-  );
+  const [myUserName] = useState("admin"); //방생성한 사람 이름
   const [session, setSession] = useState(undefined);
-  const [OV, setOV] = useState(undefined);
-  const [mainStreamManager, setMainStreamManager] = useState(undefined); // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
+  const [, setMainStreamManager] = useState(undefined); // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
-  const [currentVideoDevice, setCurrentVideoDevice] = useState(undefined);
+  const [, setCurrentVideoDevice] = useState(undefined);
+
+  const [OV] = useState(new OpenVidu());
+
   useEffect(() => {
+    //판매자가 방 생성
     joinSession();
   }, []);
-  async function getToken() {
-    //sessionid생성
-    const sessionId = await createSession(hostSessionId);
-    //sessionid로 토큰 생성
-    return await createToken(sessionId);
-  }
 
-  async function createSession(sessionId) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions",
-      { customSessionId: sessionId },
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data; // The sessionId
-  }
+  const leaveSession = useCallback(() => {
+    // --- 7) 세션에서 나옴
+    const mySession = session;
+    if (mySession) {
+      mySession.disconnect();
+    }
+    // Empty all properties...
+    setSubscribers([]);
+    setMainStreamManager(undefined);
+  }, [session]);
 
-  async function createToken(sessionId) {
-    const response = await axios.post(
-      APPLICATION_SERVER_URL + "api/sessions/" + sessionId + "/connections",
-      {},
-      {
-        headers: { "Content-Type": "application/json" },
-      }
-    );
-    return response.data; // The token
-  }
+  useEffect(() => {
+    const onbeforeunload = () => {
+      leaveSession();
+    };
+    window.addEventListener("beforeunload", onbeforeunload); // componentDidMount
+    return () => {
+      window.removeEventListener("beforeunload", onbeforeunload);
+    };
+  }, [leaveSession]);
 
   function joinSession() {
-    // --- 1) Get an OpenVidu object ---
-    const OVidu = new OpenVidu();
+    //const OVidu = new OpenVidu(); //오픈비두 생성
     // --- 2) Init a session ---
-    setOV(OVidu);
-    // --- 3) Specify the actions when events take place in the session ---
+    let mySession = OV.initSession(); //세션 만들기 세션?
+    setSession(mySession); //세션을미리 저장
 
-    // On every new Stream received...
-    console.log("?");
-    console.log(OVidu.initSession());
-    console.log("-------");
-    OVidu.initSession().on("streamCreated", (event) => {
-      console.log("스트림 생성이요");
-      // Subscribe to the Stream to receive it. Second parameter is undefined
-      // so OpenVidu doesn't create an HTML video by its own
-      var subscriber = OVidu.initSession().subscribe(event.stream, undefined);
-      var subscribersTmp = subscribers;
-      subscribersTmp.push(subscriber);
+    //스트림 생성
+    mySession.on("streamCreated", (event) => {
+      var subscriber = mySession.subscribe(event.stream, undefined);
+      var mySubscribers = subscribers;
 
-      // Update the state with the new subscribers
-      setSubscribers(subscribersTmp);
+      mySubscribers.push(subscriber);
+
+      setSubscribers(mySubscribers);
     });
 
     // On every Stream destroyed...
-    OVidu.initSession().on("streamDestroyed", (event) => {
-      console.log("스트림 종료");
+    mySession.on("streamDestroyed", (event) => {
       // Remove the stream from 'subscribers' array
       deleteSubscriber(event.stream.streamManager);
     });
 
     // On every asynchronous exception...
-    OVidu.initSession().on("exception", (exception) => {
-      console.log("예외요");
+    mySession.on("exception", (exception) => {
       console.warn(exception);
     });
 
-    // --- 4) Connect to the session with a valid user token ---
-
-    // Get a token from the OpenVidu deployment
-    getToken().then((token) => {
-      // First param is the token got from the OpenVidu deployment. Second param can be retrieved by every user on event
-      // 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-      OVidu.initSession()
-        .connect(token, { clientData: myUserName })
+    // --- 4) 토큰을 받아서 연결을 한다.
+    getToken(sessionId).then((token) => {
+      mySession
+        .connect(token, { clientData: myUserName }) //해당 토큰을 가지고 유저명과 함께 연결을 진행
         .then(async () => {
-          // --- 5) Get your own camera stream ---
-          console.log("초기화 시작, 토큰 받음");
-          console.log(token);
-          // Init a publisher passing undefined as targetElement (we don't want OpenVidu to insert a video
-          // element: we will manage it on our own) and with the desired properties
-          let publisher = await OVidu.initPublisherAsync(undefined, {
+          // --- 5) 카메라 세팅 ---
+
+          //퍼블리셔의 정보
+          let publisher = await OV.initPublisherAsync(undefined, {
             audioSource: undefined, // The source of audio. If undefined default microphone
             videoSource: undefined, // The source of video. If undefined default webcam
             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
             publishVideo: true, // Whether you want to start publishing with your video enabled or not
-            resolution: "640x480", // The resolution of your video
+            resolution: "1280x720", // The resolution of your video
             frameRate: 30, // The frame rate of your video
             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
             mirror: false, // Whether to mirror your local video or not
           });
 
-          // --- 6) Publish your stream ---
+          // --- 6)
+          //판매자가 방송 시작
+          mySession.publish(publisher);
 
-          OVidu.initSession().publish(publisher);
-
-          // Obtain the current video device in use
-          var devices = await OVidu.getDevices();
+          // 장비를 받는다.
+          var devices = await OV.getDevices();
           var videoDevices = devices.filter(
             (device) => device.kind === "videoinput"
           );
+          //현재 판매자의 방송 장비를 확인
           var currentVideoDeviceId = publisher.stream
             .getMediaStream()
             .getVideoTracks()[0]
@@ -129,7 +106,7 @@ export default function LiveShowSeller({ hostSessionId }) {
             (device) => device.deviceId === currentVideoDeviceId
           );
 
-          // Set the main video in the page to display our webcam and store our Publisher
+          // 퍼블리셔 설정
           setCurrentVideoDevice(currentVideoDevice);
           setPublisher(publisher);
           setMainStreamManager(publisher);
@@ -144,101 +121,62 @@ export default function LiveShowSeller({ hostSessionId }) {
     });
   }
 
-  function deleteSubscriber(streamManager) {
-    let subscribersTmp = subscribers;
-    let index = subscribersTmp.indexOf(streamManager, 0);
-    if (index > -1) {
-      subscribersTmp.splice(index, 1);
-      setSubscribers(subscribersTmp);
-    }
-  }
-
-  function leaveSession() {
-    // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
-
-    const mySession = session;
-
-    if (mySession) {
-      mySession.disconnect();
-    }
-
-    // Empty all properties...
-    setSubscribers([]);
-    setMainStreamManager(undefined);
-    setPublisher(undefined);
-  }
-
-  async function switchCamera() {
-    try {
-      const devices = await OV.getDevices();
-      var videoDevices = devices.filter(
-        (device) => device.kind === "videoinput"
-      );
-
-      if (videoDevices && videoDevices.length > 1) {
-        var newVideoDevice = videoDevices.filter(
-          (device) => device.deviceId !== currentVideoDevice.deviceId
-        );
-
-        if (newVideoDevice.length > 0) {
-          // Creating a new publisher with specific videoSource
-          // In mobile devices the default and first camera is the front one
-          var newPublisher = OV.initPublisher(undefined, {
-            videoSource: newVideoDevice[0].deviceId,
-            publishAudio: true,
-            publishVideo: true,
-            mirror: true,
-          });
-
-          //newPublisher.once("accessAllowed", () => {
-          await session.unpublish(mainStreamManager);
-
-          await session.publish(newPublisher);
-          setCurrentVideoDevice(newVideoDevice[0]);
-          setMainStreamManager(newPublisher);
-          setPublisher(newPublisher);
-        }
+  //참가자 배열에서 제거
+  const deleteSubscriber = useCallback(
+    (streamManager) => {
+      let tmp_subscribers = subscribers;
+      let index = tmp_subscribers.indexOf(streamManager, 0);
+      if (index > -1) {
+        tmp_subscribers.splice(index, 1);
+        setSubscribers(tmp_subscribers); // 이거 안 되면 구조분해할당으로 업데이트 할 것
       }
-    } catch (e) {
-      console.error(e);
-    }
-  }
+    },
+    [subscribers]
+  );
+  // async function switchCamera() {
+  //   try {
+  //     const devices = await OV.getDevices();
+  //     var videoDevices = devices.filter(
+  //       (device) => device.kind === "videoinput"
+  //     );
 
-  function handleMainVideoStream(stream) {
-    if (mainStreamManager !== stream) {
-      setMainStreamManager(stream);
-    }
+  //     if (videoDevices && videoDevices.length > 1) {
+  //       var newVideoDevice = videoDevices.filter(
+  //         (device) => device.deviceId !== currentVideoDevice.deviceId
+  //       );
+
+  //       if (newVideoDevice.length > 0) {
+  //         // Creating a new publisher with specific videoSource
+  //         // In mobile devices the default and first camera is the front one
+  //         var newPublisher = OV.initPublisher(undefined, {
+  //           videoSource: newVideoDevice[0].deviceId,
+  //           publishAudio: true,
+  //           publishVideo: true,
+  //           mirror: true,
+  //         });
+
+  //         //newPublisher.once("accessAllowed", () => {
+  //         await session.unpublish(mainStreamManager);
+
+  //         await session.publish(newPublisher);
+  //         setCurrentVideoDevice(newVideoDevice[0]);
+  //         setMainStreamManager(newPublisher);
+  //         setPublisher(newPublisher);
+  //       }
+  //     }
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // }
+
+  function getNicknameTag(streamManager) {
+    // Gets the nickName of the user
+    return JSON.parse(streamManager.stream.connection.data).clientData;
   }
 
   return (
     <div className="container">
-      <div id="main-video" className="col-md-6">
-        <UserVideoComponent streamManager={mainStreamManager} />
-        <input
-          className="btn btn-large btn-success"
-          type="button"
-          id="buttonSwitchCamera"
-          onClick={switchCamera}
-          value="Switch Camera"
-        />
-      </div>
-
-      {subscribers.map((sub, i) => (
-        <div
-          key={i}
-          className="stream-container col-md-6 col-xs-6"
-          onClick={() => handleMainVideoStream(sub)}
-        >
-          <UserVideoComponent streamManager={sub} />
-        </div>
-      ))}
-
-      <div
-        className="stream-container col-md-6 col-xs-6"
-        onClick={() => handleMainVideoStream(publisher)}
-      >
-        <UserVideoComponent streamManager={publisher} />
-      </div>
+      <UserVideoComponent streamManager={publisher} />
     </div>
   );
 }

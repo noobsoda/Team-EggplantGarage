@@ -1,5 +1,7 @@
 package com.ssafy.api.service;
 
-public interface BundleService {
+import com.ssafy.api.request.BundleReq;
 
+public interface BundleService {
+    Long addBundle(BundleReq bundleReq);
 }

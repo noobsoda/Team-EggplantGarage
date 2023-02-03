@@ -11,8 +11,10 @@ const StyledSmallSelect = styled.button`
 
 export default function SmallSelect({ name, buttonClick }) {
   return (
-    <StyledSmallSelect className="body2-regular" onClick={buttonClick}>
-      {name}
-    </StyledSmallSelect>
+    <>
+      <StyledSmallSelect className="body2-regular" onClick={buttonClick}>
+        {name}
+      </StyledSmallSelect>
+    </>
   );
 }

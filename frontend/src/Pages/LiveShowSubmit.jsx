@@ -1,4 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import styled from "styled-components";
 import MidBtn from "../Atoms/Buttons/MediumBtn";
 import BigBtn from "../Atoms/Buttons/BigBtn";
@@ -26,6 +28,8 @@ const StyledWindow = styled.div`
 `;
 
 export default function LiveShowSubmit() {
+  const navigate = useNavigate();
+
   const [imgSrc, setImgSrc] = useState("//:0"); //회전후 결과를 담는 canvas
 
   const [step, setStep] = useState(0);
@@ -81,12 +85,12 @@ export default function LiveShowSubmit() {
    * 방송 시작을 위한 정보 전송
    */
   function goLive() {
-    console.log("방송시작");
+    // console.log("방송시작");
     //제목
-    console.log(`방송 제목 ${title.value},${title.check}`);
+    // console.log(`방송 제목 ${title.value},${title.check}`);
 
     //카테고리들
-    console.log(`카테고리 ${categorys.value},${categorys.check}`);
+    // console.log(`카테고리 ${categorys.value},${categorys.check}`);
 
     //이미지 소스
     // console.log(`이미지 ${imgSrc}`);
@@ -95,9 +99,11 @@ export default function LiveShowSubmit() {
     //---제품 이미지 위치
     //---제품명
     //---제품가격
-    console.log(`물품 리스트 ${productList.value},${productList.check}`);
+    // console.log(`물품 리스트 ${productList.value},${productList.check}`);
 
     //판매자(나) 이메일
+
+    navigate("/liveshowseller/12");
   }
   return (
     <StyledDiv>
