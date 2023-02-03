@@ -1,8 +1,12 @@
 package com.ssafy.db.entity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
+import javax.annotation.security.DenyAll;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -10,6 +14,9 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Product extends BaseEntity {
     private String name;
     private LocalDateTime soldAt;
@@ -21,10 +28,7 @@ public class Product extends BaseEntity {
     private int rightBottomX;
     private int rightBottomY;
     private String imageUrl;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "buyer_id")
-    private User user;
+    private Long buyerId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "live_id", referencedColumnName = "id"),

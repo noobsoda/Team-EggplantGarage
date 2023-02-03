@@ -48,7 +48,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<ReviewRes> getBuyerReviews(long buyerId) {
-        List<Review> reviewList = reviewRepository.findByProduct_User_IdAndIsSellerFalseOrderByCreatedAtDesc(buyerId).get();
+        List<Review> reviewList = reviewRepository.findByProduct_BuyerIdAndIsSellerFalseOrderByCreatedAtDesc(buyerId).get();
         return ReviewRes.of(reviewList);
     }
 
