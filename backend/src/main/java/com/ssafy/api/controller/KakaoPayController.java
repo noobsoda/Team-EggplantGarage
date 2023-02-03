@@ -30,8 +30,8 @@ public class KakaoPayController {
 
     @PostMapping()
     public String kakaoPay(@RequestBody KakaoPayReq kakaoPayReq) {
-        log.info("POST: kakaoPay 결제 준비");
-        System.out.println("POST: kakaoPay 결제 준비");
+//        log.info("POST: kakaoPay 결제 준비");
+//        System.out.println("POST: kakaoPay 결제 준비");
 
         bundle = bundleRepository.findById(kakaoPayReq.getBundleId());
 
@@ -50,14 +50,13 @@ public class KakaoPayController {
 
     @GetMapping("/success")
     public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
-        log.info("GET: kakaoPaySuccess 결제 승인");
-        System.out.println("GET: kakaoPaySuccess 결제 승인");
+//        log.info("GET: kakaoPaySuccess 결제 승인");
+//        System.out.println("GET: kakaoPaySuccess 결제 승인");
 
         ResponseEntity<KakaoPayApprovalRes> kakaoPResponseEntity = kakaoPayService.kakaoPaySuccess(kakaoPayApprovalRes, pg_token);
-        System.out.println("kakaoPaySuccess -> pg_token: " + pg_token);
-        System.out.println("승인 받고나서: " + kakaoPResponseEntity.toString());
+//        System.out.println("kakaoPaySuccess -> pg_token: " + pg_token);
+//        System.out.println("승인 받고나서: " + kakaoPResponseEntity.toString());
 
-        // 화면 쪽에 정보를 전송
 //        model.addAttribute("info", kakaoPayService.kakaoPaySuccess(pg_token));
         bundle.get().setPaid(true);
         bundleRepository.save(bundle.get());

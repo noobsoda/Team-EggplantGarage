@@ -45,8 +45,8 @@ public class KakaoPayService {
 
     // 결제 준비
     public KakaoPayReadyRes KakaoPayReady(Bundle bundle) {
-        log.info("Service: 결제 준비 시작");
-        System.out.println("Service: 결제 준비 시작");
+//        log.info("Service: 결제 준비 시작");
+//        System.out.println("Service: 결제 준비 시작");
 
         bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundle.getId());
         quantity = bundledItemsRelationList.get().size();
@@ -87,8 +87,8 @@ public class KakaoPayService {
 
     // 결제 승인
     public ResponseEntity<KakaoPayApprovalRes> kakaoPaySuccess(KakaoPayApprovalRes kakaoPayApprovalRes, String pg_token) {
-        log.info("Service: 결제 승인 단계 시작");
-        System.out.println("Service: 결제 승인 단계 시작");
+//        log.info("Service: 결제 승인 단계 시작");
+//        System.out.println("Service: 결제 승인 단계 시작");
 
         RestTemplate restTemplate = new RestTemplate();
 
