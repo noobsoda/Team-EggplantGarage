@@ -208,7 +208,7 @@ public class LiveServiceImpl implements LiveService {
         userLiveRepository.deleteAll(userLiveList);
 
         liveRepository.save(live);
-        return false;
+        return true;
     }
 
     //방 상세보기 가져올 메서드

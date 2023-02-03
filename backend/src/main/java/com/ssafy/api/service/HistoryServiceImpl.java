@@ -9,6 +9,7 @@ import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.LiveRepository;
 import com.ssafy.db.repository.ProductRepository;
 import com.ssafy.db.repository.ReviewRepository;
+import com.ssafy.db.repository.UserRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,12 @@ import java.util.Optional;
 @Service("historyService")
 public class HistoryServiceImpl implements HistoryService{
     private final Logger logger;
+    private final UserRepository userRepository;
 
-    public HistoryServiceImpl(Logger logger) {
+    @Autowired
+    public HistoryServiceImpl(Logger logger, UserRepository userRepository) {
         this.logger = logger;
+        this.userRepository = userRepository;
     }
 
     @Autowired
@@ -47,7 +51,7 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public List<ProductHistoryRes> getProductHistoryByBuyerId(long buyerId) {
-        List<Product> productList = productRepository.findByUser_IdOrderByCreatedAtDesc(buyerId).get();
+        List<Product> productList = productRepository.findByBuyerIdOrderByCreatedAtDesc(buyerId).get();
         List<ProductHistoryRes> resList = new ArrayList<>();
         for (Product product : productList) {
             Optional<Review> myReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
@@ -72,7 +76,10 @@ public class HistoryServiceImpl implements HistoryService{
             Optional<Review> otherReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
             long otherReviewId = (otherReview.isPresent()) ? otherReview.get().getId() : 0;
 
-            User buyer = product.getUser();
+            Optional<User> oUser = userRepository.findById(product.getBuyerId());
+            User buyer = oUser.orElse(null);
+            if(buyer == null)    continue;
+
             ProductHistoryRes res = ProductHistoryRes.of(product, buyer, myReviewId, otherReviewId);
             resList.add(res);
         }
