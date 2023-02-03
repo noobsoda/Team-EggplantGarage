@@ -17,6 +17,16 @@ const FlexBox = styled.div`
   justify-content: space-between;
 `;
 
+const Background = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 360px;
+  height: 100vh;
+  z-index: 1;
+  background-color: rgb(0, 0, 0, 0.5);
+`;
+
 export default function Search() {
   const location = useLocation();
   let isResult = false;
@@ -41,21 +51,28 @@ export default function Search() {
   };
 
   return (
-    <Page>
-      <Header isSearch="True" />
-      <Body>
-        <FlexBox>
-          <SmallSelect name="지역설정" buttonClick={showModal_1} />
-          <SmallSelect name="카테고리" buttonClick={showModal_2} />
-          <SmallSelect name="정렬방법" buttonClick={showModal_3} />
-        </FlexBox>
-        {/* isSearch가 True일때만 영상들이 뽑혀나오게 하자 */}
-        {isResult ? <SearchBody /> : <></>}
-      </Body>
+    <>
+      <Page>
+        <Header isSearch="True" />
+        <Body>
+          <FlexBox>
+            <SmallSelect name="지역설정" buttonClick={showModal_1} />
+            <SmallSelect name="카테고리" buttonClick={showModal_2} />
+            <SmallSelect name="정렬방법" buttonClick={showModal_3} />
+          </FlexBox>
+          {/* isSearch가 True일때만 영상들이 뽑혀나오게 하자 */}
+          {isResult ? <SearchBody /> : <></>}
+        </Body>
 
-      {modal_1_Open && <ModalSetLocation setModalOpen={setModal_1_Open} />}
-      {modal_2_Open && <ModalSetCategory setModalOpen={setModal_2_Open} />}
-      {modal_3_Open && <ModalSetSort setModalOpen={setModal_3_Open} />}
-    </Page>
+        {modal_1_Open && <ModalSetLocation setModalOpen={setModal_1_Open} />}
+        {modal_2_Open && <ModalSetCategory setModalOpen={setModal_2_Open} />}
+        {modal_3_Open && <ModalSetSort setModalOpen={setModal_3_Open} />}
+      </Page>
+      {modal_1_Open || modal_2_Open || modal_3_Open ? (
+        <Background></Background>
+      ) : (
+        <></>
+      )}
+    </>
   );
 }
