@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Tapbar from "./Tapbar";
 
 const StyledPage = styled.div`
-  width: 360px;
+  width: 100%;
   height: 100%;
 `;
 

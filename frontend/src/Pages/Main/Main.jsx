@@ -11,12 +11,6 @@ import { getAllLives } from "../../util/api/liveApi";
 import { useEffect } from "react";
 import Container from "../../Templates/Layout/Container";
 
-const FlexDiv = styled.div`
-  width: 280px;
-  display: flex;
-  justify-content: space-between;
-`;
-
 export default function Main() {
   const [allLives, setAllLives] = useState(undefined);
   //liveContentList 까지 가야됨.
@@ -36,7 +30,7 @@ export default function Main() {
       <Header isLogo="True" />
       <Body>
         <div className="page-header" style={{ marginBottom: "8px" }}>
-          지역 Liveshow
+          주변 라이브쇼
         </div>
         <Container>
           <LiveshowItem isViewer={true} />
@@ -45,10 +39,14 @@ export default function Main() {
           <LiveshowItem isViewer={true} />
         </Container>
         <div className="page-header" style={{ marginBottom: "8px" }}>
-          전국 Liveshow
+          전국 라이브쇼
         </div>
         <CategoryNav />
         <Container>
+          {allLives &&
+            allLives.map((show) => {
+              return <LiveshowItem key={show.id} show={show} isViewer={true} />;
+            })}
           {allLives &&
             allLives.map((show) => {
               return <LiveshowItem key={show.id} show={show} isViewer={true} />;

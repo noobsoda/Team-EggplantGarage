@@ -5,7 +5,7 @@ import Check from "../../Atoms/Inputs/Check";
 import { useNavigate } from "react-router-dom";
 
 const StyledItemCard = styled.div`
-  width: 280px;
+  width: calc(100% - 48px);
   height: 72px;
   border-radius: 8px;
   border: 1.5px solid #d3385a;

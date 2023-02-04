@@ -4,9 +4,14 @@ import LiveshowCard from "./LiveshowCard";
 import { useNavigate } from "react-router-dom";
 
 const StyledLiveshowItem = styled.div`
-  height: 192px;
-  width: 88px;
-  box-sizing: content-box;
+  width: calc(50% - 4px);
+  height: 100%;
+  flex-grow: 0;
+  flex-shrink: 0;
+  // box-sizing: content-box;
+  display: flex;
+  flex-direction: column;
+  justify-contents: space-between;
 `;
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
@@ -24,8 +29,10 @@ export default function LiveshowItem({ isViewer, show = {} }) {
   return (
     <StyledLiveshowItem onClick={goTo}>
       <LiveshowCard viewerCnt={show.joinUsersNum} imgSrc={show.thumbnailUrl} />
-      {show && <div className="body2-regular">{show.title}</div>}
-      {show && <div className="body2-regular">{show.owner}</div>}
+      {show && (
+        <div className="body2-bold">{show.title || "라이브방 제목"}</div>
+      )}
+      {show && <div className="body2-regular">{show.owner || "판매자명"}</div>}
     </StyledLiveshowItem>
   );
 }

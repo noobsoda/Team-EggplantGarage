@@ -4,9 +4,7 @@ import ItemCard from "../../Molecules/Cards/ItemCard";
 import TextInput from "../../Atoms/Inputs/TextInput";
 import { Rating } from "@mui/material";
 
-const StyledReview = styled.div`
-  width: 280px;
-`;
+const StyledReview = styled.div``;
 
 export default function ReviewReceived() {
   return (

@@ -6,7 +6,8 @@ import SearchInput from "../../Atoms/Inputs/SearchInput";
 import { useNavigate } from "react-router-dom";
 
 const StyledHeader = styled.div`
-  width: 344px;
+  width: 100%;
+  padding: 0 16px;
   height: 56px;
   display: flex;
   justify-content: space-between;

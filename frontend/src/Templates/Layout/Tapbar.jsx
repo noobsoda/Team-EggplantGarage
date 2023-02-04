@@ -4,9 +4,10 @@ import TapbarBox from "../../Molecules/Box/TapbarBox";
 import { useNavigate } from "react-router-dom";
 
 const StyledTapbar = styled.div`
-  width: 360px;
+  width: 100%;
   height: 56px;
   display: flex;
+  justify-content: space-between;
   // position: absolute;
   // bottom: 0;
   z-index: 1;

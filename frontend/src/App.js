@@ -6,7 +6,16 @@ import "./styles/global.css";
 
 function App() {
   return (
-    <div className="App" style={{ height: "100vh" }}>
+    <div
+      className="App"
+      style={{
+        height: "100vh",
+        width: "100%",
+        minWidth: "360px",
+        maxWidth: "435px",
+        overflow: "hidden",
+      }}
+    >
       <GlobalStyle />
       <ThemeProvider theme={theme}>
         <Router />

@@ -9,7 +9,6 @@ import SalesHistory from "../../Organisms/Mypage/SalesHistory";
 import { useNavigate } from "react-router-dom";
 
 const Info = styled.div`
-  width: 280px;
   height: 64px;
   border-bottom: solid;
   border-bottom-color: ${({ theme }) => theme.color.lightgrey};
@@ -26,7 +25,7 @@ const InfoEditBtn = styled.button`
 `;
 const SelectBar = styled.div`
   height: 40px;
-  width: 280px;
+  width: 100%;
   display: flex;
   justify-content: space-around;
   border-bottom: solid;

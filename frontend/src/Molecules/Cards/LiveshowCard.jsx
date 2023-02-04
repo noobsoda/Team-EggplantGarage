@@ -2,10 +2,10 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledLiveshowCard = styled.div`
-  width: 80px;
-  height: 152px;
-  padding-top: 8px;
-  padding-left: 8px;
+  width: 100%;
+  height: 75%;
+  // padding-top: 8px;
+  // padding-left: 8px;
   border-radius: 8px;
   background: url(${(props) => props.imgSrc}) no-repeat 0px 0px;
   background-size: cover;
@@ -15,7 +15,8 @@ const ViewerCntBox = styled.div`
   width: 40px;
   height: 16px;
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.color.darkgrey};
+  margin: 8px;
+  background-color: black;
   color: ${({ theme }) => theme.color.white};
 `;
 const Image = styled.div`

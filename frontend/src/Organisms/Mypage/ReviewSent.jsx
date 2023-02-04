@@ -5,9 +5,7 @@ import TextInput from "../../Atoms/Inputs/TextInput";
 import { Rating } from "@mui/material";
 import BigBtn from "../../Atoms/Buttons/BigBtn";
 
-const StyledReview = styled.div`
-  width: 280px;
-`;
+const StyledReview = styled.div``;
 
 export default function ReviewSent({ buttonClick }) {
   return (

@@ -3,7 +3,6 @@ import styled from "styled-components";
 import LiveshowItem from "../../Molecules/Cards/LiveshowItem";
 
 const StyledSalesHistory = styled.div`
-  width: 280px;
   display: flex;
   justify-content: space-between;
   flex-wrap: wrap;
