@@ -7,7 +7,7 @@ import SalesList from "../../Templates/Modal/BuyerBody/SalesList";
 import SuggestionList from "../../Templates/Modal/BuyerBody/SuggestionList";
 
 const Header = styled.div`
-  width: 360px;
+  width: 100%;
   display: flex;
   color: ${({ theme }) => theme.color.white};
 `;

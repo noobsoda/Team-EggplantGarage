@@ -65,6 +65,13 @@ const GlobalStyle = createGlobalStyle`
 
 
     // garage typography
+    .show-header{
+        font-family: 'Inter';
+        font-style: normal;
+        font-weight: 700;
+        font-size: 32px;
+        line-height: 24px;
+    }
     .page-header{
         font-family: 'Inter';
         font-style: normal;
