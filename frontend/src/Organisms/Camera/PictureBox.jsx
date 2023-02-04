@@ -35,11 +35,24 @@ const StyledBtn = styled.button`
   bottom: 30px;
 `;
 
+//실제 비디오로 찍는 크기
+const VIDEO_RECORD_HEIGHT = 640;
+const VIDEO_RECORD_WIDTH = 1024;
+
+//우리가 보는 비디오 표시 크기
+const VIDEO_RESULT_HEIGHT = 640;
+const VIDEO_RESULT_WIDTH = 360;
+
 //카메라 설정
 const getWebcam = (callback) => {
   try {
+    //비디오 설정
     const constraints = {
-      video: true,
+      video: {
+        width: VIDEO_RECORD_WIDTH,
+        height: VIDEO_RECORD_HEIGHT, // 해상도 설정
+        facingMode: "environment", // 셀카카메라 설정. 전면은 "user" 후면은 "environment"
+      },
       audio: false,
     };
     navigator.mediaDevices.getUserMedia(constraints).then(callback);
@@ -54,7 +67,7 @@ export default function PictureBox({ setOriImgSrc }) {
   const canvasRef = useRef(null); //비디오를 담는 canvas
   const canvasRef2 = useRef(null); //회전후 결과를 담는 canvas
   const [playing, setPlaying] = useState(false); //촬영모드 on,off
-  const [imgSrc, setImgSrc] = useState("//:0");
+  const [imgSrc, setImgSrc] = useState("//:0"); //이미지의 소스
 
   useEffect(() => {
     getWebcam((stream) => {
@@ -82,22 +95,24 @@ export default function PictureBox({ setOriImgSrc }) {
   //촬영
   function snapShot() {
     //비디오 크기에 맞는 캔버스 사용
-    canvasRef.current.width = 360;
-    canvasRef.current.height = videoRef.current.videoHeight;
+    canvasRef.current.width = VIDEO_RESULT_WIDTH;
+    canvasRef.current.height = VIDEO_RESULT_HEIGHT;
 
     //캔버스에 비디오 화면 잘라서 그리기
+    //비디오 화면을 중앙을 기준으로 좌우 180만큼 잘라낸다.
+    //결과적으로 중앙에서 360의 가로, 640의 세로 영역을 잘라낸다.
     canvasRef.current
       .getContext("2d")
       .drawImage(
         videoRef.current,
-        videoRef.current.videoWidth / 2 - 180,
+        videoRef.current.videoWidth / 2 - VIDEO_RESULT_WIDTH / 2,
         0,
-        360,
-        640,
+        VIDEO_RESULT_WIDTH,
+        VIDEO_RESULT_HEIGHT,
         0,
         0,
-        360,
-        640
+        VIDEO_RESULT_WIDTH,
+        VIDEO_RESULT_HEIGHT
       );
 
     //270도 회전하기
@@ -113,6 +128,7 @@ export default function PictureBox({ setOriImgSrc }) {
     setImgSrc(canvasRef2.current.toDataURL("image/webp"));
     setOriImgSrc(canvasRef2.current.toDataURL("image/webp"));
     startOrStop(); //촬영 정지
+    console.log(`${canvasRef2.current.width}, ${canvasRef2.current.height}`);
   }
 
   return (

@@ -21,11 +21,7 @@ const StyledResultCanvas = styled.canvas`
   height: 100px;
 `;
 
-export default function ProductSubmitBox({
-  imgSrc,
-  productList,
-  setProductList,
-}) {
+export default function ProductSubmitBox({ imgSrc, productList, setProductList }) {
   const originCanvas = useRef(undefined); //원본 그림 저장
   const drawCanvas = useRef(undefined); //실제 그리는 영역
   const resultCanvas = useRef(undefined); //잘라진 영역 확인
@@ -61,15 +57,6 @@ export default function ProductSubmitBox({
       drawCanvas.current.height = img.height;
       drawCanvas.current.getContext("2d").drawImage(img, 0, 0);
       setImg(img);
-
-      //확인
-      //console.log(`${img.width}과 ${img.height}`); //480,360
-      //console.log(`${drawCanvas.current.width}, ${drawCanvas.current.height}`);
-      //캔버스에 그려진 크기  480, 360
-      //실제 캔버스 크기 360, 270
-      // console.log(
-      //   `${resultCanvas.current.width}, ${resultCanvas.current.height}`
-      // );
     };
 
     //결과 캔버스
@@ -81,7 +68,13 @@ export default function ProductSubmitBox({
     setResultCtx(resultCanvas.current.getContext("2d"));
     setCtx(drawCanvas.current.getContext("2d"));
 
-    setRatio(0.75);
+    //비율 계산
+    //실제 이미지크기->canvas에 그려진 크기의 비율 구하기
+    //canvas그려질 크기/실제 이미지 크기
+    //실제 이미지 크기drawCanvas.current.width
+    //캔버스의 크기 drawCanvas.current.clientWidth
+
+    setRatio(drawCanvas.current.clientWidth / drawCanvas.current.width);
   }, [imgSrc]);
 
   /**
@@ -201,12 +194,7 @@ export default function ProductSubmitBox({
 
     // canvas 초기화
     ctx.drawImage(img, 0, 0, img.width, img.height);
-    resultCtx.clearRect(
-      0,
-      0,
-      resultCanvas.current.width,
-      resultCanvas.current.height
-    );
+    resultCtx.clearRect(0, 0, resultCanvas.current.width, resultCanvas.current.height);
   }
   return (
     <StyledBox>
@@ -217,17 +205,16 @@ export default function ProductSubmitBox({
           onMouseUp={finishDrawing}
           onMouseDown={startDrawing}
           onMouseMove={drawSquareImage}
+          onTouchStart={startDrawing}
+          onTouchEnd={finishDrawing}
+          onTouchMove={drawSquareImage}
         ></StyledCanvas>
         <button>그리기</button>
         <StyledResultCanvas ref={resultCanvas}></StyledResultCanvas>
         <SmallBtn name="제거"></SmallBtn>
         <SmallBtn name="등록" buttonClick={addProduct}></SmallBtn>
       </div>
-      <InputBox
-        placehold="제품명을 입력하세요"
-        onChange={onProductName}
-        value={productName}
-      />
+      <InputBox placehold="제품명을 입력하세요" onChange={onProductName} value={productName} />
       <Checkbox id="price" text="즉시구매가" />
       <InputBox
         placehold="즉시구매가를 입력하세요"
