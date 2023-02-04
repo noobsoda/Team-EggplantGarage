@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 const StyledLiveshowItem = styled.div`
   width: calc(50% - 4px);
-  height: 100%;
+  height: ${(props) => (props.isSearch ? "calc(30% - 16px)" : "100%")};
   flex-grow: 0;
   flex-shrink: 0;
   // box-sizing: content-box;
@@ -16,7 +16,7 @@ const StyledLiveshowItem = styled.div`
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
 */
-export default function LiveshowItem({ isViewer, show = {} }) {
+export default function LiveshowItem({ isSearch, isViewer, show = {} }) {
   //useState , event
   const navigate = useNavigate();
   function goTo() {
@@ -27,7 +27,7 @@ export default function LiveshowItem({ isViewer, show = {} }) {
     }
   }
   return (
-    <StyledLiveshowItem onClick={goTo}>
+    <StyledLiveshowItem isSearch={isSearch} onClick={goTo}>
       <LiveshowCard viewerCnt={show.joinUsersNum} imgSrc={show.thumbnailUrl} />
       {show && (
         <div className="body2-bold">{show.title || "라이브방 제목"}</div>

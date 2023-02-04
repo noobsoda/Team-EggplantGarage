@@ -52,7 +52,9 @@ export default function Main() {
               return <LiveshowItem key={show.id} show={show} isViewer={true} />;
             })}
         </Container>
-        <LiveStartBtn buttonClick={startLive} />
+        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <LiveStartBtn buttonClick={startLive} />
+        </div>
       </Body>
     </Page>
   );

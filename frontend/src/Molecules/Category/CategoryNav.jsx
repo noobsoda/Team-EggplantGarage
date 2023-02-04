@@ -10,7 +10,6 @@ const StyledContainer = styled.div`
   column-gap: 8px;
   overflow-x: scroll;
   // height: 16px;
-  margin-bottom: 8px;
 `;
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  

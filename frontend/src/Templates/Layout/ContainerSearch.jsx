@@ -10,6 +10,7 @@ const StyledContainer = styled.div`
   box-sizing: border-box;
   row-gap: 8px;
   column-gap: 8px;
+  overflow-y: scroll;
 `;
 
 export default function ContainerSearch(props) {

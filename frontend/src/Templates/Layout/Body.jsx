@@ -8,6 +8,9 @@ const StyledBody = styled.div`
   // overflow-y: auto;
   overflow: hidden;
   overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
 `;
 
 export default function Body(props) {

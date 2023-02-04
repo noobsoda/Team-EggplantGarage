@@ -4,6 +4,7 @@ import LeftBtn from "../../Atoms/IconButtons/LeftBtn";
 import MenuBtn from "../../Atoms/IconButtons/MenuBtn";
 import SearchInput from "../../Atoms/Inputs/SearchInput";
 import { useNavigate } from "react-router-dom";
+import SearchBtn from "../../Atoms/IconButtons/SearchBtn";
 
 const StyledHeader = styled.div`
   width: 100%;
@@ -26,7 +27,7 @@ export default function Header({ isLogo, isSearch, isName, headerName }) {
     <StyledHeader>
       <LeftBtn buttonClick={() => navigate(-1)} />
       {isSearch ? <SearchInput /> : <></>}
-      {isSearch ? <div></div> : <></>}
+      {isSearch ? <SearchBtn /> : <></>}
       {isLogo ? (
         <img width="112" height="27" src="/image/logo.png" alt="" />
       ) : (
