@@ -5,13 +5,15 @@ import { useNavigate } from "react-router-dom";
 
 const StyledLiveshowItem = styled.div`
   width: calc(50% - 4px);
-  height: ${(props) => (props.isSearch ? "calc(30% - 16px)" : "100%")};
+  height: ${(props) => {
+    return props.isSearch ? "calc(30% - 16px)" : "100%";
+  }};
   flex-grow: 0;
   flex-shrink: 0;
   // box-sizing: content-box;
   display: flex;
   flex-direction: column;
-  justify-contents: space-between;
+  justify-content: space-between;
 `;
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
@@ -23,7 +25,7 @@ export default function LiveshowItem({ isSearch, isViewer, show = {} }) {
     if (isViewer) {
       navigate("/liveshowbuyer");
     } else {
-      navigate("liveshowdetail");
+      navigate("/liveshowdetail");
     }
   }
   return (

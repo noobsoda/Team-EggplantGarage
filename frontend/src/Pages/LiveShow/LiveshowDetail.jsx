@@ -14,10 +14,12 @@ export default function LiveshowDetail() {
         <div className="body1-regular">방송시간 : 1.5시간</div>
         <hr></hr>
         <div className="body1-header">판매제품 목록</div>
-        <ItemCard buttonType={"two"} />
-        <ItemCard buttonType={"two"} />
-        <ItemCard buttonType={"two"} />
-        <ItemCard buttonType={"two"} />
+        <ItemCard buttonType={"purchasedhistory"} isReview={false} />
+        <ItemCard buttonType={"purchasedhistory"} isReview={false} />
+        <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+        <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+        <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+        <ItemCard buttonType={"purchasedhistory"} isReview={true} />
       </Body>
     </Page>
   );

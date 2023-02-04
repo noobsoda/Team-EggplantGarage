@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 const Wrapper = styled.div`
-  width: width: calc(100% - 8px);
+  width: calc(100% - 8px);
   height: 40px;
   position: absolute;
   bottom: 16px;

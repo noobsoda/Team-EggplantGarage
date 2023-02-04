@@ -2,7 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import ItemCard from "../../Molecules/Cards/ItemCard";
 
-const StyledPurchasedHistory = styled.div``;
+const StyledPurchasedHistory = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+`;
 
 export default function PurchasedHistory() {
   return (

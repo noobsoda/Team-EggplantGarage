@@ -15,6 +15,7 @@ export default function SalesHistory() {
       <LiveshowItem />
       <LiveshowItem />
       <LiveshowItem />
+      <LiveshowItem />
     </StyledSalesHistory>
   );
 }

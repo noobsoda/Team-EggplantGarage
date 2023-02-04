@@ -7,7 +7,6 @@ const StyledInput = styled.input`
 
   border: 2px solid ${({ theme }) => theme.color.darkgrey};
   border-radius: 8px;
-  margin-bottom: 8px;
   color: ${({ theme }) => theme.color.black};
 `;
 
