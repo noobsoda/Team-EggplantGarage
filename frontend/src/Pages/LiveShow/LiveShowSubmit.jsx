@@ -4,6 +4,9 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import MidBtn from "../../Atoms/Buttons/MediumBtn";
 import BigBtn from "../../Atoms/Buttons/BigBtn";
+
+import PictureBox from "../../Organisms/Camera/PictureBox";
+
 import TitleCategoryBox from "../../Templates/LiveShowSubmit/TitleCategoryBox";
 import PictureSubmitBox from "../../Templates/LiveShowSubmit/PictureSubmitBox";
 import ProductSubmitBox from "../../Templates/LiveShowSubmit/ProductSubmitBox";
@@ -44,6 +47,7 @@ export default function LiveShowSubmit() {
   const [categorys, setCategorys] = useState({ value: [], check: false });
   const [productList, setProductList] = useState({ value: [], check: false });
 
+  const [camera, setCamera] = useState(false);
   function nextStep() {
     if (step === 3) return;
 
@@ -87,6 +91,12 @@ export default function LiveShowSubmit() {
   }
 
   /**
+   * 카메라 키고 끄기
+   */
+  function cameraEvent(flag) {
+    setCamera(flag);
+  }
+  /**
    * 방송 시작을 위한 정보 전송
    */
   function goLive() {
@@ -121,7 +131,8 @@ export default function LiveShowSubmit() {
             onCategoryChange={onChange}
             delCategory={delCategory}
           />
-          <PictureSubmitBox setOriImgSrc={setImgSrc} />
+          <PictureSubmitBox imgSrc={imgSrc} cameraEvent={cameraEvent} />
+
           <ProductSubmitBox
             imgSrc={imgSrc}
             productList={productList}
@@ -145,6 +156,7 @@ export default function LiveShowSubmit() {
           </>
         )}
       </BtnFlex>
+      {camera ? <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} /> : <></>}
 
       {isModify ? <ProuctModifyBox /> : <></>}
     </Page>
