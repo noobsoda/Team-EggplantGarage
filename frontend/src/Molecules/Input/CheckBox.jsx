@@ -11,10 +11,10 @@ const StyledLabel = styled.label`
   }
 `;
 
-export default function CheckBox({ id, text }) {
+export default function CheckBox({ id, text, check, setCheck }) {
   return (
     <div>
-      <Check boxId={id} />
+      <Check boxId={id} setCheck={setCheck} check={check} />
 
       <StyledLabel htmlFor={id}>
         <span className="body1-regular">{text}</span>

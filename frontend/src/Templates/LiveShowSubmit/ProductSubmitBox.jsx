@@ -61,6 +61,8 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
 
+  //제품가격 체크박스
+  const [check, setCheck] = useState(false);
   const [id, setId] = useState(0);
 
   useEffect(() => {
@@ -180,16 +182,49 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
   }
 
   /**
+   * 영역이 제대로 선택 되었는지 확인
+   */
+  function checkArea() {
+    if (endPos[0] - startPos[0] > 30 && endPos[1] - startPos[1] > 30) {
+      return true;
+    }
+    return false;
+  }
+  /**
    * 상품 등록 진행
    */
   function addProduct() {
+    //입력이 다 되었는지 확인
+
+    //영역 선택 확인
+    //가로 30이상
+    //세로 30이상
+    if (!checkArea()) {
+      alert("영역이 너무 작습니다.");
+      return;
+    }
+    //제품명 확인
+    if (productName === "") {
+      alert("제목을 입력해주세요");
+      return;
+    }
+    //즉시구매가 확인
+    let price = 0; //기본 0원
+    if (check) {
+      if (productPrice === "") {
+        alert("구매가를 입력해주세요");
+        return;
+      }
+      price = productPrice;
+    }
+
     setProductList({
       value: [
         ...productList.value,
         {
           id: id,
           productName: productName,
-          productPrice: productPrice,
+          productPrice: price,
           leftTopX: startPos[0],
           leftTopY: startPos[1],
           rightBottomX: endPos[0],
@@ -233,17 +268,18 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
         <StyledCropBox>
           <StyledResultCanvas ref={resultCanvas}></StyledResultCanvas>
           <StyledButtomBox>
-            <SmallStrokeBtn name="제거"></SmallStrokeBtn>
+            <SmallStrokeBtn name="제거" buttonClick={reset}></SmallStrokeBtn>
             <SmallBtn name="등록" buttonClick={addProduct}></SmallBtn>
           </StyledButtomBox>
         </StyledCropBox>
         <div>
           <InputBox placehold="제품명을 입력하세요" onChange={onProductName} value={productName} />
-          <Checkbox id="price" text="즉시구매가" />
+          <Checkbox id="price" text="즉시구매가 입력하기" check={check} setCheck={setCheck} />
           <InputBox
             placehold="즉시구매가를 입력하세요"
             onChange={onProductPrice}
             value={productPrice}
+            disabled={!check}
           />
         </div>
       </StyledResultBox>

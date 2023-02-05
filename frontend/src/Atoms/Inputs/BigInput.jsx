@@ -11,7 +11,7 @@ const StyledInput = styled.input`
   color: ${({ theme }) => theme.color.black};
 `;
 
-export default function BigInput({ placehold, inputValue, type, value }) {
+export default function BigInput({ placehold, inputValue, type, value, disabled }) {
   return (
     <StyledInput
       type={type}
@@ -19,6 +19,7 @@ export default function BigInput({ placehold, inputValue, type, value }) {
       onChange={inputValue}
       placeholder={placehold}
       value={value}
+      disabled={disabled}
     ></StyledInput>
   );
 }
