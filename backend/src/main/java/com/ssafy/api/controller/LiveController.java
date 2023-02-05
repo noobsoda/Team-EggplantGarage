@@ -13,6 +13,7 @@ import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -82,11 +83,6 @@ public class LiveController {
         }
 
     }
-   /* @PostMapping("/load/img")
-    @ApiOperation(value = "이미지 로드", notes = "idx를 통해 DB에서 해당하는 이미지 경로, 타입 반환")
-    public ResponseEntity<FileInfoRes> uploadImg(@RequestParam Long idx){
-        return new ResponseEntity<>(fileService.fileUpload(idx), HttpStatus.OK);
-    }*/
     @GetMapping("/detail")
     @ApiOperation(value = "방 상세정보 조회", notes = "방의 상세 정보와 유저 목록을 조회한다.")
     public ResponseEntity<LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, String> sessionMap){

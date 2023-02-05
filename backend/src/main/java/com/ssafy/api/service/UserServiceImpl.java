@@ -127,5 +127,42 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    //refreshToken 저장
+    @Override
+    public void patchUserTokenByrefreshToken(String userEmail, String refreshToken) {
+        Optional<User> oUser = userRepository.findByEmail(userEmail);
+        User user = oUser.orElse(null);
+        if(user == null)
+            return;
+        user.setRefreshToken(refreshToken);
+
+        userRepository.save(user);
+
+
+    }
+
+    //refreshToken 제거
+    @Override
+    public String patchUserDeleteTokenByrefreshToken(String refreshToken) {
+        Optional<User> oUser = userRepository.findByRefreshToken(refreshToken);
+        User user = oUser.orElse(null);
+        if(user == null)
+            return null;
+        user.setRefreshToken(null);
+        userRepository.save(user);
+
+        return user.getEmail();
+    }
+
+    @Override
+    public String getUserTokenByRefreshToken(String refreshToken) {
+        Optional<User> oUser = userRepository.findByRefreshToken(refreshToken);
+        User user = oUser.orElse(null);
+        if(user == null)
+            return null;
+
+        return user.getRefreshToken();
+    }
+
 
 }
