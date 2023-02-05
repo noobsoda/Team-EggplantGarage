@@ -29,9 +29,6 @@ export default function ModalSetLocation({ setModalOpen }) {
 
   return (
     <Modal>
-      <div height="24px" className="page-header">
-        　
-      </div>
       <Header>
         <CloseBtn onClick={closeModal} />
         <div className="page-header" height>

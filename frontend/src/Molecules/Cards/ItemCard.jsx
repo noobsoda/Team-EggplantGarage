@@ -5,20 +5,20 @@ import Check from "../../Atoms/Inputs/Check";
 import { useNavigate } from "react-router-dom";
 
 const StyledItemCard = styled.div`
-  width: 100%;
+  width: calc(100% -6px);
   height: 72px;
-  border-radius: 8px;
-  border: 1.5px solid #d3385a;
+  border-radius: 12px;
+  border: 3px solid;
   /* box-sizing: border-box; */
   background-color: ${({ theme }) => theme.color.white};
   display: flex;
+  flex-direction: row;
   column-gap: 8px;
   justify-content: space-between;
 `;
 const ItemImage = styled.div`
   width: 72px;
   height: 72px;
-  border: 1.5px solid #d3385a;
   border-radius: 8px 0px 0px 8px;
   box-sizing: border-box;
   //   background: url(${(props) => props.imgSrc}) no-repeat 0px 0px;
@@ -39,6 +39,7 @@ const ItemBtn = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  align-items: center;
 `;
 export default function ItemCard({ item, buttonType, isReview }) {
   const navigate = useNavigate();

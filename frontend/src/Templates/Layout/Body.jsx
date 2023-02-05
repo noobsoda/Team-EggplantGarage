@@ -6,10 +6,10 @@ const StyledBody = styled.div`
   width: calc(100% - 48px);
   height: calc(100% - 128.8px);
   // overflow-y: auto;
-  overflow: hidden;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow: hidden;
   row-gap: 8px;
 `;
 

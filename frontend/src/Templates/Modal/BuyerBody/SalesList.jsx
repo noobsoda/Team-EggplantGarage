@@ -10,7 +10,7 @@ const StyledBody = styled.div`
 export default function SalesList({ setModalOpen }) {
   return (
     <>
-      <ItemCard />
+      <ItemCard buttonType={"check"} />
       <ItemCard />
       <ItemCard />
       <ItemCard />

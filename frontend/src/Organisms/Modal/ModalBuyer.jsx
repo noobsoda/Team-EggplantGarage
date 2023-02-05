@@ -5,6 +5,8 @@ import Modal from "../../Atoms/Modal/Modal";
 import { useState } from "react";
 import SalesList from "../../Templates/Modal/BuyerBody/SalesList";
 import SuggestionList from "../../Templates/Modal/BuyerBody/SuggestionList";
+import ModalBody from "../../Templates/Modal/ModalBody";
+import ExtraSmallButton from "../../Atoms/Buttons/ExtraSmallBtn";
 
 const Header = styled.div`
   width: 100%;
@@ -21,11 +23,8 @@ const CloseBtn = styled.button`
 `;
 const FlexBox = styled.div`
   display: flex;
+  column-gap: 8px;
   justify-content: flex-end;
-`;
-const StyledBody = styled.div`
-  padding: 8px 40px 8px;
-  width: 280px;
 `;
 export default function ModalBuyer({ setModalOpen }) {
   const closeModal = () => {
@@ -37,16 +36,13 @@ export default function ModalBuyer({ setModalOpen }) {
   const [isSuggestion, setIsSuggestion] = useState(false);
   return (
     <Modal>
-      <div height="24px" className="page-header">
-        　
-      </div>
       <Header>
         <CloseBtn onClick={closeModal} />
         <div className="page-header" height>
           물건목록
         </div>
       </Header>
-      <StyledBody>
+      <ModalBody>
         <FlexBox>
           <SmallBtn
             name="제안목록"
@@ -54,7 +50,6 @@ export default function ModalBuyer({ setModalOpen }) {
               setIsSuggestion(false);
             }}
           />
-          <div style={{ width: "8px" }}></div>
           <SmallBtn
             name="판매목록"
             buttonClick={() => {
@@ -63,7 +58,7 @@ export default function ModalBuyer({ setModalOpen }) {
           />
         </FlexBox>
         {isSuggestion ? <SalesList /> : <SuggestionList />}
-      </StyledBody>
+      </ModalBody>
     </Modal>
   );
 }

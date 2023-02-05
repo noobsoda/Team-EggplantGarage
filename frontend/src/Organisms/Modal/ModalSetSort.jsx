@@ -26,9 +26,6 @@ export default function ModalSetSort({ setModalOpen }) {
   };
   return (
     <ModalSmall>
-      <div height="24px" className="page-header">
-        　
-      </div>
       <Header>
         <CloseBtn onClick={closeModal} />
         <div className="page-header" height>
