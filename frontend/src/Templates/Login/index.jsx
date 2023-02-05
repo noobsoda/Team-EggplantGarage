@@ -1,10 +1,17 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
 import InputBox from "../../Atoms/Inputs/BigInput";
 import Btn from "../../Atoms/Buttons/BigBtn";
 import CheckBox from "../../Molecules/Input/CheckBox";
 import Link from "../../Atoms/A/Link";
 import RedSpan from "../../Atoms/Text/RedSpan";
 import styled from "styled-components";
+
+//redux
+import { userConfirm } from "../../store/user";
+import { useEffect } from "react";
 
 const StyledLoginBox = styled.div`
   width: 280px;
@@ -34,15 +41,58 @@ const StyledRowCenter = styled.div`
 `;
 
 export default function Login() {
+  const navigate = useNavigate();
+
   const [check, setCheck] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  //redux
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(isLogin);
+    if (isLogin) {
+      navigate("/");
+    }
+  }, [isLogin]);
+  /**
+   * 로그인 진행
+   */
+  function loginSubmit() {
+    // login()
+    if (email === "") {
+      alert("아이디를 입력해주세요");
+      return;
+    }
+    if (password === "") {
+      alert("비밀번호를 입력해주세요");
+      return;
+    }
+    dispatch(userConfirm({ email: email, password: password }));
+    console.log(isLogin);
+  }
+
+  function onEmailChange(e) {
+    setEmail(e.target.value);
+  }
+  function onPasswordChange(e) {
+    setPassword(e.target.value);
+  }
   return (
     <StyledLoginBox>
       <StyledHead className="page-header">가지가라지</StyledHead>
 
       <StyledColumnDirection>
         <StyledIdPwBox>
-          <InputBox placehold="아이디" />
-          <InputBox placehold="비밀번호" />
+          <InputBox placehold="아이디" inputValue={onEmailChange} value={email} />
+          <InputBox
+            placehold="비밀번호"
+            inputValue={onPasswordChange}
+            value={password}
+            type="password"
+          />
         </StyledIdPwBox>
         <CheckBox
           id="id-save"
@@ -54,7 +104,7 @@ export default function Login() {
         <StyledRowCenter>
           <RedSpan text="아이디 또는 비밀번호가 일치 하지 않습니다." />
         </StyledRowCenter>
-        <Btn name="로그인" />
+        <Btn name="로그인" buttonClick={loginSubmit} />
       </StyledColumnDirection>
 
       <StyledRowCenter>

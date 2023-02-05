@@ -27,9 +27,16 @@ async function emailCheck(userEmail, success, fail) {
  * @param {*} fail 실패시의 콜백함수
  */
 async function nickNameCheck(userNickName, success, fail) {
-  await api
-    .get(`/api/v1/users/nickname/${userNickName}`)
-    .then(success)
-    .catch(fail);
+  await api.get(`/api/v1/users/nickname/${userNickName}`).then(success).catch(fail);
 }
-export { signup, emailCheck, nickNameCheck };
+
+/**
+ * 로그인 진행
+ * @param {*} data {email, password}
+ * @param {*} success
+ * @param {*} fail
+ */
+async function login(data, success, fail) {
+  await api.post(`/api/v1/auth/login`, data).then(success).catch(fail);
+}
+export { signup, emailCheck, nickNameCheck, login };
