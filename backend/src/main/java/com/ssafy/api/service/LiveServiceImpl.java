@@ -4,10 +4,7 @@ import com.ssafy.api.request.LiveCategoriesReq;
 import com.ssafy.api.request.LiveCategoryReq;
 import com.ssafy.api.request.LiveUserJoinReq;
 import com.ssafy.api.request.LiveRegisterPostReq;
-import com.ssafy.api.response.LiveContent;
-import com.ssafy.api.response.LiveDetailGetRes;
-import com.ssafy.api.response.LiveListGetRes;
-import com.ssafy.api.response.UserEntryRes;
+import com.ssafy.api.response.*;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,27 +23,38 @@ public class LiveServiceImpl implements LiveService {
     private final UserRepository userRepository;
     private final LiveCategoryRepository liveCategoryRepository;
     private final UserLiveRepository userLiveRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
-    public LiveServiceImpl(LiveRepository liveRepository, CategoryRepository categoryRepository, UserRepository userRepository, LiveCategoryRepository liveCategoryRepository, UserLiveRepository userLiveRepository) {
+    public LiveServiceImpl(LiveRepository liveRepository, CategoryRepository categoryRepository, UserRepository userRepository, LiveCategoryRepository liveCategoryRepository, UserLiveRepository userLiveRepository
+    ,ProductRepository productRepository) {
         this.liveRepository = liveRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.liveCategoryRepository = liveCategoryRepository;
         this.userLiveRepository = userLiveRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
     public Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user) {
         Live live = Live.builder()
-                .session_id(liveRegisterInfo.getSession_id())
+                .sessionId(liveRegisterInfo.getSessionId())
                 .title(liveRegisterInfo.getTitle())
                 .description(liveRegisterInfo.getDescription())
                 .url(liveRegisterInfo.getUrl())
                 .isLive(liveRegisterInfo.isLive())
-                .location(liveRegisterInfo.getLocation())
+                .latitude(liveRegisterInfo.getLatitude())
+                .longitude(liveRegisterInfo.getLongitude())
                 .user(user)
                 .build();
+        
+        //유저라이브 헬퍼 테이블에 본인도 넣어주기
+        UserLive userLive = UserLive.builder()
+                .live(live)
+                .user(user)
+                .build();
+        userLiveRepository.save(userLive);
 
 
         return liveRepository.save(live);
@@ -213,9 +221,9 @@ public class LiveServiceImpl implements LiveService {
 
     //방 상세보기 가져올 메서드
     @Override
-    public LiveDetailGetRes getLiveDetailByUrl(String url) {
+    public LiveDetailGetRes getLiveDetailBySessionId(String sessionId) {
         // 디비에 방송 url 정보 조회
-        Optional<Live> oLive = liveRepository.findByUrl(url);
+        Optional<Live> oLive = liveRepository.findBySessionId(sessionId);
         if (!oLive.isPresent())
             return null;
         Live live = oLive.orElse(null);
@@ -223,6 +231,7 @@ public class LiveServiceImpl implements LiveService {
         //라이브 카테고리 헬퍼 테이블 순회
         List<LiveCategory> liveCategories = live.getLiveCategoryList();
         List<Category> categoryList = new ArrayList<>();
+
 
         for (Iterator<LiveCategory> it = liveCategories.iterator(); it.hasNext(); ) {
             LiveCategory liveCategory = it.next();
@@ -253,6 +262,36 @@ public class LiveServiceImpl implements LiveService {
 
             userEntryList.add(userEntryRes);
         }
+        //라이브 아이디와 연관된 상품 테이블 조회
+        Optional<List<Product>> oProduct = productRepository.findByLive_IdOrderByCreatedAtDesc(live.getId());
+        List<Product> productList = oProduct.orElse(null);
+
+        List<LiveProductInfo> liveProductInfoList = new ArrayList<>();
+        for(Product product : productList){
+
+            LiveProductInfo liveProductInfo = LiveProductInfo.builder()
+                    .id(product.getId())
+                    .liveId(live.getId())
+                    .sellerId(live.getUser().getId())
+                    .name(product.getName())
+                    .soldAt(product.getSoldAt())
+                    .soldPrice(product.getSoldPrice())
+                    .creatAt(product.getCreatedAt())
+                    .isPaid(product.isPaid())
+                    .initialPrice(product.getInitialPrice())
+                    .leftTopX(product.getLeftTopX())
+                    .leftTopY(product.getLeftTopY())
+                    .rightBottomX(product.getRightBottomX())
+                    .rightBottomY(product.getRightBottomY())
+                    .imageUrl(product.getImageUrl())
+                    .buyerId(product.getBuyerId())
+                    .build();
+
+            liveProductInfoList.add(liveProductInfo);
+        }
+
+
+
 
 
         //불러온 값 넣어주기
@@ -267,7 +306,10 @@ public class LiveServiceImpl implements LiveService {
                 .description(live.getDescription())
                 .isLive(live.isLive())
                 .userEntryResList(userEntryList)
+                .liveProductInfoList(liveProductInfoList)
                 .build();
+
+
 
 
         return liveDetailGetRes;

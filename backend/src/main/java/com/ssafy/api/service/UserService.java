@@ -18,4 +18,10 @@ public interface UserService {
     boolean deleteUserByEmail(String email, UserDeleteReq userDeleteReq);
 
     boolean patchUserByEmail(String userEmail, UserInfoPatchReq userPatchReq);
+
+    void patchUserTokenByrefreshToken(String userEmail, String refreshToken);
+
+    String patchUserDeleteTokenByrefreshToken(String refreshToken);
+
+    String getUserTokenByRefreshToken(String refreshToken);
 }

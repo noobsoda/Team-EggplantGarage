@@ -63,12 +63,4 @@ public class FileService {
 
         return copyOfLocation;
     }
-
-    /*public FileInfoRes fileUpload(Long idx){
-        Image imgInfo = imageRepository.findById(idx).get();
-        String filePath = imgInfo.getFilePath();
-        String fileType = imgInfo.getContentType();
-        return new FileInfoRes(filePath,fileType);
-
-    }*/
 }
