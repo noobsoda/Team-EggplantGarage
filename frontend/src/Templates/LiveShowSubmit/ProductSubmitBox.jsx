@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import InputBox from "../../Molecules/Input/InputBox";
 import Checkbox from "../../Molecules/Input/CheckBox";
 import SmallBtn from "../../Atoms/Buttons/ExtraSmallBtn";
+import SmallStrokeBtn from "../../Atoms/Buttons/ExtraSmallStrokeBtn";
 
 import styled from "styled-components";
 const StyledBox = styled.div`
@@ -17,10 +18,29 @@ const StyledCanvas = styled.canvas`
 `;
 
 const StyledResultCanvas = styled.canvas`
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
+  border: 1.5px solid ${({ theme }) => theme.color.darkgrey};
+  border-radius: 8px;
 `;
 
+const StyledCropBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
+const StyledResultBox = styled.div`
+  margin-left: 40px;
+  width: 280px;
+`;
+
+const StyledButtomBox = styled.div`
+  display: flex;
+  align-items: flex-end;
+  width: 136px;
+  justify-content: space-between;
+`;
 export default function ProductSubmitBox({ imgSrc, productList, setProductList }) {
   const originCanvas = useRef(undefined); //원본 그림 저장
   const drawCanvas = useRef(undefined); //실제 그리는 영역
@@ -57,24 +77,23 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
       drawCanvas.current.height = img.height;
       drawCanvas.current.getContext("2d").drawImage(img, 0, 0);
       setImg(img);
+
+      //비율 계산
+      //실제 이미지크기->canvas에 그려진 크기의 비율 구하기
+      //canvas그려질 크기/실제 이미지 크기
+      //실제 이미지 크기drawCanvas.current.width
+      //캔버스의 크기 drawCanvas.current.clientWidth
+      setRatio(drawCanvas.current.clientWidth / drawCanvas.current.width);
     };
 
     //결과 캔버스
     const result = resultCanvas.current;
-    result.width = 100;
-    result.height = 100;
+    result.width = 72;
+    result.height = 72;
 
-    //비율 계산
+    //context저장
     setResultCtx(resultCanvas.current.getContext("2d"));
     setCtx(drawCanvas.current.getContext("2d"));
-
-    //비율 계산
-    //실제 이미지크기->canvas에 그려진 크기의 비율 구하기
-    //canvas그려질 크기/실제 이미지 크기
-    //실제 이미지 크기drawCanvas.current.width
-    //캔버스의 크기 drawCanvas.current.clientWidth
-
-    setRatio(drawCanvas.current.clientWidth / drawCanvas.current.width);
   }, [imgSrc]);
 
   /**
@@ -141,8 +160,8 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
       height, //자를 이미지
       0,
       0,
-      100,
-      100
+      72,
+      72
     );
   }
 
@@ -198,8 +217,8 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
   }
   return (
     <StyledBox>
+      <StyledNoneCanvas ref={originCanvas}></StyledNoneCanvas>
       <div>
-        <StyledNoneCanvas ref={originCanvas}></StyledNoneCanvas>
         <StyledCanvas
           ref={drawCanvas}
           onMouseUp={finishDrawing}
@@ -209,18 +228,25 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
           onTouchEnd={finishDrawing}
           onTouchMove={drawSquareImage}
         ></StyledCanvas>
-        <button>그리기</button>
-        <StyledResultCanvas ref={resultCanvas}></StyledResultCanvas>
-        <SmallBtn name="제거"></SmallBtn>
-        <SmallBtn name="등록" buttonClick={addProduct}></SmallBtn>
       </div>
-      <InputBox placehold="제품명을 입력하세요" onChange={onProductName} value={productName} />
-      <Checkbox id="price" text="즉시구매가" />
-      <InputBox
-        placehold="즉시구매가를 입력하세요"
-        onChange={onProductPrice}
-        value={productPrice}
-      />
+      <StyledResultBox>
+        <StyledCropBox>
+          <StyledResultCanvas ref={resultCanvas}></StyledResultCanvas>
+          <StyledButtomBox>
+            <SmallStrokeBtn name="제거"></SmallStrokeBtn>
+            <SmallBtn name="등록" buttonClick={addProduct}></SmallBtn>
+          </StyledButtomBox>
+        </StyledCropBox>
+        <div>
+          <InputBox placehold="제품명을 입력하세요" onChange={onProductName} value={productName} />
+          <Checkbox id="price" text="즉시구매가" />
+          <InputBox
+            placehold="즉시구매가를 입력하세요"
+            onChange={onProductPrice}
+            value={productPrice}
+          />
+        </div>
+      </StyledResultBox>
     </StyledBox>
   );
 }
