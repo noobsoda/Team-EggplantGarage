@@ -13,7 +13,8 @@ import styled from "styled-components";
 
 const FlexBox = styled.div`
   display: flex;
-  width: 280px;
+  width: 100%;
+  column-gap: 8px;
   justify-content: space-between;
 `;
 
@@ -21,7 +22,7 @@ const Background = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  width: 360px;
+  width: 100%;
   height: 100vh;
   z-index: 1;
   background-color: rgb(0, 0, 0, 0.5);

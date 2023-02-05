@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-const StyledBox = styled.div`
+const StyledBox = styled.button`
   width: 88px;
   height: 24px;
   border-radius: 12px;
