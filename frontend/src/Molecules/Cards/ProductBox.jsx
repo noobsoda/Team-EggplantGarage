@@ -9,6 +9,8 @@ const StyledBox = styled.div`
   height: 72px;
   border: 1.5px solid ${({ theme }) => theme.color.red};
   border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
 `;
 const StyledInfoBox = styled.div`
   width: 136px;
@@ -17,10 +19,6 @@ const StyledInfoBox = styled.div`
   justify-content: space-around;
 `;
 
-const StyledPicBox = styled.div`
-  width: 72px;
-  height: 72px;
-`;
 const StyledButtonBox = styled.div`
   display: flex;
   justify-content: center;
