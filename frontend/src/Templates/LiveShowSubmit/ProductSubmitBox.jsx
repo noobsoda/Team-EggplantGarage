@@ -274,7 +274,13 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
         </StyledCropBox>
         <div>
           <InputBox placehold="제품명을 입력하세요" onChange={onProductName} value={productName} />
-          <Checkbox id="price" text="즉시구매가 입력하기" check={check} setCheck={setCheck} />
+          <Checkbox
+            id="price"
+            text="즉시구매가 입력하기"
+            textSize="body1-regular"
+            check={check}
+            setCheck={setCheck}
+          />
           <InputBox
             placehold="즉시구매가를 입력하세요"
             onChange={onProductPrice}
