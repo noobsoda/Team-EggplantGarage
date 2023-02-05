@@ -30,18 +30,18 @@ const InfoBox = styled.div`
   align-items: flex-end;
   color: white;
 `;
-export default function BundleBox(props) {
+export default function BundleBox({ children, isSeller }) {
   return (
     <StyledBundleBox>
-      {props.children}
+      {children}
       <Status>
         <InfoBox>
-          <div className="body1-header">제안자</div>
+          <div className="body1-header">{isSeller ? "제안자" : " "}</div>
           <div className="body1-header">제안가격</div>
         </InfoBox>
         <BtnBox>
-          <ExtraSmallButton />
-          <ExtraSmallButton />
+          {isSeller ? <ExtraSmallButton name="승인" /> : <></>}
+          <ExtraSmallButton name={isSeller ? "거절" : "취소"} />
         </BtnBox>
       </Status>
     </StyledBundleBox>

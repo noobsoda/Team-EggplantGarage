@@ -41,7 +41,7 @@ const ItemBtn = styled.div`
   justify-content: space-evenly;
   align-items: center;
 `;
-export default function ItemCard({ item, buttonType, isReview }) {
+export default function ItemCard({ item, buttonType, isReview, isSeller }) {
   const navigate = useNavigate();
   return (
     <StyledItemCard>
@@ -49,7 +49,7 @@ export default function ItemCard({ item, buttonType, isReview }) {
       <ItemInfo>
         <div className="body1-header">제품명</div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div className="body2-bold">제안자</div>
+          <div className="body2-bold">{isSeller ? "제안자" : " "}</div>
           <div className="body2-bold">즉시구매가</div>
         </div>
       </ItemInfo>

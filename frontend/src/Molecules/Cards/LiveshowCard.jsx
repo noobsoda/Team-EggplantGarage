@@ -12,25 +12,27 @@ const StyledLiveshowCard = styled.div`
 `;
 const ViewerCntBox = styled.div`
   display: flex;
-  width: 40px;
-  height: 16px;
-  border-radius: 8px;
+  width: 64px;
+  height: 24px;
+  border-radius: 12px;
   margin: 8px;
   background-color: black;
   color: ${({ theme }) => theme.color.white};
+  column-gap: 4px;
+  align-items: center;
 `;
 const Image = styled.div`
   background: url("/image/viewer-icon.svg");
-  width: 16px;
-  height: 16px;
-  border-radius: 8px;
+  background-size: cover;
+  width: 24px;
+  height: 24px;
+  border-radius: 12px;
   z-index: 1;
 `;
 const Text = styled.div`
-  width: 24px;
-  height: 16px;
-  padding-left: 4px;
+  width: 28px;
   color: ${({ theme }) => theme.color.white};
+  text-align: right;
 `;
 export default function LiveshowCard({ imgSrc, viewerCnt, buttonClick }) {
   //썸네일 시청자수 등등... 일단은 백그라운드 그레이로 가자
@@ -41,7 +43,9 @@ export default function LiveshowCard({ imgSrc, viewerCnt, buttonClick }) {
     >
       <ViewerCntBox>
         <Image />
-        <Text className="body3-bold">{viewerCnt}</Text>
+        <Text className="body2-bold">
+          {viewerCnt !== undefined ? viewerCnt : 14}
+        </Text>
       </ViewerCntBox>
     </StyledLiveshowCard>
   );

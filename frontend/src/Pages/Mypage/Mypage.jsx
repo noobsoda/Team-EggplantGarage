@@ -10,8 +10,6 @@ import { useNavigate } from "react-router-dom";
 import ExtraSmallBtn from "../../Atoms/Buttons/ExtraSmallBtn";
 const Info = styled.div`
   height: 64px;
-  border-bottom: solid;
-  border-bottom-color: ${({ theme }) => theme.color.lightgrey};
   display: flex;
   flex-direction: column;
   row-gap: 8px;
@@ -35,6 +33,8 @@ const SelectBar = styled.div`
   justify-content: space-around;
   border-bottom: solid;
   border-bottom-color: ${({ theme }) => theme.color.lightgrey};
+  border-top: solid;
+  border-top-color: ${({ theme }) => theme.color.lightgrey};
 `;
 const SimpleFlex = styled.div`
   display: flex;

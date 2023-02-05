@@ -8,9 +8,16 @@ const StyledInput = styled.input`
   border: 2px solid ${({ theme }) => theme.color.darkgrey};
   border-radius: 8px;
   color: ${({ theme }) => theme.color.black};
+  text-align: ${(props) => props.textalign};
 `;
 
-export default function BigInput({ placehold, inputValue, type, value }) {
+export default function BigInput({
+  placehold,
+  inputValue,
+  type,
+  value,
+  textalign,
+}) {
   return (
     <StyledInput
       type={type}
@@ -18,6 +25,7 @@ export default function BigInput({ placehold, inputValue, type, value }) {
       onChange={inputValue}
       placeholder={placehold}
       value={value}
+      textalign={textalign}
     ></StyledInput>
   );
 }

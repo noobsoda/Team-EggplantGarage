@@ -22,6 +22,14 @@ const SendBtn = styled.button`
   width: 24px;
   height: 24px;
   background: url("/image/liveshow/send-icon.svg") no-repeat 0px 0px;
+  //gradient 속성 찾기
+  /* &::-webkit-mask-image: -webkit-gradient(
+    linear,
+    left 50%,
+    left bottom,
+    to(rgba(0, 0, 0, 1)),
+    from(rgba(0, 0, 0, 0))
+  ); */
 `;
 
 export default function ChatInput({ inputValue, type, value }) {
