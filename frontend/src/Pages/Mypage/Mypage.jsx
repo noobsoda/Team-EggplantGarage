@@ -56,9 +56,7 @@ export default function Mypage() {
   }
 
   function logoutClick() {
-    dispatch(logoutAction());
-
-    navigate("/");
+    dispatch(logoutAction(navigate));
   }
   return (
     <Page>

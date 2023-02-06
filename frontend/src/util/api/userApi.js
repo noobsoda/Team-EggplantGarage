@@ -40,10 +40,7 @@ async function nickNameCheck(userNickName, success, fail) {
  * @param {*} fail
  */
 async function login(data, success, fail) {
-  await api
-    .post(`/api/v1/auth/login`, data, { withCredentials: true })
-    .then(success)
-    .catch(fail);
+  await api.post(`/api/v1/auth/login`, data).then(success).catch(fail);
 }
 /**
  * 유저 정보 조회

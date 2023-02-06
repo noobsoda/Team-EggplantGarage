@@ -53,14 +53,12 @@ export const userConfirm = (userData, navigate) => (dispatch) => {
     ({ data }) => {
       //토큰 받아오기
       let accessToken = data["accessToken"];
-      let refreshToken = data["refreshToken"];
 
       dispatch(setIsLogin(true));
       dispatch(setIsLoginError(false));
       dispatch(setIsValidToken(true));
 
       sessionStorage.setItem("accessToken", accessToken);
-      sessionStorage.setItem("refreshToken", refreshToken);
       console.log("확인하자");
       console.log(sessionStorage.getItem("accessToken"));
       console.log(data);
@@ -94,12 +92,13 @@ export const getUserInfo = () => (dispatch) => {
  * 로그아웃 진행
  * @returns
  */
-export const logoutAction = () => (dispatch) => {
+export const logoutAction = (navigate) => (dispatch) => {
   logout(
     () => {
       dispatch(setIsLogin(false));
       dispatch(setUserInfo(null));
       dispatch(setIsValidToken(false));
+      navigate("/");
     },
     (e) => {
       console.log(e);

@@ -30,7 +30,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "sslstart": "set HTTPS=true&&set SSL_CRT_FILE=dev.example.com.pem&&set SSL_KEY_FILE=dev.example.com-key.pem&&set HOST=0.0.0.0&&react-scripts start"
+    "sslstart": "HTTPS=true set SSL_CRT_FILE=localhost.pem set SSL_KEY_FILE=localhost-key.pem set HOST=0.0.0.0 react-scripts start",
+    "winsslstart": "set HTTPS=true&&set SSL_CRT_FILE=localhost.pem&&set SSL_KEY_FILE=localhost-key.pem&&set HOST=0.0.0.0&&react-scripts start"
   },
   "eslintConfig": {
     "extends": [

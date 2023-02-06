@@ -7,6 +7,7 @@ let api = axios.create({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "*",
     "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE",
+    withCredentials: true,
   },
 });
 
