@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     @Query("SELECT cr FROM ChatRoom cr WHERE (cr.firstUser.id = ?1 AND cr.secondUser.id = ?2) OR (cr.firstUser.id = ?2 AND cr.secondUser.id = ?1)")
     Optional<ChatRoom> findOneByUsersId(long receiverId, long senderId);
-    List<ChatRoom> findOneByFirstUserIdOrSecondUserId(long userId);
+
+    @Query("SELECT cr FROM ChatRoom cr WHERE (cr.firstUser.id = ?1 OR cr.secondUser.id = ?1)")
+    List<ChatRoom> findByFirstUserIdOrSecondUserId(long userId);
     Optional<ChatRoom> findByid(long id);
 }

@@ -23,7 +23,7 @@ public class ChatRoomDetailRes {
     @ApiModelProperty(name = "ChatRoom receiverName")
     String receiverName;
     @Builder
-    class Message {
+    static class Message {
         boolean isSender;
         String content;
         LocalDateTime sendTime;
