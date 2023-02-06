@@ -52,6 +52,8 @@ export default function Search() {
   };
   const [category, setCategory] = useState(null);
   const [location, setLocation] = useState(null);
+  const [sort, setSort] = useState(true);
+  //true이면 시청자순 false이면 가까운순
 
   //카테고리 설정 자식 컴포넌트에서 받아온 callback 함수로받아온걸 데이터로 쏘기
   const selectedCategory = (data) => {
@@ -60,6 +62,10 @@ export default function Search() {
   };
   const selectedLocation = (data) => {
     setLocation(data);
+    console.log(data);
+  };
+  const sortCallback = (data) => {
+    setSort(data);
     console.log(data);
   };
   return (
@@ -88,7 +94,9 @@ export default function Search() {
             setModalOpen={setModal_2_Open}
           />
         )}
-        {modal_3_Open && <ModalSetSort setModalOpen={setModal_3_Open} />}
+        {modal_3_Open && (
+          <ModalSetSort sort={sortCallback} setModalOpen={setModal_3_Open} />
+        )}
       </Page>
       {modal_1_Open || modal_2_Open || modal_3_Open ? (
         <Background></Background>

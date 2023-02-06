@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import BigBtn from "../../Atoms/Buttons/BigBtn";
 import ModalSmall from "../../Atoms/Modal/ModalSmall";
@@ -17,11 +17,36 @@ const CloseBtn = styled.button`
   background-repeat: no-repeat;
   background-position: 16px 0px;
 `;
-export default function ModalSetSort({ setModalOpen }) {
+const FlexBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: calc(20vh - 80px);
+`;
+const SelectBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  height: calc(20vh - 48px);
+  padding: 24px;
+`;
+const SortBox = styled.div`
+  height: 24px;
+  display: flex;
+  align-items: center;
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 24px;
+`;
+export default function ModalSetSort({ setModalOpen, sort }) {
+  const [isViewerCnt, SetIsViewerCnt] = useState(true);
   const closeModal = () => {
     setModalOpen(false);
   };
   const apply = () => {
+    sort(isViewerCnt);
     closeModal();
   };
   return (
@@ -33,7 +58,27 @@ export default function ModalSetSort({ setModalOpen }) {
         </div>
       </Header>
       <ModalBody>
-        <BigBtn name="적용" buttonClick={apply} />
+        <SelectBox>
+          <SortBox
+            onClick={() => {
+              SetIsViewerCnt(true);
+            }}
+            style={{ color: isViewerCnt ? "white" : "grey" }}
+          >
+            시청자순
+          </SortBox>
+          <SortBox
+            onClick={() => {
+              SetIsViewerCnt(false);
+            }}
+            style={{ color: isViewerCnt ? "grey" : "white" }}
+          >
+            가까운순
+          </SortBox>
+        </SelectBox>
+        <FlexBox>
+          <BigBtn name="적용" buttonClick={apply} />
+        </FlexBox>
       </ModalBody>
     </ModalSmall>
   );
