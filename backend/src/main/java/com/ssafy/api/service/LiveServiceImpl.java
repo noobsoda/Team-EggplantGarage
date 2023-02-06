@@ -1,10 +1,8 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.request.LiveCategoriesReq;
-import com.ssafy.api.request.LiveCategoryReq;
-import com.ssafy.api.request.LiveUserJoinReq;
-import com.ssafy.api.request.LiveRegisterPostReq;
+import com.ssafy.api.request.*;
 import com.ssafy.api.response.*;
+import com.ssafy.common.util.LocationDistance;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +25,7 @@ public class LiveServiceImpl implements LiveService {
 
     @Autowired
     public LiveServiceImpl(LiveRepository liveRepository, CategoryRepository categoryRepository, UserRepository userRepository, LiveCategoryRepository liveCategoryRepository, UserLiveRepository userLiveRepository
-    ,ProductRepository productRepository) {
+            , ProductRepository productRepository) {
         this.liveRepository = liveRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
@@ -38,17 +36,26 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user) {
+        Double stableLat = 36.354963;
+        Double stableLon = 127.297375;
+        if(liveRegisterInfo.getLatitude() != null){
+            stableLat = liveRegisterInfo.getLatitude();
+        }
+        if(liveRegisterInfo.getLongitude() != null){
+            stableLon = liveRegisterInfo.getLongitude();
+        }
+
         Live live = Live.builder()
                 .sessionId(liveRegisterInfo.getSessionId())
                 .title(liveRegisterInfo.getTitle())
                 .description(liveRegisterInfo.getDescription())
                 .url(liveRegisterInfo.getUrl())
                 .isLive(liveRegisterInfo.isLive())
-                .latitude(liveRegisterInfo.getLatitude())
-                .longitude(liveRegisterInfo.getLongitude())
+                .latitude(stableLat)
+                .longitude(stableLon)
                 .user(user)
                 .build();
-        
+
         //유저라이브 헬퍼 테이블에 본인도 넣어주기
         UserLive userLive = UserLive.builder()
                 .live(live)
@@ -122,8 +129,9 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public LiveListGetRes getLiveList() {
-        List<Live> liveList = liveRepository.findAll();
+    public List<LiveContent> getLiveList(String title) {
+        Optional<List<Live>> oliveList = liveRepository.findAllByTitleContains(title);
+        List<Live> liveList = oliveList.orElse(null);
 
         if (liveList == null)
             return null;
@@ -165,9 +173,8 @@ public class LiveServiceImpl implements LiveService {
 
             Content.add(liveContent);
         }
-        liveListGetRes.setLiveContentList(Content);
 
-        return liveListGetRes;
+        return Content;
     }
 
     @Override
@@ -179,7 +186,7 @@ public class LiveServiceImpl implements LiveService {
         Optional<User> oUser = userRepository.findById(liveUserJoinReq.getUserId());
         User user = oUser.orElse(null);
 
-        if(user == null || live == null)
+        if (user == null || live == null)
             return false;
 
         UserLive userLive = UserLive.builder()
@@ -194,7 +201,7 @@ public class LiveServiceImpl implements LiveService {
     public boolean deleteUserLiveByLiveId(LiveUserJoinReq liveUserJoinReq) {
         //라이브 아이디 조회
         List<UserLive> userLiveList = userLiveRepository.findAllByUser_idAndLive_id(liveUserJoinReq.getUserId(), liveUserJoinReq.getLiveId());
-        if(userLiveList.isEmpty())
+        if (userLiveList.isEmpty())
             return false;
 
         userLiveRepository.deleteAll(userLiveList);
@@ -207,16 +214,58 @@ public class LiveServiceImpl implements LiveService {
         //라이브 상태 false로 변경
         Optional<Live> oLive = liveRepository.findById(liveId);
         Live live = oLive.orElse(null);
-        if(live == null)
+        if (live == null)
             return false;
         live.setLive(false);
-        
+
         //라이브에 참가한 유저, 유저라이브 테이블에서 전부 삭제
         List<UserLive> userLiveList = userLiveRepository.findAllByLive_id(liveId);
         userLiveRepository.deleteAll(userLiveList);
 
         liveRepository.save(live);
         return true;
+    }
+
+    @Override
+    public List<LiveContent> searchCategoryLiveList(List<LiveContent> liveContentList, String category) {
+        List<LiveContent> tempLiveContentList = new ArrayList<>();
+        for (LiveContent liveContent : liveContentList) {
+            for (Category tempCategory : liveContent.getCategories()) {
+                if (tempCategory.getName().equals(category)) {
+                    //해당 카테고리에 값과 맞다면
+                    tempLiveContentList.add(liveContent);
+                    break;
+                }
+            }
+
+        }
+
+
+        return tempLiveContentList;
+    }
+
+    @Override
+    public List<LiveContent> searchLocationLiveList(List<LiveContent> liveContentList, Location location) {
+        List<LiveContent> tempLiveContentList = new ArrayList<>();
+        for(LiveContent liveContent : liveContentList){
+            // 라이브 아이디로 lat,lon 조회
+            Optional<Live> oLive = liveRepository.findById(liveContent.getId());
+            Live live = oLive.orElse(null);
+            if(live == null)
+                continue;;
+            // 킬로미터(Kilo Meter) 단위
+            double distanceKiloMeter =
+                    LocationDistance.distance(location.getLatitude(), location.getLongitude(),
+                            live.getLatitude(), live.getLongitude(), "kilometer");
+
+            System.out.println(distanceKiloMeter);
+
+            if(distanceKiloMeter <= 5){
+                tempLiveContentList.add(liveContent);
+            }
+        }
+
+        return tempLiveContentList;
     }
 
     //방 상세보기 가져올 메서드
@@ -267,7 +316,7 @@ public class LiveServiceImpl implements LiveService {
         List<Product> productList = oProduct.orElse(null);
 
         List<LiveProductInfo> liveProductInfoList = new ArrayList<>();
-        for(Product product : productList){
+        for (Product product : productList) {
 
             LiveProductInfo liveProductInfo = LiveProductInfo.builder()
                     .id(product.getId())
@@ -291,9 +340,6 @@ public class LiveServiceImpl implements LiveService {
         }
 
 
-
-
-
         //불러온 값 넣어주기
         LiveDetailGetRes liveDetailGetRes = LiveDetailGetRes.builder()
                 .id(live.getId())
@@ -308,8 +354,6 @@ public class LiveServiceImpl implements LiveService {
                 .userEntryResList(userEntryList)
                 .liveProductInfoList(liveProductInfoList)
                 .build();
-
-
 
 
         return liveDetailGetRes;

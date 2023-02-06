@@ -9,6 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface LiveRepository extends JpaRepository<Live, Long> {
+
+    Optional<List<Live>> findAllByTitleContains(String title);
     Optional<Live> findBySessionId(String sessionId);
     Optional<Live> findByUrl(String url);
     List<Live> findAllByUser_Id(Long sellerId);
