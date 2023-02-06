@@ -18,7 +18,7 @@ ssafy-web.log
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-!**/src/main/resources/dist/
+**/src/main/resources/dist/
 
 ### IntelliJ IDEA ###
 .idea
