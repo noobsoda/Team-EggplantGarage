@@ -73,9 +73,9 @@ public class KakaoPayService {
 //        params.add("approval_url", "https://localhost:8000/api/v1/kakaoPay/success"); // 결제 성공 시 redirect url
 //        params.add("cancel_url", "https://localhost:8000/api/v1/kakaoPay/cancel"); // 결제 취소 시 redirect url
 //        params.add("fail_url", "https://localhost:8000/api/v1/kakaoPay/fail"); // 결제 실패 시 redirect url
-        params.add("approval_url", "http://localhost:8000/api/v1/kakaoPay/success"); // 결제 성공 시 redirect url
-        params.add("cancel_url", "http://localhost:8000/api/v1/kakaoPay/cancel"); // 결제 취소 시 redirect url
-        params.add("fail_url", "http://localhost:8000/api/v1/kakaoPay/fail"); // 결제 실패 시 redirect url
+        params.add("approval_url", "https://localhost:8000/api/v1/kakaoPay/success"); // 결제 성공 시 redirect url
+        params.add("cancel_url", "https://localhost:8000/api/v1/kakaoPay/cancel"); // 결제 취소 시 redirect url
+        params.add("fail_url", "https://localhost:8000/api/v1/kakaoPay/fail"); // 결제 실패 시 redirect url
 
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<>(params, headers);
         try {
@@ -116,7 +116,6 @@ public class KakaoPayService {
             User user = bundledItemsRelationList.get().get(0).getBundle().getUser();
 
             for(int i = 0; i < quantity; i++) {
-
                 bundledItemsRelationList.get().get(i).getProduct().setBuyerId(user.getId());
                 bundledItemsRelationList.get().get(i).getProduct().setSoldAt(LocalDateTime.now());
                 bundledItemsRelationList.get().get(i).getProduct().setSoldPrice(soldPrice);
