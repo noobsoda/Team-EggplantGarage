@@ -20,13 +20,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
-@Api(value = "채팅방 API", tags = {"ChatRoom."})
+@Api(value = "채팅방 API", tags = {"Chat."})
 @RestController
 @RequestMapping("/api/v1/chat")
 public class ChatController {
     private final Logger logger;
     private final ChatService chatService;
-    private SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
+
     @Autowired
     public ChatController(Logger logger, ChatService chatService) {
         this.logger = logger;
@@ -40,7 +40,7 @@ public class ChatController {
         long senderId = chatRoomPostReq.getSenderId();
         long receiverId = chatRoomPostReq.getReceiverId();
         ChatRoomRes res = chatService.getChatRoombyUsersId(senderId, receiverId);
-        if(res == null){
+        if (res == null) {
             res = chatService.createChatRoom(senderId, receiverId);
         }
         return ResponseEntity.status(200).body(res);
@@ -52,18 +52,11 @@ public class ChatController {
         List<ChatRoomRes> resList = chatService.getChatRoomListByUserId(userId);
         return ResponseEntity.status(200).body(resList);
     }
+
     @GetMapping(value = "/message/{chatRoomId}/{senderId}")
-    @ApiOperation(value = "채팅방 메시지 조회",notes = "채팅방 메시지를 조회합니다." )
+    @ApiOperation(value = "채팅방 메시지 조회", notes = "채팅방 메시지를 조회합니다.")
     public ResponseEntity<ChatRoomDetailRes> getChatMessageList(@PathVariable("chatRoomId") long chatRoomId, @PathVariable("senderId") long senderId) {
         ChatRoomDetailRes res = chatService.getChatMessageListByChatRoomId(chatRoomId, senderId);
         return ResponseEntity.status(200).body(res);
-    }
-    @MessageMapping(value = "/message/send")
-    @SendTo("/message/send")
-    public void sendMessage(@Payload ChatMessageSendReq message) {
-        ChatMessage chatMessage = chatService.saveMessage(message);
-        ChatRoom chatRoom = chatService.updateChatRoom(chatMessage);
-        // "/sub/chat/room/chatRoomId"를 구독하고 있는 클라이언트들에게 chatMessage 전송
-        template.convertAndSend("/sub/chat/room/" + chatRoom.getId(), chatMessage);
     }
 }
