@@ -1,4 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
 import InputBox from "../../Atoms/Inputs/BigInput";
 import Btn from "../../Atoms/Buttons/BigBtn";
 import CheckBox from "../../Molecules/Input/CheckBox";
@@ -6,7 +9,28 @@ import Link from "../../Atoms/A/Link";
 import RedSpan from "../../Atoms/Text/RedSpan";
 import styled from "styled-components";
 
+//redux
+import { userConfirm } from "../../store/user";
+import { useEffect } from "react";
+
+const StyledLoginBox = styled.div`
+  width: 280px;
+  height: 500px;
+  margin: 24px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+`;
+const StyledHead = styled.h1`
+  padding-bottom: 8px;
+`;
+
 const StyledColumnDirection = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 8px;
+`;
+const StyledIdPwBox = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -16,35 +40,79 @@ const StyledRowCenter = styled.div`
   justify-content: center;
 `;
 
-const StyledLoginBox = styled.div`
-  width: 360px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
 export default function Login() {
-  return (
-    <div>
-      <h1 className="page-header">로그인</h1>
-      <StyledLoginBox>
-        <StyledColumnDirection>
-          <StyledColumnDirection>
-            <InputBox placehold="아이디" />
-            <InputBox placehold="비밀번호" />
-          </StyledColumnDirection>
-          <CheckBox></CheckBox>
-          <StyledRowCenter>
-            <RedSpan text="아이디 또는 비밀번호가 일치 하지 않습니다." />
-          </StyledRowCenter>
-          <Btn name="로그인" />
-        </StyledColumnDirection>
+  const navigate = useNavigate();
 
+  const [check, setCheck] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  //redux
+  const isLogin = useSelector((state) => state.user.isLogin);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    console.log(isLogin);
+    if (isLogin) {
+      navigate("/");
+    }
+  }, [isLogin, navigate]);
+  /**
+   * 로그인 진행
+   */
+  function loginSubmit() {
+    // login()
+    if (email === "") {
+      alert("아이디를 입력해주세요");
+      return;
+    }
+    if (password === "") {
+      alert("비밀번호를 입력해주세요");
+      return;
+    }
+  }
+
+  function onEmailChange(e) {
+    setEmail(e.target.value);
+  }
+  function onPasswordChange(e) {
+    setPassword(e.target.value);
+  }
+  return (
+    <StyledLoginBox>
+      <StyledHead className="page-header">가지가라지</StyledHead>
+
+      <StyledColumnDirection>
+        <StyledIdPwBox>
+          <InputBox
+            placehold="아이디"
+            inputValue={onEmailChange}
+            value={email}
+          />
+          <InputBox
+            placehold="비밀번호"
+            inputValue={onPasswordChange}
+            value={password}
+            type="password"
+          />
+        </StyledIdPwBox>
+        <CheckBox
+          id="id-save"
+          text=" 아이디 저장"
+          textSize="body2-regular"
+          check={check}
+          setCheck={setCheck}
+        />
         <StyledRowCenter>
-          <Link link="/signup" value="회원가입" />|
-          <Link link="/findpass" value="비밀번호 찾기" />
+          <RedSpan text="아이디 또는 비밀번호가 일치 하지 않습니다." />
         </StyledRowCenter>
-      </StyledLoginBox>
-    </div>
+        <Btn name="로그인" buttonClick={loginSubmit} />
+      </StyledColumnDirection>
+
+      <StyledRowCenter>
+        <Link link="/signup" value="회원가입" />|
+        <Link link="/findpass" value="비밀번호 찾기" />
+      </StyledRowCenter>
+    </StyledLoginBox>
   );
 }
