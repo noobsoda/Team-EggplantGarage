@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
-import InputBox from "../../Molecules/InputBox";
-import Checkbox from "../../Molecules/CheckBox";
+import InputBox from "../../Molecules/Input/InputBox";
+import Checkbox from "../../Molecules/Input/CheckBox";
 import SmallBtn from "../../Atoms/Buttons/ExtraSmallBtn";
+import SmallStrokeBtn from "../../Atoms/Buttons/ExtraSmallStrokeBtn";
 
 import styled from "styled-components";
 const StyledBox = styled.div`
@@ -17,15 +18,30 @@ const StyledCanvas = styled.canvas`
 `;
 
 const StyledResultCanvas = styled.canvas`
-  width: 100px;
-  height: 100px;
+  width: 70px;
+  height: 70px;
+  border: 1.5px solid ${({ theme }) => theme.color.darkgrey};
+  border-radius: 8px;
 `;
 
-export default function ProductSubmitBox({
-  imgSrc,
-  productList,
-  setProductList,
-}) {
+const StyledCropBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
+const StyledResultBox = styled.div`
+  margin-left: 40px;
+  width: 280px;
+`;
+
+const StyledButtomBox = styled.div`
+  display: flex;
+  align-items: flex-end;
+  width: 136px;
+  justify-content: space-between;
+`;
+export default function ProductSubmitBox({ imgSrc, productList, setProductList }) {
   const originCanvas = useRef(undefined); //원본 그림 저장
   const drawCanvas = useRef(undefined); //실제 그리는 영역
   const resultCanvas = useRef(undefined); //잘라진 영역 확인
@@ -45,6 +61,8 @@ export default function ProductSubmitBox({
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
 
+  //제품가격 체크박스
+  const [check, setCheck] = useState(false);
   const [id, setId] = useState(0);
 
   useEffect(() => {
@@ -62,26 +80,22 @@ export default function ProductSubmitBox({
       drawCanvas.current.getContext("2d").drawImage(img, 0, 0);
       setImg(img);
 
-      //확인
-      //console.log(`${img.width}과 ${img.height}`); //480,360
-      //console.log(`${drawCanvas.current.width}, ${drawCanvas.current.height}`);
-      //캔버스에 그려진 크기  480, 360
-      //실제 캔버스 크기 360, 270
-      // console.log(
-      //   `${resultCanvas.current.width}, ${resultCanvas.current.height}`
-      // );
+      //비율 계산
+      //실제 이미지크기->canvas에 그려진 크기의 비율 구하기
+      //canvas그려질 크기/실제 이미지 크기
+      //실제 이미지 크기drawCanvas.current.width
+      //캔버스의 크기 drawCanvas.current.clientWidth
+      setRatio(drawCanvas.current.clientWidth / drawCanvas.current.width);
     };
 
     //결과 캔버스
     const result = resultCanvas.current;
-    result.width = 100;
-    result.height = 100;
+    result.width = 72;
+    result.height = 72;
 
-    //비율 계산
+    //context저장
     setResultCtx(resultCanvas.current.getContext("2d"));
     setCtx(drawCanvas.current.getContext("2d"));
-
-    setRatio(0.75);
   }, [imgSrc]);
 
   /**
@@ -148,8 +162,8 @@ export default function ProductSubmitBox({
       height, //자를 이미지
       0,
       0,
-      100,
-      100
+      72,
+      72
     );
   }
 
@@ -168,16 +182,49 @@ export default function ProductSubmitBox({
   }
 
   /**
+   * 영역이 제대로 선택 되었는지 확인
+   */
+  function checkArea() {
+    if (endPos[0] - startPos[0] > 30 && endPos[1] - startPos[1] > 30) {
+      return true;
+    }
+    return false;
+  }
+  /**
    * 상품 등록 진행
    */
   function addProduct() {
+    //입력이 다 되었는지 확인
+
+    //영역 선택 확인
+    //가로 30이상
+    //세로 30이상
+    if (!checkArea()) {
+      alert("영역이 너무 작습니다.");
+      return;
+    }
+    //제품명 확인
+    if (productName === "") {
+      alert("제목을 입력해주세요");
+      return;
+    }
+    //즉시구매가 확인
+    let price = 0; //기본 0원
+    if (check) {
+      if (productPrice === "") {
+        alert("구매가를 입력해주세요");
+        return;
+      }
+      price = productPrice;
+    }
+
     setProductList({
       value: [
         ...productList.value,
         {
           id: id,
           productName: productName,
-          productPrice: productPrice,
+          productPrice: price,
           leftTopX: startPos[0],
           leftTopY: startPos[1],
           rightBottomX: endPos[0],
@@ -201,39 +248,47 @@ export default function ProductSubmitBox({
 
     // canvas 초기화
     ctx.drawImage(img, 0, 0, img.width, img.height);
-    resultCtx.clearRect(
-      0,
-      0,
-      resultCanvas.current.width,
-      resultCanvas.current.height
-    );
+    resultCtx.clearRect(0, 0, resultCanvas.current.width, resultCanvas.current.height);
   }
   return (
     <StyledBox>
+      <StyledNoneCanvas ref={originCanvas}></StyledNoneCanvas>
       <div>
-        <StyledNoneCanvas ref={originCanvas}></StyledNoneCanvas>
         <StyledCanvas
           ref={drawCanvas}
           onMouseUp={finishDrawing}
           onMouseDown={startDrawing}
           onMouseMove={drawSquareImage}
+          onTouchStart={startDrawing}
+          onTouchEnd={finishDrawing}
+          onTouchMove={drawSquareImage}
         ></StyledCanvas>
-        <button>그리기</button>
-        <StyledResultCanvas ref={resultCanvas}></StyledResultCanvas>
-        <SmallBtn name="제거"></SmallBtn>
-        <SmallBtn name="등록" buttonClick={addProduct}></SmallBtn>
       </div>
-      <InputBox
-        placehold="제품명을 입력하세요"
-        onChange={onProductName}
-        value={productName}
-      />
-      <Checkbox id="price" text="즉시구매가" />
-      <InputBox
-        placehold="즉시구매가를 입력하세요"
-        onChange={onProductPrice}
-        value={productPrice}
-      />
+      <StyledResultBox>
+        <StyledCropBox>
+          <StyledResultCanvas ref={resultCanvas}></StyledResultCanvas>
+          <StyledButtomBox>
+            <SmallStrokeBtn name="제거" buttonClick={reset}></SmallStrokeBtn>
+            <SmallBtn name="등록" buttonClick={addProduct}></SmallBtn>
+          </StyledButtomBox>
+        </StyledCropBox>
+        <div>
+          <InputBox placehold="제품명을 입력하세요" onChange={onProductName} value={productName} />
+          <Checkbox
+            id="price"
+            text="즉시구매가 입력하기"
+            textSize="body1-regular"
+            check={check}
+            setCheck={setCheck}
+          />
+          <InputBox
+            placehold="즉시구매가를 입력하세요"
+            onChange={onProductPrice}
+            value={productPrice}
+            disabled={!check}
+          />
+        </div>
+      </StyledResultBox>
     </StyledBox>
   );
 }

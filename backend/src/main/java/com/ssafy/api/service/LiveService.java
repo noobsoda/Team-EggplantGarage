@@ -11,7 +11,7 @@ import com.ssafy.db.entity.User;
 public interface LiveService {
     Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user);
 
-    LiveDetailGetRes getLiveDetailByUrl(String url);
+    LiveDetailGetRes getLiveDetailBySessionId(String sessionId);
 
     boolean getLiveCheckUrlByUrl(String url);
 
