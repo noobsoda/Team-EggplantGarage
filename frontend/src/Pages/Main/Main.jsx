@@ -1,4 +1,9 @@
 import React, { useState } from "react";
+
+//redux
+import { useSelector } from "react-redux";
+import { checkIsLogin } from "../../store/user";
+
 import Header from "../../Templates/Layout/Header";
 import Body from "../../Templates/Layout/Body";
 import Page from "../../Templates/Layout/Page";
@@ -12,6 +17,8 @@ import { useEffect } from "react";
 import Container from "../../Templates/Layout/Container";
 
 export default function Main() {
+  const isLogin = useSelector(checkIsLogin);
+
   const [allLives, setAllLives] = useState(undefined);
   //liveContentList 까지 가야됨.
   const navigate = useNavigate();
@@ -19,6 +26,11 @@ export default function Main() {
     navigate("/liveshowsubmit");
   }
   useEffect(() => {
+    //로그인 확인
+    console.log(isLogin);
+    if (!isLogin) {
+      navigate("/login");
+    }
     getAllLives(({ data }) => {
       setAllLives(data.liveContentList);
     });
