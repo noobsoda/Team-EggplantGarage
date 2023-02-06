@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { login } from "../../util/api/userApi";
 
-export const counterSlice = createSlice({
+export const userSlice = createSlice({
   name: "user",
   initialState: {
     isLogin: false, //로그인 여부
@@ -23,19 +23,31 @@ export const counterSlice = createSlice({
       state.isLogin = true;
       state.userInfo = userInfo.payload;
     },
-    userConfirm: (state, userData) => {
-      login(
-        userData.payload,
-        ({ data }) => {
-          console.log(data);
-        },
-        () => {}
-      );
-    },
   },
 });
 
-// Action creators are generated for each case reducer function
-export const { userConfirm } = counterSlice.actions;
+export const getIsLogin = (state) => state.user.isLogin;
+export const getIsLoginError = (state) => state.user.isLoginError;
+export const getIsValidToken = (state) => state.user.isValidToken;
+export const getUserInfo = (state) => state.user.userInfo;
 
-export default counterSlice.reducer;
+// Action creators are generated for each case reducer function
+export const { setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } =
+  userSlice.actions;
+
+export const userConfirm = (userData) => (dispatch) => {
+  login(
+    userData,
+    ({ data }) => {
+      //토큰 받아오기
+      let accessToken = data["accessToken"];
+      let refreshToken = data["refreshToken"];
+      console.log(accessToken);
+      console.log(refreshToken);
+      dispatch(setIsLogin(true));
+    },
+    () => {}
+  );
+};
+
+export default userSlice.reducer;

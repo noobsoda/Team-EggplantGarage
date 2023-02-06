@@ -10,7 +10,7 @@ import RedSpan from "../../Atoms/Text/RedSpan";
 import styled from "styled-components";
 
 //redux
-import { userConfirm } from "../../store/user";
+import { userConfirm, getIsLogin } from "../../store/user";
 import { useEffect } from "react";
 
 const StyledLoginBox = styled.div`
@@ -48,11 +48,10 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   //redux
-  const isLogin = useSelector((state) => state.user.isLogin);
+  const isLogin = useSelector(getIsLogin);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log(isLogin);
     if (isLogin) {
       navigate("/");
     }
@@ -61,7 +60,6 @@ export default function Login() {
    * 로그인 진행
    */
   function loginSubmit() {
-    // login()
     if (email === "") {
       alert("아이디를 입력해주세요");
       return;
@@ -70,6 +68,8 @@ export default function Login() {
       alert("비밀번호를 입력해주세요");
       return;
     }
+    console.log("가라");
+    dispatch(userConfirm({ email: email, password: password }));
   }
 
   function onEmailChange(e) {

@@ -20,6 +20,7 @@
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.6.2",
     "react-scripts": "^5.0.1",
+    "redux-persist": "^6.0.0",
     "socket.io-client": "^4.5.4",
     "styled-components": "^5.3.6",
     "web-vitals": "^2.1.4"
@@ -29,7 +30,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "sslstart": "HTTPS=true SSL_CRT_FILE=dev.example.com.pem SSL_KEY_FILE=dev.example.com-key.pem HOST=0.0.0.0 react-scripts start"
+    "sslstart": "set HTTPS=true&&set SSL_CRT_FILE=dev.example.com.pem&&set SSL_KEY_FILE=dev.example.com-key.pem&&set HOST=0.0.0.0&&react-scripts start"
   },
   "eslintConfig": {
     "extends": [
