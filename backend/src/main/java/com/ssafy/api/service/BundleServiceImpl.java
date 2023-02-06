@@ -86,24 +86,6 @@ public class BundleServiceImpl implements BundleService {
     public List<List<Product>> getBuyerSuggestList(long liveId, long buyerId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserId(liveId, buyerId).get();
         return getBundleItemsProduct(bundleList);
-//        List<List<Product>> productAllList = new ArrayList<>();
-//        int size = bundleList.size();
-//
-//        for(int i = 0; i < size; i++) {
-//            long id = bundleList.get(i).getId();
-//            List<Product> productList = new ArrayList<>();
-//
-//            List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(id).get();
-//            int itemsSize = bundledItemsRelationList.size();
-//
-//            for(int j = 0; j < itemsSize; j++) {
-//                Product product = bundledItemsRelationList.get(j).getProduct();
-//                productList.add(product);
-//            }
-//
-//            productAllList.add(productList);
-//        }
-//        return productAllList;
     }
 
     @Override
