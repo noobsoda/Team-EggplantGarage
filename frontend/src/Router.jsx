@@ -20,26 +20,33 @@ import WriteReview from "./Pages/Mypage/WriteReview";
 import Review from "./Pages/Mypage/Review";
 import LiveshowBuyer from "./Pages/LiveShow/LiveshowBuyer";
 
+import Auth from "./Templates/Auth";
+
 const Router = () => {
   const router = createBrowserRouter([
-    { path: "/", element: <Main /> },
-    { path: "/home", element: <Main /> },
-    { path: "/liveshowsubmit", element: <LiveShowSubmit /> },
-    { path: "/liveshowseller/:sessionId", element: <LiveShowSeller /> },
-    { path: "/test/:sessionId", element: <LiveShow /> },
-    { path: "/liveshowbuyer", element: <LiveshowBuyer /> },
+    {
+      element: <Auth />,
+      children: [
+        { path: "/", element: <Main /> },
+        { path: "/home", element: <Main /> },
+        { path: "/liveshowsubmit", element: <LiveShowSubmit /> },
+        { path: "/liveshowseller/:sessionId", element: <LiveShowSeller /> },
+        { path: "/test/:sessionId", element: <LiveShow /> },
+        { path: "/liveshowbuyer", element: <LiveshowBuyer /> },
+        { path: "/search", element: <Search /> },
+        { path: "/like", element: <Like /> },
+        { path: "/chat", element: <Chat /> },
+        { path: "/mypage", element: <Mypage /> },
+        { path: "/category", element: <Category /> },
+        { path: "/infoedit", element: <InfoEdit /> },
+        { path: "/liveshowdetail", element: <LiveshowDetail /> },
+        { path: "/writereview", element: <WriteReview /> },
+        { path: "/review", element: <Review /> },
+      ],
+    },
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
     { path: "/signupemail", element: <SignUpEmail /> },
-    { path: "/search", element: <Search /> },
-    { path: "/like", element: <Like /> },
-    { path: "/chat", element: <Chat /> },
-    { path: "/mypage", element: <Mypage /> },
-    { path: "/category", element: <Category /> },
-    { path: "/infoedit", element: <InfoEdit /> },
-    { path: "/liveshowdetail", element: <LiveshowDetail /> },
-    { path: "/writereview", element: <WriteReview /> },
-    { path: "/review", element: <Review /> },
   ]);
 
   return (

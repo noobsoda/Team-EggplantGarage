@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+//redux
+import { useDispatch } from "react-redux";
+import { userConfirm } from "../../store/user";
 
 import InputBox from "../../Atoms/Inputs/BigInput";
 import Btn from "../../Atoms/Buttons/BigBtn";
@@ -8,10 +10,6 @@ import CheckBox from "../../Molecules/Input/CheckBox";
 import Link from "../../Atoms/A/Link";
 import RedSpan from "../../Atoms/Text/RedSpan";
 import styled from "styled-components";
-
-//redux
-import { userConfirm, getIsLogin } from "../../store/user";
-import { useEffect } from "react";
 
 const StyledLoginBox = styled.div`
   width: 280px;
@@ -48,14 +46,8 @@ export default function Login() {
   const [password, setPassword] = useState("");
 
   //redux
-  const isLogin = useSelector(getIsLogin);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (isLogin) {
-      navigate("/");
-    }
-  }, [isLogin, navigate]);
   /**
    * 로그인 진행
    */
@@ -69,7 +61,8 @@ export default function Login() {
       return;
     }
     console.log("가라");
-    dispatch(userConfirm({ email: email, password: password }));
+
+    dispatch(userConfirm({ email: email, password: password }, navigate));
   }
 
   function onEmailChange(e) {

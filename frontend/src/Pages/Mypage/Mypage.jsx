@@ -8,6 +8,10 @@ import { useState } from "react";
 import SalesHistory from "../../Organisms/Mypage/SalesHistory";
 import { useNavigate } from "react-router-dom";
 import ExtraSmallBtn from "../../Atoms/Buttons/ExtraSmallBtn";
+//redux
+import { logoutAction } from "../../store/user";
+import { useDispatch } from "react-redux";
+
 const Info = styled.div`
   height: 64px;
   display: flex;
@@ -46,8 +50,15 @@ const SimpleFlex = styled.div`
 export default function Mypage() {
   const [isPurchase, setisPurchase] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   function goInfoEdit() {
     navigate("/infoedit");
+  }
+
+  function logoutClick() {
+    dispatch(logoutAction());
+
+    navigate("/");
   }
   return (
     <Page>
@@ -56,7 +67,10 @@ export default function Mypage() {
         <Info>
           <InfoFlex>
             <div className="page-header">닉네임</div>
-            <ExtraSmallBtn name="로그아웃"></ExtraSmallBtn>
+            <ExtraSmallBtn
+              name="로그아웃"
+              buttonClick={logoutClick}
+            ></ExtraSmallBtn>
           </InfoFlex>
           <InfoFlex>
             <SimpleFlex>
