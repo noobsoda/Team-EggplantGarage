@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import MediumBtn from "../../Atoms/Buttons/MediumBtn";
 import Modal from "../../Atoms/Modal/Modal";
@@ -18,15 +18,25 @@ const CloseBtn = styled.button`
   background-repeat: no-repeat;
   background-position: 16px 0px;
 `;
-
-export default function ModalSetLocation({ setModalOpen }) {
+const FlexBox = styled.div`
+  display: flex;
+  height: calc(20vh - 80px);
+  justify-content: center;
+  align-items: flex-end;
+  column-gap: 16px;
+`;
+export default function ModalSetLocation({ setModalOpen, setCoordinate }) {
+  const [location, setLocation] = useState(null);
   const closeModal = () => {
     setModalOpen(false);
   };
   const apply = () => {
+    setCoordinate(location);
     closeModal();
   };
-
+  const send = (data) => {
+    setLocation(data);
+  };
   return (
     <Modal>
       <Header>
@@ -36,9 +46,11 @@ export default function ModalSetLocation({ setModalOpen }) {
         </div>
       </Header>
       <ModalBody>
-        <MapContainer />
-        <MediumBtn name="초기화" />
-        <MediumBtn name="적용" buttonClick={apply} />
+        <MapContainer selectedLocation={send} />
+        <FlexBox>
+          <MediumBtn name="초기화" />
+          <MediumBtn name="적용" buttonClick={apply} />
+        </FlexBox>
       </ModalBody>
     </Modal>
   );

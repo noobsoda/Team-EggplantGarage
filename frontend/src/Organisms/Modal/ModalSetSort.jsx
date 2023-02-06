@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import MediumBtn from "../../Atoms/Buttons/MediumBtn";
+import BigBtn from "../../Atoms/Buttons/BigBtn";
 import ModalSmall from "../../Atoms/Modal/ModalSmall";
 import ModalBody from "../../Templates/Modal/ModalBody";
 
@@ -33,8 +33,7 @@ export default function ModalSetSort({ setModalOpen }) {
         </div>
       </Header>
       <ModalBody>
-        <MediumBtn name="초기화" />
-        <MediumBtn name="적용" buttonClick={apply} />
+        <BigBtn name="적용" buttonClick={apply} />
       </ModalBody>
     </ModalSmall>
   );

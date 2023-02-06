@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import LiveshowCard from "./LiveshowCard";
 import { useNavigate } from "react-router-dom";
@@ -31,9 +31,9 @@ export default function LiveshowItem({
   const navigate = useNavigate();
   function goTo() {
     if (isViewer) {
-      navigate("/liveshowbuyer");
+      navigate("/liveshowbuyer", { state: show.id });
     } else {
-      navigate("/liveshowdetail");
+      navigate("/liveshowdetail", { state: show.id });
     }
   }
   return (
