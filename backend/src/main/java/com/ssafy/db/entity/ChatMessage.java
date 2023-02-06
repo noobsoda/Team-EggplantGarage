@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -18,7 +19,8 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 @SuperBuilder
 public class ChatMessage extends BaseEntity {
-    private String message;
+    private String content;
+    private LocalDateTime createdAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
     private ChatRoom chatRoom;
