@@ -2,6 +2,7 @@ package com.ssafy.api.response;
 
 import com.ssafy.db.entity.ChatMessage;
 import com.ssafy.db.entity.ChatRoom;
+import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -17,37 +18,35 @@ import java.util.List;
 @Builder
 @ApiModel("ChatRoomDetailResponse")
 public class ChatRoomDetailRes {
-    @ApiModelProperty(name = "ChatRoom id")
-    long chatRoomId;
-    @ApiModelProperty(name = "ChatRoom toUserId")
-    long toUserId;
-    @ApiModelProperty(name = "ChatRoom toUserName")
-    String toUserName;
+    @ApiModelProperty(name = "ChatRoom receiverId")
+    long receiverId;
+    @ApiModelProperty(name = "ChatRoom receiverName")
+    String receiverName;
     @Builder
     class Message {
-        boolean isMe;
+        boolean isSender;
         String content;
         LocalDateTime sendTime;
     }
     List<Message> messageList;
 
-    public static ChatRoomDetailRes of(ChatRoom chatRoom, long myId)  {
+    public static ChatRoomDetailRes of(ChatRoom chatRoom, long senderId)  {
         List<ChatMessage> chatMessageList = chatRoom.getChatMessageList();
         List<Message> msgList = new ArrayList<>();
+        boolean IsFirstUserSender = (chatRoom.getFirstUser().getId() == senderId) ? true : false;
         for (ChatMessage chatMessage : chatMessageList) {
-            boolean isMe = (chatMessage.getChatRoom().getFromUser().getId() == myId) ? true : false;
+            boolean isSender = (chatMessage.isFirstUser() == IsFirstUserSender) ? true : false;
             Message msg = Message.builder()
-                    .isMe(isMe)
+                    .isSender(isSender)
                     .content(chatMessage.getContent())
                     .sendTime(chatMessage.getCreatedAt())
                     .build();
             msgList.add(msg);
         }
-
+        User receiver = (IsFirstUserSender) ? chatRoom.getSecondUser() : chatRoom.getFirstUser();
         ChatRoomDetailRes res = ChatRoomDetailRes.builder()
-                .chatRoomId(chatRoom.getId())
-                .toUserId(chatRoom.getToUser().getId())
-                .toUserName(chatRoom.getToUser().getName())
+                .receiverId(receiver.getId())
+                .receiverName(receiver.getName())
                 .messageList(msgList)
                 .build();
         return res;

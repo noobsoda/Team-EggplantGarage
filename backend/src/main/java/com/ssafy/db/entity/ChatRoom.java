@@ -18,12 +18,12 @@ import java.util.List;
 @SuperBuilder
 public class ChatRoom extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "from_user_id")
-    private User fromUser;
+    @JoinColumn(name = "first_user_id")
+    private User firstUser;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "to_user_id")
-    private User toUser;
+    @JoinColumn(name = "second_user_id")
+    private User secondUser;
     private String lastSendMessage;
     private LocalDateTime lastSendTime;
 

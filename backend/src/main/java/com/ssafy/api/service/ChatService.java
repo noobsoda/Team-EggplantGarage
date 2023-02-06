@@ -9,9 +9,11 @@ import com.ssafy.db.entity.ChatRoom;
 import java.util.List;
 
 public interface ChatService {
-    ChatRoomRes createChatRoom(long fromUserId, long toUserId);
-    ChatRoomRes getChatRoombyUsersId(long fromUserId, long toUserId);
-    List<ChatRoomRes> getChatRoomListByMyId(long userId);
-    ChatRoomDetailRes getChatMessageListById(long chatRoomId, long myId);
+    ChatRoomRes createChatRoom(long senderId, long receiverId);
+    ChatRoomRes getChatRoombyUsersId(long senderId, long receiverId);
+    List<ChatRoomRes> getChatRoomListByUserId(long userId);
+    ChatRoomDetailRes getChatMessageListByChatRoomId(long chatRoomId, long senderID);
     ChatMessage saveMessage(ChatMessageSendReq chatMessageSendReq);
+
+    ChatRoom updateChatRoom(ChatMessage chatMessage);
 }

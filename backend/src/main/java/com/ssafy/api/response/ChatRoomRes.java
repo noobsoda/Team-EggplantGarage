@@ -1,6 +1,7 @@
 package com.ssafy.api.response;
 
 import com.ssafy.db.entity.ChatRoom;
+import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -18,30 +19,31 @@ import java.util.List;
 public class ChatRoomRes {
     @ApiModelProperty(name = "ChatRoom id")
     long chatRoomId;
-    @ApiModelProperty(name = "ChatRoom toUserId")
-    long toUserId;
-    @ApiModelProperty(name = "ChatRoom toUserName")
-    String toUserName;
+    @ApiModelProperty(name = "ChatRoom receiverId")
+    long receiverId;
+    @ApiModelProperty(name = "ChatRoom receiverName")
+    String receiverName;
     @ApiModelProperty(name = "ChatRoom lastSendMessage")
     String lastSendMessage;
     @ApiModelProperty(name = "ChatRoom lastSendTime")
     LocalDateTime lastSendTime;
 
-    public static ChatRoomRes of(ChatRoom chatRoom)  {
+    public static ChatRoomRes of(ChatRoom chatRoom, long senderId)  {
+        User receiver = (chatRoom.getFirstUser().getId() != senderId) ? chatRoom.getFirstUser() : chatRoom.getSecondUser();
         ChatRoomRes res = ChatRoomRes.builder()
                 .chatRoomId(chatRoom.getId())
-                .toUserId(chatRoom.getToUser().getId())
-                .toUserName(chatRoom.getToUser().getName())
+                .receiverId(receiver.getId())
+                .receiverName(receiver.getName())
                 .lastSendMessage(chatRoom.getLastSendMessage())
                 .lastSendTime(chatRoom.getLastSendTime())
                 .build();
         return res;
     }
 
-    public static List<ChatRoomRes> of(List<ChatRoom> chatRoomList)  {
+    public static List<ChatRoomRes> of(List<ChatRoom> chatRoomList, long senderId)  {
         List<ChatRoomRes> resList = new ArrayList<>();
         for (ChatRoom chatRoom: chatRoomList) {
-            resList.add(ChatRoomRes.of(chatRoom));
+            resList.add(ChatRoomRes.of(chatRoom, senderId));
         }
         return resList;
     }

@@ -5,6 +5,7 @@ import com.ssafy.api.request.ChatRoomPostReq;
 import com.ssafy.api.response.ChatRoomDetailRes;
 import com.ssafy.api.response.ChatRoomRes;
 import com.ssafy.api.service.ChatService;
+import com.ssafy.db.entity.ChatMessage;
 import com.ssafy.db.entity.ChatRoom;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
@@ -24,23 +25,23 @@ import java.util.List;
 @RequestMapping("/api/v1/chat")
 public class ChatController {
     private final Logger logger;
-    private final ChatService chatRoomService;
+    private final ChatService chatService;
     private SimpMessagingTemplate template; //특정 Broker로 메세지를 전달
     @Autowired
-    public ChatController(Logger logger, ChatService chatRoomService) {
+    public ChatController(Logger logger, ChatService chatService) {
         this.logger = logger;
-        this.chatRoomService = chatRoomService;
+        this.chatService = chatService;
     }
 
     @PostMapping("/join")
     @ApiOperation(value = "채팅방 입장", notes = "채팅방에 입장합니다.")
     @ApiResponses({@ApiResponse(code = 201, message = "입장 성공"), @ApiResponse(code = 500, message = "서버 오류")})
     public ResponseEntity<ChatRoomRes> joinChatRoom(@RequestBody @ApiParam(value = "채팅방 정보", required = true) ChatRoomPostReq chatRoomPostReq) {
-        long fromUserId = chatRoomPostReq.getFromUserID();
-        long toUserId = chatRoomPostReq.getToUserID();
-        ChatRoomRes res = chatRoomService.getChatRoombyUsersId(fromUserId, toUserId);
+        long senderId = chatRoomPostReq.getSenderId();
+        long receiverId = chatRoomPostReq.getReceiverId();
+        ChatRoomRes res = chatService.getChatRoombyUsersId(senderId, receiverId);
         if(res == null){
-            res = chatRoomService.createChatRoom(fromUserId, toUserId);
+            res = chatService.createChatRoom(senderId, receiverId);
         }
         return ResponseEntity.status(200).body(res);
     }
@@ -48,19 +49,21 @@ public class ChatController {
     @GetMapping(value = "/list/{userId}")
     @ApiOperation(value = "채팅방 목록 조회", notes = "채팅방 목록을 조회합니다.")
     public ResponseEntity<List<ChatRoomRes>> getChatRoomList(HttpServletResponse response, @PathVariable("userId") Long userId) {
-        List<ChatRoomRes> resList = chatRoomService.getChatRoomListByMyId(userId);
+        List<ChatRoomRes> resList = chatService.getChatRoomListByUserId(userId);
         return ResponseEntity.status(200).body(resList);
     }
-    @GetMapping(value = "/message/{chatRoomId}")
+    @GetMapping(value = "/message/{chatRoomId}/{senderId}")
     @ApiOperation(value = "채팅방 메시지 조회",notes = "채팅방 메시지를 조회합니다." )
-    public ResponseEntity<ChatRoomDetailRes> getChatRoomDetailRes(@PathVariable("chatRoomId") long chatRoomId, long myId) {
-        ChatRoomDetailRes res = chatRoomService.getChatMessageListById(chatRoomId, myId);
+    public ResponseEntity<ChatRoomDetailRes> getChatMessageList(@PathVariable("chatRoomId") long chatRoomId, @PathVariable("senderId") long senderId) {
+        ChatRoomDetailRes res = chatService.getChatMessageListByChatRoomId(chatRoomId, senderId);
         return ResponseEntity.status(200).body(res);
     }
-    @MessageMapping(value = "/message")
+    @MessageMapping(value = "/message/send")
     @SendTo("/message/send")
     public void sendMessage(@Payload ChatMessageSendReq message) {
-        chatRoomService.saveMessage(message);
+        ChatMessage chatMessage = chatService.saveMessage(message);
+        ChatRoom chatRoom = chatService.updateChatRoom(chatMessage);
+        // "/sub/chat/room/chatRoomId"를 구독하고 있는 클라이언트들에게 chatMessage 전송
+        template.convertAndSend("/sub/chat/room/" + chatRoom.getId(), chatMessage);
     }
-
 }

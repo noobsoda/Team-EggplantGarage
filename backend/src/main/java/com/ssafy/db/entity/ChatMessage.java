@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 @SuperBuilder
 public class ChatMessage extends BaseEntity {
     private String content;
+    private boolean isFirstUser;
     private LocalDateTime createdAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")

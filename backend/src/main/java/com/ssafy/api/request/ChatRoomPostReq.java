@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @ApiModel("ChatRoomCreatePostReq")
 public class ChatRoomPostReq {
-    @ApiModelProperty(name = "보내는 사람", required = true, example = "1")
-    long fromUserID;
-    @ApiModelProperty(name = "받는 사람", required = true, example = "2")
-    long toUserID;
+    @ApiModelProperty(name = "보내는 유저 아이디", required = true, example = "1")
+    long senderId;
+    @ApiModelProperty(name = "받는 유저 아이디", required = true, example = "2")
+    long receiverId;
 }

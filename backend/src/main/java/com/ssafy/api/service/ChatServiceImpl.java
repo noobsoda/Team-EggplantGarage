@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Service("chatRoomService")
+@Service("chatService")
 public class ChatServiceImpl implements ChatService {
     private final Logger logger;
     private final ChatRoomRepository chatRoomRepository;
@@ -33,42 +33,52 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatRoomRes createChatRoom(long fromUserId, long toUserId) {
-        User fromUser = userRepository.findById(fromUserId).orElse(null);
-        User toUser = userRepository.findById(toUserId).orElse(null);
+    public ChatRoomRes createChatRoom(long senderId, long receiverId) {
+        User sender = userRepository.findById(senderId).orElse(null);
+        User receiver = userRepository.findById(receiverId).orElse(null);
         ChatRoom chatRoom = ChatRoom.builder()
-                .fromUser(fromUser)
-                .toUser(toUser)
+                .firstUser(sender)
+                .secondUser(receiver)
                 .build();
-        return ChatRoomRes.of(chatRoom);
+        return ChatRoomRes.of(chatRoom, senderId);
     }
 
     @Override
-    public ChatRoomRes getChatRoombyUsersId(long fromUserId, long toUserId) {
-        Optional<ChatRoom> chatRoom = chatRoomRepository.findOneByUsersId(fromUserId, toUserId);
-        return ChatRoomRes.of(chatRoom.orElse(null));
+    public ChatRoomRes getChatRoombyUsersId(long senderId, long receiverId) {
+        Optional<ChatRoom> chatRoom = chatRoomRepository.findOneByUsersId(senderId, receiverId);
+        return ChatRoomRes.of(chatRoom.orElse(null), senderId);
     }
 
     @Override
-    public List<ChatRoomRes> getChatRoomListByMyId(long myId) {
-        List<ChatRoom> chatRoomList = chatRoomRepository.findOneByToUserIdOrFromUserId(myId);
-        return ChatRoomRes.of(chatRoomList);
+    public List<ChatRoomRes> getChatRoomListByUserId(long senderId) {
+        List<ChatRoom> chatRoomList = chatRoomRepository.findOneByFirstUserIdOrSecondUserId(senderId);
+        return ChatRoomRes.of(chatRoomList, senderId);
     }
 
     @Override
-    public ChatRoomDetailRes getChatMessageListById(long chatRoomId, long myId) {
+    public ChatRoomDetailRes getChatMessageListByChatRoomId(long chatRoomId, long senderId) {
         ChatRoom chatRoom = chatRoomRepository.findByid(chatRoomId).orElse(null);
-        return ChatRoomDetailRes.of(chatRoom, myId);
+        return ChatRoomDetailRes.of(chatRoom, senderId);
     }
 
     @Override
     public ChatMessage saveMessage(ChatMessageSendReq chatMessageSendReq) {
         ChatRoom chatRoom = chatRoomRepository.findByid(chatMessageSendReq.getChatRoomID()).orElse(null);
+        boolean isFirstUser = (chatRoom.getFirstUser().getId() == chatMessageSendReq.getSenderId()) ? true : false;
         ChatMessage chatMessage = ChatMessage.builder()
+                .isFirstUser(isFirstUser)
                 .content(chatMessageSendReq.getContent())
                 .createdAt(LocalDateTime.now())
                 .chatRoom(chatRoom)
                 .build();
         return chatMessageRepository.save(chatMessage);
+    }
+
+    @Override
+    public ChatRoom updateChatRoom(ChatMessage chatMessage) {
+        ChatRoom chatRoom = chatMessage.getChatRoom();
+        chatRoom.setLastSendMessage(chatMessage.getContent());
+        chatRoom.setLastSendTime(chatMessage.getCreatedAt());
+        return chatRoomRepository.save(chatRoom);
     }
 }
