@@ -17,6 +17,7 @@ export default function BigInput({
   type,
   value,
   textalign,
+  disabled,
 }) {
   return (
     <StyledInput
@@ -25,6 +26,7 @@ export default function BigInput({
       onChange={inputValue}
       placeholder={placehold}
       value={value}
+      disabled={disabled}
       textalign={textalign}
     ></StyledInput>
   );

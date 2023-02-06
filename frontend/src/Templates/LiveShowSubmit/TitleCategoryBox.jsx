@@ -4,7 +4,12 @@ import CategorySelect from "../../Molecules/Category/CategorySelect";
 import styled from "styled-components";
 
 const StyledBox = styled.div`
-  width: 360px;
+  width: 280px;
+  margin: 24px 40px;
+`;
+
+const StyledHead = styled.h1`
+  padding-bottom: 56px;
 `;
 
 const options = [
@@ -38,7 +43,7 @@ export default function TitleCategoryBox({
 }) {
   return (
     <StyledBox>
-      <h1 className="page-header">라이브쇼 등록</h1>
+      <StyledHead className="page-header">라이브 쇼 등록</StyledHead>
       <InputBox
         placehold="방송제목"
         text="제목을 입력해주세요."

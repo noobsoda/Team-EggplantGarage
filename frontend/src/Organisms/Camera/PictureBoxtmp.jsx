@@ -1,8 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
+import Button from "../../Atoms/Buttons/ExtraSmallBtn";
 
 const StyledCanvas = styled.canvas`
   display: none;
+`;
+const StyledImg = styled.img`
+  width: 360px;
 `;
 
 const StyledCamera = styled.div`
@@ -12,8 +16,6 @@ const StyledCamera = styled.div`
   height: 640px;
   display: flex;
   justify-content: center;
-  overflow: hidden;
-  z-index: 10;
 `;
 const StyledVideo = styled.video`
   height: 640px;
@@ -29,7 +31,7 @@ const StyledBtn = styled.button`
   padding: 15px 20px;
   text-align: center;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0, 0.2);
-  position: absolute;
+  position: fixed;
   bottom: 30px;
 `;
 
@@ -60,29 +62,36 @@ const getWebcam = (callback) => {
   }
 };
 
-export default function PictureBox({ setOriImgSrc, cameraEvent }) {
+export default function PictureBox({ setOriImgSrc }) {
   const videoRef = useRef(null); //비디오 태그
   const canvasRef = useRef(null); //비디오를 담는 canvas
   const canvasRef2 = useRef(null); //회전후 결과를 담는 canvas
+  const [playing, setPlaying] = useState(false); //촬영모드 on,off
+  const [imgSrc, setImgSrc] = useState("//:0"); //이미지의 소스
 
   useEffect(() => {
-    startCamera();
+    getWebcam((stream) => {
+      setPlaying(true); // 비디오가 실행되지 않으면 오류발생해서 true했다가 다시 false로
+      videoRef.current.srcObject = stream;
+      setPlaying(false);
+    });
   }, []);
 
-  //카메라 실행
-  function startCamera() {
-    getWebcam((stream) => {
-      videoRef.current.srcObject = stream;
-    });
-  }
-  //카메라 종료
-  function endCamera() {
-    const s = videoRef.current.srcObject;
-    s.getTracks().forEach((track) => {
-      track.stop();
-    });
-    cameraEvent(false);
-  }
+  const startOrStop = () => {
+    if (playing) {
+      const s = videoRef.current.srcObject;
+      s.getTracks().forEach((track) => {
+        track.stop();
+      });
+    } else {
+      getWebcam((stream) => {
+        setPlaying(true);
+        videoRef.current.srcObject = stream;
+      });
+    }
+    setPlaying(!playing);
+  };
+
   //촬영
   function snapShot() {
     //비디오 크기에 맞는 캔버스 사용
@@ -116,18 +125,31 @@ export default function PictureBox({ setOriImgSrc, cameraEvent }) {
       .drawImage(canvasRef.current, canvasRef.current.width * -1, 0);
 
     //캔버스의 값을 이미지화
+    setImgSrc(canvasRef2.current.toDataURL("image/webp"));
     setOriImgSrc(canvasRef2.current.toDataURL("image/webp"));
-    endCamera();
+    startOrStop(); //촬영 정지
+    console.log(`${canvasRef2.current.width}, ${canvasRef2.current.height}`);
   }
 
   return (
-    <>
+    <div>
+      <h2 className="body1-header">사진 등록</h2>
+
+      <div>
+        <Button name="카메라" buttonClick={startOrStop} />
+        <Button name="앨범" />
+      </div>
       <StyledCanvas ref={canvasRef}></StyledCanvas>
       <StyledCanvas ref={canvasRef2}></StyledCanvas>
-      <StyledCamera>
-        <StyledVideo ref={videoRef} autoPlay playsInline></StyledVideo>
-        <StyledBtn onClick={snapShot}>사진촬영</StyledBtn>
-      </StyledCamera>
-    </>
+      <StyledImg src={imgSrc} alt="" />
+      {playing ? (
+        <StyledCamera>
+          <StyledVideo ref={videoRef} autoPlay playsInline></StyledVideo>
+          <StyledBtn onClick={snapShot}>사진촬영</StyledBtn>
+        </StyledCamera>
+      ) : (
+        <></>
+      )}
+    </div>
   );
 }
