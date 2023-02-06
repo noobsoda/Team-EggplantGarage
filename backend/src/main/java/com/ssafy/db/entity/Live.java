@@ -4,7 +4,6 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
 
@@ -22,9 +21,9 @@ public class Live extends BaseEntity implements Serializable {
     private String url;
     private boolean isLive;
     private String thumbnailUrl;
-    private String location;
-
-    private String session_id;
+    private Double latitude;
+    private Double longitude;
+    private String sessionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seller_id")

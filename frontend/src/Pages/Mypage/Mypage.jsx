@@ -7,15 +7,17 @@ import PurchasedHistory from "../../Organisms/Mypage/PurchasedHistory";
 import { useState } from "react";
 import SalesHistory from "../../Organisms/Mypage/SalesHistory";
 import { useNavigate } from "react-router-dom";
-
+import ExtraSmallBtn from "../../Atoms/Buttons/ExtraSmallBtn";
 const Info = styled.div`
-  width: 280px;
   height: 64px;
-  border-bottom: solid;
-  border-bottom-color: ${({ theme }) => theme.color.lightgrey};
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
 `;
 const InfoFlex = styled.div`
   display: flex;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   height: 24px;
 `;
@@ -26,11 +28,19 @@ const InfoEditBtn = styled.button`
 `;
 const SelectBar = styled.div`
   height: 40px;
-  width: 280px;
+  width: 100%;
   display: flex;
   justify-content: space-around;
   border-bottom: solid;
   border-bottom-color: ${({ theme }) => theme.color.lightgrey};
+  border-top: solid;
+  border-top-color: ${({ theme }) => theme.color.lightgrey};
+`;
+const SimpleFlex = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 8px;
 `;
 
 export default function Mypage() {
@@ -46,15 +56,20 @@ export default function Mypage() {
         <Info>
           <InfoFlex>
             <div className="page-header">닉네임</div>
-            <div>
-              <span className="body1-regular" style={{ height: "24px" }}>
-                회원정보수정
-              </span>
-              <InfoEditBtn onClick={goInfoEdit}></InfoEditBtn>
-            </div>
+            <ExtraSmallBtn name="로그아웃"></ExtraSmallBtn>
           </InfoFlex>
-          <img src="/image/star.svg" alt="" />
-          <span className="body1-regular">5.0</span>
+          <InfoFlex>
+            <SimpleFlex>
+              <img src="/image/star.svg" alt="" />
+              <div className="body1-header">5.0</div>
+            </SimpleFlex>
+            <SimpleFlex>
+              <div className="body1-header" style={{ height: "24px" }}>
+                회원정보수정
+              </div>
+              <InfoEditBtn onClick={goInfoEdit}></InfoEditBtn>
+            </SimpleFlex>
+          </InfoFlex>
         </Info>
         <SelectBar>
           <button className="body1-header" onClick={() => setisPurchase(true)}>

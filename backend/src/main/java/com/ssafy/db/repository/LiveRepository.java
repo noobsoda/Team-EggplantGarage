@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface LiveRepository extends JpaRepository<Live, Long> {
+    Optional<Live> findBySessionId(String sessionId);
     Optional<Live> findByUrl(String url);
     List<Live> findAllByUser_Id(Long sellerId);
     Optional<List<Live>> findByUser_IdAndIsLiveFalseOrderByCreatedAtDesc(long sellerId);

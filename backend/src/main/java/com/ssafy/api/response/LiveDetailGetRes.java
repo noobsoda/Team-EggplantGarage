@@ -23,6 +23,7 @@ public class LiveDetailGetRes {
     private String description;
     private boolean isLive;
     private List<UserEntryRes> userEntryResList;
+    private List<LiveProductInfo> liveProductInfoList;
 
 
 }

@@ -2,11 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledChatting = styled.div`
-  position: absolute;
-  left: 40px;
-  bottom: 72px;
   width: 200px;
-  height: 200px;
+  height: 30vh;
   border-radius: 8px;
   background-color: white;
 `;

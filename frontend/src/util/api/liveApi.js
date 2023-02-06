@@ -1,5 +1,5 @@
 import { OVApi } from "./api";
-
+import { api } from "./api";
 /**
  * 세션에서 토큰 가져오기
  * @param {*} hostSessionId
@@ -58,5 +58,16 @@ async function closeSession(sessionId) {
     });
   return response;
 }
+////////////////////////////////////////////////////////////
 
-export { getToken, closeSession };
+/**
+ * 모든 live 조회
+ */
+async function getAllLives(success, fail) {
+  const lives = await api.get(`/api/v1/lives`).then(success);
+  // .catch();
+  return lives;
+}
+////////////////////////////////////////////////////////////
+
+export { getToken, closeSession, getAllLives };
