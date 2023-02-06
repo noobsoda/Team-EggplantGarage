@@ -56,7 +56,7 @@ export default function Login() {
     if (isLogin) {
       navigate("/");
     }
-  }, [isLogin]);
+  }, [isLogin, navigate]);
   /**
    * 로그인 진행
    */
@@ -70,8 +70,6 @@ export default function Login() {
       alert("비밀번호를 입력해주세요");
       return;
     }
-    dispatch(userConfirm({ email: email, password: password }));
-    console.log(isLogin);
   }
 
   function onEmailChange(e) {
@@ -86,7 +84,11 @@ export default function Login() {
 
       <StyledColumnDirection>
         <StyledIdPwBox>
-          <InputBox placehold="아이디" inputValue={onEmailChange} value={email} />
+          <InputBox
+            placehold="아이디"
+            inputValue={onEmailChange}
+            value={email}
+          />
           <InputBox
             placehold="비밀번호"
             inputValue={onPasswordChange}

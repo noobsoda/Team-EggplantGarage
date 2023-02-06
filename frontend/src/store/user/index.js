@@ -28,13 +28,8 @@ export const counterSlice = createSlice({
         userData.payload,
         ({ data }) => {
           console.log(data);
-
-          //   this.setIsLogin(state, true);
-          state.isLogin = true;
         },
-        () => {
-          alert("잠시후 시도해 주세요.");
-        }
+        () => {}
       );
     },
   },
