@@ -53,9 +53,7 @@ export default function ModalSetSort({ setModalOpen, sort }) {
     <ModalSmall>
       <Header>
         <CloseBtn onClick={closeModal} />
-        <div className="page-header" height>
-          정렬
-        </div>
+        <div className="page-header">정렬</div>
       </Header>
       <ModalBody>
         <SelectBox>

@@ -107,6 +107,7 @@ export default function Category() {
           {categories.map((box, index) => {
             return (
               <CategoryBox
+                key={index}
                 name={box.name}
                 //   imgSrc={box.src}
                 imgSrc="./image/category/star.png"

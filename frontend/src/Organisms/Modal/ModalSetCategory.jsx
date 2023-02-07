@@ -76,15 +76,14 @@ export default function ModalSetCategory({ setModalOpen, select }) {
     <Modal>
       <Header>
         <CloseBtn onClick={closeModal} />
-        <div className="page-header" height>
-          카테고리
-        </div>
+        <div className="page-header">카테고리</div>
       </Header>
       <ModalBody>
         <CBox>
           {categories.map((text, index) => {
             return (
               <CategoryCheckBtn
+                key={index}
                 name={text}
                 buttonClick={() => handleClick(index)}
                 isClicked={selected === index ? true : false}

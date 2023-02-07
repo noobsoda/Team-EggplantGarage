@@ -41,9 +41,7 @@ export default function ModalSetLocation({ setModalOpen, setCoordinate }) {
     <Modal>
       <Header>
         <CloseBtn onClick={closeModal} />
-        <div className="page-header" height>
-          지역설정
-        </div>
+        <div className="page-header">지역설정</div>
       </Header>
       <ModalBody>
         <MapContainer selectedLocation={send} />
