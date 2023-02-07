@@ -88,18 +88,7 @@ async function createLive(data, success, fail) {
     .catch(fail);
   return lives;
 }
-async function createLiveOld(id, data, success, fail) {
-  // api.defaults.headers["AUTHORIZATION"] =
-  //   "Bearer " + sessionStorage.getItem("accessToken");
-  console.log(id);
-  console.log(data);
-  console.log("가자");
-  const lives = await api
-    .post(`/api/v1/lives/${id}`, JSON.stringify(data))
-    .then(success)
-    .catch(fail);
-  return lives;
-}
+
 /**
  * 라이브 카테고리 설정
  * @param {*} data {liveCategoryReqList{ categoryName:""}}
@@ -107,16 +96,7 @@ async function createLiveOld(id, data, success, fail) {
  * @param {*} fail
  */
 async function setLiveCategory(data, success, fail) {
-  return await api
-    .post(`/api/v1/lives/category`, data)
-    .then(success)
-    .catch(fail);
-}
-async function setLiveCategoryOld(id, data, success, fail) {
-  return await api
-    .post(`/api/v1/lives/category/${id}`, data)
-    .then(success)
-    .catch(fail);
+  return await api.post(`/api/v1/lives/category`, data).then(success).catch(fail);
 }
 
 /**
@@ -127,16 +107,27 @@ async function setLiveCategoryOld(id, data, success, fail) {
  * @returns
  */
 async function setLiveImage(data, success, fail) {
-  return await fileApi
-    .post(`/api/v1/lives/save/img`, data)
-    .then(success)
-    .catch(fail);
+  return await fileApi.post(`/api/v1/lives/save/img`, data).then(success).catch(fail);
 }
-async function setLiveImageOld(id, data, success, fail) {
-  await fileApi
-    .post(`/api/v1/lives/save/img/${id}`, data)
-    .then(success)
-    .catch(fail);
+
+/**
+ * 라이브의 상세 정보 조회
+ * 제목, 카테고리, 등록된 물품, 참여자,
+ * @param {*} id 라이브의 방 번호 - sessionId
+ * @param {*} success
+ * @param {*} fail
+ * @returns
+ */
+async function getLiveDetail(id, success, fail) {
+  return await api.get(`/api/v1/lives/detail`, { sessionId: id }).then(success).catch(fail);
+}
+
+/**
+ * 라이브를 종료 시킨다 isLive = false
+ * @param {*} id live pk
+ */
+async function closeLive(id, success, fail) {
+  return await api.fetch(`/api/v1/lives/${id}`).thend(success).catch(fail);
 }
 
 export {
@@ -146,7 +137,6 @@ export {
   createLive,
   setLiveCategory,
   setLiveImage,
-  createLiveOld,
-  setLiveCategoryOld,
-  setLiveImageOld,
+  getLiveDetail,
+  closeLive,
 };
