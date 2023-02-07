@@ -80,7 +80,9 @@ async function getAllLives(success, fail) {
 async function createLive(data, success, fail) {
   const lives = await api
     .post(`/api/v1/lives`, data, {
-      AUTHORIZATION: "Bearer " + sessionStorage.getItem("accessToken"),
+      // headers: {
+      //   AUTHORIZATION: "Bearer " + sessionStorage.getItem("accessToken"),
+      // },
     })
     .then(success)
     .catch(fail);

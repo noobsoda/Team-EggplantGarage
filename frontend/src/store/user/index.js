@@ -47,7 +47,6 @@ export const { setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } =
  * @returns
  */
 export const userConfirm = (userData, navigate) => (dispatch) => {
-  console.log(userData);
   login(
     userData,
     ({ data }) => {
@@ -62,6 +61,7 @@ export const userConfirm = (userData, navigate) => (dispatch) => {
       //해당 유저의 간단 정보 가져와서 info에 저장
       userInfo(
         ({ data }) => {
+          console.log(data);
           dispatch(setUserInfo(data));
         },
         () => {}

@@ -22,9 +22,6 @@ import {
   createLive,
   setLiveCategory,
   setLiveImage,
-  createLiveOld,
-  setLiveCategoryOld,
-  setLiveImageOld,
 } from "../../util/api/liveApi";
 import { setLiveProduct } from "../../util/api/productApi";
 import { dataURItoBlob } from "../../util/data";
@@ -131,29 +128,57 @@ export default function LiveShowSubmit() {
       setStep(2);
       return;
     }
-    //판매자(나) 이메일
 
-    //라이브 방 만들기
-
-    const id = "test";
-
+    const id = userInfo.id;
     const liveInfo = {
       title: title.value,
       description: "",
-      // url: `${process.env.REACT_APP_API_URL}test/${id}`,
-      url: `14321dsafdsaesfdsafsafeaewa`,
+      url: `${process.env.REACT_APP_API_URL}test/${id}`,
       live: true,
       latitude: "",
       longitude: "",
       sessionId: id,
+      sellerId: id,
     };
 
-    createLiveOld(
-      id,
+    //라이브 상품등록
+    let formData = new FormData(); // formData 객체를 생성한다.
+    const productInfo = productList.value.map((ele) => {
+      return {
+        liveId: 1,
+        sellerId: id,
+        name: ele.productName,
+        initialPrice: ele.productPrice,
+        leftTopX: Math.floor(ele.leftTopX),
+        leftTopY: Math.floor(ele.leftTopY),
+        rightBottomX: Math.floor(ele.rightBottomX),
+        rightBottomY: Math.floor(ele.rightBottomY),
+      };
+    });
+
+    for (let i = 0; i < productInfo.length; i++) {
+      formData.append(`productList[${i}]`, JSON.stringify(productInfo[i]));
+    }
+
+    // formData.append("productList", productInfo); //상품 정보
+    formData.append("img", dataURItoBlob(imgSrc)); //이미지 소스
+
+    setLiveProduct(
+      formData,
+      ({ data }) => {
+        console.log("상품 등록 성공");
+      },
+      () => {
+        console.log("상품 등록 실패");
+      }
+    );
+    return;
+    createLive(
       liveInfo,
       async ({ data }) => {
         console.log("방은 만들어졌다.");
         console.log(data);
+        console.log(data.liveId);
         const liveId = 1;
 
         //라이브 카테고리 등록
@@ -163,8 +188,7 @@ export default function LiveShowSubmit() {
             return { categoryName: ele };
           }),
         };
-        await setLiveCategoryOld(
-          id,
+        await setLiveCategory(
           categoryInfo,
           ({ data }) => {
             console.log("카테고리 성공");
@@ -189,7 +213,11 @@ export default function LiveShowSubmit() {
           };
         });
 
-        formData.append("productList", productInfo); //상품 정보
+        for (let i = 0; i < productInfo.length; i++) {
+          formData.append("productList[]", JSON.stringify(productInfo[i]));
+        }
+
+        //formData.append("productList", productInfo); //상품 정보
         formData.append("img", dataURItoBlob(imgSrc)); //이미지 소스
 
         await setLiveProduct(
@@ -206,8 +234,8 @@ export default function LiveShowSubmit() {
         formData = new FormData(); // formData 객체를 생성한다.
         let file = dataURItoBlob(imgSrc);
         formData.append("img", file);
-        await setLiveImageOld(
-          "test@test.com",
+        formData.append("sessionId", id);
+        await setLiveImage(
           formData,
           ({ data }) => {
             console.log("이미지 성공");

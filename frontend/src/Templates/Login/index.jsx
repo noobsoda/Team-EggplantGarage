@@ -67,7 +67,6 @@ export default function Login() {
       alert("비밀번호를 입력해주세요");
       return;
     }
-    console.log("가라");
 
     dispatch(userConfirm({ email: email, password: password }, navigate));
   }
