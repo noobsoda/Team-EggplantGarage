@@ -97,11 +97,11 @@ export default function Category() {
   ];
   const navigate = useNavigate();
   function goTo(index) {
-    navigate("/search", { state: { isResult: "True" } });
+    navigate("/search", { state: { isResult: true } });
   }
   return (
     <Page>
-      <Header isName="True" headerName="카테고리" />
+      <Header isName={true} headerName="카테고리" />
       <Body>
         <FlexDiv>
           {categories.map((box, index) => {

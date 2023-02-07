@@ -71,7 +71,7 @@ export default function Search() {
   return (
     <>
       <Page>
-        <Header isSearch="True" />
+        <Header isSearch={true} />
         <Body>
           <FlexBox>
             <SmallSelect name="지역설정" buttonClick={showModal_1} />
