@@ -26,7 +26,6 @@ public class BundleController {
     @PostMapping()
     public ResponseEntity<?> addBundle(@RequestBody BundleReq bundleReq) {
         Long bundleId = bundleService.addBundle(bundleReq);
-        System.out.println("bundleId: " + bundleId);
         
         // 프론트한테 bundleId 보내주기
         return ResponseEntity.status(200).body("묶음 상품 등록 성공: " + bundleId);
