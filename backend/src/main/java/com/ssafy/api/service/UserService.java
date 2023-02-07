@@ -24,4 +24,6 @@ public interface UserService {
     String patchUserDeleteTokenByrefreshToken(String refreshToken);
 
     String getUserTokenByRefreshToken(String refreshToken);
+
+    User getUserById(Long sellerId);
 }
