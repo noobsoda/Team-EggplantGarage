@@ -2,12 +2,18 @@ import React from "react";
 import { render } from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import store from "./store";
+import store, { persistor } from "./store";
 import { Provider } from "react-redux";
+
+//persist로 새로고침시 유지
+import { PersistGate } from "redux-persist/integration/react";
+
 const component = document.getElementById("root");
 render(
   <Provider store={store}>
-    <App />
+    <PersistGate loading={null} persistor={persistor}>
+      <App />
+    </PersistGate>
   </Provider>,
   component
 );

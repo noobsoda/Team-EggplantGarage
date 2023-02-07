@@ -156,7 +156,11 @@ export default function LiveShowSubmit() {
           </>
         )}
       </BtnFlex>
-      {camera ? <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} /> : <></>}
+      {camera ? (
+        <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} />
+      ) : (
+        <></>
+      )}
 
       {isModify ? <ProuctModifyBox /> : <></>}
     </Page>

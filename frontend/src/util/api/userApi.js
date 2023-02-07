@@ -27,7 +27,10 @@ async function emailCheck(userEmail, success, fail) {
  * @param {*} fail 실패시의 콜백함수
  */
 async function nickNameCheck(userNickName, success, fail) {
-  await api.get(`/api/v1/users/nickname/${userNickName}`).then(success).catch(fail);
+  await api
+    .get(`/api/v1/users/nickname/${userNickName}`)
+    .then(success)
+    .catch(fail);
 }
 
 /**
@@ -39,4 +42,41 @@ async function nickNameCheck(userNickName, success, fail) {
 async function login(data, success, fail) {
   await api.post(`/api/v1/auth/login`, data).then(success).catch(fail);
 }
-export { signup, emailCheck, nickNameCheck, login };
+/**
+ * 유저 정보 조회
+ * @param {*} success
+ * @param {*} fail
+ */
+async function userInfo(success, fail) {
+  api.defaults.headers["AUTHORIZATION"] =
+    "Bearer " + sessionStorage.getItem("accessToken");
+  await api.get("/api/v1/users/me").then(success).catch(fail);
+}
+
+/**
+ * 로그아웃 진행
+ * @param {*} success
+ * @param {*} fail
+ */
+async function logout(success, fail) {
+  await api.post("/api/v1/auth/logout").then(success).catch(fail);
+}
+
+/**
+ * 토큰 재발급 진행
+ * @param {*} success
+ * @param {*} fail
+ */
+async function tokenRegeneration(success, fail) {
+  await api.post(`/api/v1/auth/reissue`).then(success).catch(fail);
+}
+
+export {
+  signup,
+  emailCheck,
+  nickNameCheck,
+  login,
+  userInfo,
+  logout,
+  tokenRegeneration,
+};

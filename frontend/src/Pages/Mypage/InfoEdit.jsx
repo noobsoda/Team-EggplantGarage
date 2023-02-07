@@ -8,7 +8,7 @@ import BigInput from "../../Atoms/Inputs/BigInput";
 export default function InfoEdit() {
   return (
     <Page>
-      <Header isName="True" headerName="회원정보수정" />
+      <Header isName={true} headerName="회원정보수정" />
       <Body>
         <div className="body1-header">닉네임</div>
         <BigInput placehold="현재 닉네임" />
