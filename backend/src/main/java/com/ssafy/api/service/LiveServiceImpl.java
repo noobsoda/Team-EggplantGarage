@@ -5,6 +5,7 @@ import com.ssafy.api.response.*;
 import com.ssafy.common.util.LocationDistance;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
+import org.checkerframework.checker.nullness.Opt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,16 +23,18 @@ public class LiveServiceImpl implements LiveService {
     private final LiveCategoryRepository liveCategoryRepository;
     private final UserLiveRepository userLiveRepository;
     private final ProductRepository productRepository;
+    private final FavoriteRepository favoriteRepository;
 
     @Autowired
     public LiveServiceImpl(LiveRepository liveRepository, CategoryRepository categoryRepository, UserRepository userRepository, LiveCategoryRepository liveCategoryRepository, UserLiveRepository userLiveRepository
-            , ProductRepository productRepository) {
+            , ProductRepository productRepository, FavoriteRepository favoriteRepository) {
         this.liveRepository = liveRepository;
         this.categoryRepository = categoryRepository;
         this.userRepository = userRepository;
         this.liveCategoryRepository = liveCategoryRepository;
         this.userLiveRepository = userLiveRepository;
         this.productRepository = productRepository;
+        this.favoriteRepository = favoriteRepository;
     }
 
     @Override
@@ -63,26 +66,27 @@ public class LiveServiceImpl implements LiveService {
                 .build();
         userLiveRepository.save(userLive);
 
+        liveRepository.save(live);
 
-        return liveRepository.save(live);
+        return live;
     }
 
     //url 중복 체크할 메서드
-    public boolean getLiveCheckUrlByUrl(String url) {
+    public boolean getLiveCheckSessionIdBySessionId(String sessionId) {
         // 디비에 방송 url 정보 조회
-        Optional<Live> oLive = liveRepository.findByUrl(url);
+        Optional<Live> oLive = liveRepository.findBySessionId(sessionId);
         if (!oLive.isPresent())
             return false;
         return true;
     }
 
     @Override
-    public boolean postLiveByThumbnailUrl(Long sellerId, String thumbnailUrl) {
+    public boolean postLiveByThumbnailUrl(String sessionId, String thumbnailUrl) {
 
-        List<Live> liveList = liveRepository.findAllByUser_Id(sellerId);
+        Optional<List<Live>> oLiveList = liveRepository.findAllBySessionId(sessionId);
+        List<Live> liveList = oLiveList.orElse(null);
 
-
-        if (liveList == null) return false;
+        if (liveList == null || liveList.size() == 0) return false;
 
         for (Live live : liveList) {
             //현재 라이브를 하고 있을 때만 썸네일 바꾸기
@@ -97,10 +101,11 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public boolean postLiveByCategories(Long sellerId, LiveCategoriesReq liveCategoriesReq) {
-        List<Live> liveList = liveRepository.findAllByUser_Id(sellerId);
+    public boolean postLiveByCategories(LiveCategoriesReq liveCategoriesReq) {
+        Optional<List<Live>> oLiveList = liveRepository.findAllBySessionId(liveCategoriesReq.getSessionId());
+        List<Live> liveList = oLiveList.orElse(null);
 
-        if (liveList == null) return false;
+        if (liveList == null || liveList.size() == 0) return false;
 
         for (Live live : liveList) {
 
@@ -129,7 +134,7 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public List<LiveContent> getLiveList(String title) {
+    public List<LiveContent> getLiveListByTitle(String title) {
         Optional<List<Live>> oliveList = liveRepository.findAllByTitleContains(title);
         List<Live> liveList = oliveList.orElse(null);
 
@@ -218,9 +223,15 @@ public class LiveServiceImpl implements LiveService {
             return false;
         live.setLive(false);
 
+        //라이브에 찜한 유저의 찜 테이블에서 전부 삭제
+        Optional<List<Favorite>> oFavoriteList = favoriteRepository.findByLive_id(liveId);
+        List<Favorite> favoriteList = oFavoriteList.orElse(null);
+        favoriteRepository.deleteAll(favoriteList);
         //라이브에 참가한 유저, 유저라이브 테이블에서 전부 삭제
-        List<UserLive> userLiveList = userLiveRepository.findAllByLive_id(liveId);
-        userLiveRepository.deleteAll(userLiveList);
+        //라이브 아디와 유저 아디가 판매자 본인과 만났을 경우 라이브 유저 전부 삭제해서 주석처리
+        /*List<UserLive> userLiveList = userLiveRepository.findAllByLive_id(liveId);
+        userLiveRepository.deleteAll(userLiveList);*/
+
 
         liveRepository.save(live);
         return true;
