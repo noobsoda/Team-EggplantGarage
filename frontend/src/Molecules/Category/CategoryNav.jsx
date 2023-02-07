@@ -41,7 +41,7 @@ export default function CategoryNav({ liveshow, buttonClick }) {
   return (
     <StyledContainer>
       {categories.map((name) => {
-        return <CategoryNavBtn name={name} />;
+        return <CategoryNavBtn key={name} name={name} />;
       })}
     </StyledContainer>
   );

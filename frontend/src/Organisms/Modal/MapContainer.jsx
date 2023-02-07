@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 //초기 center는 lng lat redux에 저장한값을 이용하는 것으로 하자
 //초기화 하면 현재 내 위치로 옮겨주기. 적용눌렀을때는 지금 떠있는 상태로.
 //이 lat lng 현재 내위치를 뽑는건 라이브 시작하기에도 그냥 적용 할 수 있는 것
-const MapContainer = () => {
+const MapContainer = ({ selectedLocation }) => {
   const { kakao } = window;
   useEffect(
     () => {
@@ -17,6 +17,9 @@ const MapContainer = () => {
       let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
           console.log("지역 명칭 : " + result[0].address_name);
+          let location = { lng: result[0].x, lat: result[0].y };
+          selectedLocation(location);
+          //x가 lng 경도 , y 가 lat 위도
           addr.innerHTML = result[0].address_name;
           //   console.log("행정구역 코드 : " + result[0].code);
           //   console.log(result[0]);
@@ -42,7 +45,9 @@ const MapContainer = () => {
       // 중심 좌표나 확대 수준이 변경됐을 때 지도 중심 좌표에 대한 주소 정보를 표시하도록 이벤트를 등록합니다
       kakao.maps.event.addListener(map, "idle", function () {
         // searchAddrFromCoords(map.getCenter(), displayCenterInfo);
-        // console.log(map.getCenter());
+        // let lat = map.getCenter().getLat();
+        // let lng = map.getCenter().getLng();
+        // selectedLocation(lat, lng);
         geocoder.coord2RegionCode(
           map.getCenter().getLng(),
           map.getCenter().getLat(),
@@ -55,12 +60,12 @@ const MapContainer = () => {
     ]
   );
   return (
-    <div style={{ width: "280px", height: "320px" }}>
+    <div style={{ width: "100%", height: "calc(50vh)" }}>
       <div
         id="map"
         style={{
-          width: "280px",
-          height: "280px",
+          width: "100%",
+          height: "calc(50vh - 40px)",
         }}
       ></div>
       <div
@@ -69,6 +74,7 @@ const MapContainer = () => {
         style={{
           height: "40px",
           color: "white",
+          display: "flex",
           justifyContent: "center",
           alignItems: "center",
         }}

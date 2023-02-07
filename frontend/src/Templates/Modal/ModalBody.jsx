@@ -7,6 +7,7 @@ const StyledModalBody = styled.div`
   height: calc(70vh - 72px);
   display: flex;
   flex-direction: column;
+  /* align-items: center; */
   row-gap: 8px;
   border-radius: 16px;
   overflow-y: scroll;
