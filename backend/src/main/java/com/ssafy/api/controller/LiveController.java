@@ -8,12 +8,14 @@ import com.ssafy.api.service.FileService;
 import com.ssafy.api.service.LiveService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.util.DistanceModule;
+import com.ssafy.common.util.LocationDistance;
 import com.ssafy.db.entity.Live;
 import com.ssafy.db.entity.User;
 import io.swagger.annotations.*;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -117,31 +119,50 @@ public class LiveController {
         }
     }
 
-    @GetMapping("/search")
-    @ApiOperation(value = "방 검색 목록 조회", notes = "모든 방의 검색 목록을 조회한다")
+    @PostMapping("/search")
+    @ApiOperation(value = "방 검색 목록 조회", notes = "모든 방의 검색 목록을 조회한다. 전국 true, 지역 false    ASC, DESC 대소문자 상관 없음, 위도 경도 아무값도 안줄시 싸피캠퍼스")
     public ResponseEntity<LiveListGetRes> getLiveSearchListInfo(@RequestBody @ApiParam(value = "방 검색 정보", required = true) LiveAllInfoGetReq liveAllInfoGetReq) {
         List<LiveContent> liveContentList;
         Double maxDistance;
-        //제목기준으로 방 목록 조회하기
-        if (liveAllInfoGetReq.getTitle() == null) {
+        //제목기준으로 방 목록 조회하기 제목이 없으면 전체 조회
+        if (StringUtils.trimToEmpty(liveAllInfoGetReq.getTitle()) == "") {
             liveContentList = liveService.getLiveListByTitle("");
         } else {
             liveContentList = liveService.getLiveListByTitle(liveAllInfoGetReq.getTitle());
         }
 
-        //카테고리 기준으로 방 목록 조회하기
-        if (liveAllInfoGetReq.getCategory() != null && liveAllInfoGetReq.getCategory() != "") {
+        //카테고리 기준으로 방 목록 조회하기, 카테고리 설정 안하면 넘어가기
+        if (StringUtils.trimToEmpty(liveAllInfoGetReq.getCategory()) != "") {
             liveContentList = liveService.searchCategoryLiveList(liveContentList, liveAllInfoGetReq.getCategory());
         }
 
+        //이러면 전국 아니면 지역 확정인데
         Location location = Location.builder()
                 .latitude(liveAllInfoGetReq.getLatitude())
                 .longitude(liveAllInfoGetReq.getLongitude())
                 .build();
-        //위도 경도 기준 5km 이내 있는 라이브 조회
-        //전국 라이브 조회
 
-        liveContentList = liveService.searchLocationLiveList(liveContentList, location, liveAllInfoGetReq.getDistanceSort(), liveAllInfoGetReq.isNational());
+        //전국인지, 5km인지 isNational을 통해 구분해서 distance 포함된 값 반환
+        List<DistanceModule> distanceModuleList;
+        distanceModuleList = liveService.searchLocationLiveList(liveContentList, location, liveAllInfoGetReq.isNational());
+
+
+        //거리별 정렬
+        String distanceSort = StringUtils.trimToEmpty(liveAllInfoGetReq.getDistanceSort());
+        distanceSort = StringUtils.upperCase(distanceSort);
+
+        //ASC, DESC가 아니면 그냥 값 들어감
+        liveContentList = LocationDistance.distanceSort(distanceModuleList, distanceSort);
+
+
+
+        String userJoinSort = StringUtils.trimToEmpty(liveAllInfoGetReq.getJoinUserSort());
+        userJoinSort = StringUtils.upperCase(userJoinSort);
+        //유저별 정렬
+        if(userJoinSort != ""){
+            liveContentList = liveService.searchSortUserJoinLiveList(liveContentList, userJoinSort);
+        }
+
 
 
 

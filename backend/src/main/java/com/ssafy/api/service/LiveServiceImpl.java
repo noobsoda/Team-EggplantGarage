@@ -10,10 +10,7 @@ import org.checkerframework.checker.nullness.Opt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service("liveService")
 public class LiveServiceImpl implements LiveService {
@@ -257,8 +254,7 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public List<LiveContent> searchLocationLiveList(List<LiveContent> liveContentList, Location location, String distanceSort, boolean isNational) {
-        List<LiveContent> tempLiveContentList = new ArrayList<>();
+    public List<DistanceModule> searchLocationLiveList(List<LiveContent> liveContentList, Location location, boolean isNational) {
         List<DistanceModule> distanceModuleList = new ArrayList<>();
         for (LiveContent liveContent : liveContentList) {
             // 라이브 아이디로 lat,lon 조회
@@ -280,11 +276,33 @@ public class LiveServiceImpl implements LiveService {
                     distanceModuleList.add(new DistanceModule(distanceKiloMeter, liveContent));
                 }
             }
-            tempLiveContentList = LocationDistance.distanceSort(distanceModuleList,distanceSort);
 
         }
 
-        return tempLiveContentList;
+        return distanceModuleList;
+    }
+
+    @Override
+    public List<LiveContent> searchSortUserJoinLiveList(List<LiveContent> liveContentList, String userJoinSort) {
+        //오름차순 정렬
+        if(userJoinSort.equals("ASC")){
+            Collections.sort(liveContentList, new Comparator<LiveContent>() {
+                @Override
+                public int compare(LiveContent o1, LiveContent o2) {
+                    return o1.getJoinUsersNum() - o2.getJoinUsersNum();
+                }
+            });
+            //내림차순 정렬
+        }else if(userJoinSort.equals("DESC")){
+            Collections.sort(liveContentList, new Comparator<LiveContent>() {
+                @Override
+                public int compare(LiveContent o1, LiveContent o2) {
+                    return o2.getJoinUsersNum() - o1.getJoinUsersNum();
+                }
+            });
+
+        }
+        return liveContentList;
     }
 
     //방 상세보기 가져올 메서드

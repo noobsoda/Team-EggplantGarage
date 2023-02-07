@@ -9,6 +9,6 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 public class DistanceModule {
-    double distance;
-    LiveContent liveContent;
+    private double distance;
+    private LiveContent liveContent;
 }
