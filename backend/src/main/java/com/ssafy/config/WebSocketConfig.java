@@ -15,10 +15,11 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 연결 URL : wss://localhost:8000/ws/chat
         registry.addEndpoint("/ws/chat")
                 // Client에서 websocket연결할 때 사용할 API 경로를 설정해주는 메서드
-                // api에 "/socket" prefix로 붙으면 messageBroker가 해당 경로를 가로챔
-                // var socket = new SockJS("/socket");
+                // api에 "/ws/chat" prefix로 붙으면 messageBroker가 해당 경로를 가로챔
+                // var socket = new SockJS("/ws/chat");
                 .setAllowedOriginPatterns("*")
                 .withSockJS();
+        registry.addEndpoint("/ws/chat").setAllowedOriginPatterns("*");
     }
 
     @Override

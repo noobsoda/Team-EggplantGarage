@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 
@@ -12,11 +13,13 @@ import java.time.LocalDateTime;
 @ApiModel("ChatMessageSendReq")
 public class ChatMessageSendReq {
     @ApiModelProperty(name = "채팅방 아이디", required = true, example = "1")
-    long chatRoomID;
+    private long chatRoomId;
     @ApiModelProperty(name = "보내는 사람 아이디", required = true, example = "2")
-    long senderId;
+    private long senderId;
     @ApiModelProperty(name = "받는 사람 아이디", required = true, example = "3")
-    long receiverId;
+    private long receiverId;
     @ApiModelProperty(name = "메시지 내용", required = true, example = " 안녕하세요.")
     private String content;
+    @ApiModelProperty(name = "메시지 시간")
+    private String sendTime;
 }

@@ -63,7 +63,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public ChatMessage saveMessage(ChatMessageSendReq chatMessageSendReq) {
-        ChatRoom chatRoom = chatRoomRepository.findByid(chatMessageSendReq.getChatRoomID()).orElse(null);
+        ChatRoom chatRoom = chatRoomRepository.findByid(chatMessageSendReq.getChatRoomId()).orElse(null);
         boolean isFirstUser = (chatRoom.getFirstUser().getId() == chatMessageSendReq.getSenderId()) ? true : false;
         ChatMessage chatMessage = ChatMessage.builder()
                 .isFirstUser(isFirstUser)

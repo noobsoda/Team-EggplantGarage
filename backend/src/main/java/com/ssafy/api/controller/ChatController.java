@@ -1,20 +1,13 @@
 package com.ssafy.api.controller;
 
-import com.ssafy.api.request.ChatMessageSendReq;
 import com.ssafy.api.request.ChatRoomPostReq;
 import com.ssafy.api.response.ChatRoomDetailRes;
 import com.ssafy.api.response.ChatRoomRes;
 import com.ssafy.api.service.ChatService;
-import com.ssafy.db.entity.ChatMessage;
-import com.ssafy.db.entity.ChatRoom;
 import io.swagger.annotations.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
