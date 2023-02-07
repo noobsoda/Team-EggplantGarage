@@ -18,11 +18,7 @@ import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import Body from "../../Templates/Layout/Body";
 
-import {
-  createLive,
-  setLiveCategory,
-  setLiveImage,
-} from "../../util/api/liveApi";
+import { createLive, setLiveCategory, setLiveImage } from "../../util/api/liveApi";
 import { setLiveProduct } from "../../util/api/productApi";
 import { dataURItoBlob } from "../../util/data";
 
@@ -141,46 +137,9 @@ export default function LiveShowSubmit() {
       sellerId: id,
     };
 
-    //라이브 상품등록
-    let formData = new FormData(); // formData 객체를 생성한다.
-    const productInfo = productList.value.map((ele) => {
-      return {
-        liveId: 1,
-        sellerId: id,
-        name: ele.productName,
-        initialPrice: ele.productPrice,
-        leftTopX: Math.floor(ele.leftTopX),
-        leftTopY: Math.floor(ele.leftTopY),
-        rightBottomX: Math.floor(ele.rightBottomX),
-        rightBottomY: Math.floor(ele.rightBottomY),
-      };
-    });
-
-    for (let i = 0; i < productInfo.length; i++) {
-      formData.append(`productList[${i}]`, JSON.stringify(productInfo[i]));
-    }
-
-    // formData.append("productList", productInfo); //상품 정보
-    formData.append("img", dataURItoBlob(imgSrc)); //이미지 소스
-
-    setLiveProduct(
-      formData,
-      ({ data }) => {
-        console.log("상품 등록 성공");
-      },
-      () => {
-        console.log("상품 등록 실패");
-      }
-    );
-    return;
     createLive(
       liveInfo,
       async ({ data }) => {
-        console.log("방은 만들어졌다.");
-        console.log(data);
-        console.log(data.liveId);
-        const liveId = 1;
-
         //라이브 카테고리 등록
         const categoryInfo = {
           sessionId: id,
@@ -190,11 +149,9 @@ export default function LiveShowSubmit() {
         };
         await setLiveCategory(
           categoryInfo,
-          ({ data }) => {
-            console.log("카테고리 성공");
-          },
+          ({ data }) => {},
           () => {
-            console.log("카테고리 실패");
+            console.warn("category fail");
           }
         );
 
@@ -202,31 +159,30 @@ export default function LiveShowSubmit() {
         let formData = new FormData(); // formData 객체를 생성한다.
         const productInfo = productList.value.map((ele) => {
           return {
-            liveId: liveId,
+            liveId: data.liveId,
             sellerId: id,
             name: ele.productName,
             initialPrice: ele.productPrice,
-            leftTopX: ele.leftTopX,
-            leftTopY: ele.leftTopY,
-            rightBottomX: ele.rightBottomX,
-            rightBottomY: ele.rightBottomY,
+            leftTopX: Math.floor(ele.leftTopX),
+            leftTopY: Math.floor(ele.leftTopY),
+            rightBottomX: Math.floor(ele.rightBottomX),
+            rightBottomY: Math.floor(ele.rightBottomY),
           };
         });
 
+        //array json을 전송하기위해 맞춘 형식 BE에서 이런 형태로 받음
         for (let i = 0; i < productInfo.length; i++) {
-          formData.append("productList[]", JSON.stringify(productInfo[i]));
+          for (let key in productInfo[0]) {
+            formData.append(`productList[${i}].${key}`, productInfo[i][key]); //상품 정보
+          }
         }
-
-        //formData.append("productList", productInfo); //상품 정보
         formData.append("img", dataURItoBlob(imgSrc)); //이미지 소스
 
         await setLiveProduct(
           formData,
-          ({ data }) => {
-            console.log("상품 등록 성공");
-          },
+          ({ data }) => {},
           () => {
-            console.log("상품 등록 실패");
+            console.warn("product fail");
           }
         );
 
@@ -237,20 +193,16 @@ export default function LiveShowSubmit() {
         formData.append("sessionId", id);
         await setLiveImage(
           formData,
-          ({ data }) => {
-            console.log("이미지 성공");
-          },
+          ({ data }) => {},
           () => {
-            console.log("이미지 실패");
+            console.warn("image fail");
           }
         );
 
-        console.log("방이 다 만들어졌다");
-        // navigate(`/liveshowseller/${id}`);
-        // navigate(`/liveshowseller/1231`);
+        navigate(`/liveshowseller/${id}`);
       },
       (e) => {
-        console.log(e);
+        console.warn("live fail");
       }
     );
   }
@@ -294,11 +246,7 @@ export default function LiveShowSubmit() {
         </BtnFlex>
         {isModify ? <ProuctModifyBox /> : <></>}
       </Body>
-      {camera ? (
-        <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} />
-      ) : (
-        <></>
-      )}
+      {camera ? <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} /> : <></>}
     </Page>
   );
 }
