@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { checkUserInfo } from "../../store/user";
 
 import styled from "styled-components";
 import MidBtn from "../../Atoms/Buttons/MediumBtn";
@@ -15,6 +17,17 @@ import ProuctModifyBox from "../../Templates/LiveShowSubmit/ProductModifyBox";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import Body from "../../Templates/Layout/Body";
+
+import {
+  createLive,
+  setLiveCategory,
+  setLiveImage,
+  createLiveOld,
+  setLiveCategoryOld,
+  setLiveImageOld,
+} from "../../util/api/liveApi";
+import { setLiveProduct } from "../../util/api/productApi";
+import { dataURItoBlob } from "../../util/data";
 
 const StyledBox = styled.div`
   display: flex;
@@ -32,13 +45,10 @@ const StyledWindow = styled.div`
 const BtnFlex = styled.div`
   display: flex;
   justify-content: space-around;
-  /* position: absolute; */
-  /* width: 100%; */
-  /* left: 0px; */
-  /* bottom: 72px; */
 `;
 
 export default function LiveShowSubmit() {
+  const userInfo = useSelector(checkUserInfo);
   const navigate = useNavigate();
 
   const [imgSrc, setImgSrc] = useState("//:0"); //회전후 결과를 담는 canvas
@@ -103,26 +113,120 @@ export default function LiveShowSubmit() {
    * 방송 시작을 위한 정보 전송
    */
   function goLive() {
-    // console.log("방송시작");
     //제목
-    // console.log(`방송 제목 ${title.value},${title.check}`);
-
+    if (!title.check) {
+      alert("제목을 작성해주세요");
+      setStep(0);
+      return;
+    }
     //카테고리들
-    // console.log(`카테고리 ${categorys.value},${categorys.check}`);
+    if (!categorys.check) {
+      alert("카테고리를 입력해주세요");
+      setStep(0);
+      return;
+    }
 
-    //이미지 소스
-    // console.log(`이미지 ${imgSrc}`);
-
-    //물품정보
-    //---제품 이미지 위치
-    //---제품명
-    //---제품가격
-    // console.log(`물품 리스트 ${productList.value},${productList.check}`);
-
+    if (!productList.check) {
+      alert("물품을 한개이상 등록해주세요");
+      setStep(2);
+      return;
+    }
     //판매자(나) 이메일
 
-    navigate("/liveshowseller/12");
+    //라이브 방 만들기
+
+    const id = "test";
+
+    const liveInfo = {
+      title: title.value,
+      description: "",
+      // url: `${process.env.REACT_APP_API_URL}test/${id}`,
+      url: `14321dsafdsaesfdsafsafeaewa`,
+      live: true,
+      latitude: "",
+      longitude: "",
+      sessionId: id,
+    };
+
+    createLiveOld(
+      id,
+      liveInfo,
+      async ({ data }) => {
+        console.log("방은 만들어졌다.");
+        console.log(data);
+        const liveId = 1;
+
+        //라이브 카테고리 등록
+        const categoryInfo = {
+          sessionId: id,
+          liveCategoryReqList: categorys.value.map((ele) => {
+            return { categoryName: ele };
+          }),
+        };
+        await setLiveCategoryOld(
+          id,
+          categoryInfo,
+          ({ data }) => {
+            console.log("카테고리 성공");
+          },
+          () => {
+            console.log("카테고리 실패");
+          }
+        );
+
+        //라이브 상품등록
+        let formData = new FormData(); // formData 객체를 생성한다.
+        const productInfo = productList.value.map((ele) => {
+          return {
+            liveId: liveId,
+            sellerId: id,
+            name: ele.productName,
+            initialPrice: ele.productPrice,
+            leftTopX: ele.leftTopX,
+            leftTopY: ele.leftTopY,
+            rightBottomX: ele.rightBottomX,
+            rightBottomY: ele.rightBottomY,
+          };
+        });
+
+        formData.append("productList", productInfo); //상품 정보
+        formData.append("img", dataURItoBlob(imgSrc)); //이미지 소스
+
+        await setLiveProduct(
+          formData,
+          ({ data }) => {
+            console.log("상품 등록 성공");
+          },
+          () => {
+            console.log("상품 등록 실패");
+          }
+        );
+
+        //섬네일 지정
+        formData = new FormData(); // formData 객체를 생성한다.
+        let file = dataURItoBlob(imgSrc);
+        formData.append("img", file);
+        await setLiveImageOld(
+          "test@test.com",
+          formData,
+          ({ data }) => {
+            console.log("이미지 성공");
+          },
+          () => {
+            console.log("이미지 실패");
+          }
+        );
+
+        console.log("방이 다 만들어졌다");
+        // navigate(`/liveshowseller/${id}`);
+        // navigate(`/liveshowseller/1231`);
+      },
+      (e) => {
+        console.log(e);
+      }
+    );
   }
+
   return (
     <Page>
       <Header isName={true} headerName="라이브쇼 등록" />

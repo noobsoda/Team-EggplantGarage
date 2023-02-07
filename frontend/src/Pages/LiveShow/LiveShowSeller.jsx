@@ -1,10 +1,15 @@
 import { OpenVidu } from "openvidu-browser";
 import React, { useCallback, useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { checkUserInfo } from "../../store/user";
+
 import UserVideoComponent from "../../Atoms/Video/LiveVideo";
 import { closeSession, getToken } from "../../util/api/liveApi";
 
 export default function LiveShowSeller() {
+  const userInfo = useSelector(checkUserInfo);
+
   const { sessionId } = useParams(); //방 아이디
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름
