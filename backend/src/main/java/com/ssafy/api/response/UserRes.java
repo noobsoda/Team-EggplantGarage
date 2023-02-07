@@ -16,6 +16,10 @@ import java.time.LocalDateTime;
 @Setter
 @ApiModel("UserResponse")
 public class UserRes {
+
+    @ApiModelProperty(name = "User Id")
+    Long id;
+
     @ApiModelProperty(name = "User Email")
     String email;
     @ApiModelProperty(name = "User Name")
@@ -34,6 +38,7 @@ public class UserRes {
 
     public static UserRes of(User user) {
         UserRes res = new UserRes();
+        res.setId(user.getId());
         res.setEmail(user.getEmail());
         res.setName(user.getName());
         res.setNickname(user.getNickname());
