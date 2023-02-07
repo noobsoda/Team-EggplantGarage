@@ -39,7 +39,7 @@ export default function Main() {
   return (
     <Page>
       {/* 헤더 */}
-      <Header isLogo="True" />
+      <Header isLogo={true} />
       <Body>
         <div className="page-header" style={{ marginBottom: "8px" }}>
           주변 라이브쇼

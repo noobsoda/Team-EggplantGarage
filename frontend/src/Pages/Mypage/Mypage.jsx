@@ -60,7 +60,7 @@ export default function Mypage() {
   }
   return (
     <Page>
-      <Header isName="True" headerName="마이페이지" />
+      <Header isName={true} headerName="마이페이지" />
       <Body>
         <Info>
           <InfoFlex>
