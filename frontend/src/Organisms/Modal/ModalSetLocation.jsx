@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import MediumBtn from "../../Atoms/Buttons/MediumBtn";
+import BigBtn from "../../Atoms/Buttons/BigBtn";
 import Modal from "../../Atoms/Modal/Modal";
 import ModalBody from "../../Templates/Modal/ModalBody";
 import MapContainer from "./MapContainer";
@@ -48,8 +48,7 @@ export default function ModalSetLocation({ setModalOpen, setCoordinate }) {
       <ModalBody>
         <MapContainer selectedLocation={send} />
         <FlexBox>
-          <MediumBtn name="초기화" />
-          <MediumBtn name="적용" buttonClick={apply} />
+          <BigBtn name="적용" buttonClick={apply} />
         </FlexBox>
       </ModalBody>
     </Modal>

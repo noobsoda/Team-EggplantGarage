@@ -5,7 +5,6 @@ import React, { useEffect } from "react";
 //이 lat lng 현재 내위치를 뽑는건 라이브 시작하기에도 그냥 적용 할 수 있는 것
 const MapContainer = ({ selectedLocation }) => {
   const { kakao } = window;
-
   useEffect(
     () => {
       const container = document.getElementById("map");
