@@ -34,19 +34,28 @@ const Text = styled.div`
   color: ${({ theme }) => theme.color.white};
   text-align: right;
 `;
-export default function LiveshowCard({ imgSrc, viewerCnt, buttonClick }) {
+export default function LiveshowCard({
+  imgSrc,
+  viewerCnt,
+  buttonClick,
+  isHistory,
+}) {
   //썸네일 시청자수 등등... 일단은 백그라운드 그레이로 가자
   return (
     <StyledLiveshowCard
       onClick={buttonClick}
       imgSrc={imgSrc || "/image/liveshow.jpg"}
     >
-      <ViewerCntBox>
-        <Image />
-        <Text className="body2-bold">
-          {viewerCnt !== undefined ? viewerCnt : 14}
-        </Text>
-      </ViewerCntBox>
+      {isHistory ? (
+        <></>
+      ) : (
+        <ViewerCntBox>
+          <Image />
+          <Text className="body2-bold">
+            {viewerCnt !== undefined ? viewerCnt : 14}
+          </Text>
+        </ViewerCntBox>
+      )}
     </StyledLiveshowCard>
   );
 }

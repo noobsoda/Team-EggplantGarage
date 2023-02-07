@@ -18,7 +18,14 @@ const StyledHeader = styled.div`
   box-sizing: border-box;
 `;
 
-export default function Header({ isLogo, isSearch, isName, headerName }) {
+export default function Header({
+  isLogo,
+  isSearch,
+  isName,
+  headerName,
+  search,
+  onChangeSearch,
+}) {
   const navigate = useNavigate();
   function menuClicked() {
     navigate("/category");
@@ -26,8 +33,8 @@ export default function Header({ isLogo, isSearch, isName, headerName }) {
   return (
     <StyledHeader>
       <LeftBtn buttonClick={() => navigate(-1)} />
-      {isSearch ? <SearchInput /> : <></>}
-      {isSearch ? <SearchBtn /> : <></>}
+      {isSearch ? <SearchInput onChange={onChangeSearch} /> : <></>}
+      {isSearch ? <SearchBtn buttonClick={search} /> : <></>}
       {isLogo ? (
         <img width="112" height="27" src="/image/logo.png" alt="" />
       ) : (

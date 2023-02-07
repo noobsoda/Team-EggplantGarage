@@ -53,6 +53,7 @@ export default function Search() {
   const [category, setCategory] = useState(null);
   const [location, setLocation] = useState(null);
   const [sort, setSort] = useState(true);
+  let [keyword, setKeyword] = useState("");
   //true이면 시청자순 false이면 가까운순
 
   //카테고리 설정 자식 컴포넌트에서 받아온 callback 함수로받아온걸 데이터로 쏘기
@@ -68,10 +69,25 @@ export default function Search() {
     setSort(data);
     console.log(data);
   };
+  const keywordValue = (e) => {
+    setKeyword(e.target.value);
+    // console.log(e.target.value);
+  };
+  const search = () => {
+    console.log(keyword);
+    console.log(location);
+    console.log(category);
+    console.log(sort);
+    //이제 통신을해야돼 axios로
+    //request body를 만들어서
+    // console.log("yaho");
+    if (category === 0) {
+    }
+  };
   return (
     <>
       <Page>
-        <Header isSearch={true} />
+        <Header isSearch={true} search={search} onChangeSearch={keywordValue} />
         <Body>
           <FlexBox>
             <SmallSelect name="지역설정" buttonClick={showModal_1} />

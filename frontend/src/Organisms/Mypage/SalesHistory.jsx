@@ -2,20 +2,25 @@ import React from "react";
 import styled from "styled-components";
 import LiveshowItem from "../../Molecules/Cards/LiveshowItem";
 import ContainerHistory from "../../Templates/Layout/ContainerHistory";
-import { getAllLives } from "../../util/api/liveApi";
+import { getSalesHistory } from "../../util/api/liveApi";
 import { useState, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function SalesHistory() {
-  const [allLives, setAllLives] = useState(undefined);
+  const [lives, setLives] = useState(undefined);
+  const myId = useSelector((state) => state.user.userInfo);
+  //여기서 userInfo에서 myId 값을 빼와야하는데 롱 id값을 빼옴
   useEffect(() => {
-    getAllLives(({ data }) => {
-      setAllLives(data.liveContentList);
+    getSalesHistory(myId, ({ data }) => {
+      console.log(data);
+      //우선 뭐들어오는지 보고
+      setLives(data);
     });
   }, []);
   return (
     <>
       <ContainerHistory>
-        {allLives &&
+        {/* {allLives &&
           allLives.map((show) => {
             return (
               <LiveshowItem
@@ -25,18 +30,7 @@ export default function SalesHistory() {
                 isHistory={true}
               />
             );
-          })}
-        {allLives &&
-          allLives.map((show) => {
-            return (
-              <LiveshowItem
-                key={show.id}
-                show={show}
-                isSearch={true}
-                isHistory={true}
-              />
-            );
-          })}
+          })} */}
         <LiveshowItem isSearch={true} isHistory={true} />
         <LiveshowItem isSearch={true} isHistory={true} />
         <LiveshowItem isSearch={true} isHistory={true} />

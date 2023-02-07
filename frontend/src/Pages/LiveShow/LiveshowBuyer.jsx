@@ -1,13 +1,14 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
 import LiveChatting from "../../Molecules/Box/LiveChatting";
 import ChatInput from "../../Atoms/Inputs/ChatInput";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
+import { getLiveDetails } from "../../util/api/liveApi";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -43,6 +44,20 @@ const Title = styled.div`
 export default function LiveshowBuyer() {
   const [isSpeaker, setIsSpeaker] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const { state } = useLocation();
+  console.log(state); // in this state liveshow id 담겨있음
+  //axios 통신후 데이터 뿌리기
+  const [live, setLive] = useState(undefined);
+  const [productList, setProductList] = useState(undefined);
+  useEffect(() => {
+    getLiveDetails(({ data }) => {
+      console.log(data);
+      //콘솔에 찍어보고 live 넣기.
+      setLive(data);
+      setProductList(data.liveProductInfoList);
+    });
+  }, []);
   const navigate = useNavigate();
   return (
     <StyledPage>

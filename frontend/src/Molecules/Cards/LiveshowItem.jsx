@@ -24,21 +24,25 @@ const InfoBox = styled.div`
 export default function LiveshowItem({
   isSearch,
   isViewer,
-  show = {},
+  show = { id: 12341, sessionId: "세션아이디" },
   isHistory,
 }) {
   //useState , event
   const navigate = useNavigate();
   function goTo() {
     if (isViewer) {
-      navigate("/liveshowbuyer", { state: show.id });
+      navigate("/liveshowbuyer", { state: show.sessionId });
     } else {
       navigate("/liveshowdetail", { state: show.id });
     }
   }
   return (
     <StyledLiveshowItem isSearch={isSearch} onClick={goTo}>
-      <LiveshowCard viewerCnt={show.joinUsersNum} imgSrc={show.thumbnailUrl} />
+      <LiveshowCard
+        viewerCnt={show.joinUsersNum}
+        imgSrc={show.thumbnailUrl}
+        isHistory={isHistory}
+      />
       <InfoBox>
         {show && (
           <div className="body1-header">{show.title || "라이브방 제목"}</div>
@@ -46,7 +50,7 @@ export default function LiveshowItem({
         {show && (
           <div className="body1-regular">
             {isHistory
-              ? show.created_at || "판매날짜"
+              ? show.createdAt || "판매날짜"
               : show.owner || "판매자명"}
           </div>
         )}
