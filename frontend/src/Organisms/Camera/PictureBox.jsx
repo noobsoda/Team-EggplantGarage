@@ -33,6 +33,15 @@ const StyledBtn = styled.button`
   bottom: 30px;
 `;
 
+const Back = styled.div`
+  position: absolute;
+  top: 0;
+  background-color: black;
+  z-index: 10;
+  width: 100%;
+  height: 100%;
+`;
+
 //실제 비디오로 찍는 크기
 const VIDEO_RECORD_HEIGHT = 640;
 const VIDEO_RECORD_WIDTH = 1024;
@@ -121,13 +130,15 @@ export default function PictureBox({ setOriImgSrc, cameraEvent }) {
   }
 
   return (
-    <>
-      <StyledCanvas ref={canvasRef}></StyledCanvas>
-      <StyledCanvas ref={canvasRef2}></StyledCanvas>
-      <StyledCamera>
-        <StyledVideo ref={videoRef} autoPlay playsInline></StyledVideo>
-        <StyledBtn onClick={snapShot}>사진촬영</StyledBtn>
-      </StyledCamera>
-    </>
+    <Back>
+      <div>
+        <StyledCanvas ref={canvasRef}></StyledCanvas>
+        <StyledCanvas ref={canvasRef2}></StyledCanvas>
+        <StyledCamera>
+          <StyledVideo ref={videoRef} autoPlay playsInline></StyledVideo>
+          <StyledBtn onClick={snapShot}>사진촬영</StyledBtn>
+        </StyledCamera>
+      </div>
+    </Back>
   );
 }

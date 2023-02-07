@@ -12,9 +12,11 @@ import RedSpan from "../../Atoms/Text/RedSpan";
 import styled from "styled-components";
 
 const StyledLoginBox = styled.div`
-  width: 280px;
+  /* width: 280px;
   height: 500px;
   margin: 24px 40px;
+  ; */
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -27,17 +29,22 @@ const StyledColumnDirection = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 8px;
+  row-gap: 8px;
 `;
 const StyledIdPwBox = styled.div`
   display: flex;
   flex-direction: column;
+  row-gap: 8px;
+  margin-bottom: 8px;
 `;
 
 const StyledRowCenter = styled.div`
   display: flex;
   justify-content: center;
 `;
-
+const LoginBox = styled.div`
+  height: 168px;
+`;
 export default function Login() {
   const navigate = useNavigate();
 
@@ -76,29 +83,32 @@ export default function Login() {
       <StyledHead className="page-header">가지가라지</StyledHead>
 
       <StyledColumnDirection>
-        <StyledIdPwBox>
-          <InputBox
-            placehold="아이디"
-            inputValue={onEmailChange}
-            value={email}
+        <LoginBox>
+          <StyledIdPwBox>
+            <InputBox
+              placehold="아이디"
+              inputValue={onEmailChange}
+              value={email}
+            />
+            <InputBox
+              placehold="비밀번호"
+              inputValue={onPasswordChange}
+              value={password}
+              type="password"
+            />
+          </StyledIdPwBox>
+          <CheckBox
+            id="id-save"
+            text=" 아이디 저장"
+            textSize="body2-regular"
+            check={check}
+            setCheck={setCheck}
           />
-          <InputBox
-            placehold="비밀번호"
-            inputValue={onPasswordChange}
-            value={password}
-            type="password"
-          />
-        </StyledIdPwBox>
-        <CheckBox
-          id="id-save"
-          text=" 아이디 저장"
-          textSize="body2-regular"
-          check={check}
-          setCheck={setCheck}
-        />
-        <StyledRowCenter>
-          <RedSpan text="아이디 또는 비밀번호가 일치 하지 않습니다." />
-        </StyledRowCenter>
+          <StyledRowCenter>
+            <RedSpan text="아이디 또는 비밀번호가 일치 하지 않습니다." />
+          </StyledRowCenter>
+        </LoginBox>
+
         <Btn name="로그인" buttonClick={loginSubmit} />
       </StyledColumnDirection>
 

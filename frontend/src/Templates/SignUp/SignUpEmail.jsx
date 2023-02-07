@@ -8,7 +8,11 @@ import styled from "styled-components";
 import { passwordReg, emailReg } from "../../util/regex";
 import { emailCheck, nickNameCheck, signup } from "../../util/api/userApi";
 
-const StyledMainBody = styled.div``;
+const StyledMainBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+`;
 
 export default function SignUpEmail() {
   const navigate = useNavigate();
@@ -121,8 +125,8 @@ export default function SignUpEmail() {
     );
   }
   return (
-    <StyledMainBody>
-      <div>
+    <div>
+      <StyledMainBody>
         <InputBox
           placehold="이메일"
           text="이미 존재하는 이메일 주소 입니다."
@@ -158,7 +162,7 @@ export default function SignUpEmail() {
           isCheck={true}
         />
         <BigColorBtn name="가입하기" buttonClick={signUpCheck} />
-      </div>
-    </StyledMainBody>
+      </StyledMainBody>
+    </div>
   );
 }

@@ -14,6 +14,7 @@ import ProductListBox from "../../Templates/LiveShowSubmit/ProductListBox";
 import ProuctModifyBox from "../../Templates/LiveShowSubmit/ProductModifyBox";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
+import Body from "../../Templates/Layout/Body";
 
 const StyledBox = styled.div`
   display: flex;
@@ -29,10 +30,12 @@ const StyledWindow = styled.div`
   width: 360px;
 `;
 const BtnFlex = styled.div`
-  position: absolute;
-  left: 0px;
-  bottom: 72px;
-  margin: 0 40px;
+  display: flex;
+  justify-content: space-around;
+  /* position: absolute; */
+  /* width: 100%; */
+  /* left: 0px; */
+  /* bottom: 72px; */
 `;
 
 export default function LiveShowSubmit() {
@@ -123,42 +126,47 @@ export default function LiveShowSubmit() {
   return (
     <Page>
       <Header isName={true} headerName="라이브쇼 등록" />
-      <StyledWindow>
-        <StyledBox phase={step}>
-          <TitleCategoryBox
-            onTitleChange={titleValue}
-            categorys={categorys.value}
-            onCategoryChange={onChange}
-            delCategory={delCategory}
-          />
-          <PictureSubmitBox imgSrc={imgSrc} cameraEvent={cameraEvent} />
+      <Body>
+        <StyledWindow>
+          <StyledBox phase={step}>
+            <TitleCategoryBox
+              onTitleChange={titleValue}
+              categorys={categorys.value}
+              onCategoryChange={onChange}
+              delCategory={delCategory}
+            />
+            <PictureSubmitBox imgSrc={imgSrc} cameraEvent={cameraEvent} />
 
-          <ProductSubmitBox
-            imgSrc={imgSrc}
-            productList={productList}
-            setProductList={setProductList}
-          />
-          <ProductListBox imgSrc={imgSrc} productList={productList} />
-        </StyledBox>
-      </StyledWindow>
-      <BtnFlex>
-        {step === 0 ? (
-          <BigBtn name="NEXT" buttonClick={nextStep} />
-        ) : step === 3 ? (
-          <>
-            <MidBtn name="PREV" buttonClick={backStep} />
-            <MidBtn name="방송시작" buttonClick={goLive} />
-          </>
-        ) : (
-          <>
-            <MidBtn name="PREV" buttonClick={backStep} />
-            <MidBtn name="NEXT" buttonClick={nextStep} />
-          </>
-        )}
-      </BtnFlex>
-      {camera ? <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} /> : <></>}
-
-      {isModify ? <ProuctModifyBox /> : <></>}
+            <ProductSubmitBox
+              imgSrc={imgSrc}
+              productList={productList}
+              setProductList={setProductList}
+            />
+            <ProductListBox imgSrc={imgSrc} productList={productList} />
+          </StyledBox>
+        </StyledWindow>
+        <BtnFlex>
+          {step === 0 ? (
+            <BigBtn name="NEXT" buttonClick={nextStep} />
+          ) : step === 3 ? (
+            <>
+              <MidBtn name="PREV" buttonClick={backStep} />
+              <MidBtn name="방송시작" buttonClick={goLive} />
+            </>
+          ) : (
+            <>
+              <MidBtn name="PREV" buttonClick={backStep} />
+              <MidBtn name="NEXT" buttonClick={nextStep} />
+            </>
+          )}
+        </BtnFlex>
+        {isModify ? <ProuctModifyBox /> : <></>}
+      </Body>
+      {camera ? (
+        <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} />
+      ) : (
+        <></>
+      )}
     </Page>
   );
 }
