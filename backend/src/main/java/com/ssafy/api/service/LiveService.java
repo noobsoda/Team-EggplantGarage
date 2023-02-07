@@ -32,5 +32,5 @@ public interface LiveService {
 
     List<LiveContent> searchCategoryLiveList(List<LiveContent> liveContentList, String category);
 
-    List<LiveContent> searchLocationLiveList(List<LiveContent> liveContentList, Location location);
+    List<LiveContent> searchLocationLiveList(List<LiveContent> liveContentList, Location location, String distanceSort, boolean isNational);
 }

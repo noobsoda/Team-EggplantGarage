@@ -57,12 +57,12 @@ public class LiveController {
             resMap.put("message", "사용자를 찾을 수 없습니다.");
             return ResponseEntity.status(404).body(resMap);
         }
-        //url 중복 체크
-        if (liveService.getLiveCheckSessionIdBySessionId(liveRegisterInfo.getSessionId())) {
+        //세션아이디 중복 체크
+        /*if (liveService.getLiveCheckSessionIdBySessionId(liveRegisterInfo.getSessionId())) {
             resMap.put("statusCode", 409);
             resMap.put("message", "세션 ID가 중복됩니다");
             return ResponseEntity.status(409).body(resMap);
-        }
+        }*/
         //db에 저장 및 생성
         else {
             Live live = liveService.CreateLive(liveRegisterInfo, user);
@@ -121,6 +121,7 @@ public class LiveController {
     @ApiOperation(value = "방 검색 목록 조회", notes = "모든 방의 검색 목록을 조회한다")
     public ResponseEntity<LiveListGetRes> getLiveSearchListInfo(@RequestBody @ApiParam(value = "방 검색 정보", required = true) LiveAllInfoGetReq liveAllInfoGetReq) {
         List<LiveContent> liveContentList;
+        Double maxDistance;
         //제목기준으로 방 목록 조회하기
         if (liveAllInfoGetReq.getTitle() == null) {
             liveContentList = liveService.getLiveListByTitle("");
@@ -133,16 +134,18 @@ public class LiveController {
             liveContentList = liveService.searchCategoryLiveList(liveContentList, liveAllInfoGetReq.getCategory());
         }
 
+        Location location = Location.builder()
+                .latitude(liveAllInfoGetReq.getLatitude())
+                .longitude(liveAllInfoGetReq.getLongitude())
+                .build();
         //위도 경도 기준 5km 이내 있는 라이브 조회
-        if (liveAllInfoGetReq.getLatitude() == null || liveAllInfoGetReq.getLongitude() == null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
-        } else if (liveAllInfoGetReq.getLatitude() != 0 && liveAllInfoGetReq.getLongitude() != 0) {
-            Location location = Location.builder()
-                    .latitude(liveAllInfoGetReq.getLatitude())
-                    .longitude(liveAllInfoGetReq.getLongitude())
-                    .build();
-            liveContentList = liveService.searchLocationLiveList(liveContentList, location);
-        }
+        //전국 라이브 조회
+
+        liveContentList = liveService.searchLocationLiveList(liveContentList, location, liveAllInfoGetReq.getDistanceSort(), liveAllInfoGetReq.isNational());
+
+
+
+
 
 
         if (liveContentList == null) {

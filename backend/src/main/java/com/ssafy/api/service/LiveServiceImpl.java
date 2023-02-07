@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.*;
 import com.ssafy.api.response.*;
+import com.ssafy.common.util.DistanceModule;
 import com.ssafy.common.util.LocationDistance;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
@@ -41,10 +42,10 @@ public class LiveServiceImpl implements LiveService {
     public Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user) {
         Double stableLat = 36.354963;
         Double stableLon = 127.297375;
-        if(liveRegisterInfo.getLatitude() != null){
+        if (liveRegisterInfo.getLatitude() != null) {
             stableLat = liveRegisterInfo.getLatitude();
         }
-        if(liveRegisterInfo.getLongitude() != null){
+        if (liveRegisterInfo.getLongitude() != null) {
             stableLon = liveRegisterInfo.getLongitude();
         }
 
@@ -256,24 +257,31 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public List<LiveContent> searchLocationLiveList(List<LiveContent> liveContentList, Location location) {
+    public List<LiveContent> searchLocationLiveList(List<LiveContent> liveContentList, Location location, String distanceSort, boolean isNational) {
         List<LiveContent> tempLiveContentList = new ArrayList<>();
-        for(LiveContent liveContent : liveContentList){
+        List<DistanceModule> distanceModuleList = new ArrayList<>();
+        for (LiveContent liveContent : liveContentList) {
             // 라이브 아이디로 lat,lon 조회
             Optional<Live> oLive = liveRepository.findById(liveContent.getId());
             Live live = oLive.orElse(null);
-            if(live == null)
-                continue;;
+            if (live == null)
+                continue;
+            ;
             // 킬로미터(Kilo Meter) 단위
             double distanceKiloMeter =
                     LocationDistance.distance(location.getLatitude(), location.getLongitude(),
                             live.getLatitude(), live.getLongitude(), "kilometer");
 
-            System.out.println(distanceKiloMeter);
-
-            if(distanceKiloMeter <= 5){
-                tempLiveContentList.add(liveContent);
+            //전국이면
+            if (isNational) {
+                distanceModuleList.add(new DistanceModule(distanceKiloMeter, liveContent));
+            } else {//전국이 아니면 5km 이내
+                if (distanceKiloMeter <= 5) {
+                    distanceModuleList.add(new DistanceModule(distanceKiloMeter, liveContent));
+                }
             }
+            tempLiveContentList = LocationDistance.distanceSort(distanceModuleList,distanceSort);
+
         }
 
         return tempLiveContentList;
