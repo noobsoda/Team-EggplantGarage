@@ -13,7 +13,8 @@ import styled from "styled-components";
 
 const FlexBox = styled.div`
   display: flex;
-  width: 280px;
+  width: 100%;
+  column-gap: 8px;
   justify-content: space-between;
 `;
 
@@ -21,17 +22,17 @@ const Background = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  width: 360px;
+  width: 100%;
   height: 100vh;
   z-index: 1;
   background-color: rgb(0, 0, 0, 0.5);
 `;
 
 export default function Search() {
-  const location = useLocation();
+  const initLocation = useLocation();
   let isResult = false;
-  if (location.state !== null) {
-    isResult = location.state.isResult;
+  if (initLocation.state !== null) {
+    isResult = initLocation.state.isResult;
   }
 
   const [modal_1_Open, setModal_1_Open] = useState(false);
@@ -49,11 +50,28 @@ export default function Search() {
   const showModal_3 = () => {
     setModal_3_Open(true);
   };
+  const [category, setCategory] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [sort, setSort] = useState(true);
+  //true이면 시청자순 false이면 가까운순
 
+  //카테고리 설정 자식 컴포넌트에서 받아온 callback 함수로받아온걸 데이터로 쏘기
+  const selectedCategory = (data) => {
+    setCategory(data);
+    console.log("카테고리 선택 : " + data);
+  };
+  const selectedLocation = (data) => {
+    setLocation(data);
+    console.log(data);
+  };
+  const sortCallback = (data) => {
+    setSort(data);
+    console.log(data);
+  };
   return (
     <>
       <Page>
-        <Header isSearch="True" />
+        <Header isSearch={true} />
         <Body>
           <FlexBox>
             <SmallSelect name="지역설정" buttonClick={showModal_1} />
@@ -64,9 +82,21 @@ export default function Search() {
           {isResult ? <SearchBody /> : <></>}
         </Body>
 
-        {modal_1_Open && <ModalSetLocation setModalOpen={setModal_1_Open} />}
-        {modal_2_Open && <ModalSetCategory setModalOpen={setModal_2_Open} />}
-        {modal_3_Open && <ModalSetSort setModalOpen={setModal_3_Open} />}
+        {modal_1_Open && (
+          <ModalSetLocation
+            setCoordinate={selectedLocation}
+            setModalOpen={setModal_1_Open}
+          />
+        )}
+        {modal_2_Open && (
+          <ModalSetCategory
+            select={selectedCategory}
+            setModalOpen={setModal_2_Open}
+          />
+        )}
+        {modal_3_Open && (
+          <ModalSetSort sort={sortCallback} setModalOpen={setModal_3_Open} />
+        )}
       </Page>
       {modal_1_Open || modal_2_Open || modal_3_Open ? (
         <Background></Background>

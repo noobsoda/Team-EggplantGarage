@@ -13,7 +13,7 @@ export default function Review() {
   const [myreview, setMyreview] = useState(true);
   return (
     <Page>
-      <Header isName="True" headerName="리뷰보기" />
+      <Header isName={true} headerName="리뷰보기" />
       <Body>
         {myreview ? (
           <ReviewSent

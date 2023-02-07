@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledBigBtn = styled.button`
-  width: 280px;
+  width: calc(100%);
   height: 40px;
   border-radius: 8px;
   background-color: ${({ theme }) => theme.color.red};

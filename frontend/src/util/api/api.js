@@ -7,6 +7,19 @@ let api = axios.create({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "*",
     "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE",
+    withCredentials: true,
+  },
+});
+
+let OVApi = axios.create({
+  baseURL: process.env.REACT_APP_OV_API_URL,
+  headers: {
+    "Content-Type": "application/json;charset=utf-8",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*",
+    "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE",
+    Authorization:
+      "Basic " + btoa("OPENVIDUAPP:" + process.env.REACT_APP_OV_SECRET),
   },
 });
 
@@ -20,4 +33,4 @@ let fileApi = axios.create({
   },
 });
 
-export { api, fileApi };
+export { api, fileApi, OVApi };
