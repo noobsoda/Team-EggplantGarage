@@ -91,7 +91,7 @@ public class KakaoPayService {
     // 결제 승인
     public ResponseEntity<KakaoPayApprovalRes> kakaoPaySuccess(KakaoPayApprovalRes kakaoPayApprovalRes, String pg_token) {
 //        log.info("Service: 결제 승인 단계 시작");
-        System.out.println("Service: 결제 승인 단계 시작");
+        //System.out.println("Service: 결제 승인 단계 시작");
 
         RestTemplate restTemplate = new RestTemplate();
 

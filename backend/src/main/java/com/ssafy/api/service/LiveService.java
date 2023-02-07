@@ -6,6 +6,7 @@ import com.ssafy.api.request.LiveRegisterPostReq;
 import com.ssafy.api.request.Location;
 import com.ssafy.api.response.LiveContent;
 import com.ssafy.api.response.LiveDetailGetRes;
+import com.ssafy.common.util.DistanceModule;
 import com.ssafy.db.entity.Live;
 import com.ssafy.db.entity.User;
 
@@ -32,5 +33,7 @@ public interface LiveService {
 
     List<LiveContent> searchCategoryLiveList(List<LiveContent> liveContentList, String category);
 
-    List<LiveContent> searchLocationLiveList(List<LiveContent> liveContentList, Location location);
+    List<DistanceModule> searchLocationLiveList(List<LiveContent> liveContentList, Location location, boolean isNational);
+
+    List<LiveContent> searchSortUserJoinLiveList(List<LiveContent> liveContentList, String userJoinSort);
 }

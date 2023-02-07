@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.*;
 import com.ssafy.api.response.*;
+import com.ssafy.common.util.DistanceModule;
 import com.ssafy.common.util.LocationDistance;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
@@ -9,10 +10,7 @@ import org.checkerframework.checker.nullness.Opt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service("liveService")
 public class LiveServiceImpl implements LiveService {
@@ -41,10 +39,10 @@ public class LiveServiceImpl implements LiveService {
     public Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user) {
         Double stableLat = 36.354963;
         Double stableLon = 127.297375;
-        if(liveRegisterInfo.getLatitude() != null){
+        if (liveRegisterInfo.getLatitude() != null) {
             stableLat = liveRegisterInfo.getLatitude();
         }
-        if(liveRegisterInfo.getLongitude() != null){
+        if (liveRegisterInfo.getLongitude() != null) {
             stableLon = liveRegisterInfo.getLongitude();
         }
 
@@ -256,27 +254,55 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public List<LiveContent> searchLocationLiveList(List<LiveContent> liveContentList, Location location) {
-        List<LiveContent> tempLiveContentList = new ArrayList<>();
-        for(LiveContent liveContent : liveContentList){
+    public List<DistanceModule> searchLocationLiveList(List<LiveContent> liveContentList, Location location, boolean isNational) {
+        List<DistanceModule> distanceModuleList = new ArrayList<>();
+        for (LiveContent liveContent : liveContentList) {
             // 라이브 아이디로 lat,lon 조회
             Optional<Live> oLive = liveRepository.findById(liveContent.getId());
             Live live = oLive.orElse(null);
-            if(live == null)
-                continue;;
+            if (live == null)
+                continue;
+            ;
             // 킬로미터(Kilo Meter) 단위
             double distanceKiloMeter =
                     LocationDistance.distance(location.getLatitude(), location.getLongitude(),
                             live.getLatitude(), live.getLongitude(), "kilometer");
 
-            System.out.println(distanceKiloMeter);
-
-            if(distanceKiloMeter <= 5){
-                tempLiveContentList.add(liveContent);
+            //전국이면
+            if (isNational) {
+                distanceModuleList.add(new DistanceModule(distanceKiloMeter, liveContent));
+            } else {//전국이 아니면 5km 이내
+                if (distanceKiloMeter <= 5) {
+                    distanceModuleList.add(new DistanceModule(distanceKiloMeter, liveContent));
+                }
             }
+
         }
 
-        return tempLiveContentList;
+        return distanceModuleList;
+    }
+
+    @Override
+    public List<LiveContent> searchSortUserJoinLiveList(List<LiveContent> liveContentList, String userJoinSort) {
+        //오름차순 정렬
+        if(userJoinSort.equals("ASC")){
+            Collections.sort(liveContentList, new Comparator<LiveContent>() {
+                @Override
+                public int compare(LiveContent o1, LiveContent o2) {
+                    return o1.getJoinUsersNum() - o2.getJoinUsersNum();
+                }
+            });
+            //내림차순 정렬
+        }else if(userJoinSort.equals("DESC")){
+            Collections.sort(liveContentList, new Comparator<LiveContent>() {
+                @Override
+                public int compare(LiveContent o1, LiveContent o2) {
+                    return o2.getJoinUsersNum() - o1.getJoinUsersNum();
+                }
+            });
+
+        }
+        return liveContentList;
     }
 
     //방 상세보기 가져올 메서드
