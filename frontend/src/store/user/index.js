@@ -59,10 +59,13 @@ export const userConfirm = (userData, navigate) => (dispatch) => {
       dispatch(setIsValidToken(true));
 
       sessionStorage.setItem("accessToken", accessToken);
-      console.log("확인하자");
-      console.log(sessionStorage.getItem("accessToken"));
-      console.log(data);
-      console.log(data["accessToken"]);
+      //해당 유저의 간단 정보 가져와서 info에 저장
+      userInfo(
+        ({ data }) => {
+          dispatch(setUserInfo(data));
+        },
+        () => {}
+      );
       navigate("/");
     },
     () => {
