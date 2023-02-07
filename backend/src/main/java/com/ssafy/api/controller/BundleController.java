@@ -1,6 +1,7 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.request.BundleReq;
+import com.ssafy.api.response.BundledItemsProductRes;
 import com.ssafy.api.service.BundleService;
 import com.ssafy.db.entity.Bundle;
 import com.ssafy.db.entity.Product;
@@ -34,14 +35,14 @@ public class BundleController {
     // 판매자 - 묶음 제안 목록
     @GetMapping("/{liveId}")
     public ResponseEntity<?> getSellerSuggestList(@PathVariable("liveId") Long liveId) {
-        List<List<Product>> suggestList = bundleService.getSellerSuggestList(liveId);
+        List<List<BundledItemsProductRes>> suggestList = bundleService.getSellerSuggestList(liveId);
         return ResponseEntity.status(200).body(suggestList);
     }
 
     // 구매자 - 묶음 제안 목록
     @GetMapping("/{liveId}/{buyerId}")
     public ResponseEntity<?> getBuyerSuggestList(@PathVariable("liveId") Long liveId, @PathVariable("buyerId") Long buyerId) {
-        List<List<Product>> getProductList = bundleService.getBuyerSuggestList(liveId, buyerId);
+        List<List<BundledItemsProductRes>> getProductList = bundleService.getBuyerSuggestList(liveId, buyerId);
         return ResponseEntity.status(200).body(getProductList);
     }
 
