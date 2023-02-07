@@ -12,6 +12,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     @Override
     // 소켓 연결 관련 설정
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        System.out.println("------------------config------------------");
         // 연결 URL : wss://localhost:8000/ws/chat
         registry.addEndpoint("/ws/chat")
                 // Client에서 websocket연결할 때 사용할 API 경로를 설정해주는 메서드

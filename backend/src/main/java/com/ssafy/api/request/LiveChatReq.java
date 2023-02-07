@@ -1,9 +1,9 @@
-package com.ssafy.api.response;
+package com.ssafy.api.request;
 
 import lombok.Data;
 
 @Data
-public class ChatRes {
+public class LiveChatReq {
     private MessageType type;
     private String roomId;
     private String content;
