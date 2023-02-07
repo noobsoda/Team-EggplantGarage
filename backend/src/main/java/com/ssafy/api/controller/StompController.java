@@ -35,18 +35,16 @@ public class StompController {
         template.convertAndSend("/sub/room/" + chatRoom.getId(), chatMessageSendReq);
     }
 
-    @MessageMapping("/live/message")
+    @MessageMapping("/live/message/{roomId}")
     public void sendMessageToLive(@Payload LiveChatReq liveChatReq) {
         System.out.println("controller: sendMessage");
         // @Payload: 헤더와 메타 데이터를 제외한 실제 사용에 있어서 필요한 데이터
         template.convertAndSend("/sub/live/" + liveChatReq.getRoomId(), liveChatReq);
     }
 
-    @MessageMapping("/live/addUser")
-    public void addUser(@Payload LiveChatReq liveChatReq, SimpMessageHeaderAccessor headerAccessor) {
+    @MessageMapping("/live/addUser/{roomId}")
+    public void addUser(@Payload LiveChatReq liveChatReq) {
         System.out.println("controller: addUser");
-        System.out.println("roomId: " + liveChatReq.getRoomId());
-        headerAccessor.getSessionAttributes().put("username", liveChatReq.getSender());
         template.convertAndSend("/sub/live/" + liveChatReq.getRoomId(), liveChatReq);
     }
 }
