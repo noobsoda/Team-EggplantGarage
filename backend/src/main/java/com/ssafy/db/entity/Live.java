@@ -17,7 +17,6 @@ import java.io.Serializable;
 public class Live extends BaseEntity implements Serializable {
     private String title;
     private String description;
-    @Column(unique = true)
     private String url;
     private boolean isLive;
     private String thumbnailUrl;

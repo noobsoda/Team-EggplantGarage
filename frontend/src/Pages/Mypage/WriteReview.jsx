@@ -15,7 +15,7 @@ export default function WriteReview() {
   //npm install @mui/material @emotion/react @emotion/styled
   return (
     <Page>
-      <Header isName="True" headerName="리뷰작성" />
+      <Header isName={true} headerName="리뷰작성" />
       <Body>
         <div className="page-header">상대방</div>
         <ItemCard />

@@ -10,6 +10,8 @@ import lombok.Setter;
 @ApiModel("LiveRegisterPostReq")
 public class LiveRegisterPostReq {
 
+    @ApiModelProperty(name = "판매자 아이디", example = "2")
+    private Long sellerId;
     @ApiModelProperty(name = "세션 아이디", example = "ses_YnDaGYNcd7")
     private String sessionId;
     @ApiModelProperty(name = "방송 제목", example = "GarageSale Open")
@@ -24,6 +26,7 @@ public class LiveRegisterPostReq {
     private Double latitude;
     @ApiModelProperty(name = "방송 경도", example = "202.22")
     private Double longitude;
+    
 
 
 }
