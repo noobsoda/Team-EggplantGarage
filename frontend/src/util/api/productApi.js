@@ -29,7 +29,7 @@ async function setLiveProduct(data, success, fail) {
  *  "soldPrice": 0
  * @returns
  */
-async function getBoughtList(buyerId, success, fail) {
+async function getPurchasedList(buyerId, success, fail) {
   const items = await api.get(`/api/v1/history/buyer/` + buyerId).then(success);
   // .catch();
   return items;
@@ -86,7 +86,7 @@ async function setBundleRefuse(bundleId, success, fail) {
 //
 
 export {
-  getBoughtList,
+  getPurchasedList,
   postBundle,
   getSellerSuggestList,
   getBundleItemList,
