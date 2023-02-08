@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-const StyledBox = styled.button`
+const StyledBox = styled.div`
   width: 88px;
   height: 24px;
   border-radius: 12px;
@@ -16,7 +16,7 @@ const StyledBox = styled.button`
 `;
 
 const StyledInnerBox = styled.div`
-  margin: 0 8px;
+  margin: 0 4px;
   display: flex;
   justify-content: space-between;
 `;

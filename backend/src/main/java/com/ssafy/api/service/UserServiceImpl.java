@@ -164,5 +164,16 @@ public class UserServiceImpl implements UserService {
         return user.getRefreshToken();
     }
 
+    @Override
+    public User getUserById(Long sellerId) {
+        Optional<User> oUser = userRepository.findById(sellerId);
+        User user = oUser.orElse(null);
+
+        if(user == null)
+            return null;
+
+        return user;
+    }
+
 
 }

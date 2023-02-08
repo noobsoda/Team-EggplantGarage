@@ -1,10 +1,22 @@
 import React from "react";
+import styled from "styled-components";
 import BigInput from "../../Atoms/Inputs/BigInput";
 import RedParagraph from "../../Atoms/Text/RedParagraph";
 
-export default function InputBox({ placehold, text, isCheck, onChange, type, value, disabled }) {
+const StyledBox = styled.div`
+  height: 48px;
+`;
+export default function InputBox({
+  placehold,
+  text,
+  isCheck,
+  onChange,
+  type,
+  value,
+  disabled,
+}) {
   return (
-    <div>
+    <StyledBox>
       <BigInput
         type={type}
         placehold={placehold}
@@ -13,6 +25,6 @@ export default function InputBox({ placehold, text, isCheck, onChange, type, val
         disabled={disabled}
       />
       {isCheck ? <></> : <RedParagraph text={text} />}
-    </div>
+    </StyledBox>
   );
 }

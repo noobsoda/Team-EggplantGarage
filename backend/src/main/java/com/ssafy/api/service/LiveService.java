@@ -6,7 +6,7 @@ import com.ssafy.api.request.LiveRegisterPostReq;
 import com.ssafy.api.request.Location;
 import com.ssafy.api.response.LiveContent;
 import com.ssafy.api.response.LiveDetailGetRes;
-import com.ssafy.api.response.LiveListGetRes;
+import com.ssafy.common.util.DistanceModule;
 import com.ssafy.db.entity.Live;
 import com.ssafy.db.entity.User;
 
@@ -17,13 +17,13 @@ public interface LiveService {
 
     LiveDetailGetRes getLiveDetailBySessionId(String sessionId);
 
-    boolean getLiveCheckUrlByUrl(String url);
+    boolean getLiveCheckSessionIdBySessionId(String url);
 
-    boolean postLiveByThumbnailUrl(Long sellerId, String thumbnailUrl);
+    boolean postLiveByThumbnailUrl(String sessionId, String thumbnailUrl);
 
-    boolean postLiveByCategories(Long id, LiveCategoriesReq liveCategoriesReq);
+    boolean postLiveByCategories(LiveCategoriesReq liveCategoriesReq);
 
-    List<LiveContent>  getLiveList(String title);
+    List<LiveContent> getLiveListByTitle(String title);
 
     boolean postUserLiveByLiveId(LiveUserJoinReq liveUserJoinReq);
 
@@ -33,5 +33,7 @@ public interface LiveService {
 
     List<LiveContent> searchCategoryLiveList(List<LiveContent> liveContentList, String category);
 
-    List<LiveContent> searchLocationLiveList(List<LiveContent> liveContentList, Location location);
+    List<DistanceModule> searchLocationLiveList(List<LiveContent> liveContentList, Location location, boolean isNational);
+
+    List<LiveContent> searchSortUserJoinLiveList(List<LiveContent> liveContentList, String userJoinSort);
 }

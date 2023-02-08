@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.BundleReq;
+import com.ssafy.api.response.BundledItemsProductRes;
 import com.ssafy.db.entity.Bundle;
 import com.ssafy.db.entity.BundledItemsRelation;
 import com.ssafy.db.entity.Product;
@@ -55,20 +56,27 @@ public class BundleServiceImpl implements BundleService {
         return bundleId;
     }
 
-    public List<List<Product>> getBundleItemsProduct(List<Bundle> bundleList) {
-        List<List<Product>> productAllList = new ArrayList<>();
+    public List<List<BundledItemsProductRes>> getBundleItemsProduct(List<Bundle> bundleList) {
+        List<List<BundledItemsProductRes>> productAllList = new ArrayList<>();
         int size = bundleList.size();
 
         for(int i = 0; i < size; i++) {
             long id = bundleList.get(i).getId();
-            List<Product> productList = new ArrayList<>();
+            List<BundledItemsProductRes> productList = new ArrayList<>();
 
             List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(id).get();
             int itemsSize = bundledItemsRelationList.size();
 
             for(int j = 0; j < itemsSize; j++) {
                 Product product = bundledItemsRelationList.get(j).getProduct();
-                productList.add(product);
+                BundledItemsProductRes res = new BundledItemsProductRes(
+                        product.getName(), product.getSoldPrice(),
+                        product.isPaid(), product.getLeftTopX(),
+                        product.getLeftTopY(), product.getRightBottomX(),
+                        product.getRightBottomY(), product.getImageUrl(),
+                        product.getBuyerId(), bundleList.get(i).getUser().getNickname());
+
+                productList.add(res);
             }
 
             productAllList.add(productList);
@@ -77,13 +85,13 @@ public class BundleServiceImpl implements BundleService {
     }
 
     @Override
-    public List<List<Product>> getSellerSuggestList(Long liveId) {
+    public List<List<BundledItemsProductRes>> getSellerSuggestList(Long liveId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalse(liveId).get();
         return getBundleItemsProduct(bundleList);
     }
 
     @Override
-    public List<List<Product>> getBuyerSuggestList(long liveId, long buyerId) {
+    public List<List<BundledItemsProductRes>> getBuyerSuggestList(long liveId, long buyerId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserId(liveId, buyerId).get();
         return getBundleItemsProduct(bundleList);
     }

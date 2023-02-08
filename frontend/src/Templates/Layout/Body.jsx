@@ -14,5 +14,5 @@ const StyledBody = styled.div`
 `;
 
 export default function Body(props) {
-  return <StyledBody>{props.children}</StyledBody>;
+  return <StyledBody className={props.className}>{props.children}</StyledBody>;
 }
