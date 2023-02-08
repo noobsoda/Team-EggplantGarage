@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import CategoryNavBtn from "../../Atoms/Buttons/CategoryNavBtn";
 import Container from "../../Templates/Layout/Container";
 import styled from "styled-components";
@@ -14,7 +14,7 @@ const StyledContainer = styled.div`
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
 */
-export default function CategoryNav({ liveshow, buttonClick }) {
+export default function CategoryNav({ setSelected }) {
   //useState , event
   const categories = [
     "인기",
@@ -38,10 +38,19 @@ export default function CategoryNav({ liveshow, buttonClick }) {
     "식물",
     "기타",
   ];
+
   return (
     <StyledContainer>
       {categories.map((name) => {
-        return <CategoryNavBtn key={name} name={name} />;
+        return (
+          <CategoryNavBtn
+            key={name}
+            name={name}
+            buttonClick={() => {
+              setSelected(name);
+            }}
+          />
+        );
       })}
     </StyledContainer>
   );
