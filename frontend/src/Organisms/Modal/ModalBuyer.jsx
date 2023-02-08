@@ -26,7 +26,12 @@ const FlexBox = styled.div`
   column-gap: 8px;
   justify-content: flex-end;
 `;
-export default function ModalBuyer({ setModalOpen }) {
+export default function ModalBuyer({
+  productList,
+  bundleList,
+  setModalOpen,
+  isSeller,
+}) {
   const closeModal = () => {
     setModalOpen(false);
   };
@@ -38,9 +43,7 @@ export default function ModalBuyer({ setModalOpen }) {
     <Modal>
       <Header>
         <CloseBtn onClick={closeModal} />
-        <div className="page-header" height>
-          물건목록
-        </div>
+        <div className="page-header">물건목록</div>
       </Header>
       <ModalBody>
         <FlexBox>
@@ -57,7 +60,11 @@ export default function ModalBuyer({ setModalOpen }) {
             }}
           />
         </FlexBox>
-        {isSuggestion ? <SalesList /> : <SuggestionList />}
+        {isSuggestion ? (
+          <SalesList isSeller={isSeller} productList={productList} />
+        ) : (
+          <SuggestionList isSeller={isSeller} suggestList={bundleList} />
+        )}
       </ModalBody>
     </Modal>
   );

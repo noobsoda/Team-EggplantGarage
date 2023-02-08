@@ -34,13 +34,12 @@ export default function Main() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    //로그인 확인
     navigator.geolocation.getCurrentPosition((position) => {
       setLat(position.coords.latitude);
       setLng(position.coords.longitude);
     });
     let aroundSearchCondition = {
-      category: selected == "인기" ? "" : "",
+      category: selected === "인기" ? "" : "",
       title: "",
       joinUserSort: "",
       distanceSort: "ASC",
@@ -58,7 +57,7 @@ export default function Main() {
     let nationalSearchCondition = {
       title: "",
       distanceSort: "",
-      category: selected == "인기" ? "" : selected,
+      category: selected === "인기" ? "" : selected,
       joinUserSort: "DESC",
       latitude: 0,
       longitude: 0,
