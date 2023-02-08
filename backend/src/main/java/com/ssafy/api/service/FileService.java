@@ -63,4 +63,9 @@ public class FileService {
 
         return copyOfLocation;
     }
+    public String fileDownload(String fileName){
+        uploadPath = DOMAIN + File.separator + "pictures" + "/" + fileName;
+        return uploadPath;
+
+    }
 }
