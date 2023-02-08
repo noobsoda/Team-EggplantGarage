@@ -4,7 +4,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 //라우터에 맞는 페이지 지정
 import Main from "./Pages/Main/Main";
 import LiveShowSubmit from "./Pages/LiveShow/LiveShowSubmit";
-import LiveShowSeller from "./Pages/LiveShow//LiveShowSeller";
+import LiveShowSeller from "./Pages/LiveShow/LiveShowSeller";
 import LiveShow from "./Pages/LiveShow//LiveShowTest";
 import SignUp from "./Pages/User/SignUp";
 import SignUpEmail from "./Pages/User/SignUpEmail";

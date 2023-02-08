@@ -21,10 +21,6 @@ const StyledImg = styled.img`
   margin-top: 16px;
 `;
 
-const Space = styled.div`
-  height: ;
-`;
-
 export default function PictureSubmitBox({ imgSrc, cameraEvent }) {
   return (
     <StyledBox>

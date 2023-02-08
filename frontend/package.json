@@ -30,7 +30,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "sslstart": "HTTPS=true set SSL_CRT_FILE=localhost.pem set SSL_KEY_FILE=localhost-key.pem set HOST=0.0.0.0 react-scripts start",
+    "sslstart": "HTTPS=true SSL_CRT_FILE=localhost.pem SSL_KEY_FILE=localhost-key.pem HOST=0.0.0.0 react-scripts start",
     "winsslstart": "set HTTPS=true&&set SSL_CRT_FILE=localhost.pem&&set SSL_KEY_FILE=localhost-key.pem&&set HOST=0.0.0.0&&react-scripts start"
   },
   "eslintConfig": {

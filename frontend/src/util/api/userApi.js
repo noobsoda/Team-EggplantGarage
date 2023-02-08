@@ -48,9 +48,16 @@ async function login(data, success, fail) {
  * @param {*} fail
  */
 async function userInfo(success, fail) {
-  api.defaults.headers["AUTHORIZATION"] =
-    "Bearer " + sessionStorage.getItem("accessToken");
-  await api.get("/api/v1/users/me").then(success).catch(fail);
+  console.log("정보좀");
+  console.log(sessionStorage.getItem("accessToken"));
+  await api
+    .get("/api/v1/users/me", {
+      headers: {
+        AUTHORIZATION: "Bearer " + sessionStorage.getItem("accessToken"),
+      },
+    })
+    .then(success)
+    .catch(fail);
 }
 
 /**
