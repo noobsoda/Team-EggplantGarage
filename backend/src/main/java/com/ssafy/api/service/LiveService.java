@@ -15,7 +15,7 @@ import java.util.List;
 public interface LiveService {
     Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user);
 
-    LiveDetailGetRes getLiveDetailBySessionId(String sessionId);
+    LiveDetailGetRes getLiveDetailBySessionId(String liveId);
 
     boolean getLiveCheckSessionIdBySessionId(String url);
 

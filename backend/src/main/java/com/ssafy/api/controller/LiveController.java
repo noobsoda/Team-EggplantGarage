@@ -97,9 +97,9 @@ public class LiveController {
     @PostMapping("/detail")
     @ApiOperation(value = "방 상세정보 조회", notes = "방의 상세 정보와 유저 목록을 조회한다.")
     public ResponseEntity<LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, String> sessionMap) {
-        String sessionId = sessionMap.get("sessionId");
+        String liveId = sessionMap.get("liveId");
 
-        LiveDetailGetRes liveDetailGetRes = liveService.getLiveDetailBySessionId(sessionId);
+        LiveDetailGetRes liveDetailGetRes = liveService.getLiveDetailBySessionId(liveId);
         //상품도 추가로 보여주기
 
         return ResponseEntity.status(200).body(liveDetailGetRes);
