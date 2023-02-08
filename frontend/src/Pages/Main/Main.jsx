@@ -23,54 +23,50 @@ export default function Main() {
 
   const [allLives, setAllLives] = useState(undefined);
   const [aroundLives, setAroundLives] = useState(undefined);
-  const [lng, setLng] = useState(0);
-  const [lat, setLat] = useState(0);
-  const [selected, setSelected] = useState("인기");
+  const [lng, setLng] = useState(127.2986652);
+  const [lat, setLat] = useState(36.3555225);
+  const [selected, setSelected] = useState("");
   //liveContentList 까지 가야됨.
   const navigate = useNavigate();
   function startLive() {
     navigate("/liveshowsubmit");
   }
   const dispatch = useDispatch();
+
   useEffect(() => {
     //로그인 확인
-    console.log(isLogin);
-    // if (!isLogin) {
-    //   navigate("/login");
-    // }
-    if (navigator.geolocation) {
-      // console.log("왜 안들어와");
-      // GeoLocation을 이용해서 접속 위치를 얻어옵니다
-      //이부분만 있으면 라이브쇼 시작할때 위도 경도도 가져올 수 있음
-      navigator.geolocation.getCurrentPosition((position) => {
-        // console.log(position);
-        setLat(position.coords.latitude);
-        setLng(position.coords.longitude);
-      });
-    }
-
+    navigator.geolocation.getCurrentPosition((position) => {
+      setLat(position.coords.latitude);
+      setLng(position.coords.longitude);
+    });
     let aroundSearchCondition = {
+      category: selected == "인기" ? "" : "",
+      title: "",
+      joinUserSort: "",
       distanceSort: "ASC",
       latitude: lat,
       longitude: lng,
       national: false,
     };
     getLives(aroundSearchCondition, ({ data }) => {
-      console.log(data.liveContentList);
-      console.log(aroundSearchCondition);
+      // console.log("주변지역");
+      // console.log(lat + "//////" + lng);
+      // console.log(data.liveContentList);
       setAroundLives(data.liveContentList);
     });
 
     let nationalSearchCondition = {
-      category: selected,
+      title: "",
+      distanceSort: "",
+      category: selected == "인기" ? "" : selected,
       joinUserSort: "DESC",
       latitude: 0,
       longitude: 0,
       national: true,
     };
     getLives(nationalSearchCondition, ({ data }) => {
-      console.log(data.liveContentList);
-      console.log(nationalSearchCondition);
+      // console.log(data.liveContentList);
+      // console.log(nationalSearchCondition);
       setAllLives(data.liveContentList);
     });
     let location = { lat: lat, lng: lng };
@@ -86,20 +82,16 @@ export default function Main() {
           주변 라이브쇼
         </div>
         <Container>
-          <LiveshowItem isViewer={true} />
-          <LiveshowItem isViewer={true} />
-          <LiveshowItem isViewer={true} />
-          <LiveshowItem isViewer={true} />
+          {aroundLives &&
+            aroundLives.map((show) => {
+              return <LiveshowItem key={show.id} show={show} isViewer={true} />;
+            })}
         </Container>
         <div className="page-header" style={{ marginBottom: "8px" }}>
           전국 라이브쇼
         </div>
         <CategoryNav setSelected={setSelected} />
         <Container>
-          {allLives &&
-            allLives.map((show) => {
-              return <LiveshowItem key={show.id} show={show} isViewer={true} />;
-            })}
           {allLives &&
             allLives.map((show) => {
               return <LiveshowItem key={show.id} show={show} isViewer={true} />;

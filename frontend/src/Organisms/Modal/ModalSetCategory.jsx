@@ -68,8 +68,8 @@ export default function ModalSetCategory({ setModalOpen, select }) {
   };
   const [selected, setSelected] = useState(null);
 
-  const handleClick = (index) => {
-    setSelected(index);
+  const handleClick = (text) => {
+    setSelected(text);
   };
 
   return (
@@ -85,8 +85,8 @@ export default function ModalSetCategory({ setModalOpen, select }) {
               <CategoryCheckBtn
                 key={index}
                 name={text}
-                buttonClick={() => handleClick(index)}
-                isClicked={selected === index ? true : false}
+                buttonClick={() => handleClick(text)}
+                isClicked={selected === text ? true : false}
               ></CategoryCheckBtn>
             );
           })}
