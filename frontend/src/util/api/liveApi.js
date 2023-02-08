@@ -70,7 +70,7 @@ async function closeSession(sessionId) {
 
 async function getLives(searchCondition, success, fail) {
   const lives = await api
-    .get(`/api/v1/lives/search`, searchCondition)
+    .post(`/api/v1/lives/search`, searchCondition)
     .then(success);
   return lives;
 }
@@ -229,4 +229,5 @@ export {
   getMyLives,
   getLiveDetails,
   getSalesHistory,
+  getLives,
 };
