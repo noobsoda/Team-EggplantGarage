@@ -26,10 +26,10 @@ export default function Main() {
   }
   useEffect(() => {
     //로그인 확인
-    console.log(isLogin);
-    if (!isLogin) {
-      navigate("/login");
-    }
+    // console.log(isLogin);
+    // if (!isLogin) {
+    //   navigate("/login");
+    // }
     // getAllLives(({ data }) => {
     //   setAllLives(data.liveContentList);
     // });

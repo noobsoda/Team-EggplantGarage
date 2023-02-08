@@ -80,10 +80,32 @@ async function setBundleRefuse(bundleId, success, fail) {
     .catch(fail);
 }
 
-//get bundle 두개
+/**
+ * 해당 라이브에 요청된 묶음 가져오기
+ * @param {*} liveId
+ * @param {*} success
+ * @param {*} fail
+ * @returns
+ */
+async function getLiveBundle(liveId, success, fail) {
+  return await api.get(`/api/v1/bundle/${liveId}`).then(success).catch(fail);
+}
+
 //update bundle/approval
 //update bundle/refuge
-//
+
+/**
+ * 이미지 가져오기
+ * @param {*} filename
+ * @returns
+ */
+async function getImage(filename) {
+  return await api(`/api/v1/file/images/${filename}`)
+    .then((response) => response.blob())
+    .then((blob) => {
+      return URL.createObjectURL(blob);
+    });
+}
 
 export {
   getBoughtList,
@@ -94,4 +116,5 @@ export {
   setBundleApproval,
   setBundleRefuse,
   setLiveProduct,
+  getLiveBundle,
 };
