@@ -94,7 +94,7 @@ public class LiveController {
 
     }
 
-    @GetMapping("/detail")
+    @PostMapping("/detail")
     @ApiOperation(value = "방 상세정보 조회", notes = "방의 상세 정보와 유저 목록을 조회한다.")
     public ResponseEntity<LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, String> sessionMap) {
         String sessionId = sessionMap.get("sessionId");

@@ -322,7 +322,8 @@ public class LiveServiceImpl implements LiveService {
         for (Iterator<LiveCategory> it = liveCategories.iterator(); it.hasNext(); ) {
             LiveCategory liveCategory = it.next();
             //카테고리 아이디와 연관된 카테고리 테이블 조회
-
+            if(liveCategory.getCategory() == null)
+                continue;
             categoryList.add(Category.builder()
                     .id(liveCategory.getCategory().getId())
                     .name(liveCategory.getCategory().getName())
