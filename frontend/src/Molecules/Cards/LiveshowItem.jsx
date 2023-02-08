@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const StyledLiveshowItem = styled.div`
   width: calc(50% - 4px);
   height: ${(props) => {
-    return props.isSearch ? "calc(30% - 16px)" : "100%";
+    return props.isSearch ? "40%" : "100%";
   }};
   flex-grow: 0;
   flex-shrink: 0;
