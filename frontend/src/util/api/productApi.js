@@ -10,7 +10,6 @@ async function setLiveProduct(data, success, fail) {
   await fileApi.post(`/api/v1/products`, data).then(success).catch(fail);
 }
 
-
 /**
  *
  * @param {*} success 성공시 전달되는 콜백함수
@@ -30,8 +29,8 @@ async function setLiveProduct(data, success, fail) {
  *  "soldPrice": 0
  * @returns
  */
-async function getBoughtList(success, fail, buyerid) {
-  const items = await api.get(`/api/v1/history/buyer/` + buyerid).then(success);
+async function getBoughtList(buyerId, success, fail) {
+  const items = await api.get(`/api/v1/history/buyer/` + buyerId).then(success);
   // .catch();
   return items;
 }
@@ -40,18 +39,59 @@ async function getBoughtList(success, fail, buyerid) {
  * 
  * @param {*} success 
  * @param {*} fail 
- * @param {*} bundle "productIdList": [],
-    "buyerId": 3,
-    "soldPrice": 30000,
-    "liveId": 1
-
+ * @param {*} bundle 
+ * "productIdList": [],
+   "buyerId": 3,
+   "soldPrice": 30000,
+   "liveId": 1
  */
-async function postBundle(success, fail, bundle) {
+async function postBundle(bundle, success, fail) {
   await api.post(`/api/v1/bundle`, bundle).then(success).catch(fail);
 }
+
+async function getSellerSuggestList(liveId, success, fail) {
+  await api
+    .get(`/api/v1/bundle/` + liveId)
+    .then(success)
+    .catch(fail);
+}
+async function getBuyerSuggestList(liveId, buyerId, success, fail) {
+  await api
+    .get(`/api/v1/bundle/` + liveId + `/` + buyerId)
+    .then(success)
+    .catch(fail);
+}
+async function getBundleItemList(bundleId, success, fail) {
+  await api
+    .get(`/api/v1/bundle/items/` + bundleId)
+    .then(success)
+    .catch(fail);
+}
+async function setBundleApproval(bundleId, success, fail) {
+  await api
+    .put(`/api/v1/bundle/approval/` + bundleId)
+    .then(success)
+    .catch(fail);
+}
+async function setBundleRefuse(bundleId, success, fail) {
+  await api
+    .put(`/api/v1/bundle/reffuse/` + bundleId)
+    .then(success)
+    .catch(fail);
+}
+
 //get bundle 두개
 //update bundle/approval
 //update bundle/refuge
 //
 
-export { getBoughtList,setLiveProduct };
+export {
+  getBoughtList,
+  postBundle,
+  getSellerSuggestList,
+  getBundleItemList,
+  getBuyerSuggestList,
+  setBundleApproval,
+  setBundleRefuse,
+  setLiveProduct,
+};

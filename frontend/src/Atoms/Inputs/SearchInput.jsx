@@ -11,12 +11,12 @@ const StyledInput = styled.input`
   box-sizing: border-box;
 `;
 
-export default function SearchInput({ inputValue, type, value }) {
+export default function SearchInput({ onChange, type, value }) {
   return (
     <StyledInput
       type={type}
       className="body1-regular"
-      onChange={inputValue}
+      onChange={onChange}
       placeholder="검색어를 입력하세요"
       value={value}
     ></StyledInput>

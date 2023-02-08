@@ -12,7 +12,6 @@ import LiveshowItem from "../../Molecules/Cards/LiveshowItem";
 import LiveStartBtn from "../../Atoms/IconButtons/LiveStartBtn";
 import CategoryNav from "../../Molecules/Category/CategoryNav";
 import { useNavigate } from "react-router-dom";
-import { getAllLives } from "../../util/api/liveApi";
 import { useEffect } from "react";
 import Container from "../../Templates/Layout/Container";
 
@@ -31,9 +30,9 @@ export default function Main() {
     if (!isLogin) {
       navigate("/login");
     }
-    getAllLives(({ data }) => {
-      setAllLives(data.liveContentList);
-    });
+    // getAllLives(({ data }) => {
+    //   setAllLives(data.liveContentList);
+    // });
   }, []);
 
   return (

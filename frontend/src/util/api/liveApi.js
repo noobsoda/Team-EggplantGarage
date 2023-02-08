@@ -1,4 +1,4 @@
-import { api, fileApi,OVApi } from "./api";
+import { api, fileApi, OVApi } from "./api";
 /**
  * 세션에서 토큰 가져오기
  * @param {*} hostSessionId
@@ -59,12 +59,19 @@ async function closeSession(sessionId) {
 }
 ////////////////////////////////////////////////////////////
 
-/**
- * 모든 live 조회
- */
-async function getAllLives(success, fail) {
-  const lives = await api.get(`/api/v1/lives`).then(success);
-  // .catch();
+// /**
+//  * 모든 live 조회
+//  */
+// async function getAllLives(success, fail) {
+//   const lives = await api.get(`/api/v1/lives`).then(success);
+//   // .catch();
+//   return lives;
+// }
+
+async function getLives(searchCondition, success, fail) {
+  const lives = await api
+    .get(`/api/v1/lives/search`, searchCondition)
+    .then(success);
   return lives;
 }
 
@@ -78,7 +85,7 @@ async function getAllLives(success, fail) {
     "thumbnailUrl": "string",
     "title": "string"
  */
-async function getMyLives(success, fail, myid) {
+async function getMyLives(myId, success, fail) {
   const lives = await api.get(`/api/v1/lives`).then(success);
   // .catch();
   return lives;
@@ -130,7 +137,7 @@ async function getMyLives(success, fail, myid) {
     }
   ]
  */
-async function getLiveDetails(success, fail, sessionId) {
+async function getLiveDetails(sessionId, success, fail) {
   const live = await api.get(`/api/v1/lives`, sessionId).then(success);
   // .catch();
   return live;
@@ -162,7 +169,10 @@ async function createLive(data, success, fail) {
  * @param {*} fail
  */
 async function setLiveCategory(data, success, fail) {
-  return await api.post(`/api/v1/lives/category`, data).then(success).catch(fail);
+  return await api
+    .post(`/api/v1/lives/category`, data)
+    .then(success)
+    .catch(fail);
 }
 
 /**
@@ -173,7 +183,10 @@ async function setLiveCategory(data, success, fail) {
  * @returns
  */
 async function setLiveImage(data, success, fail) {
-  return await fileApi.post(`/api/v1/lives/save/img`, data).then(success).catch(fail);
+  return await fileApi
+    .post(`/api/v1/lives/save/img`, data)
+    .then(success)
+    .catch(fail);
 }
 
 /**
@@ -185,7 +198,10 @@ async function setLiveImage(data, success, fail) {
  * @returns
  */
 async function getLiveDetail(id, success, fail) {
-  return await api.get(`/api/v1/lives/detail`, { sessionId: id }).then(success).catch(fail);
+  return await api
+    .get(`/api/v1/lives/detail`, { sessionId: id })
+    .then(success)
+    .catch(fail);
 }
 
 /**
@@ -195,17 +211,22 @@ async function getLiveDetail(id, success, fail) {
 async function closeLive(id, success, fail) {
   return await api.fetch(`/api/v1/lives/${id}`).thend(success).catch(fail);
 }
+async function getSalesHistory(sellerId, success, fail) {
+  const lives = await api
+    .get(`/api/v1/history/seller/` + sellerId)
+    .then(success);
+  return lives;
+}
 
 export {
   getToken,
   closeSession,
-  getAllLives,
   createLive,
   setLiveCategory,
   setLiveImage,
   getLiveDetail,
   closeLive,
   getMyLives,
-  getLiveDetails
+  getLiveDetails,
+  getSalesHistory,
 };
-

@@ -9,7 +9,7 @@ import { api } from "./api";
  * @returns content:리뷰내용 , score:별점
  *
  */
-async function getReviewMine(success, fail, myreviewid) {
+async function getReviewMine(myreviewid, success, fail) {
   const review = await api.get(`/api/v1/reviews/` + myreviewid).then(success);
   // .catch();
   return review;
@@ -22,7 +22,7 @@ async function getReviewMine(success, fail, myreviewid) {
  * @param {*} otherreviewid 상대방이 쓴 리뷰아이디 product 에 들어있음
  * @returns content:리뷰내용 , score:별점
  */
-async function getReviewOther(success, fail, otherreviewid) {
+async function getReviewOther(otherreviewid, success, fail) {
   const review = await api
     .get(`/api/v1/reviews/` + otherreviewid)
     .then(success);
@@ -34,9 +34,10 @@ async function getReviewOther(success, fail, otherreviewid) {
  *
  * @param {*} success
  * @param {*} fail
- * @param {*} review content,prouductId,score,seller:boolean,visible:boolean
+ * @param {*} review
+ * content,prouductId,score,seller:boolean,visible:boolean
  */
-async function postReview(success, fail, review) {
+async function postReview(review, success, fail) {
   await api.post(`/api/v1/reviews`, review).then(success).catch(fail);
 }
 
