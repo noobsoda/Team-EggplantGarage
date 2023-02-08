@@ -1,13 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
-import SockJS from "sockjs-client";
-import Stomp from "stompjs";
+import { getStompClient } from "../../store/socket";
+import { useLocation } from "react-router-dom";
 
 const StyledChatting = styled.div`
   width: 200px;
   height: 30vh;
   border-radius: 8px;
   background-color: white;
+`;
+
+const StyledMessage = styled.ul`
+
 `;
 
 const StyledContainer = styled.div`
@@ -43,105 +47,134 @@ const SendBtn = styled.button`
 `;
 
 
-export default function ChatInput({ inputValue, type, value,myNickname, myLiveId }) {
-    const [nickname, setNickname] = useState(myNickname);
-    const [liveId, setliveId] = useState(myLiveId);
-    const [message, setMessage] = useState("");
-    var stompClient = null;
-    var messageArea = document.querySelector('#messageArea');
-    
-    const connect = (event) => {
-      console.log("connect");
+export default function ChatInput({ inputValue, type, value,myNickname }) {
+  // const [nickname, setNickname] = useState(myNickname);
+  const nickname = "홍길동";
+  const [chatting, setChatting] = useState([]);
+  const [message, setMessage] = useState("");
+  const stompClient = getStompClient();
+  // const liveId = useLocation().state.liveId;
+  const liveId = 1;
+  const messageArea = useRef();
+  const scrollRef = useRef();
+
+  console.log("liveId: " + liveId);
+  // var messageArea = document.querySelector('#messageArea');
+  console.log(messageArea);
+  console.log(messageArea.current);
+
   
-      const socket = new SockJS('/ws/chat');
-      stompClient = Stomp.over(socket);
-      stompClient.connect({}, connected, error);
-      console.log("여기");
   
-      event.preventDefault();
-    }
+  const connect = () => {
+    console.log("connect");
   
-    const connected = () => {
-      console.log("connected!");
-    
-      stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
-    
-      stompClient.send("/pub/live/addUser/" + liveId,
-          {},
-          JSON.stringify({sender: nickname, type: 'JOIN', roomId: liveId})
-      )
-    }
+    console.log("stompClient: " + stompClient);
+    stompClient.connect({}, connectSuccess, connectError);
+    console.log("여기");
+  }
   
-    const error = (error) => {
-      console.log("error!");
-    }
-    
-    const onMessageReceived = (payload) => {
-      console.log("onMessageReceived!");
-    
-      var message = JSON.parse(payload.body);
-      console.log("message: " + message.content + " " + message.type + " " + message.sender);
-    
-      var messageElement = document.createElement('p');
-    
-      if(message.type === 'JOIN') {
-          message.content = '[' + message.sender + '] 님이 입장하셨습니다.';
-      } else if (message.type === 'LEAVE') {
-          console.log("LEAVE: " + messageElement);
-          message.content = '[' + message.sender + '] 님이 퇴장하셨습니다.';
-      } else {
-          var usernameElement = document.createElement('span');
-          var usernameText = document.createTextNode("[" + message.sender + "] ");
-          console.log("sender: " + message.sender);
-          usernameElement.appendChild(usernameText);
-          messageElement.appendChild(usernameElement);
-      }
-    
-      var textElement = document.createElement('span');
-      var messageText = document.createTextNode(message.content);
-      textElement.appendChild(messageText);
-    
-      messageElement.appendChild(textElement);
-    
-      messageArea.appendChild(messageElement);
-      messageArea.scrollTop = messageArea.scrollHeight;
-    }
-    
-    const sendMessage = (event) => {
-      console.log("sendMessage!");
-    
-      var messageContent = inputValue;
-      if(messageContent && stompClient) {
-          var chatMessage = {
-              sender: nickname,
-              roomId: liveId,
-              content: inputValue,
-              type: 'CHAT'
-          };
-          stompClient.send("/pub/live/message/" + liveId, {}, JSON.stringify(chatMessage));
-          inputValue.value = '';
-      }
-      event.preventDefault();
+  useEffect(() => {
+    console.log("useEffect!");
+
+    if (stompClient === null) {
+      return;
+    } 
+    connect();
+  }, []);
+
+  useEffect(() => {
+    scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, []);
+
+
+  const connectSuccess = () => {
+    console.log("connectSuccess!");
+    console.log("stompClient: " + stompClient);
+  
+    stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
+  
+    stompClient.send("/pub/live/addUser/" + liveId,
+        {},
+        JSON.stringify({sender: nickname, type: 'JOIN', roomId: liveId})
+    )
   }
 
+  const connectError = (error) => {
+    console.log("connectError!");
+  }
+  
+  const onMessageReceived = (payload) => {
+    console.log("onMessageReceived!");
+  
+    var message = JSON.parse(payload.body);
+    console.log("message: " + message.content + " " + message.type + " " + message.sender);
+  
+    var messageElement = document.createElement('p');
 
+    if(message.type === 'JOIN') {
+        message.content = '[' + message.sender + '] 님이 입장하셨습니다.';
+    } else if (message.type === 'LEAVE') {
+        // console.log("LEAVE: " + messageElement);
+        // message.content = '[' + message.sender + '] 님이 퇴장하셨습니다.';
+    } else {
+        var usernameElement = document.createElement('span');
+        var usernameText = document.createTextNode("[" + message.sender + "] ");
+        console.log("sender: " + message.sender);
+        usernameElement.appendChild(usernameText);
+        messageElement.appendChild(usernameElement);
+    }
+  
+    var textElement = document.createElement('span');
+    var messageText = document.createTextNode(message.content);
+    textElement.appendChild(messageText);
+  
+    messageElement.appendChild(textElement);
+  
+    messageArea.current.appendChild(messageElement);
+    // messageArea.scrollTop = messageArea.scrollHeight;
+  }
+  
+  const sendMessage = () => {
+    console.log("sendMessage!");
+  
+    console.log("보내기: " + message + " " + stompClient);
+    if (message && stompClient) {
+      var chatMessage = {
+        sender: nickname,
+        roomId: liveId,
+        content: message,
+        type: 'CHAT'
+      };
+      stompClient.send("/pub/live/message/" + liveId, {}, JSON.stringify(chatMessage));
+      scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+    setMessage("");
+    // event.preventDefault();
+  }
+
+  const onKeyPress = (e) => {
+    if (e.key == "Enter") {
+      sendMessage();
+    }
+  };
+
+  const inputChangeHandler = (event) => {
+    setMessage(event.target.value)
+  }
 
   return (
     <StyledContainer>
-      <StyledChatting>
-        <ul id="messageArea">
-          {/* 안녕하세요 */}
-        </ul>
-      </StyledChatting>
-        
-        {/* <input type="text" id="message" placeholder="채팅을 입력해주세요."/>
-        <button type="submit" class="primary">보내기</button> */}
+      <StyledChatting ref={scrollRef}>
+        <StyledMessage ref={messageArea} />
+      </StyledChatting> 
+      
       <StyledInput
-        type={type}
+        type="text"
         className="body1-regular"
-        onChange={inputValue}
-        placeholder="채팅을 입력해주세요"
+        onChange={inputChangeHandler}
+        placeholder="메세지를 입력해주세요"
         value={message}
+        onKeyPress={onKeyPress}
       ></StyledInput>
       <SendBtn onClick={sendMessage} />
     </StyledContainer>
