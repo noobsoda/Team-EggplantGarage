@@ -3,17 +3,21 @@ import LiveshowItem from "../../Molecules/Cards/LiveshowItem";
 import ContainerSearch from "../../Templates/Layout/ContainerSearch";
 
 //카테고리, 검색어, 지역, 정렬 넣어서 뽑아내기
-export default function SearchBody({ category, keyword, location, sort }) {
+export default function SearchBody({ lives }) {
   return (
     <>
       <ContainerSearch>
-        <LiveshowItem isSearch={true} />
-        <LiveshowItem isSearch={true} />
-        <LiveshowItem isSearch={true} />
-        <LiveshowItem isSearch={true} />
-        <LiveshowItem isSearch={true} />
-        <LiveshowItem isSearch={true} />
-        <LiveshowItem isSearch={true} />
+        {lives &&
+          lives.map((show) => {
+            return (
+              <LiveshowItem
+                key={show.id}
+                show={show}
+                isSearch={true}
+                isViewer={true}
+              />
+            );
+          })}
       </ContainerSearch>
     </>
   );

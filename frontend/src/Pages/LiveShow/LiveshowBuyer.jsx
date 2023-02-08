@@ -31,7 +31,7 @@ const StyledHeader = styled.div`
   justify-content: space-between;
 `;
 const StyledBody = styled.div`
-  height: calc(100% - 288px);
+  height: calc(100% - 328px);
   //264+ padding값
   padding: 0 24px 24px;
   display: flex;
