@@ -18,11 +18,7 @@ import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import Body from "../../Templates/Layout/Body";
 
-import {
-  createLive,
-  setLiveCategory,
-  setLiveImage,
-} from "../../util/api/liveApi";
+import { createLive, setLiveCategory, setLiveImage } from "../../util/api/liveApi";
 import { setLiveProduct } from "../../util/api/productApi";
 import { dataURItoBlob } from "../../util/data";
 
@@ -216,7 +212,6 @@ export default function LiveShowSubmit() {
     let productTmp = productList.value.filter((ele) => ele.id !== productId);
 
     if (productTmp.length === 0) {
-      console.log("다비웠다.");
       setProductList({ value: [], check: false });
     } else {
       setProductList({ value: productTmp, check: true });
@@ -224,7 +219,6 @@ export default function LiveShowSubmit() {
   }
 
   function modiProduct(productId) {
-    console.log("수정" + productId);
     //찾기
     for (let i = 0; i < productList.value.length; i++) {
       if (productList.value[i].id === productId) {
@@ -260,7 +254,12 @@ export default function LiveShowSubmit() {
               onModifyClick={modiProduct}
               onDeleteClick={deleteProduct}
             />
-            <ProuctModifyBox modifyProduct={modifyProduct} />
+            <ProuctModifyBox
+              imgSrc={imgSrc}
+              modifyProduct={modifyProduct}
+              productList={productList}
+              setProductList={setProductList}
+            />
           </StyledBox>
         </StyledWindow>
         <BtnFlex>
@@ -279,11 +278,7 @@ export default function LiveShowSubmit() {
           )}
         </BtnFlex>
       </Body>
-      {camera ? (
-        <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} />
-      ) : (
-        <></>
-      )}
+      {camera ? <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} /> : <></>}
     </Page>
   );
 }
