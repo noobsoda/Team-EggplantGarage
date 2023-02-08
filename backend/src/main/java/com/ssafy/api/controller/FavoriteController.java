@@ -42,11 +42,10 @@ public class FavoriteController {
 
     }
     //찜 조회
-    @GetMapping("")
+    @GetMapping("{userId}")
     @ApiOperation(value = "찜 목록 조회", notes = "유저가 찜한 모든 라이브들을 조회한다.")
-    public ResponseEntity<FavoriteLiveGetRes> getFavoriteInfo(@RequestBody @ApiParam(value = "유저 ID 정보", required = true)Map<String, Object> reqMap){
+    public ResponseEntity<FavoriteLiveGetRes> getFavoriteInfo(@PathVariable @ApiParam(value = "유저 ID 정보", required = true)Long userId){
         //전체 방 목록 받아오기
-        Long userId = (Long)reqMap.get("userId");
         List<LiveContent> liveContentList = liveService.getLiveListByTitle("");
 
         //유저가 찜한 라이브 아이디 구해오기
