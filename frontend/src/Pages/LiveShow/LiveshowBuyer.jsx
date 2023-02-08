@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useLocation } from "react-router-dom";
 import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
-import LiveChatting from "../../Molecules/Box/LiveChatting";
+// import LiveChatting from "../../Molecules/Box/LiveChatting";
 import ChatInput from "../../Atoms/Inputs/ChatInput";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
@@ -84,7 +84,7 @@ export default function LiveshowBuyer() {
         </StyledSide>
       </StyledHeader>
       <StyledBody>
-        <LiveChatting />
+        {/* <LiveChatting /> */}
         <ChatInput />
       </StyledBody>
       {modalOpen && <ModalBuyer setModalOpen={setModalOpen} />}
