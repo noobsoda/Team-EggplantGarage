@@ -10,7 +10,6 @@ async function setLiveProduct(data, success, fail) {
   await fileApi.post(`/api/v1/products`, data).then(success).catch(fail);
 }
 
-
 /**
  *
  * @param {*} success 성공시 전달되는 콜백함수
@@ -94,4 +93,5 @@ export {
   getBuyerSuggestList,
   setBundleApproval,
   setBundleRefuse,
+  setLiveProduct,
 };

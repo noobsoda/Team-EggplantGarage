@@ -14,6 +14,8 @@ const StyledModal = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
+  min-width: 360px;
+  max-width: 435px;
 `;
 
 export default function ModalSmall(props) {
