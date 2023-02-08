@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import Body from "../../Templates/Layout/Body";
@@ -10,6 +10,8 @@ import ModalSetLocation from "../../Organisms/Modal/ModalSetLocation";
 import ModalSetCategory from "../../Organisms/Modal/ModalSetCategory";
 import ModalSetSort from "../../Organisms/Modal/ModalSetSort";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { getLives } from "../../util/api/liveApi";
 
 const FlexBox = styled.div`
   display: flex;
@@ -30,7 +32,7 @@ const Background = styled.div`
 
 export default function Search() {
   const initLocation = useLocation();
-  let isResult = false;
+  const [isResult, setIsResult] = useState(false);
   if (initLocation.state !== null) {
     isResult = initLocation.state.isResult;
   }
@@ -51,10 +53,29 @@ export default function Search() {
     setModal_3_Open(true);
   };
   const [category, setCategory] = useState(null);
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState(
+    useSelector((state) => state.location.location)
+  );
   const [sort, setSort] = useState(true);
-  let [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState("");
+  const [searchCondition, setSearchCondition] = useState({});
+  const [lives, setLives] = useState([]);
   //true이면 시청자순 false이면 가까운순
+  useEffect(() => {
+    setSearchCondition({
+      category: category,
+      distanceSort: sort ? "ASC" : null,
+      joinUserSort: sort ? null : "desc",
+      latitude: location.lat,
+      longitude: location.lng,
+      national: true,
+      title: "hi",
+    });
+    getLives(searchCondition, ({ data }) => {
+      console.log(data.liveContentList);
+      setLives(data.liveContentList);
+    });
+  }, [category, location, sort, keyword]);
 
   //카테고리 설정 자식 컴포넌트에서 받아온 callback 함수로받아온걸 데이터로 쏘기
   const selectedCategory = (data) => {
