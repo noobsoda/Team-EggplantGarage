@@ -18,7 +18,7 @@ export default function Like() {
       console.log(data.liveContentList);
       setLives(data.liveContentList);
     });
-  });
+  }, []);
   return (
     <>
       <Page>
