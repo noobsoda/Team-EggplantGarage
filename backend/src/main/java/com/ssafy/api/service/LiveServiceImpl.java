@@ -6,7 +6,6 @@ import com.ssafy.common.util.DistanceModule;
 import com.ssafy.common.util.LocationDistance;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
-import org.checkerframework.checker.nullness.Opt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,9 +78,9 @@ public class LiveServiceImpl implements LiveService {
     }
 
     @Override
-    public boolean postLiveByThumbnailUrl(String sessionId, String thumbnailUrl) {
+    public boolean postLiveByThumbnailUrl(Long liveId, String thumbnailUrl) {
 
-        Optional<List<Live>> oLiveList = liveRepository.findAllBySessionId(sessionId);
+        Optional<List<Live>> oLiveList = liveRepository.findAllById(liveId);
         List<Live> liveList = oLiveList.orElse(null);
 
         if (liveList == null || liveList.size() == 0) return false;
@@ -100,7 +99,7 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public boolean postLiveByCategories(LiveCategoriesReq liveCategoriesReq) {
-        Optional<List<Live>> oLiveList = liveRepository.findAllBySessionId(liveCategoriesReq.getSessionId());
+        Optional<List<Live>> oLiveList = liveRepository.findAllById(liveCategoriesReq.getLiveId());
         List<Live> liveList = oLiveList.orElse(null);
 
         if (liveList == null || liveList.size() == 0) return false;
@@ -142,9 +141,12 @@ public class LiveServiceImpl implements LiveService {
         LiveListGetRes liveListGetRes = new LiveListGetRes();
         List<LiveContent> Content = new ArrayList<>();
         for (Live live : liveList) {
+            if(!live.isLive())
+                continue;
             //라이브 카테고리 헬퍼 테이블 순회
             List<LiveCategory> liveCategories = live.getLiveCategoryList();
             List<Category> categoryList = new ArrayList<>();
+
 
             for (Iterator<LiveCategory> it = liveCategories.iterator(); it.hasNext(); ) {
                 LiveCategory liveCategory = it.next();
@@ -307,7 +309,7 @@ public class LiveServiceImpl implements LiveService {
 
     //방 상세보기 가져올 메서드
     @Override
-    public LiveDetailGetRes getLiveDetailBySessionId(String liveId) {
+    public LiveDetailGetRes getLiveDetailBySessionId(Long liveId) {
         // 디비에 방송 url 정보 조회
         Optional<Live> oLive = liveRepository.findById(liveId);
         if (!oLive.isPresent())
