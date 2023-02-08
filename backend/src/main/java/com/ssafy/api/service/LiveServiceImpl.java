@@ -307,9 +307,9 @@ public class LiveServiceImpl implements LiveService {
 
     //방 상세보기 가져올 메서드
     @Override
-    public LiveDetailGetRes getLiveDetailBySessionId(String sessionId) {
+    public LiveDetailGetRes getLiveDetailBySessionId(String liveId) {
         // 디비에 방송 url 정보 조회
-        Optional<Live> oLive = liveRepository.findBySessionId(sessionId);
+        Optional<Live> oLive = liveRepository.findById(liveId);
         if (!oLive.isPresent())
             return null;
         Live live = oLive.orElse(null);
@@ -322,7 +322,8 @@ public class LiveServiceImpl implements LiveService {
         for (Iterator<LiveCategory> it = liveCategories.iterator(); it.hasNext(); ) {
             LiveCategory liveCategory = it.next();
             //카테고리 아이디와 연관된 카테고리 테이블 조회
-
+            if(liveCategory.getCategory() == null)
+                continue;
             categoryList.add(Category.builder()
                     .id(liveCategory.getCategory().getId())
                     .name(liveCategory.getCategory().getName())
