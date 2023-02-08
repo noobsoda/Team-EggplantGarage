@@ -9,6 +9,7 @@ import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
 import { getLiveDetails } from "../../util/api/liveApi";
+import LikeBtn from "../../Atoms/IconButtons/liveshow/LikeBtn";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -43,6 +44,7 @@ const Title = styled.div`
 `;
 export default function LiveshowBuyer() {
   const [isSpeaker, setIsSpeaker] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const { state } = useLocation();
@@ -70,6 +72,12 @@ export default function LiveshowBuyer() {
             }}
           />
           <div>　</div>
+          <LikeBtn
+            buttonClick={() => {
+              setIsLiked((cur) => !cur);
+            }}
+            isClicked={isLiked}
+          />
           <SpeakerBtn
             buttonClick={() => {
               setIsSpeaker((cur) => !cur);
