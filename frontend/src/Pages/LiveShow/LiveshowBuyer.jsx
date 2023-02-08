@@ -48,13 +48,13 @@ export default function LiveshowBuyer() {
   const [modalOpen, setModalOpen] = useState(false);
 
   const { state } = useLocation();
-  console.log(state); // in this state liveshow id 담겨있음
+  // console.log(state); // in this state liveshow id 담겨있음
   //axios 통신후 데이터 뿌리기
   const [live, setLive] = useState(undefined);
   const [productList, setProductList] = useState(undefined);
   useEffect(() => {
     getLiveDetails(({ data }) => {
-      console.log(data);
+      // console.log(data);
       //콘솔에 찍어보고 live 넣기.
       setLive(data);
       setProductList(data.liveProductInfoList);

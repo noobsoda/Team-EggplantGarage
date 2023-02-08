@@ -18,7 +18,11 @@ import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import Body from "../../Templates/Layout/Body";
 
-import { createLive, setLiveCategory, setLiveImage } from "../../util/api/liveApi";
+import {
+  createLive,
+  setLiveCategory,
+  setLiveImage,
+} from "../../util/api/liveApi";
 import { setLiveProduct } from "../../util/api/productApi";
 import { dataURItoBlob } from "../../util/data";
 
@@ -141,8 +145,9 @@ export default function LiveShowSubmit() {
       liveInfo,
       async ({ data }) => {
         //라이브 카테고리 등록
+        const liveId = data.liveId;
         const categoryInfo = {
-          sessionId: id,
+          liveId: liveId,
           liveCategoryReqList: categorys.value.map((ele) => {
             return { categoryName: ele };
           }),
@@ -190,7 +195,7 @@ export default function LiveShowSubmit() {
         formData = new FormData(); // formData 객체를 생성한다.
         let file = dataURItoBlob(imgSrc);
         formData.append("img", file);
-        formData.append("sessionId", id);
+        formData.append("liveId", liveId);
         await setLiveImage(
           formData,
           ({ data }) => {},
@@ -199,7 +204,7 @@ export default function LiveShowSubmit() {
           }
         );
 
-        navigate(`/liveshowseller/${id}`);
+        navigate(`/liveshowseller/${liveId}`);
       },
       (e) => {
         console.warn("live fail");
@@ -246,7 +251,11 @@ export default function LiveShowSubmit() {
         </BtnFlex>
         {isModify ? <ProuctModifyBox /> : <></>}
       </Body>
-      {camera ? <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} /> : <></>}
+      {camera ? (
+        <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} />
+      ) : (
+        <></>
+      )}
     </Page>
   );
 }

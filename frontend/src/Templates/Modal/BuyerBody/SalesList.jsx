@@ -12,20 +12,27 @@ const InfoBox = styled.div`
   align-items: center;
 `;
 
-export default function SalesList({}) {
+export default function SalesList({ isSeller, productList }) {
   return (
     <>
-      <ItemCard buttonType={"check"} />
-      <ItemCard buttonType={"check"} />
-      <ItemCard buttonType={"check"} />
-      <ItemCard buttonType={"check"} />
-      <ItemCard buttonType={"check"} />
-      <ItemCard buttonType={"check"} />
-      <ItemCard buttonType={"check"} />
-      <InfoBox>
-        <BigInput placehold={"예상금액"} textalign="right" />
-        <BigBtn name={"구매요청"} />
-      </InfoBox>
+      {productList.map((item, i) => {
+        return (
+          <ItemCard
+            key={item.name}
+            buttonType={"check"}
+            isSeller={isSeller}
+            item={item}
+          />
+        );
+      })}
+      {isSeller ? (
+        <></>
+      ) : (
+        <InfoBox>
+          <BigInput placehold={"예상금액"} textalign="right" />
+          <BigBtn name={"구매요청"} />
+        </InfoBox>
+      )}
     </>
   );
 }
