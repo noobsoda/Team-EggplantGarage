@@ -32,4 +32,58 @@ async function nickNameCheck(userNickName, success, fail) {
     .then(success)
     .catch(fail);
 }
-export { signup, emailCheck, nickNameCheck };
+
+/**
+ * 로그인 진행
+ * @param {*} data {email, password}
+ * @param {*} success
+ * @param {*} fail
+ */
+async function login(data, success, fail) {
+  await api.post(`/api/v1/auth/login`, data).then(success).catch(fail);
+}
+/**
+ * 유저 정보 조회
+ * @param {*} success
+ * @param {*} fail
+ */
+async function userInfo(success, fail) {
+  console.log("정보좀");
+  console.log(sessionStorage.getItem("accessToken"));
+  await api
+    .get("/api/v1/users/me", {
+      headers: {
+        AUTHORIZATION: "Bearer " + sessionStorage.getItem("accessToken"),
+      },
+    })
+    .then(success)
+    .catch(fail);
+}
+
+/**
+ * 로그아웃 진행
+ * @param {*} success
+ * @param {*} fail
+ */
+async function logout(success, fail) {
+  await api.post("/api/v1/auth/logout").then(success).catch(fail);
+}
+
+/**
+ * 토큰 재발급 진행
+ * @param {*} success
+ * @param {*} fail
+ */
+async function tokenRegeneration(success, fail) {
+  await api.post(`/api/v1/auth/reissue`).then(success).catch(fail);
+}
+
+export {
+  signup,
+  emailCheck,
+  nickNameCheck,
+  login,
+  userInfo,
+  logout,
+  tokenRegeneration,
+};

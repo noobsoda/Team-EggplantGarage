@@ -9,18 +9,31 @@ const StyledBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+
+  margin-bottom: 8px;
+  margin-left: ${(props) => (props.center ? "8" : "0")}px;
+  margin-right: ${(props) => (props.center ? "8" : "0")}px;
 `;
 
 const StyledInnerBox = styled.div`
-  margin: 0 8px;
+  margin: 0 4px;
+  display: flex;
+  justify-content: space-between;
 `;
 
-export default function CategoryBtn({ categoryName, onClose }) {
+const CloseBtn = styled.button`
+  width: 16px;
+  height: 16px;
+  background: url("/image/close.svg") no-repeat 0px 0px;
+  background-size: 16px;
+`;
+
+export default function CategoryBtn({ center, categoryName, onClose }) {
   return (
-    <StyledBox className="body2-bold">
+    <StyledBox className="body2-bold" center={center}>
       <StyledInnerBox>
         <span>{categoryName}</span>
-        <button onClick={() => onClose(categoryName)}>X</button>
+        <CloseBtn onClick={() => onClose(categoryName)} />
       </StyledInnerBox>
     </StyledBox>
   );

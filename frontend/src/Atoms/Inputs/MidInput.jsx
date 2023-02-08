@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledInput = styled.input`
-  width: 192px;
+  width: calc(100% - 95.2px);
   height: 40px;
 
   border: 2px solid ${({ theme }) => theme.color.darkgrey};

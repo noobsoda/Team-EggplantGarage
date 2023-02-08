@@ -2,17 +2,21 @@ import React from "react";
 import styled from "styled-components";
 import TapbarBox from "../../Molecules/Box/TapbarBox";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setPage } from "../../store/tapbar";
 
 const StyledTapbar = styled.div`
-  width: 360px;
+  width: 100%;
   height: 56px;
   display: flex;
-  position: absolute;
-  bottom: 0;
+  justify-content: space-between;
+  // position: absolute;
+  // bottom: 0;
   z-index: 1;
   background-color: white;
   border-top: 0.5px solid;
   border-top-color: ${({ theme }) => theme.color.lightgrey};
+  box-sizing: border-box;
 `;
 export default function Tapbar() {
   const array = [
@@ -43,17 +47,20 @@ export default function Tapbar() {
     },
   ];
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   function goTo(location) {
     navigate("/" + location);
+    dispatch(setPage(location));
   }
   return (
     <StyledTapbar>
-      {array.map((box) => {
+      {array.map((box, index) => {
         return (
           <TapbarBox
             name={box.name}
             imgSrc={box.src}
-            key={box.name}
+            key={index}
+            category={box.category}
             clicked={() => goTo(box.category)}
           />
         );

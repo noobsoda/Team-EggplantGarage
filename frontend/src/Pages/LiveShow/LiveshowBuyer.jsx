@@ -1,131 +1,92 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
 import LiveChatting from "../../Molecules/Box/LiveChatting";
 import ChatInput from "../../Atoms/Inputs/ChatInput";
+import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
+import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
+import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
+import { getLiveDetails } from "../../util/api/liveApi";
 
 const StyledPage = styled.div`
-  width: 360px;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: grey;
 `;
 //일단은 컴포넌트들이랑 바텀시트 구현해놓자.
 const StyledSide = styled.div`
   width: 40px;
-  position: absolute;
-  left: 304px;
-  top: 24px;
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
 `;
-const MenuBtn = styled.button`
-  width: 40px;
-  height: 40px;
-  margin-bottom: 40px;
-  background: url("/image/liveshow/bigmenu-icon.svg") no-repeat 0px 0px;
+const StyledHeader = styled.div`
+  width: calc(100% - 48px);
+  padding: 40px 24px;
+  display: flex;
+  justify-content: space-between;
 `;
-const CameraBtn = styled.button`
-  width: 40px;
-  height: 40px;
-  margin-bottom: 16px;
-  background: url("/image/liveshow/camera-icon.svg") no-repeat 0px 0px;
+const StyledBody = styled.div`
+  height: calc(100% - 288px);
+  //264+ padding값
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  row-gap: 24px;
 `;
-const CameraBtnT = styled.button`
-  width: 40px;
-  height: 40px;
-  margin-bottom: 16px;
-  background: url("/image/liveshow/camera-icon.svg") no-repeat 0px 0px;
-  background-position-y: -40px;
+const Title = styled.div`
+  color: white;
 `;
-const MicBtn = styled.button`
-  width: 40px;
-  height: 40px;
-  margin-bottom: 16px;
-  background: url("/image/liveshow/mic-icon.svg") no-repeat 0px 0px;
-`;
-const MicBtnT = styled.button`
-  width: 40px;
-  height: 40px;
-  margin-bottom: 16px;
-  background: url("/image/liveshow/mic-icon.svg") no-repeat 0px 0px;
-  background-position-y: -40px;
-`;
-const SpeakerBtn = styled.button`
-  width: 40px;
-  height: 40px;
-  margin-bottom: 16px;
-
-  background: url("/image/liveshow/speaker-icon.svg") no-repeat 0px 0px;
-`;
-const SpeakerBtnT = styled.button`
-  width: 40px;
-  height: 40px;
-  margin-bottom: 16px;
-  background: url("/image/liveshow/speaker-icon.svg") no-repeat 0px 0px;
-  background-position-y: -40px;
-`;
-const ExitBtn = styled.button`
-  width: 40px;
-  height: 40px;
-  margin-bottom: 16px;
-
-  background: url("/image/liveshow/exit-icon.svg") no-repeat 0px 0px;
-`;
-const SendBtn = styled.button`
-  width: 24px;
-  height: 24px;
-  background: url("/image/liveshow/send-icon.svg") no-repeat 0px 0px;
-`;
-
 export default function LiveshowBuyer() {
-  const [isCamera, setIsCamera] = useState(true);
-  const [isMic, setIsMic] = useState(true);
+  const [isSpeaker, setIsSpeaker] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const { state } = useLocation();
+  console.log(state); // in this state liveshow id 담겨있음
+  //axios 통신후 데이터 뿌리기
+  const [live, setLive] = useState(undefined);
+  const [productList, setProductList] = useState(undefined);
+  useEffect(() => {
+    getLiveDetails(({ data }) => {
+      console.log(data);
+      //콘솔에 찍어보고 live 넣기.
+      setLive(data);
+      setProductList(data.liveProductInfoList);
+    });
+  }, []);
   const navigate = useNavigate();
   return (
     <StyledPage>
-      야호 여기 구매자페이지
-      <StyledSide>
-        <MenuBtn
-          onClick={() => {
-            setModalOpen(true);
-          }}
-        />
-        {isCamera ? (
-          <CameraBtn
-            onClick={() => {
-              setIsCamera(false);
+      <StyledHeader>
+        <Title className="show-header">라이브쇼 제목</Title>
+        <StyledSide>
+          <BigMenuBtn
+            buttonClick={() => {
+              setModalOpen(true);
             }}
           />
-        ) : (
-          <CameraBtnT
-            onClick={() => {
-              setIsCamera(true);
+          <div>　</div>
+          <SpeakerBtn
+            buttonClick={() => {
+              setIsSpeaker((cur) => !cur);
+            }}
+            isClicked={isSpeaker}
+          />
+          <ExitBtn
+            buttonClick={() => {
+              navigate("/");
             }}
           />
-        )}
-        {isMic ? (
-          <MicBtn
-            onClick={() => {
-              setIsMic(false);
-            }}
-          />
-        ) : (
-          <MicBtnT
-            onClick={() => {
-              setIsMic(true);
-            }}
-          />
-        )}
-        <ExitBtn
-          onClick={() => {
-            navigate("/");
-          }}
-        />
-      </StyledSide>
-      <LiveChatting />
-      <ChatInput />
+        </StyledSide>
+      </StyledHeader>
+      <StyledBody>
+        <LiveChatting />
+        <ChatInput />
+      </StyledBody>
       {modalOpen && <ModalBuyer setModalOpen={setModalOpen} />}
     </StyledPage>
   );

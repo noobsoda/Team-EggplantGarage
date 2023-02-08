@@ -1,6 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import BigBtn from "../../Atoms/Buttons/BigBtn";
+import Header from "../../Templates/Layout/Header";
+import Body from "../../Templates/Layout/Body";
+import Page from "../../Templates/Layout/Page";
+import styled from "styled-components";
+
+const ButtonBox = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Center = styled(Body)`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
 
 export default function SignUp() {
   const navigate = useNavigate();
@@ -8,9 +23,13 @@ export default function SignUp() {
     navigate("/signupemail");
   }
   return (
-    <div>
-      회원가입
-      <BigBtn name="이메일로 가입하기" buttonClick={goToEmail}></BigBtn>
-    </div>
+    <Page>
+      <Header headerName="회원가입" isName={true} />
+      <Center>
+        <ButtonBox>
+          <BigBtn name="이메일로 가입하기" buttonClick={goToEmail}></BigBtn>
+        </ButtonBox>
+      </Center>
+    </Page>
   );
 }

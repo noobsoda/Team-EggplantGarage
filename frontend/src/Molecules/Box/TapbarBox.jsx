@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 
 const StyledTapbarBox = styled.button`
@@ -12,11 +13,13 @@ const StyledIcon = styled.div`
   height: 24px;
   margin: 0 auto;
   background: url(${(props) => props.imgSrc}) no-repeat 0px 0px;
+  background-position-y: -${(props) => props.isClicked && 24}px;
 `;
-export default function TapbarBox({ name, imgSrc, clicked }) {
+export default function TapbarBox({ name, imgSrc, clicked, category }) {
+  const page = useSelector((state) => state.tapbar.page);
   return (
     <StyledTapbarBox onClick={clicked}>
-      <StyledIcon imgSrc={imgSrc} />
+      <StyledIcon imgSrc={imgSrc} isClicked={page === category} />
       <div className="tapbar">{name}</div>
     </StyledTapbarBox>
   );
