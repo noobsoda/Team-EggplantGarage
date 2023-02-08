@@ -51,7 +51,7 @@ export default function LiveShowSubmit() {
   const [imgSrc, setImgSrc] = useState("//:0"); //회전후 결과를 담는 canvas
 
   const [step, setStep] = useState(0);
-  const [isModify, setIsModify] = useState(false);
+  const [modifyProduct, setModifyProduct] = useState({});
 
   const [title, setTitle] = useState({ value: "", check: false });
   const [categorys, setCategorys] = useState({ value: [], check: false });
@@ -215,7 +215,6 @@ export default function LiveShowSubmit() {
   function deleteProduct(productId) {
     let productTmp = productList.value.filter((ele) => ele.id !== productId);
 
-    console.log(productTmp);
     if (productTmp.length === 0) {
       console.log("다비웠다.");
       setProductList({ value: [], check: false });
@@ -226,6 +225,15 @@ export default function LiveShowSubmit() {
 
   function modiProduct(productId) {
     console.log("수정" + productId);
+    //찾기
+    for (let i = 0; i < productList.value.length; i++) {
+      if (productList.value[i].id === productId) {
+        setModifyProduct(productList.value[i]);
+        break;
+      }
+    }
+
+    setStep(4); //수정 페이지로 이동
   }
   return (
     <Page>
@@ -252,7 +260,7 @@ export default function LiveShowSubmit() {
               onModifyClick={modiProduct}
               onDeleteClick={deleteProduct}
             />
-            <ProuctModifyBox />
+            <ProuctModifyBox modifyProduct={modifyProduct} />
           </StyledBox>
         </StyledWindow>
         <BtnFlex>
@@ -270,7 +278,6 @@ export default function LiveShowSubmit() {
             </>
           )}
         </BtnFlex>
-        {isModify ? <ProuctModifyBox /> : <></>}
       </Body>
       {camera ? (
         <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} />
