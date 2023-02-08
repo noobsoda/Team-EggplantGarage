@@ -28,7 +28,7 @@ import { dataURItoBlob } from "../../util/data";
 
 const StyledBox = styled.div`
   display: flex;
-  width: 1440px;
+  width: 1800px;
 
   transform: ${(props) => `translateX(${-props.phase * 360}px)`};
   transition: transform 0.2s ease-in-out;
@@ -212,6 +212,21 @@ export default function LiveShowSubmit() {
     );
   }
 
+  function deleteProduct(productId) {
+    let productTmp = productList.value.filter((ele) => ele.id !== productId);
+
+    console.log(productTmp);
+    if (productTmp.length === 0) {
+      console.log("다비웠다.");
+      setProductList({ value: [], check: false });
+    } else {
+      setProductList({ value: productTmp, check: true });
+    }
+  }
+
+  function modiProduct(productId) {
+    console.log("수정" + productId);
+  }
   return (
     <Page>
       <Header isName={true} headerName="라이브쇼 등록" />
@@ -231,7 +246,13 @@ export default function LiveShowSubmit() {
               productList={productList}
               setProductList={setProductList}
             />
-            <ProductListBox imgSrc={imgSrc} productList={productList} />
+            <ProductListBox
+              imgSrc={imgSrc}
+              productList={productList}
+              onModifyClick={modiProduct}
+              onDeleteClick={deleteProduct}
+            />
+            <ProuctModifyBox />
           </StyledBox>
         </StyledWindow>
         <BtnFlex>
