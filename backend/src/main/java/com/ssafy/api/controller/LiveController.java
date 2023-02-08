@@ -77,15 +77,15 @@ public class LiveController {
 
     @PostMapping("/save/img")
     @ApiOperation(value = "이미지 저장", notes = "이미지 DB 저장 후, idx 반환")
-    public ResponseEntity<? extends BaseResponseBody> postSaveImg(MultipartFile img, @RequestParam String sessionId) {
-        if (img.isEmpty()) {
+    public ResponseEntity<? extends BaseResponseBody> postSaveImg(MultipartFile img, @RequestParam Long liveId) {
+        if (img == null) {
             return ResponseEntity.status(204).body(BaseResponseBody.of(204, "이미지가 없습니다"));
         }
         Path path = fileService.fileSave(img);
         String thumbnailUrl = path.toString();
         //이메일로 아이디 찾고
         //그 아이디로 셀러 아이디 조회하고 해당 객체에 이미지 넣기
-        if (liveService.postLiveByThumbnailUrl(sessionId, thumbnailUrl)) {
+        if (liveService.postLiveByThumbnailUrl(liveId, thumbnailUrl)) {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "이미지 넣기 성공"));
         } else {
             return ResponseEntity.status(404).body(BaseResponseBody.of(404, "해당 라이브가 없습니다"));
@@ -96,8 +96,8 @@ public class LiveController {
 
     @PostMapping("/detail")
     @ApiOperation(value = "방 상세정보 조회", notes = "방의 상세 정보와 유저 목록을 조회한다.")
-    public ResponseEntity<LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, String> sessionMap) {
-        String liveId = sessionMap.get("liveId");
+    public ResponseEntity<LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, Long> sessionMap) {
+        Long liveId = sessionMap.get("liveId");
 
         LiveDetailGetRes liveDetailGetRes = liveService.getLiveDetailBySessionId(liveId);
         //상품도 추가로 보여주기
