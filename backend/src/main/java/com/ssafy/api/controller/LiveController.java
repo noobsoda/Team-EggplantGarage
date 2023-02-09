@@ -170,6 +170,10 @@ public class LiveController {
             liveContentList = liveService.searchSortUserJoinLiveList(liveContentList, userJoinSort);
         }
 
+        if(liveAllInfoGetReq.getPage() > 0) {
+            liveContentList = liveService.setPageaLiveList(liveContentList, liveAllInfoGetReq.getPage());
+        }
+
 
 
 

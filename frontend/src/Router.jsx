@@ -11,6 +11,7 @@ import Login from "./Pages/User/Login";
 import Search from "./Pages/Search/Search";
 import Mypage from "./Pages/Mypage/Mypage";
 import Chat from "./Pages/Chat/Chat";
+import ChatRoom from "./Pages/Chat/ChatRoom";
 import Like from "./Pages/Like/Like";
 import Category from "./Pages/Main/Category";
 import InfoEdit from "./Pages/Mypage/InfoEdit";
@@ -58,6 +59,7 @@ const Router = () => {
     { path: "/search", element: <Search /> },
     { path: "/like", element: <Like /> },
     { path: "/chat", element: <Chat /> },
+    { path: "/chat/room", element: <ChatRoom /> },
     { path: "/mypage", element: <Mypage /> },
     { path: "/category", element: <Category /> },
     { path: "/infoedit", element: <InfoEdit /> },

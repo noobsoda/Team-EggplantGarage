@@ -76,7 +76,9 @@ export default function ItemCard({
           <ExtraSmallButton
             name="후기작성"
             buttonClick={() => {
-              navigate("/writereview");
+              navigate("/writereview", {
+                state: { productId: item.id, isSellr: isSeller },
+              });
             }}
           />
         ) : (
@@ -86,7 +88,13 @@ export default function ItemCard({
           <ExtraSmallButton
             name="후기열람"
             buttonClick={() => {
-              navigate("/review");
+              navigate("/review", {
+                state: {
+                  myReviewId: item.myReviewId,
+                  otherReviewId: item.otherReviewId,
+                  otherName: item.otherName,
+                },
+              });
             }}
           />
         ) : (

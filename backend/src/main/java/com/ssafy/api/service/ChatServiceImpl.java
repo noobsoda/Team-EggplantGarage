@@ -1,7 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.ChatMessageSendReq;
-import com.ssafy.api.response.ChatRoomDetailRes;
+import com.ssafy.api.response.ChatMessageRes;
 import com.ssafy.api.response.ChatRoomRes;
 import com.ssafy.db.entity.ChatMessage;
 import com.ssafy.db.entity.ChatRoom;
@@ -40,7 +40,7 @@ public class ChatServiceImpl implements ChatService {
                 .firstUser(sender)
                 .secondUser(receiver)
                 .build();
-        return ChatRoomRes.of(chatRoom, senderId);
+        return ChatRoomRes.of(chatRoomRepository.save(chatRoom), senderId);
     }
 
     @Override
@@ -56,17 +56,16 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public ChatRoomDetailRes getChatMessageListByChatRoomId(long chatRoomId, long senderId) {
+    public List<ChatMessageRes> getChatMessageByChatRoomId(long chatRoomId) {
         ChatRoom chatRoom = chatRoomRepository.findByid(chatRoomId).orElse(null);
-        return ChatRoomDetailRes.of(chatRoom, senderId);
+        return ChatMessageRes.of(chatRoom);
     }
 
     @Override
     public ChatMessage saveMessage(ChatMessageSendReq chatMessageSendReq) {
         ChatRoom chatRoom = chatRoomRepository.findByid(chatMessageSendReq.getChatRoomId()).orElse(null);
-        boolean isFirstUser = (chatRoom.getFirstUser().getId() == chatMessageSendReq.getSenderId()) ? true : false;
         ChatMessage chatMessage = ChatMessage.builder()
-                .isFirstUser(isFirstUser)
+                .senderId(chatMessageSendReq.getSenderId())
                 .content(chatMessageSendReq.getContent())
                 .createdAt(LocalDateTime.now())
                 .chatRoom(chatRoom)

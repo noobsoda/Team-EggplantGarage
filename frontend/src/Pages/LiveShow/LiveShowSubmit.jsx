@@ -28,7 +28,7 @@ import { dataURItoBlob } from "../../util/data";
 
 const StyledBox = styled.div`
   display: flex;
-  width: 1440px;
+  width: 1800px;
 
   transform: ${(props) => `translateX(${-props.phase * 360}px)`};
   transition: transform 0.2s ease-in-out;
@@ -51,13 +51,15 @@ export default function LiveShowSubmit() {
   const [imgSrc, setImgSrc] = useState("//:0"); //회전후 결과를 담는 canvas
 
   const [step, setStep] = useState(0);
-  const [isModify, setIsModify] = useState(false);
+  const [modifyProduct, setModifyProduct] = useState({});
 
   const [title, setTitle] = useState({ value: "", check: false });
   const [categorys, setCategorys] = useState({ value: [], check: false });
   const [productList, setProductList] = useState({ value: [], check: false });
 
   const [camera, setCamera] = useState(false);
+  const [goCrop, setGoCrop] = useState(true); //수정화면의 자르기
+
   function nextStep() {
     if (step === 3) return;
 
@@ -213,6 +215,26 @@ export default function LiveShowSubmit() {
     );
   }
 
+  function deleteProduct(productId) {
+    let productTmp = productList.value.filter((ele) => ele.id !== productId);
+
+    if (productTmp.length === 0) {
+      setProductList({ value: [], check: false });
+    } else {
+      setProductList({ value: productTmp, check: true });
+    }
+  }
+
+  function modiProduct(productId) {
+    //찾기
+    for (let i = 0; i < productList.value.length; i++) {
+      if (productList.value[i].id === productId) {
+        setModifyProduct(productList.value[i]);
+        break;
+      }
+    }
+    setStep(4); //수정 페이지로 이동
+  }
   return (
     <Page>
       <Header isName={true} headerName="라이브쇼 등록" />
@@ -232,7 +254,20 @@ export default function LiveShowSubmit() {
               productList={productList}
               setProductList={setProductList}
             />
-            <ProductListBox imgSrc={imgSrc} productList={productList} />
+            <ProductListBox
+              imgSrc={imgSrc}
+              productList={productList}
+              onModifyClick={modiProduct}
+              onDeleteClick={deleteProduct}
+            />
+            <ProuctModifyBox
+              imgSrc={imgSrc}
+              modifyProduct={modifyProduct}
+              productList={productList.value}
+              setProductList={setProductList}
+              deleteProduct={deleteProduct}
+              backStep={backStep}
+            />
           </StyledBox>
         </StyledWindow>
         <BtnFlex>
@@ -243,6 +278,10 @@ export default function LiveShowSubmit() {
               <MidBtn name="PREV" buttonClick={backStep} />
               <MidBtn name="방송시작" buttonClick={goLive} />
             </>
+          ) : step === 4 ? (
+            <>
+              <BigBtn name="뒤로" buttonClick={backStep} />
+            </>
           ) : (
             <>
               <MidBtn name="PREV" buttonClick={backStep} />
@@ -250,7 +289,6 @@ export default function LiveShowSubmit() {
             </>
           )}
         </BtnFlex>
-        {isModify ? <ProuctModifyBox /> : <></>}
       </Body>
       {camera ? (
         <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} />

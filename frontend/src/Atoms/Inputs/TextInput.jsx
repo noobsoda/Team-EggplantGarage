@@ -11,12 +11,12 @@ const StyledInput = styled.input`
   color: ${({ theme }) => theme.color.black};
 `;
 
-export default function TextInput({ placehold, inputValue, type }) {
+export default function TextInput({ placehold, onChange, type }) {
   return (
     <StyledInput
       type={type}
       className="body1-regular"
-      onChange={inputValue}
+      onChange={onChange}
       placeholder={placehold}
     ></StyledInput>
   );

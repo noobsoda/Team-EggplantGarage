@@ -65,7 +65,7 @@ export default function Main() {
     };
     getLives(nationalSearchCondition, ({ data }) => {
       // console.log(data.liveContentList);
-      // console.log(nationalSearchCondition);
+      console.log(nationalSearchCondition);
       setAllLives(data.liveContentList);
     });
     let location = { lat: lat, lng: lng };

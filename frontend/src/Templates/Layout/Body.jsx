@@ -8,8 +8,8 @@ const StyledBody = styled.div`
   // overflow-y: auto;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
-  overflow: hidden;
+  overflow-y: scroll;
+  /* overflow: hidden; */
   row-gap: 8px;
 `;
 
