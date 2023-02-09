@@ -97,7 +97,7 @@ export default function LiveshowBuyer() {
 
   return (
     <StyledPage>
-      <Seller sessionId={liveId} />
+      <Seller liveId={liveId} />
       <LiveLayout>
         <StyledHeader>
           <Title className="show-header">{liveInfo.title}</Title>

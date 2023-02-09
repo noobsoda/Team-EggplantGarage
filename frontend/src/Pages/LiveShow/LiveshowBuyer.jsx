@@ -11,8 +11,6 @@ import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
 import LikeBtn from "../../Atoms/IconButtons/liveshow/LikeBtn";
 
-import LiveChatting from "../../Molecules/Box/LiveChatting";
-
 import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
 
 import Buyer from "../../Templates/LiveShow/Buyer";
@@ -109,6 +107,7 @@ export default function LiveshowBuyer() {
   }
   return (
     <StyledPage>
+      <Buyer liveId={liveId} />
       <StyledHeader>
         <Title className="show-header">{liveInfo.title}</Title>
         <StyledSide>
@@ -133,8 +132,7 @@ export default function LiveshowBuyer() {
         </StyledSide>
       </StyledHeader>
       <StyledBody>
-        {/* <LiveChatting /> */}
-        {/* <ChatInput /> */}
+        <ChatInput />
       </StyledBody>
       {modalOpen && <ModalBuyer setModalOpen={setModalOpen} />}
     </StyledPage>

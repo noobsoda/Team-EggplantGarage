@@ -15,7 +15,7 @@ const StyledLive = styled.div`
   z-index: 0;
 `;
 
-export default function Seller({ sessionId, liveId }) {
+export default function Seller({ liveId }) {
   const userInfo = useSelector(checkUserInfo);
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름
@@ -83,7 +83,7 @@ export default function Seller({ sessionId, liveId }) {
     });
 
     // --- 4) 토큰을 받아서 연결을 한다.
-    getToken(sessionId, "PUBLISHER").then((token) => {
+    getToken(liveId, "PUBLISHER").then((token) => {
       mySession
         .connect(token, { clientData: myUserName }) //해당 토큰을 가지고 유저명과 함께 연결을 진행
         .then(async () => {
@@ -108,7 +108,9 @@ export default function Seller({ sessionId, liveId }) {
 
           // 장비를 받는다.
           var devices = await OV.getDevices();
-          var videoDevices = devices.filter((device) => device.kind === "videoinput");
+          var videoDevices = devices.filter(
+            (device) => device.kind === "videoinput"
+          );
           //현재 판매자의 방송 장비를 확인
           var currentVideoDeviceId = publisher.stream
             .getMediaStream()
@@ -124,7 +126,11 @@ export default function Seller({ sessionId, liveId }) {
           setMainStreamManager(publisher);
         })
         .catch((error) => {
-          console.log("There was an error connecting to the session:", error.code, error.message);
+          console.log(
+            "There was an error connecting to the session:",
+            error.code,
+            error.message
+          );
         });
     });
   }
