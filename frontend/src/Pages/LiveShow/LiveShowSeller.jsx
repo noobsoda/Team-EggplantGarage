@@ -8,6 +8,7 @@ import LiveChatBox from "../../Molecules/Box/LiveChatBox";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
+import { closeLive } from "../../util/api/liveApi";
 
 import Seller from "../../Templates/LiveShow/Seller";
 
@@ -73,6 +74,12 @@ export default function LiveshowBuyer() {
 
   const navigate = useNavigate();
 
+  const exit = () => {
+    closeLive(liveId, (data) => {
+      console.log(data);
+    });
+  };
+
   //10초마다 묶음 제안 요청 왔는지 확인
   useInterval(() => {
     getLiveBundle(
@@ -121,6 +128,7 @@ export default function LiveshowBuyer() {
             />
             <ExitBtn
               buttonClick={() => {
+                exit();
                 navigate("/");
               }}
             />

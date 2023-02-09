@@ -107,6 +107,12 @@ async function getImage(filename) {
     });
 }
 
+async function getSalesItemHistory(liveId, success, fail) {
+  await api
+    .get(`/api/v1/history/live/` + liveId)
+    .then(success)
+    .catch(fail);
+}
 export {
   getPurchasedList,
   postBundle,
@@ -117,4 +123,5 @@ export {
   setBundleRefuse,
   setLiveProduct,
   getLiveBundle,
+  getSalesItemHistory,
 };

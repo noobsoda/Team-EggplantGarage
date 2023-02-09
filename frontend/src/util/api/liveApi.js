@@ -210,7 +210,7 @@ async function getLiveDetail(id, success, fail) {
  * @param {*} id liveId pk
  */
 async function closeLive(id, success, fail) {
-  return await api.fetch(`/api/v1/lives/${id}`).thend(success).catch(fail);
+  return await api.patch(`/api/v1/lives/${id}`).then(success).catch(fail);
 }
 async function getSalesHistory(sellerId, success, fail) {
   const lives = await api
