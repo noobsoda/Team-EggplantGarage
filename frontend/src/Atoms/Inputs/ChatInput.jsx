@@ -10,9 +10,7 @@ const StyledChatting = styled.div`
   background-color: white;
 `;
 
-const StyledMessage = styled.ul`
-
-`;
+const StyledMessage = styled.ul``;
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -46,7 +44,6 @@ const SendBtn = styled.button`
   ); */
 `;
 
-
 export default function ChatInput() {
   // const nickname = useLocation().state.nickname;
   const nickname = "홍길동"; // 닉네임
@@ -64,13 +61,13 @@ export default function ChatInput() {
   const connect = () => {
     console.log("connect");
     stompClient.connect({}, connectSuccess, connectError);
-  }
-  
+  };
+
   useEffect(() => {
     console.log("useEffect!");
     if (stompClient === null) {
       return;
-    } 
+    }
     connect();
   }, []);
 
@@ -78,59 +75,63 @@ export default function ChatInput() {
     scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
   }, []);
 
-
   const connectSuccess = () => {
     console.log("connectSuccess!");
     stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
-    stompClient.send("/pub/live/addUser/" + liveId,
-        {},
-        JSON.stringify({sender: nickname, type: 'JOIN', roomId: liveId})
-    )
-  }
+    stompClient.send(
+      "/pub/live/addUser/" + liveId,
+      {},
+      JSON.stringify({ sender: nickname, type: "JOIN", roomId: liveId })
+    );
+  };
 
   const connectError = (error) => {
     console.log("connectError!");
-  }
-  
+  };
+
   const onMessageReceived = (payload) => {
     console.log("onMessageReceived!");
-  
+
     var message = JSON.parse(payload.body);
-    var messageElement = document.createElement('p');
+    var messageElement = document.createElement("p");
 
-    if(message.type === 'JOIN') {
-        message.content = '[' + message.sender + '] 님이 입장하셨습니다.';
+    if (message.type === "JOIN") {
+      message.content = "[" + message.sender + "] 님이 입장하셨습니다.";
     } else {
-        var usernameElement = document.createElement('span');
-        var usernameText = document.createTextNode("[" + message.sender + "] ");
+      var usernameElement = document.createElement("span");
+      var usernameText = document.createTextNode("[" + message.sender + "] ");
 
-        usernameElement.appendChild(usernameText);
-        messageElement.appendChild(usernameElement);
+      usernameElement.appendChild(usernameText);
+      messageElement.appendChild(usernameElement);
     }
-  
-    var textElement = document.createElement('span');
+
+    var textElement = document.createElement("span");
     var messageText = document.createTextNode(message.content);
     textElement.appendChild(messageText);
-  
+
     messageElement.appendChild(textElement);
     messageArea.current.appendChild(messageElement);
-  }
-  
+  };
+
   const sendMessage = () => {
     console.log("sendMessage!");
-  
+
     if (message && stompClient) {
       var chatMessage = {
         sender: nickname,
         roomId: liveId,
         content: message,
-        type: 'CHAT'
+        type: "CHAT",
       };
-      stompClient.send("/pub/live/message/" + liveId, {}, JSON.stringify(chatMessage));
+      stompClient.send(
+        "/pub/live/message/" + liveId,
+        {},
+        JSON.stringify(chatMessage)
+      );
       scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
     setMessage("");
-  }
+  };
 
   const onKeyPress = (e) => {
     if (e.key === "Enter") {
@@ -139,15 +140,15 @@ export default function ChatInput() {
   };
 
   const inputChangeHandler = (event) => {
-    setMessage(event.target.value)
-  }
+    setMessage(event.target.value);
+  };
 
   return (
     <StyledContainer>
       <StyledChatting ref={scrollRef}>
         <StyledMessage ref={messageArea} />
-      </StyledChatting> 
-      
+      </StyledChatting>
+
       <StyledInput
         type="text"
         className="body1-regular"
