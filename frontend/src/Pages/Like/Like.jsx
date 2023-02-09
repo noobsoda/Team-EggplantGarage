@@ -4,7 +4,7 @@ import Body from "../../Templates/Layout/Body";
 import LikeBody from "../../Organisms/Like/LikeBody";
 import Page from "../../Templates/Layout/Page";
 import { useState } from "react";
-import { getLikeLives } from "../../util/api/liveApi";
+import { getLikeLives } from "../../util/api/favoriteApi";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
 
