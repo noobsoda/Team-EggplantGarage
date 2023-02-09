@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
@@ -6,6 +7,8 @@ import { getStompClient } from "../../store/socket";
 import Body from "../../Templates/Layout/Body";
 import styled from "styled-components";
 import ChattingMessage from "../../Organisms/Chat/ChattingMessage";
+import { checkUserInfo } from "../../store/user";
+import { getChatMessageList } from "../../util/api/chatApi";
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -46,21 +49,23 @@ const ChatBody = styled.div`
 `;
 
 export default function ChatRoom() {
+  console.log(useLocation().state);
   const InputRef = useRef(undefined);
-
-  const roomId = useLocation().state.roomId; // 현재 URL을 통해 RoomId를 얻어옴
-  const [chattingMessages, setChattingMessages] = useState([]); // 주고 받은 메시지 리스트
+  const userInfo = useSelector(checkUserInfo);
+  const senderId = userInfo.id;
+  const receiverId = useLocation().state.receiverId;
+  const receiverName = useLocation().state.receiverName;
+  const chatRoomId = useLocation().state.chatRoomId; // 현재 URL을 통해 RoomId를 얻어옴
+  const [chatMessagesList, setChatMessagesList] = useState([]); // 주고 받은 메시지 리스트
   const [message, setMessage] = useState(""); // 입력창 메시지
-  const [userId, setUserId] = useState(1); // 나의 아이디(리덕스로 초기값 가져오기로 수정)
-  const [users, setUserList] = useState([]); // 유저 리스트(나, 상대방)
-  const [toUser, setToUser] = useState({}); // 상대방 유저
   const stompClient = getStompClient();
   const scrollRef = useRef();
   let navigate = useNavigate();
+  const dispatch = useDispatch();
 
   // 메시지 배열에 새로운 메시지 추가
   const addMessage = (message) => {
-    setChattingMessages((prev) => [...prev, message]);
+    setChatMessagesList((prev) => [...prev, message]);
   };
 
   // 메시지 받기 : 받은 메시지를 메시지 배열에 추가
@@ -69,7 +74,7 @@ export default function ChatRoom() {
     stompClient.connect(
       {},
       () => {
-        stompClient.subscribe("/sub/room/" + roomId, (data) => {
+        stompClient.subscribe("/sub/room/" + chatRoomId, (data) => {
           const newMessage = JSON.parse(data.body);
           addMessage(newMessage);
         });
@@ -88,26 +93,17 @@ export default function ChatRoom() {
     }
     connect();
     // dispatch의 내부에 있는 chattingMessageList라는 함수의 액션 객체를 반환 받아 setChattingMessages, setUserList 하도록 로직 추가 필요
-    setChattingMessages([]); // 일단 주고받은 메시지 없다고 선언
-    setUserList([
-      { id: 1, name: "나" },
-      { id: 2, name: "상대방" },
-    ]);
+    getChatMessageList(chatRoomId, ({ data }) => {
+      setChatMessagesList(data);
+    });
   }, []);
-
-  // 의존성 변수 users가 변경될 때만 함수 호출
-  // 입장했을 때 setToUser를 설정하기 위해 실행됨
-  // sender가 상대방이라면 toUser(receiver)를 나로 설정
-  useEffect(() => {
-    users.map((user) => user.id != userId && setToUser(user));
-  }, [users]);
 
   // 의존성 변수 chattingMessages가 변경될 때만 함수 호출
   // 새로운 메시지가 생성될때 채팅 스크롤
   // 메시지가 추가될 경우 이벤트가 발생하여, 스크롤을 가장 밑으로 내림
   useEffect(() => {
     scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [chattingMessages]);
+  }, [chatMessagesList]);
 
   // 메시지 보내기
   const sendMessage = () => {
@@ -117,9 +113,9 @@ export default function ChatRoom() {
         {},
         JSON.stringify({
           content: message,
-          senderId: userId,
-          receiverId: toUser.id,
-          chatRoomId: roomId,
+          senderId: senderId,
+          receiverId: receiverId,
+          chatRoomId: chatRoomId,
           sendTime: null,
         })
       );
@@ -142,11 +138,9 @@ export default function ChatRoom() {
       {/* scrollRef를 이용하여 아래 div 영역을 스크롤 조작 */}
       <Body>
         <ChatBody ref={scrollRef}>
+          <div> {receiverName}님과의 채팅방</div>
           <div>
-            {users.map((user) => user.id != userId && <div>{toUser.name}</div>)}
-          </div>
-          <div>
-            <ChattingMessage chattingMessages={chattingMessages} />
+            <ChattingMessage chattingMessages={chatMessagesList} />
           </div>
         </ChatBody>
         <StyledContainer>

@@ -2,7 +2,6 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import userReducer from "./user";
 import tapbarReducer from "./tapbar";
 import locationReducer from "./location";
-import chatReducer from "./chat";
 import {
   persistStore,
   persistReducer,
@@ -25,7 +24,6 @@ const rootReducer = combineReducers({
   user: userReducer,
   tapbar: tapbarReducer,
   location: locationReducer,
-  chat: chatReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
