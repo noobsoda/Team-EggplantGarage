@@ -15,11 +15,11 @@ import java.util.List;
 public interface LiveService {
     Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user);
 
-    LiveDetailGetRes getLiveDetailBySessionId(String sessionId);
+    LiveDetailGetRes getLiveDetailBySessionId(Long liveId);
 
     boolean getLiveCheckSessionIdBySessionId(String url);
 
-    boolean postLiveByThumbnailUrl(String sessionId, String thumbnailUrl);
+    boolean postLiveByThumbnailUrl(Long liveId, String thumbnailUrl);
 
     boolean postLiveByCategories(LiveCategoriesReq liveCategoriesReq);
 

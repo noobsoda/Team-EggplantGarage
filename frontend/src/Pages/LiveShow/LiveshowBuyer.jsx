@@ -9,6 +9,7 @@ import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
 import { getLiveDetails } from "../../util/api/liveApi";
+import LikeBtn from "../../Atoms/IconButtons/liveshow/LikeBtn";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -30,7 +31,7 @@ const StyledHeader = styled.div`
   justify-content: space-between;
 `;
 const StyledBody = styled.div`
-  height: calc(100% - 288px);
+  height: calc(100% - 328px);
   //264+ padding값
   padding: 0 24px 24px;
   display: flex;
@@ -43,16 +44,17 @@ const Title = styled.div`
 `;
 export default function LiveshowBuyer() {
   const [isSpeaker, setIsSpeaker] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const { state } = useLocation();
-  console.log(state); // in this state liveshow id 담겨있음
+  // console.log(state); // in this state liveshow id 담겨있음
   //axios 통신후 데이터 뿌리기
   const [live, setLive] = useState(undefined);
   const [productList, setProductList] = useState(undefined);
   useEffect(() => {
     getLiveDetails(({ data }) => {
-      console.log(data);
+      // console.log(data);
       //콘솔에 찍어보고 live 넣기.
       setLive(data);
       setProductList(data.liveProductInfoList);
@@ -70,6 +72,12 @@ export default function LiveshowBuyer() {
             }}
           />
           <div>　</div>
+          <LikeBtn
+            buttonClick={() => {
+              setIsLiked((cur) => !cur);
+            }}
+            isClicked={isLiked}
+          />
           <SpeakerBtn
             buttonClick={() => {
               setIsSpeaker((cur) => !cur);

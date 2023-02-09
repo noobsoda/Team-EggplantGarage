@@ -70,7 +70,20 @@ async function closeSession(sessionId) {
 
 async function getLives(searchCondition, success, fail) {
   const lives = await api
-    .get(`/api/v1/lives/search`, searchCondition)
+    .post(`/api/v1/lives/search`, searchCondition)
+    .then(success);
+  return lives;
+}
+ /**
+  * 찜한 live 조회
+  * @param {*} success 
+  * @param {*} userId 유저아이디
+  */
+
+
+async function getLikeLives(userId, success, fail) {
+  const lives = await api
+    .get("/api/v1/favorite/" + userId)
     .then(success);
   return lives;
 }
@@ -148,7 +161,7 @@ async function getLiveDetails(sessionId, success, fail) {
  * @param {*} data {title,description,url,live,latitude,longtitude, sessionId}
  * @param {*} success
  * @param {*} fail
- * @returns
+ * @returns {*} {liveId:11}
  */
 async function createLive(data, success, fail) {
   const lives = await api
@@ -164,7 +177,7 @@ async function createLive(data, success, fail) {
 
 /**
  * 라이브 카테고리 설정
- * @param {*} data {liveCategoryReqList{ categoryName:""}}
+ * @param {*} data {liveId:11, liveCategoryReqList{ categoryName:""}}
  * @param {*} success
  * @param {*} fail
  */
@@ -177,7 +190,7 @@ async function setLiveCategory(data, success, fail) {
 
 /**
  * 라이브 썸네일 설정
- * @param {*} data
+ * @param {*} data {liveId:11,img:file}
  * @param {*} success
  * @param {*} fail
  * @returns
@@ -192,21 +205,22 @@ async function setLiveImage(data, success, fail) {
 /**
  * 라이브의 상세 정보 조회
  * 제목, 카테고리, 등록된 물품, 참여자,
- * @param {*} id 라이브의 방 번호 - sessionId
+ * @param {*} id 라이브의 방 번호 - liveid(pk)
  * @param {*} success
  * @param {*} fail
  * @returns
  */
 async function getLiveDetail(id, success, fail) {
+  console.log(id);
   return await api
-    .get(`/api/v1/lives/detail`, { sessionId: id })
+    .post(`/api/v1/lives/detail`, { liveId: id })
     .then(success)
     .catch(fail);
 }
 
 /**
  * 라이브를 종료 시킨다 isLive = false
- * @param {*} id live pk
+ * @param {*} id liveId pk
  */
 async function closeLive(id, success, fail) {
   return await api.fetch(`/api/v1/lives/${id}`).thend(success).catch(fail);
@@ -229,4 +243,6 @@ export {
   getMyLives,
   getLiveDetails,
   getSalesHistory,
+  getLives,
+  getLikeLives,
 };

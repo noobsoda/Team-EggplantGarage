@@ -1,9 +1,9 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 
-import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
+import ModalSeller from "../../Organisms/Modal/ModalBuyer";
 import LiveChatting from "../../Molecules/Box/LiveChatting";
 import ChatInput from "../../Atoms/Inputs/ChatInput";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
@@ -13,6 +13,9 @@ import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
 import Seller from "../../Templates/LiveShow/Seller";
 
 import { getLiveDetail } from "../../util/api/liveApi";
+import { getLiveBundle } from "../../util/api/productApi";
+
+import useInterval from "../../hook/useInterval";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -61,24 +64,45 @@ export default function LiveshowBuyer() {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [liveInfo, setLiveInfo] = useState({});
+  const [bundleList, setBundleList] = useState([]);
+
+  const navigate = useNavigate();
+
+  //10초마다 묶음 제안 요청 왔는지 확인
+  useInterval(() => {
+    getLiveBundle(
+      sessionId,
+      ({ data }) => {
+        console.log("제안온 목록");
+        console.log(data);
+        setBundleList(data);
+      },
+      () => {
+        console.warn("bundle load fail");
+      }
+    );
+  }, 10000);
 
   useEffect(() => {
     getLiveDetail(
       sessionId,
       ({ data }) => {
+        console.log("라이브 정보에요");
         console.log(data);
+        setLiveInfo(data);
       },
-      () => {}
+      () => {
+        console.warn("live info fail");
+      }
     );
   }, []);
 
-  const navigate = useNavigate();
   return (
     <StyledPage>
       <Seller sessionId={sessionId} />
       <LiveLayout>
         <StyledHeader>
-          <Title className="show-header">라이브쇼 제목</Title>
+          <Title className="show-header">{liveInfo.title}</Title>
           <StyledSide>
             <BigMenuBtn
               buttonClick={() => {
@@ -105,7 +129,14 @@ export default function LiveshowBuyer() {
         </StyledBody>
       </LiveLayout>
 
-      {modalOpen && <ModalBuyer setModalOpen={setModalOpen} />}
+      {modalOpen && (
+        <ModalSeller
+          productList={liveInfo.liveProductInfoList}
+          bundleList={bundleList}
+          setModalOpen={setModalOpen}
+          isSeller={true}
+        />
+      )}
     </StyledPage>
   );
 }

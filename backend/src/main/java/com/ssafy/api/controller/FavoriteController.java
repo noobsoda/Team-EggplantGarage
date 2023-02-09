@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(value = "찜 API", tags = {"Favorite."})
 @RestController
@@ -41,9 +42,9 @@ public class FavoriteController {
 
     }
     //찜 조회
-    @GetMapping("")
+    @GetMapping("{userId}")
     @ApiOperation(value = "찜 목록 조회", notes = "유저가 찜한 모든 라이브들을 조회한다.")
-    public ResponseEntity<FavoriteLiveGetRes> getFavoriteInfo(@RequestParam @ApiParam(value = "유저 ID 정보", required = true)Long userId ){
+    public ResponseEntity<FavoriteLiveGetRes> getFavoriteInfo(@PathVariable @ApiParam(value = "유저 ID 정보", required = true)Long userId){
         //전체 방 목록 받아오기
         List<LiveContent> liveContentList = liveService.getLiveListByTitle("");
 

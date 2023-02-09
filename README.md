@@ -30,4 +30,3 @@ Web RTC를 활용한 비대면 Garage Sale
 ### 허진선
 
 백엔드 개발(1:1 채팅, 마이페이지)
-//webhook
