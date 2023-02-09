@@ -307,6 +307,26 @@ public class LiveServiceImpl implements LiveService {
         return liveContentList;
     }
 
+    @Override
+    public List<LiveContent> setPageaLiveList(List<LiveContent> liveContentListInfo, int page) {
+        List<LiveContent> liveContentList = new ArrayList<>();
+        int size = liveContentListInfo.size();
+
+        if(size <= page * 10 && size <= (page -1) * 10){
+            return null;
+        }
+        else if(size > (page -1) * 10 && size < page * 10){
+            for(int i = ((page -1) * 10); i < liveContentListInfo.size(); i++){
+                liveContentList.add(liveContentListInfo.get(i));
+            }
+        }else{
+            for(int i = ((page -1) * 10); i < (page) * 10; i++){
+                liveContentList.add(liveContentListInfo.get(i));
+            }
+        }
+        return liveContentList;
+    }
+
     //방 상세보기 가져올 메서드
     @Override
     public LiveDetailGetRes getLiveDetailBySessionId(Long liveId) {
