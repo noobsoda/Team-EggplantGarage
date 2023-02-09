@@ -1,6 +1,5 @@
 import { OpenVidu } from "openvidu-browser";
 import React, { useCallback, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
 import styled from "styled-components";
@@ -46,6 +45,7 @@ export default function Seller({ liveId }) {
     setMainStreamManager(undefined);
 
     closeLive(liveId);
+    closeSession();
   }, [session]);
 
   useEffect(() => {

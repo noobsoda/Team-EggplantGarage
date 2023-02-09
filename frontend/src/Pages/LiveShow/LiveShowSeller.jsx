@@ -4,8 +4,7 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 
 import ModalSeller from "../../Organisms/Modal/ModalBuyer";
-import LiveChatting from "../../Molecules/Box/LiveChatting";
-import ChatInput from "../../Atoms/Inputs/ChatInput";
+import LiveChatBox from "../../Molecules/Box/LiveChatBox";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
@@ -128,7 +127,7 @@ export default function LiveshowBuyer() {
           </StyledSide>
         </StyledHeader>
         <StyledBody>
-          <ChatInput />
+          <LiveChatBox liveId={liveId} />
         </StyledBody>
       </LiveLayout>
 
