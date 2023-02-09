@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import ItemCard from "../../Molecules/Cards/ItemCard";
-import TextInput from "../../Atoms/Inputs/TextInput";
 import { Rating } from "@mui/material";
+import ReviewTextBox from "../../Atoms/Text/ReviewTextBox";
 
 const StyledReview = styled.div`
   display: flex;
@@ -13,13 +12,12 @@ const StyledReview = styled.div`
   align-items: center;
 `;
 
-export default function ReviewReceived() {
+export default function ReviewReceived(review, otherName) {
   return (
     <StyledReview>
-      <div className="page-header">상대방 누구가 남긴 후기</div>
-      <ItemCard />
-      <Rating readOnly size="large" value={5} />
-      <TextInput onChange="그냥 내용 어쩌구 리뷰내용" />
+      <div className="page-header">{otherName}가 남긴 후기</div>
+      <Rating readOnly size="large" value={review && review.score} />
+      <ReviewTextBox conten={review && review.content}></ReviewTextBox>
     </StyledReview>
   );
 }

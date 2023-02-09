@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,7 +22,23 @@ public class FileService {
     private String DOMAIN;
     private String uploadPath;
 
-    public Path fileSave(MultipartFile file) {
+    public String filename(MultipartFile file){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String curDate = sdf.format(new Date());
+        String ftype = file.getContentType();
+
+        String newFileName = curDate + Long.toString(System.nanoTime());
+        if(ftype.equals("image/jpeg") || ftype.equals("image/jpg")){
+            newFileName += ".jpg";
+        }
+        else{
+            newFileName += ".png";
+        }
+
+        return newFileName;
+    }
+    public Path fileSave(MultipartFile file, String newFileName) {
         uploadPath = DOMAIN + File.separator + "pictures";
 
         File folder = new File(uploadPath);
@@ -37,17 +52,6 @@ public class FileService {
             }
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String curDate = sdf.format(new Date());
-        String ftype = file.getContentType();
-
-        String newFileName = curDate + Long.toString(System.nanoTime());
-        if(ftype.equals("image/jpeg") || ftype.equals("image/jpg")){
-            newFileName += ".jpg";
-        }
-        else{
-            newFileName += ".png";
-        }
         Path copyOfLocation = Paths.get(uploadPath + File.separator + newFileName);
 
          /*

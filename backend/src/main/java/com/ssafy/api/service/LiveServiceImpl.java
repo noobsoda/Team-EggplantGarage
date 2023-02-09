@@ -312,9 +312,10 @@ public class LiveServiceImpl implements LiveService {
     public LiveDetailGetRes getLiveDetailBySessionId(Long liveId) {
         // 디비에 방송 url 정보 조회
         Optional<Live> oLive = liveRepository.findById(liveId);
-        if (!oLive.isPresent())
-            return null;
         Live live = oLive.orElse(null);
+
+        if(live == null)
+            return null;
 
         //라이브 카테고리 헬퍼 테이블 순회
         List<LiveCategory> liveCategories = live.getLiveCategoryList();

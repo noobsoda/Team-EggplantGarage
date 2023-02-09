@@ -81,8 +81,9 @@ public class LiveController {
         if (img == null) {
             return ResponseEntity.status(204).body(BaseResponseBody.of(204, "이미지가 없습니다"));
         }
-        Path path = fileService.fileSave(img);
-        String thumbnailUrl = path.toString();
+        String filename = fileService.filename(img);
+        Path path = fileService.fileSave(img, filename);
+        String thumbnailUrl = filename;
         //이메일로 아이디 찾고
         //그 아이디로 셀러 아이디 조회하고 해당 객체에 이미지 넣기
         if (liveService.postLiveByThumbnailUrl(liveId, thumbnailUrl)) {
@@ -96,13 +97,17 @@ public class LiveController {
 
     @PostMapping("/detail")
     @ApiOperation(value = "방 상세정보 조회", notes = "방의 상세 정보와 유저 목록을 조회한다.")
-    public ResponseEntity<LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, Long> sessionMap) {
+    public ResponseEntity<? extends LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, Long> sessionMap) {
         Long liveId = sessionMap.get("liveId");
 
         LiveDetailGetRes liveDetailGetRes = liveService.getLiveDetailBySessionId(liveId);
         //상품도 추가로 보여주기
 
-        return ResponseEntity.status(200).body(liveDetailGetRes);
+        if(liveDetailGetRes == null){
+            return ResponseEntity.status(404).body(null);
+        }else {
+            return ResponseEntity.status(200).body(liveDetailGetRes);
+        }
     }
 
     //카테고리 넣기

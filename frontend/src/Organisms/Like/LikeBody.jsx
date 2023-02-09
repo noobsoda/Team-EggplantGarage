@@ -9,7 +9,14 @@ export default function SearchBody({ lives }) {
       <ContainerSearch>
         {lives &&
           lives.map((show) => {
-            return <LiveshowItem key={show.id} show={show} isViewer={true} />;
+            return (
+              <LiveshowItem
+                key={show.id}
+                show={show}
+                isViewer={true}
+                isSearch={true}
+              />
+            );
           })}
       </ContainerSearch>
     </>

@@ -74,19 +74,6 @@ async function getLives(searchCondition, success, fail) {
     .then(success);
   return lives;
 }
- /**
-  * 찜한 live 조회
-  * @param {*} success 
-  * @param {*} userId 유저아이디
-  */
-
-
-async function getLikeLives(userId, success, fail) {
-  const lives = await api
-    .get("/api/v1/favorite/" + userId)
-    .then(success);
-  return lives;
-}
 
 /**
  * 마이페이지 내 판매내역 클릭시 나올 했던 라이브 목록들 가져오기
@@ -244,5 +231,4 @@ export {
   getLiveDetails,
   getSalesHistory,
   getLives,
-  getLikeLives,
 };
