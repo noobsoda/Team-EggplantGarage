@@ -31,11 +31,7 @@ const Background = styled.div`
 `;
 
 export default function Search() {
-  const initLocation = useLocation();
   const [isResult, setIsResult] = useState(false);
-  if (initLocation.state !== null) {
-    isResult = initLocation.state.isResult;
-  }
 
   const [modal_1_Open, setModal_1_Open] = useState(false);
 
@@ -62,7 +58,13 @@ export default function Search() {
   const [lives, setLives] = useState([]);
   const [isNational, SetIsNational] = useState(true);
   //true이면 시청자순 false이면 가까운순
+
+  const initLocation = useLocation();
   useEffect(() => {
+    if (initLocation.state !== null) {
+      setIsResult(initLocation.state.isResult);
+      setCategory(initLocation.state.category);
+    }
     let searchCondition = {
       category: category === "전체" || category === "인기" ? "" : category,
       distanceSort: sort ? "ASC" : "",
