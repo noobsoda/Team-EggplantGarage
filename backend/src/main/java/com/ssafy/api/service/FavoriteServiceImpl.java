@@ -106,4 +106,14 @@ public class FavoriteServiceImpl implements FavoriteService{
         favoriteRepository.deleteAll(favoriteList);
         return true;
     }
+
+    @Override
+    public boolean postFavoriteIsFavorite(Long userId, Long liveId) {
+        Optional<List<Favorite>> oFavoriteList = favoriteRepository.findByUser_idAndLive_id(userId, liveId);
+        List<Favorite> favoriteList = oFavoriteList.orElse(null);
+        if(favoriteList == null || favoriteList.size() == 0)
+            return false;
+
+        return true;
+    }
 }

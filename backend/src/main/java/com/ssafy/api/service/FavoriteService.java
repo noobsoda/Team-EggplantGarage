@@ -15,4 +15,6 @@ public interface FavoriteService {
     List<LiveContent> getFavoriteLive(List<LiveContent> liveContentList, List<FavoriteGetInfo> favoriteGetInfo);
 
     boolean deleteFavorite(Long userId, Long liveId);
+
+    boolean postFavoriteIsFavorite(Long userId, Long liveId);
 }
