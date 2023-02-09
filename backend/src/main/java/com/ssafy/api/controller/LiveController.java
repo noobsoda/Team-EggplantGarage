@@ -81,8 +81,9 @@ public class LiveController {
         if (img == null) {
             return ResponseEntity.status(204).body(BaseResponseBody.of(204, "이미지가 없습니다"));
         }
-        Path path = fileService.fileSave(img);
-        String thumbnailUrl = path.toString();
+        String filename = fileService.filename(img);
+        Path path = fileService.fileSave(img, filename);
+        String thumbnailUrl = filename;
         //이메일로 아이디 찾고
         //그 아이디로 셀러 아이디 조회하고 해당 객체에 이미지 넣기
         if (liveService.postLiveByThumbnailUrl(liveId, thumbnailUrl)) {

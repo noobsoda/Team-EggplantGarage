@@ -41,10 +41,10 @@ public class ProductController {
             return ResponseEntity.status(204).body(BaseResponseBody.of(204, "이미지가 없습니다"));
         }
 
-        Path path = fileService.fileSave(img);
-        String thumbnailUrl = path.toString();
+        String filename = fileService.filename(img);
+        Path path = fileService.fileSave(img, filename);
         Map<String, Object> reqMap = new HashMap<>();
-        reqMap.put("thumbnailUrl", thumbnailUrl);
+        reqMap.put("thumbnailUrl", filename);
 
         if(productService.postProductById(productList, reqMap)){
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "상품 등록 성공"));
