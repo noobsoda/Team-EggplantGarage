@@ -41,7 +41,11 @@ const StyledButtomBox = styled.div`
   width: 136px;
   justify-content: space-between;
 `;
-export default function ProductSubmitBox({ imgSrc, productList, setProductList }) {
+export default function ProductSubmitBox({
+  imgSrc,
+  productList,
+  setProductList,
+}) {
   const originCanvas = useRef(undefined); //원본 그림 저장
   const drawCanvas = useRef(undefined); //실제 그리는 영역
   const resultCanvas = useRef(undefined); //잘라진 영역 확인
@@ -104,7 +108,16 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
    * @param {*} e
    */
   function startDrawing(e) {
-    const { offsetX, offsetY } = e.nativeEvent;
+    let offsetX = null;
+    let offsetY = null;
+    if (e.type === "mousedown") {
+      offsetX = e.nativeEvent.offsetX;
+      offsetY = e.nativeEvent.offsetY;
+    } else {
+      const bcr = e.target.getBoundingClientRect();
+      offsetX = e.targetTouches[0].clientX - bcr.x;
+      offsetY = e.targetTouches[0].clientY - bcr.y;
+    }
     setIsDrawing(true);
 
     ctx.beginPath(); //선그리기 시작
@@ -117,10 +130,9 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
    * 마우스 그리기 종료
    * @param {*} e
    */
-  function finishDrawing(e) {
-    const { offsetX, offsetY } = e.nativeEvent;
-    CropImage(offsetX / ratio - startPos[0], offsetY / ratio - startPos[1]);
-    setEndPos([offsetX / ratio, offsetY / ratio]);
+  function finishDrawing() {
+    CropImage(endPos[0] - startPos[0], endPos[1] - startPos[1]);
+
     setIsDrawing(false);
   }
 
@@ -130,7 +142,16 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
    * @returns
    */
   function drawSquareImage(e) {
-    const { offsetX, offsetY } = e.nativeEvent;
+    let offsetX = null;
+    let offsetY = null;
+    if (e.type === "mousemove") {
+      offsetX = e.nativeEvent.offsetX;
+      offsetY = e.nativeEvent.offsetY;
+    } else {
+      const bcr = e.target.getBoundingClientRect();
+      offsetX = e.targetTouches[0].clientX - bcr.x;
+      offsetY = e.targetTouches[0].clientY - bcr.y;
+    }
     if (!isdrawing) return;
     //canvas지우기
     ctx.clearRect(0, 0, drawCanvas.current.width, drawCanvas.current.height);
@@ -146,6 +167,7 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
       offsetX / ratio - startPos[0],
       offsetY / ratio - startPos[1]
     );
+    setEndPos([offsetX / ratio, offsetY / ratio]);
   }
 
   /**
@@ -248,7 +270,12 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
 
     // canvas 초기화
     ctx.drawImage(img, 0, 0, img.width, img.height);
-    resultCtx.clearRect(0, 0, resultCanvas.current.width, resultCanvas.current.height);
+    resultCtx.clearRect(
+      0,
+      0,
+      resultCanvas.current.width,
+      resultCanvas.current.height
+    );
   }
   return (
     <StyledBox>
@@ -273,7 +300,11 @@ export default function ProductSubmitBox({ imgSrc, productList, setProductList }
           </StyledButtomBox>
         </StyledCropBox>
         <div>
-          <InputBox placehold="제품명을 입력하세요" onChange={onProductName} value={productName} />
+          <InputBox
+            placehold="제품명을 입력하세요"
+            onChange={onProductName}
+            value={productName}
+          />
           <Checkbox
             id="price"
             text="즉시구매가 입력하기"
