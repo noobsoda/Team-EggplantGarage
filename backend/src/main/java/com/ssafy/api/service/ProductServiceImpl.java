@@ -48,7 +48,6 @@ public class ProductServiceImpl implements ProductService {
 
             Product product = Product.builder()
                     .live(live)
-                    .buyerId(productReq.getSellerId())
                     .name(productReq.getName())
                     .initialPrice(productReq.getInitialPrice())
                     .leftTopX(productReq.getLeftTopX())
