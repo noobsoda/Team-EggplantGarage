@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import Body from "../../Templates/Layout/Body";
@@ -10,6 +10,8 @@ import ModalSetLocation from "../../Organisms/Modal/ModalSetLocation";
 import ModalSetCategory from "../../Organisms/Modal/ModalSetCategory";
 import ModalSetSort from "../../Organisms/Modal/ModalSetSort";
 import styled from "styled-components";
+import { useSelector } from "react-redux";
+import { getLives } from "../../util/api/liveApi";
 
 const FlexBox = styled.div`
   display: flex;
@@ -30,7 +32,7 @@ const Background = styled.div`
 
 export default function Search() {
   const initLocation = useLocation();
-  let isResult = false;
+  const [isResult, setIsResult] = useState(false);
   if (initLocation.state !== null) {
     isResult = initLocation.state.isResult;
   }
@@ -50,11 +52,32 @@ export default function Search() {
   const showModal_3 = () => {
     setModal_3_Open(true);
   };
-  const [category, setCategory] = useState(null);
-  const [location, setLocation] = useState(null);
+  const [category, setCategory] = useState("");
+  const [location, setLocation] = useState(
+    useSelector((state) => state.location.location)
+  );
   const [sort, setSort] = useState(true);
-  let [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState("");
+  // const [searchCondition, setSearchCondition] = useState({});
+  const [lives, setLives] = useState([]);
+  const [isNational, SetIsNational] = useState(true);
   //true이면 시청자순 false이면 가까운순
+  useEffect(() => {
+    let searchCondition = {
+      category: category === "전체" || category === "인기" ? "" : category,
+      distanceSort: sort ? "ASC" : "",
+      joinUserSort: sort ? "" : "desc",
+      latitude: location.lat,
+      longitude: location.lng,
+      national: isNational,
+      title: keyword,
+    };
+    getLives(searchCondition, ({ data }) => {
+      console.log(searchCondition);
+      console.log(data.liveContentList);
+      setLives(data.liveContentList);
+    });
+  }, [category, location, sort, keyword, isNational]);
 
   //카테고리 설정 자식 컴포넌트에서 받아온 callback 함수로받아온걸 데이터로 쏘기
   const selectedCategory = (data) => {
@@ -63,6 +86,7 @@ export default function Search() {
   };
   const selectedLocation = (data) => {
     setLocation(data);
+    SetIsNational(false);
     console.log(data);
   };
   const sortCallback = (data) => {
@@ -74,15 +98,7 @@ export default function Search() {
     // console.log(e.target.value);
   };
   const search = () => {
-    console.log(keyword);
-    console.log(location);
-    console.log(category);
-    console.log(sort);
-    //이제 통신을해야돼 axios로
-    //request body를 만들어서
-    // console.log("yaho");
-    if (category === 0) {
-    }
+    setIsResult(true);
   };
   return (
     <>
@@ -95,7 +111,7 @@ export default function Search() {
             <SmallSelect name="정렬방법" buttonClick={showModal_3} />
           </FlexBox>
           {/* isSearch가 True일때만 영상들이 뽑혀나오게 하자 */}
-          {isResult ? <SearchBody /> : <></>}
+          {isResult ? <SearchBody lives={lives} /> : <></>}
         </Body>
 
         {modal_1_Open && (

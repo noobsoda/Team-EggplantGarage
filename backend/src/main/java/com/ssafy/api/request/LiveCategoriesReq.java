@@ -8,6 +8,6 @@ import java.util.List;
 @Getter
 @Setter
 public class LiveCategoriesReq {
-    private String sessionId;
+    private Long liveId;
     private List<LiveCategoryReq> liveCategoryReqList;
 }

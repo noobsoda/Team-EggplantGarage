@@ -29,7 +29,7 @@ async function setLiveProduct(data, success, fail) {
  *  "soldPrice": 0
  * @returns
  */
-async function getBoughtList(buyerId, success, fail) {
+async function getPurchasedList(buyerId, success, fail) {
   const items = await api.get(`/api/v1/history/buyer/` + buyerId).then(success);
   // .catch();
   return items;
@@ -80,13 +80,35 @@ async function setBundleRefuse(bundleId, success, fail) {
     .catch(fail);
 }
 
-//get bundle 두개
+/**
+ * 해당 라이브에 요청된 묶음 가져오기
+ * @param {*} liveId
+ * @param {*} success
+ * @param {*} fail
+ * @returns
+ */
+async function getLiveBundle(liveId, success, fail) {
+  return await api.get(`/api/v1/bundle/${liveId}`).then(success).catch(fail);
+}
+
 //update bundle/approval
 //update bundle/refuge
-//
+
+/**
+ * 이미지 가져오기
+ * @param {*} filename
+ * @returns
+ */
+async function getImage(filename) {
+  return await api(`/api/v1/file/images/${filename}`)
+    .then((response) => response.blob())
+    .then((blob) => {
+      return URL.createObjectURL(blob);
+    });
+}
 
 export {
-  getBoughtList,
+  getPurchasedList,
   postBundle,
   getSellerSuggestList,
   getBundleItemList,
@@ -94,4 +116,5 @@ export {
   setBundleApproval,
   setBundleRefuse,
   setLiveProduct,
+  getLiveBundle,
 };
