@@ -18,7 +18,11 @@ import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import Body from "../../Templates/Layout/Body";
 
-import { createLive, setLiveCategory, setLiveImage } from "../../util/api/liveApi";
+import {
+  createLive,
+  setLiveCategory,
+  setLiveImage,
+} from "../../util/api/liveApi";
 import { setLiveProduct } from "../../util/api/productApi";
 import { dataURItoBlob } from "../../util/data";
 
@@ -54,6 +58,8 @@ export default function LiveShowSubmit() {
   const [productList, setProductList] = useState({ value: [], check: false });
 
   const [camera, setCamera] = useState(false);
+  const [goCrop, setGoCrop] = useState(true); //수정화면의 자르기
+
   function nextStep() {
     if (step === 3) return;
 
@@ -226,7 +232,6 @@ export default function LiveShowSubmit() {
         break;
       }
     }
-
     setStep(4); //수정 페이지로 이동
   }
   return (
@@ -257,8 +262,10 @@ export default function LiveShowSubmit() {
             <ProuctModifyBox
               imgSrc={imgSrc}
               modifyProduct={modifyProduct}
-              productList={productList}
+              productList={productList.value}
               setProductList={setProductList}
+              deleteProduct={deleteProduct}
+              backStep={backStep}
             />
           </StyledBox>
         </StyledWindow>
@@ -270,6 +277,10 @@ export default function LiveShowSubmit() {
               <MidBtn name="PREV" buttonClick={backStep} />
               <MidBtn name="방송시작" buttonClick={goLive} />
             </>
+          ) : step === 4 ? (
+            <>
+              <BigBtn name="뒤로" buttonClick={backStep} />
+            </>
           ) : (
             <>
               <MidBtn name="PREV" buttonClick={backStep} />
@@ -278,7 +289,11 @@ export default function LiveShowSubmit() {
           )}
         </BtnFlex>
       </Body>
-      {camera ? <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} /> : <></>}
+      {camera ? (
+        <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} />
+      ) : (
+        <></>
+      )}
     </Page>
   );
 }
