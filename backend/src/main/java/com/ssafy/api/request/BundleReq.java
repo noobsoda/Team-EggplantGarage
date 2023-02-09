@@ -8,5 +8,6 @@ import java.util.List;
 public class BundleReq {
     private List<Long> productIdList;
     private Long buyerId;
+    private Long liveId;
     private int soldPrice;
 }

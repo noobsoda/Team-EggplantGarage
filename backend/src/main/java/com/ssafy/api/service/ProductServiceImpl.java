@@ -38,6 +38,7 @@ public class ProductServiceImpl implements ProductService {
 
         List<ProductReq> productReqList = productList.getProductList();
 
+
         for (ProductReq productReq : productReqList) {
             Optional<Live> oLive = liveRepository.findById(productReq.getLiveId());
             Live live = oLive.orElse(null);
@@ -45,9 +46,8 @@ public class ProductServiceImpl implements ProductService {
                 continue;
 
 
-            Product.builder()
+            Product product = Product.builder()
                     .live(live)
-                    .buyerId(productReq.getSellerId())
                     .name(productReq.getName())
                     .initialPrice(productReq.getInitialPrice())
                     .leftTopX(productReq.getLeftTopX())
@@ -57,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
                     .imageUrl(thumbnailUrl)
                     .build();
 
+            productRepository.save(product);
 
 
         }
@@ -64,6 +65,6 @@ public class ProductServiceImpl implements ProductService {
 
 
 
-        return false;
+        return true;
     }
 }

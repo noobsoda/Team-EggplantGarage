@@ -51,6 +51,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getUserById(long id) {
+        Optional<User> user = userRepository.findById(id);
+        if (user.isPresent()) {
+            return user.get();
+        } else {
+            return null;
+        }
+    }
+
+    @Override
     public User getUserByEmail(String email) {
         // 디비에 유저 정보 조회 (userId 를 통한 조회).
         //User user = userRepository.findByUserEmail(userEmail).get();
@@ -125,6 +135,54 @@ public class UserServiceImpl implements UserService {
         } else {
             return false;
         }
+    }
+
+    //refreshToken 저장
+    @Override
+    public void patchUserTokenByrefreshToken(String userEmail, String refreshToken) {
+        Optional<User> oUser = userRepository.findByEmail(userEmail);
+        User user = oUser.orElse(null);
+        if(user == null)
+            return;
+        user.setRefreshToken(refreshToken);
+
+        userRepository.save(user);
+
+
+    }
+
+    //refreshToken 제거
+    @Override
+    public String patchUserDeleteTokenByrefreshToken(String refreshToken) {
+        Optional<User> oUser = userRepository.findByRefreshToken(refreshToken);
+        User user = oUser.orElse(null);
+        if(user == null)
+            return null;
+        user.setRefreshToken(null);
+        userRepository.save(user);
+
+        return user.getEmail();
+    }
+
+    @Override
+    public String getUserTokenByRefreshToken(String refreshToken) {
+        Optional<User> oUser = userRepository.findByRefreshToken(refreshToken);
+        User user = oUser.orElse(null);
+        if(user == null)
+            return null;
+
+        return user.getRefreshToken();
+    }
+
+    @Override
+    public User getUserById(Long sellerId) {
+        Optional<User> oUser = userRepository.findById(sellerId);
+        User user = oUser.orElse(null);
+
+        if(user == null)
+            return null;
+
+        return user;
     }
 
 

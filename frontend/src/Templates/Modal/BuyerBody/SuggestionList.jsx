@@ -1,18 +1,22 @@
 import React from "react";
 import styled from "styled-components";
+import BundleBox from "../../../Molecules/Cards/BundleBox";
 import ItemCard from "../../../Molecules/Cards/ItemCard";
 
-const StyledBody = styled.div`
-  padding: 8px 40px 8px;
-  width: 280px;
-`;
-
-export default function SuggestionList() {
+export default function SuggestionList({ isSeller, suggestList }) {
   return (
-    <StyledBody>
-      <ItemCard />
-      <ItemCard />
-      <ItemCard />
-    </StyledBody>
+    <>
+      {suggestList.map((items, i) => {
+        return (
+          <BundleBox key={i} isSeller={isSeller}>
+            {items.map((item) => {
+              return (
+                <ItemCard item={item} isBundle={true} isSeller={isSeller} />
+              );
+            })}
+          </BundleBox>
+        );
+      })}
+    </>
   );
 }

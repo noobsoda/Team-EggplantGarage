@@ -1,5 +1,6 @@
 import React from "react";
 import Button from "../../Atoms/Buttons/ExtraSmallBtn";
+import ButtonStroke from "../../Atoms/Buttons/ExtraSmallStrokeBtn";
 import ImageBox from "../../Atoms/canvas/ImageBox";
 import styled from "styled-components";
 
@@ -9,6 +10,8 @@ const StyledBox = styled.div`
   height: 72px;
   border: 1.5px solid ${({ theme }) => theme.color.red};
   border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 8px;
 `;
 const StyledInfoBox = styled.div`
   width: 136px;
@@ -17,20 +20,18 @@ const StyledInfoBox = styled.div`
   justify-content: space-around;
 `;
 
-const StyledPicBox = styled.div`
-  width: 72px;
-  height: 72px;
-`;
 const StyledButtonBox = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
   flex-direction: column;
 `;
 
 export default function ProductBox({
+  id,
   name,
   price,
-  onClick,
+  onModifyClick,
+  onDeleteClick,
   imgSrc,
   leftTopX,
   rightBottomX,
@@ -52,7 +53,11 @@ export default function ProductBox({
         <p className="body2-bold">{price}원</p>
       </StyledInfoBox>
       <StyledButtonBox>
-        <Button name="수정" buttonClick={onClick}></Button>
+        <Button name="수정" buttonClick={() => onModifyClick(id)}></Button>
+        <ButtonStroke
+          name="제거"
+          buttonClick={() => onDeleteClick(id)}
+        ></ButtonStroke>
       </StyledButtonBox>
     </StyledBox>
   );
