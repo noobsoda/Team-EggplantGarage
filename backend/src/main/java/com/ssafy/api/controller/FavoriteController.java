@@ -82,8 +82,8 @@ public class FavoriteController {
         if (favoriteService.postFavoriteIsFavorite(favoritePostInfo.getUserId(), favoritePostInfo.getLiveId())) {
             return ResponseEntity.status(200).body(FavoriteIsFavoritePostRes.of(true));
         } else {
-            return ResponseEntity.status(404).body(FavoriteIsFavoritePostRes.of(false));
-        }
+            return ResponseEntity.status(200).body(FavoriteIsFavoritePostRes.of(false));
+        } //라이브 아디나 유저 아이디가 아예 없는 경우 예외 처리 할것
 
 
     }

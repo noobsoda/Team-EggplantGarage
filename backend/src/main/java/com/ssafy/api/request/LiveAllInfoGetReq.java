@@ -21,5 +21,7 @@ public class LiveAllInfoGetReq {
     private Double latitude;
     @ApiModelProperty(name = "경도", example = "127.324351")
     private Double longitude;
+    @ApiModelProperty(name = "페이지", example = "1")
+    private int page;
 
 }

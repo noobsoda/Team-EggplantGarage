@@ -9,6 +9,7 @@ export default function SearchBody({ lives }) {
       <ContainerSearch>
         {lives &&
           lives.map((show) => {
+            console.log(show);
             return (
               <LiveshowItem
                 key={show.id}

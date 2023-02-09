@@ -15,14 +15,24 @@ const StyledCategoryBox = styled.div`
   padding-top: 8px;
   align-content: flex-start;
 `;
-export default function CategorySelect({ options, categorys, onChange, delCategory }) {
+export default function CategorySelect({
+  options,
+  categorys,
+  onChange,
+  delCategory,
+}) {
   return (
     <StyledCategorySelectBox>
       <Select options={options} onChange={onChange} />
       <StyledCategoryBox>
         {categorys.map((ele, i) => {
           return (
-            <CategoryBtn key={ele} categoryName={ele} onClose={delCategory} center={i % 3 == 1} />
+            <CategoryBtn
+              key={ele}
+              categoryName={ele}
+              onClose={delCategory}
+              center={i % 3 === 1}
+            />
           );
         })}
       </StyledCategoryBox>

@@ -4,8 +4,7 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 
 import ModalSeller from "../../Organisms/Modal/ModalBuyer";
-import LiveChatting from "../../Molecules/Box/LiveChatting";
-import ChatInput from "../../Atoms/Inputs/ChatInput";
+import LiveChatBox from "../../Molecules/Box/LiveChatBox";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
@@ -22,6 +21,9 @@ const StyledPage = styled.div`
   height: 100%;
   background-color: grey;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 //일단은 컴포넌트들이랑 바텀시트 구현해놓자.
 const StyledSide = styled.div`
@@ -38,13 +40,16 @@ const StyledHeader = styled.div`
   justify-content: space-between;
 `;
 const StyledBody = styled.div`
-  height: calc(100% - 288px);
+  height: 50%;
+  width: 100%;
   //264+ padding값
   padding: 0 24px 24px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   row-gap: 24px;
+  position: absolute;
+  bottom: 0;
 `;
 const Title = styled.div`
   color: white;
@@ -58,7 +63,7 @@ const LiveLayout = styled.div`
   z-index: 1;
 `;
 export default function LiveshowBuyer() {
-  const { sessionId } = useParams(); //방 아이디
+  const { liveId } = useParams(); //방 아이디
 
   const [isSpeaker, setIsSpeaker] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -71,7 +76,7 @@ export default function LiveshowBuyer() {
   //10초마다 묶음 제안 요청 왔는지 확인
   useInterval(() => {
     getLiveBundle(
-      sessionId,
+      liveId,
       ({ data }) => {
         console.log("제안온 목록");
         console.log(data);
@@ -85,10 +90,8 @@ export default function LiveshowBuyer() {
 
   useEffect(() => {
     getLiveDetail(
-      sessionId,
+      liveId,
       ({ data }) => {
-        console.log("라이브 정보에요");
-        console.log(data);
         setLiveInfo(data);
       },
       () => {
@@ -99,7 +102,7 @@ export default function LiveshowBuyer() {
 
   return (
     <StyledPage>
-      <Seller sessionId={sessionId} />
+      <Seller liveId={liveId} />
       <LiveLayout>
         <StyledHeader>
           <Title className="show-header">{liveInfo.title}</Title>
@@ -124,8 +127,7 @@ export default function LiveshowBuyer() {
           </StyledSide>
         </StyledHeader>
         <StyledBody>
-          <LiveChatting />
-          <ChatInput />
+          <LiveChatBox liveId={liveId} />
         </StyledBody>
       </LiveLayout>
 

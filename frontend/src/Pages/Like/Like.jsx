@@ -4,7 +4,7 @@ import Body from "../../Templates/Layout/Body";
 import LikeBody from "../../Organisms/Like/LikeBody";
 import Page from "../../Templates/Layout/Page";
 import { useState } from "react";
-import { getLikeLives } from "../../util/api/favoriteApi";
+import { getFavoriteLives } from "../../util/api/favoriteApi";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
 
@@ -13,12 +13,12 @@ export default function Like() {
   const userInfo = useSelector(checkUserInfo);
 
   useEffect(() => {
-    getLikeLives(userInfo.id, ({ data }) => {
+    getFavoriteLives(userInfo.id, ({ data }) => {
       console.log(userInfo.id);
       console.log(data.liveContentList);
       setLives(data.liveContentList);
     });
-  }, []);
+  }, [userInfo]);
   return (
     <>
       <Page>

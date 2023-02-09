@@ -5,7 +5,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Main from "./Pages/Main/Main";
 import LiveShowSubmit from "./Pages/LiveShow/LiveShowSubmit";
 import LiveShowSeller from "./Pages/LiveShow/LiveShowSeller";
-import LiveShow from "./Pages/LiveShow//LiveShowTest";
 import SignUp from "./Pages/User/SignUp";
 import SignUpEmail from "./Pages/User/SignUpEmail";
 import Login from "./Pages/User/Login";
@@ -55,9 +54,8 @@ const Router = () => {
     { path: "/", element: <Main /> },
     { path: "/home", element: <Main /> },
     { path: "/liveshowsubmit", element: <LiveShowSubmit /> },
-    { path: "/liveshowseller/:sessionId", element: <LiveShowSeller /> },
-    { path: "/test/:sessionId", element: <LiveShow /> },
-    { path: "/liveshowbuyer", element: <LiveshowBuyer /> },
+    { path: "/liveshowseller/:liveId", element: <LiveShowSeller /> },
+    { path: "/liveshowbuyer/:liveId", element: <LiveshowBuyer /> },
     { path: "/search", element: <Search /> },
     { path: "/like", element: <Like /> },
     { path: "/chat", element: <Chat /> },

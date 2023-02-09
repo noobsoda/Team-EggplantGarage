@@ -99,7 +99,9 @@ public class LiveController {
     @ApiOperation(value = "방 상세정보 조회", notes = "방의 상세 정보와 유저 목록을 조회한다.")
     public ResponseEntity<? extends LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, Long> sessionMap) {
         Long liveId = sessionMap.get("liveId");
-
+        if(liveId == null){
+            return ResponseEntity.status(404).body(null);
+        }
         LiveDetailGetRes liveDetailGetRes = liveService.getLiveDetailBySessionId(liveId);
         //상품도 추가로 보여주기
 
@@ -166,6 +168,10 @@ public class LiveController {
         //유저별 정렬
         if(userJoinSort != ""){
             liveContentList = liveService.searchSortUserJoinLiveList(liveContentList, userJoinSort);
+        }
+
+        if(liveAllInfoGetReq.getPage() > 0) {
+            liveContentList = liveService.setPageaLiveList(liveContentList, liveAllInfoGetReq.getPage());
         }
 
 

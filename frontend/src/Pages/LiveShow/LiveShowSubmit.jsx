@@ -209,6 +209,7 @@ export default function LiveShowSubmit() {
         navigate(`/liveshowseller/${liveId}`);
       },
       (e) => {
+        console.log(e);
         console.warn("live fail");
       }
     );

@@ -1,6 +1,5 @@
 import { OpenVidu } from "openvidu-browser";
 import React, { useCallback, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
 import styled from "styled-components";
@@ -13,9 +12,12 @@ const StyledLive = styled.div`
   top: 0;
   left: 0;
   z-index: 0;
+  width: 100%;
+  height: 100%;
+  /* display */
 `;
 
-export default function Seller({ sessionId, liveId }) {
+export default function Seller({ liveId }) {
   const userInfo = useSelector(checkUserInfo);
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름
@@ -43,6 +45,7 @@ export default function Seller({ sessionId, liveId }) {
     setMainStreamManager(undefined);
 
     closeLive(liveId);
+    closeSession();
   }, [session]);
 
   useEffect(() => {
@@ -83,7 +86,7 @@ export default function Seller({ sessionId, liveId }) {
     });
 
     // --- 4) 토큰을 받아서 연결을 한다.
-    getToken(sessionId, "PUBLISHER").then((token) => {
+    getToken(liveId, "PUBLISHER").then((token) => {
       mySession
         .connect(token, { clientData: myUserName }) //해당 토큰을 가지고 유저명과 함께 연결을 진행
         .then(async () => {
@@ -96,7 +99,7 @@ export default function Seller({ sessionId, liveId }) {
             publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
             publishVideo: true, // Whether you want to start publishing with your video enabled or not
             //resolution: "1280x720", // The resolution of your video
-            resolution: "360x640",
+            resolution: `${window.innerWidth}x${window.innerHeight}`,
             frameRate: 30, // The frame rate of your video
             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
             mirror: false, // Whether to mirror your local video or not
@@ -108,7 +111,9 @@ export default function Seller({ sessionId, liveId }) {
 
           // 장비를 받는다.
           var devices = await OV.getDevices();
-          var videoDevices = devices.filter((device) => device.kind === "videoinput");
+          var videoDevices = devices.filter(
+            (device) => device.kind === "videoinput"
+          );
           //현재 판매자의 방송 장비를 확인
           var currentVideoDeviceId = publisher.stream
             .getMediaStream()
@@ -124,7 +129,11 @@ export default function Seller({ sessionId, liveId }) {
           setMainStreamManager(publisher);
         })
         .catch((error) => {
-          console.log("There was an error connecting to the session:", error.code, error.message);
+          console.log(
+            "There was an error connecting to the session:",
+            error.code,
+            error.message
+          );
         });
     });
   }

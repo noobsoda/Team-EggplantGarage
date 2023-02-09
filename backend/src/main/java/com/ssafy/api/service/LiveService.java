@@ -36,4 +36,6 @@ public interface LiveService {
     List<DistanceModule> searchLocationLiveList(List<LiveContent> liveContentList, Location location, boolean isNational);
 
     List<LiveContent> searchSortUserJoinLiveList(List<LiveContent> liveContentList, String userJoinSort);
+
+    List<LiveContent> setPageaLiveList(List<LiveContent> liveContentList, int page);
 }

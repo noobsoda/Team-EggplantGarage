@@ -5,7 +5,7 @@ import Body from "../../Templates/Layout/Body";
 import ItemCard from "../../Molecules/Cards/ItemCard";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { getLiveDetails } from "../../util/api/liveApi";
+import { getLiveDetail } from "../../util/api/liveApi";
 
 export default function LiveshowDetail() {
   const { state } = useLocation();
@@ -14,7 +14,7 @@ export default function LiveshowDetail() {
   const [live, setLive] = useState(undefined);
   const [productList, setProductList] = useState(undefined);
   useEffect(() => {
-    getLiveDetails(({ data }) => {
+    getLiveDetail(({ data }) => {
       console.log(data);
       //콘솔에 찍어보고 live 넣기.
       setLive(data);
