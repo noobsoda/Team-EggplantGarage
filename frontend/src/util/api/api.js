@@ -18,8 +18,7 @@ let OVApi = axios.create({
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "*",
     "Access-Control-Allow-Methods": "POST, GET, PUT, DELETE",
-    Authorization:
-      "Basic " + btoa("OPENVIDUAPP:" + process.env.REACT_APP_OV_SECRET),
+    Authorization: "Basic " + btoa("OPENVIDUAPP:" + process.env.REACT_APP_OV_SECRET),
   },
 });
 

@@ -15,11 +15,7 @@ import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
 import Buyer from "../../Templates/LiveShow/Buyer";
 
 import { getLiveDetail } from "../../util/api/liveApi";
-import {
-  isFavoriteLive,
-  deleteFavoriteLive,
-  addFavoriteLive,
-} from "../../util/api/favoriteApi";
+import { isFavoriteLive, deleteFavoriteLive, addFavoriteLive } from "../../util/api/favoriteApi";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -70,7 +66,7 @@ export default function LiveshowBuyer() {
   const { liveId } = useParams(); //방 아이디가 넘어온다.
   const userInfo = useSelector(checkUserInfo); //현재 유저의 정보
 
-  const [liveInfo, setLiveInfo] = useState({});
+  const [liveInfo, setLiveInfo] = useState({}); //방의 정보, 판매물품
   const [isSpeaker, setIsSpeaker] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -88,7 +84,7 @@ export default function LiveshowBuyer() {
     isFavoriteLive(
       { liveId: liveId, userId: userInfo.id },
       ({ data }) => {
-        setIsLiked(data);
+        setIsLiked(data.favorite);
       },
       () => {
         console.warn("favor info fail");
@@ -149,8 +145,10 @@ export default function LiveshowBuyer() {
       </LiveLayout>
       {modalOpen && (
         <ModalBuyer
+          bundleList={[]}
           productList={liveInfo.liveProductInfoList}
           setModalOpen={setModalOpen}
+          isSeller={false}
         />
       )}
     </StyledPage>

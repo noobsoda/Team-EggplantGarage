@@ -2,9 +2,9 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../Atoms/Video/LiveVideo";
-import { getToken, closeSession } from "../../util/api/liveApi";
+import { getToken } from "../../util/api/liveApi";
 
-export default function LiveShowSeller({ liveId }) {
+export default function Buyer({ liveId }) {
   //해당 세션 아이디를 받아서 해당 라이브로 접속하기
   //seller는 방송하기를 위한 카메라세팅, 카메라 접근권한이 필요하다.
 
@@ -89,11 +89,7 @@ export default function LiveShowSeller({ liveId }) {
           setMainStreamManager(publisher);
         })
         .catch((error) => {
-          console.log(
-            "There was an error connecting to the session:",
-            error.code,
-            error.message
-          );
+          console.log("There was an error connecting to the session:", error.code, error.message);
         });
     });
   }

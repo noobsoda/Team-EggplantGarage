@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
-import { getStompClient } from "../../store/socket";
+import getStompClient from "../../util/socket";
 import Body from "../../Templates/Layout/Body";
 import styled from "styled-components";
 import ChattingMessage from "../../Organisms/Chat/ChattingMessage";
@@ -54,7 +54,7 @@ export default function ChatRoom() {
   const [userId, setUserId] = useState(1); // 나의 아이디(리덕스로 초기값 가져오기로 수정)
   const [users, setUserList] = useState([]); // 유저 리스트(나, 상대방)
   const [toUser, setToUser] = useState({}); // 상대방 유저
-  const stompClient = getStompClient();
+  const [stompClient, setStompClient] = useState(getStompClient());
   const scrollRef = useRef();
   let navigate = useNavigate();
 
@@ -65,7 +65,7 @@ export default function ChatRoom() {
 
   // 메시지 받기 : 받은 메시지를 메시지 배열에 추가
   // stomp는 텍스트 처리만 가능하기 때문에 보낼 때 JSON.stringify(newMessage)) 받을 때 JSON.parse(data.body)처리를 꼭 해주어야 함
-  const connect = () => {
+  function connect() {
     stompClient.connect(
       {},
       () => {
@@ -78,7 +78,7 @@ export default function ChatRoom() {
         console.log(error);
       }
     );
-  };
+  }
 
   // 처음 컴포넌트가 새롭게 생성되는 시점에 한 번 실행
   // 백엔드 서버에 데이터를 요청할 때 axios 작업할 때 사용
@@ -142,9 +142,7 @@ export default function ChatRoom() {
       {/* scrollRef를 이용하여 아래 div 영역을 스크롤 조작 */}
       <Body>
         <ChatBody ref={scrollRef}>
-          <div>
-            {users.map((user) => user.id != userId && <div>{toUser.name}</div>)}
-          </div>
+          <div>{users.map((user) => user.id != userId && <div>{toUser.name}</div>)}</div>
           <div>
             <ChattingMessage chattingMessages={chattingMessages} />
           </div>
