@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { getStompClient } from "../../store/socket";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 const StyledChatting = styled.div`
   width: 200px;
@@ -47,35 +47,27 @@ const SendBtn = styled.button`
 `;
 
 
-export default function ChatInput({ inputValue, type, value,myNickname }) {
-  // const [nickname, setNickname] = useState(myNickname);
-  const nickname = "홍길동";
-  const [chatting, setChatting] = useState([]);
-  const [message, setMessage] = useState("");
+export default function ChatInput() {
+  // const nickname = useLocation().state.nickname;
+  const nickname = "홍길동"; // 닉네임
+  const [message, setMessage] = useState(""); // 입력 메세지
   const stompClient = getStompClient();
   // const liveId = useLocation().state.liveId;
-  const liveId = 1;
+  // const { sessionId } = useParams();
+  const liveId = 1; // 라이브 방ID
   const messageArea = useRef();
   const scrollRef = useRef();
 
-  console.log("liveId: " + liveId);
-  // var messageArea = document.querySelector('#messageArea');
-  console.log(messageArea);
-  console.log(messageArea.current);
+  // console.log("nickname: " + nickname);
+  // console.log("liveId: " + liveId);
 
-  
-  
   const connect = () => {
     console.log("connect");
-  
-    console.log("stompClient: " + stompClient);
     stompClient.connect({}, connectSuccess, connectError);
-    console.log("여기");
   }
   
   useEffect(() => {
     console.log("useEffect!");
-
     if (stompClient === null) {
       return;
     } 
@@ -89,10 +81,7 @@ export default function ChatInput({ inputValue, type, value,myNickname }) {
 
   const connectSuccess = () => {
     console.log("connectSuccess!");
-    console.log("stompClient: " + stompClient);
-  
     stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
-  
     stompClient.send("/pub/live/addUser/" + liveId,
         {},
         JSON.stringify({sender: nickname, type: 'JOIN', roomId: liveId})
@@ -107,19 +96,14 @@ export default function ChatInput({ inputValue, type, value,myNickname }) {
     console.log("onMessageReceived!");
   
     var message = JSON.parse(payload.body);
-    console.log("message: " + message.content + " " + message.type + " " + message.sender);
-  
     var messageElement = document.createElement('p');
 
     if(message.type === 'JOIN') {
         message.content = '[' + message.sender + '] 님이 입장하셨습니다.';
-    } else if (message.type === 'LEAVE') {
-        // console.log("LEAVE: " + messageElement);
-        // message.content = '[' + message.sender + '] 님이 퇴장하셨습니다.';
     } else {
         var usernameElement = document.createElement('span');
         var usernameText = document.createTextNode("[" + message.sender + "] ");
-        console.log("sender: " + message.sender);
+
         usernameElement.appendChild(usernameText);
         messageElement.appendChild(usernameElement);
     }
@@ -129,15 +113,12 @@ export default function ChatInput({ inputValue, type, value,myNickname }) {
     textElement.appendChild(messageText);
   
     messageElement.appendChild(textElement);
-  
     messageArea.current.appendChild(messageElement);
-    // messageArea.scrollTop = messageArea.scrollHeight;
   }
   
   const sendMessage = () => {
     console.log("sendMessage!");
   
-    console.log("보내기: " + message + " " + stompClient);
     if (message && stompClient) {
       var chatMessage = {
         sender: nickname,
@@ -149,11 +130,10 @@ export default function ChatInput({ inputValue, type, value,myNickname }) {
       scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
     setMessage("");
-    // event.preventDefault();
   }
 
   const onKeyPress = (e) => {
-    if (e.key == "Enter") {
+    if (e.key === "Enter") {
       sendMessage();
     }
   };
