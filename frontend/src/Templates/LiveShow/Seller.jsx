@@ -17,7 +17,7 @@ const StyledLive = styled.div`
   /* display */
 `;
 
-export default function Seller({ liveId }) {
+export default function Seller({ liveId, isCamera, isMic }) {
   const userInfo = useSelector(checkUserInfo);
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름
@@ -26,14 +26,18 @@ export default function Seller({ liveId }) {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const [, setCurrentVideoDevice] = useState(undefined);
+  const [isVideo, SetIsVideo] = useState(true);
 
   const [OV] = useState(new OpenVidu());
-
   useEffect(() => {
-    //판매자가 방 생성
     joinSession();
   }, []);
-
+  useEffect(() => {
+    if (publisher) {
+      publisher.publishAudio(isMic);
+      publisher.publishVideo(isCamera);
+    }
+  }, [isMic, isCamera]);
   const leaveSession = useCallback(() => {
     // --- 7) 세션에서 나옴
     const mySession = session;
@@ -52,6 +56,7 @@ export default function Seller({ liveId }) {
     const onbeforeunload = () => {
       leaveSession();
     };
+
     window.addEventListener("beforeunload", onbeforeunload); // componentDidMount
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
