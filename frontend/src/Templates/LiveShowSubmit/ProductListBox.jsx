@@ -14,7 +14,12 @@ const StyledListBox = styled.div`
   height: 384px;
   overflow: scroll;
 `;
-export default function ProductListBox({ imgSrc, productList }) {
+export default function ProductListBox({
+  imgSrc,
+  productList,
+  onModifyClick,
+  onDeleteClick,
+}) {
   return (
     <StyledBox>
       <StyledHead className="page-header">물품 목록</StyledHead>
@@ -22,7 +27,8 @@ export default function ProductListBox({ imgSrc, productList }) {
         {productList.value.map((ele) => {
           return (
             <ProductBox
-              key={ele.productName}
+              key={ele.id}
+              id={ele.id}
               imgSrc={imgSrc}
               name={ele.productName}
               price={ele.productPrice}
@@ -30,6 +36,8 @@ export default function ProductListBox({ imgSrc, productList }) {
               rightBottomX={ele.rightBottomX}
               leftTopY={ele.leftTopY}
               rightBottomY={ele.rightBottomY}
+              onModifyClick={onModifyClick}
+              onDeleteClick={onDeleteClick}
             />
           );
         })}
