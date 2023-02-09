@@ -5,7 +5,7 @@ import UserVideoComponent from "../../Atoms/Video/LiveVideo";
 import { getToken, closeSession } from "../../util/api/liveApi";
 
 export default function LiveShowSeller({}) {
-  const { sessionId } = useParams();
+  const { liveId } = useParams();
   //해당 세션 아이디를 받아서 해당 라이브로 접속하기
   //seller는 방송하기를 위한 카메라세팅, 카메라 접근권한이 필요하다.
 
@@ -71,7 +71,7 @@ export default function LiveShowSeller({}) {
     });
 
     // --- 4) 토큰을 받아서 연결을 한다.
-    getToken(sessionId, "SUBSCRIBER").then((token) => {
+    getToken(liveId, "SUBSCRIBER").then((token) => {
       mySession
         .connect(token, { clientData: myUserName }) //해당 토큰을 가지고 유저명과 함께 연결을 진행
         .then(async () => {

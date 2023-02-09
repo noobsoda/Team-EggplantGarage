@@ -1,19 +1,27 @@
 import React from "react";
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { checkUserInfo } from "../../store/user";
 import styled from "styled-components";
-import { useNavigate, useLocation } from "react-router-dom";
-import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
-import LiveChatting from "../../Molecules/Box/LiveChatting";
+
 import ChatInput from "../../Atoms/Inputs/ChatInput";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
-import { getLiveDetail } from "../../util/api/liveApi";
 import LikeBtn from "../../Atoms/IconButtons/liveshow/LikeBtn";
+
+import LiveChatting from "../../Molecules/Box/LiveChatting";
+
+import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
+
+import Buyer from "../../Templates/LiveShow/Buyer";
+
+import { getLiveDetail } from "../../util/api/liveApi";
 import {
-  postIsFavoriteLive,
-  postFavoriteLive,
+  isFavoriteLive,
   deleteFavoriteLive,
+  addFavoriteLive,
 } from "../../util/api/favoriteApi";
 
 const StyledPage = styled.div`
@@ -48,33 +56,61 @@ const Title = styled.div`
   color: white;
 `;
 export default function LiveshowBuyer() {
+  const navigate = useNavigate();
+  const { liveId } = useParams(); //방 아이디가 넘어온다.
+  const userInfo = useSelector(checkUserInfo); //현재 유저의 정보
+
+  const [liveInfo, setLiveInfo] = useState({});
   const [isSpeaker, setIsSpeaker] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-
-  const { state } = useLocation();
-  //console.log(state); // in this state liveshow id 담겨있음
-  //axios 통신후 데이터 뿌리기
-  const [live, setLive] = useState(undefined);
-  const [productList, setProductList] = useState(undefined);
   useEffect(() => {
-    getLiveDetail(state, ({ data }) => {
-      // console.log(data);
-      //콘솔에 찍어보고 live 넣기.
-      setLive(data);
-      console.log(data);
-      setProductList(data.liveProductInfoList);
-    });
-    postIsFavoriteLive(({ data }) => {
-      console.log(data);
-      setIsLiked(data);
-    });
+    console.log(liveId);
+    getLiveDetail(
+      liveId,
+      ({ data }) => {
+        setLiveInfo(data);
+      },
+      () => {
+        console.warn("live info fail");
+      }
+    );
+    // //현재 유저의 좋야요 유무
+    isFavoriteLive(
+      { liveId: liveId, userId: userInfo.id },
+      ({ data }) => {
+        setIsLiked(data);
+      },
+      () => {
+        console.warn("favor info fail");
+      }
+    );
   }, []);
-  const navigate = useNavigate();
+
+  function clickLike() {
+    if (isLiked) {
+      deleteFavoriteLive(
+        { liveId: liveId, userId: userInfo.id },
+        () => {},
+        () => {
+          console.warn("favor delete fail");
+        }
+      );
+    } else {
+      addFavoriteLive(
+        { liveId: liveId, userId: userInfo.id },
+        () => {},
+        () => {
+          console.warn("favor add fail");
+        }
+      );
+    }
+    setIsLiked(!isLiked);
+  }
   return (
     <StyledPage>
       <StyledHeader>
-        <Title className="show-header">라이브쇼 제목</Title>
+        <Title className="show-header">{liveInfo.title}</Title>
         <StyledSide>
           <BigMenuBtn
             buttonClick={() => {
@@ -82,12 +118,7 @@ export default function LiveshowBuyer() {
             }}
           />
           <div>　</div>
-          <LikeBtn
-            buttonClick={() => {
-              setIsLiked((cur) => !cur);
-            }}
-            isClicked={isLiked}
-          />
+          <LikeBtn buttonClick={clickLike} isClicked={isLiked} />
           <SpeakerBtn
             buttonClick={() => {
               setIsSpeaker((cur) => !cur);
@@ -102,8 +133,8 @@ export default function LiveshowBuyer() {
         </StyledSide>
       </StyledHeader>
       <StyledBody>
-        <LiveChatting />
-        <ChatInput />
+        {/* <LiveChatting /> */}
+        {/* <ChatInput /> */}
       </StyledBody>
       {modalOpen && <ModalBuyer setModalOpen={setModalOpen} />}
     </StyledPage>

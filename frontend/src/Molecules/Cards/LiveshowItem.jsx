@@ -27,7 +27,7 @@ export default function LiveshowItem({ isSearch, isViewer, show, isHistory }) {
   function goTo() {
     if (isViewer) {
       console.log(show);
-      navigate("/liveshowbuyer", { state: show.id });
+      navigate(`/liveshowbuyer/${show.id}`);
     } else {
       navigate("/liveshowdetail", { state: show.id });
     }

@@ -7,16 +7,21 @@ import { api } from "./api";
  */
 
 async function getFavoriteLives(userId, success, fail) {
-  const favorite = await api.get("/api/v1/favorite/" + userId).then(success);
+  const favorite = await api
+    .get(`/api/v1/favorite/${userId}`)
+    .then(success)
+    .catch(fail);
   return favorite;
 }
 
 /**
- * 해당 라이브가 찜이 되있는지 여부에 대한 조회
- *
- *
+ * 해당 라이브가 찜했는지 여부 확인
+ * @param {*} favoriteInfo {liveId:1,userId:1}
+ * @param {*} success
+ * @param {*} fail
+ * @returns
  */
-async function postIsFavoriteLive(favoriteInfo, success, fail) {
+async function isFavoriteLive(favoriteInfo, success, fail) {
   const isFavorite = await api
     .post("/api/v1/favorite/detail", favoriteInfo)
     .then(success)
@@ -25,34 +30,36 @@ async function postIsFavoriteLive(favoriteInfo, success, fail) {
 }
 
 /**
- * 해당 라이브가 찜이 되있는지 여부에 대한 조회
- *
- *
+ * 종아요 표시 삭제
+ * @param {*} favoriteInfo { "liveId": 5, "userId": 3}
+ * @param {*} success
+ * @param {*} fail
+ * @returns
  */
-async function postFavoriteLive(favoriteInfo, success, fail) {
+async function deleteFavoriteLive(favoriteInfo, success, fail) {
   const favorite = await api
-    .post("/api/v1/favorite", favoriteInfo)
+    .delete("/api/v1/favorite", { data: favoriteInfo })
     .then(success)
     .catch(fail);
   return favorite;
 }
 
 /**
- * 해당 라이브가 찜이 되있는지 여부에 대한 조회
- *
- *
+ * 라이브 좋아요 추가
+ * @param {*} favoriteInfo {liveId:1,userId:1}
+ * @param {*} success
+ * @param {*} fail
+ * @returns
  */
-async function deleteFavoriteLive(favoriteInfo, success, fail) {
-  const favorite = await api
-    .delete("/api/v1/favorite", favoriteInfo)
+async function addFavoriteLive(favoriteInfo, success, fail) {
+  return await api
+    .post(`/api/v1/favorite/`, favoriteInfo)
     .then(success)
     .catch(fail);
-  return favorite;
 }
-
 export {
   getFavoriteLives,
-  postIsFavoriteLive,
-  postFavoriteLive,
+  isFavoriteLive,
+  addFavoriteLive,
   deleteFavoriteLive,
 };
