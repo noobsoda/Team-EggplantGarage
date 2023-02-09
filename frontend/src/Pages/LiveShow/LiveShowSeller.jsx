@@ -64,7 +64,7 @@ const LiveLayout = styled.div`
   z-index: 1;
 `;
 export default function LiveshowBuyer() {
-  const { sessionId } = useParams(); //방 아이디
+  const { liveId } = useParams(); //방 아이디
 
   const [isSpeaker, setIsSpeaker] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
@@ -74,27 +74,25 @@ export default function LiveshowBuyer() {
 
   const navigate = useNavigate();
 
-  // 10초마다 묶음 제안 요청 왔는지 확인
-  // useInterval(() => {
-  //   getLiveBundle(
-  //     sessionId,
-  //     ({ data }) => {
-  //       console.log("제안온 목록");
-  //       console.log(data);
-  //       setBundleList(data);
-  //     },
-  //     () => {
-  //       console.warn("bundle load fail");
-  //     }
-  //   );
-  // }, 10000);
+  //10초마다 묶음 제안 요청 왔는지 확인
+  useInterval(() => {
+    getLiveBundle(
+      liveId,
+      ({ data }) => {
+        console.log("제안온 목록");
+        console.log(data);
+        setBundleList(data);
+      },
+      () => {
+        console.warn("bundle load fail");
+      }
+    );
+  }, 10000);
 
   useEffect(() => {
     getLiveDetail(
-      sessionId,
+      liveId,
       ({ data }) => {
-        console.log("라이브 정보에요");
-        console.log(data);
         setLiveInfo(data);
       },
       () => {
@@ -105,7 +103,7 @@ export default function LiveshowBuyer() {
 
   return (
     <StyledPage>
-      <Seller sessionId={sessionId} />
+      <Seller liveId={liveId} />
       <LiveLayout>
         <StyledHeader>
           <Title className="show-header">{liveInfo.title}</Title>

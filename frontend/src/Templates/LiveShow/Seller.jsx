@@ -18,7 +18,7 @@ const StyledLive = styled.div`
   /* display */
 `;
 
-export default function Seller({ sessionId, liveId }) {
+export default function Seller({ liveId }) {
   const userInfo = useSelector(checkUserInfo);
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름
@@ -86,7 +86,7 @@ export default function Seller({ sessionId, liveId }) {
     });
 
     // --- 4) 토큰을 받아서 연결을 한다.
-    getToken(sessionId, "PUBLISHER").then((token) => {
+    getToken(liveId, "PUBLISHER").then((token) => {
       mySession
         .connect(token, { clientData: myUserName }) //해당 토큰을 가지고 유저명과 함께 연결을 진행
         .then(async () => {
