@@ -3,49 +3,51 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import { getStompClient } from "../../store/socket";
+import Body from "../../Templates/Layout/Body";
+import styled from "styled-components";
+import ChattingMessage from "../../Organisms/Chat/ChattingMessage";
 
-const ChattingMessageItem = ({ senderName, message, sendDate }) => {
-  const myName = "나"; // 리덕스에서 현재 사용자 이름 가져오기
-  return (
-    <div>
-      {senderName === myName ? ( // 보낸 메시지
-        <div>
-          <span>{sendDate}</span>
-          <span>{message}</span>
-        </div>
-      ) : (
-        // 받은 메시지
-        <div>
-          <div>
-            <span>{senderName}</span>
-            <span>{message}</span>
-            <span>{sendDate}</span>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
-
-const ChattingMessage = ({ chattingMessages }) => {
-  return (
-    // 채팅 메시지가 존재하면 채팅 말풍선 생성
-    <div>
-      {chattingMessages &&
-        chattingMessages.map((chattingMessage, i) => (
-          <ChattingMessageItem
-            key={i}
-            // id={chattingMessage.id}
-            message={chattingMessage.content}
-            senderName={"나"}
-            sendDate={chattingMessage.sendDate}
-          />
-        ))}
-    </div>
-  );
-};
+const StyledContainer = styled.div`
+  width: 100%;
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  column-gap: 8px;
+  align-items: center;
+`;
+const StyledInput = styled.input`
+  width: calc(100% - 32px);
+  height: 40px;
+  border: 2px solid ${({ theme }) => theme.color.black};
+  border-radius: 8px;
+  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0);
+  color: ${({ theme }) => theme.color.black};
+  padding: 0 8px;
+`;
+const SendBtn = styled.button`
+  width: 24px;
+  height: 24px;
+  background: url("/image/send-icon.svg") no-repeat 0px 0px;
+  //gradient 속성 찾기
+  /* &::-webkit-mask-image: -webkit-gradient(
+    linear,
+    left 50%,
+    left bottom,
+    to(rgba(0, 0, 0, 1)),
+    from(rgba(0, 0, 0, 0))
+  ); */
+`;
+const ChatBody = styled.div`
+  height: calc(100% - 56px);
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+`;
 
 export default function ChatRoom() {
+  const InputRef = useRef(undefined);
+
   const roomId = useLocation().state.roomId; // 현재 URL을 통해 RoomId를 얻어옴
   const [chattingMessages, setChattingMessages] = useState([]); // 주고 받은 메시지 리스트
   const [message, setMessage] = useState(""); // 입력창 메시지
@@ -138,27 +140,39 @@ export default function ChatRoom() {
     <Page>
       <Header isName="True" headerName="채팅방" />
       {/* scrollRef를 이용하여 아래 div 영역을 스크롤 조작 */}
-      <div ref={scrollRef}>
-        <div>
-          {users.map((user) => user.id != userId && <div>{toUser.name}</div>)}
-        </div>
-        <div>
-          <ChattingMessage chattingMessages={chattingMessages} />
-        </div>
-        <div>
+      <Body>
+        <ChatBody ref={scrollRef}>
           <div>
-            <input
-              id="sendMessage"
-              type="text"
-              value={message}
-              placeholder="메시지를 입력하세요"
-              onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={onKeyPress}
-            />
+            {users.map((user) => user.id != userId && <div>{toUser.name}</div>)}
           </div>
-          <button onClick={sendMessage}>전송</button>
-        </div>
-      </div>
+          <div>
+            <ChattingMessage chattingMessages={chattingMessages} />
+          </div>
+          <div>
+            <div>
+              <input
+                id="sendMessage"
+                type="text"
+                value={message}
+                placeholder="메시지를 입력하세요"
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyPress={onKeyPress}
+              />
+            </div>
+            <button onClick={sendMessage}>전송</button>
+          </div>
+        </ChatBody>
+        <StyledContainer>
+          <StyledInput
+            // ref={InputRef}
+            value={message}
+            placeholder="메시지를 입력하세요"
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyPress={onKeyPress}
+          />
+          <SendBtn onClick={sendMessage} />
+        </StyledContainer>
+      </Body>
     </Page>
   );
 }

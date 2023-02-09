@@ -22,6 +22,9 @@ const StyledPage = styled.div`
   height: 100%;
   background-color: grey;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;
 //일단은 컴포넌트들이랑 바텀시트 구현해놓자.
 const StyledSide = styled.div`
@@ -38,13 +41,16 @@ const StyledHeader = styled.div`
   justify-content: space-between;
 `;
 const StyledBody = styled.div`
-  height: calc(100% - 288px);
+  height: 50%;
+  width: 100%;
   //264+ padding값
   padding: 0 24px 24px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   row-gap: 24px;
+  position: absolute;
+  bottom: 0;
 `;
 const Title = styled.div`
   color: white;
@@ -68,20 +74,20 @@ export default function LiveshowBuyer() {
 
   const navigate = useNavigate();
 
-  //10초마다 묶음 제안 요청 왔는지 확인
-  useInterval(() => {
-    getLiveBundle(
-      sessionId,
-      ({ data }) => {
-        console.log("제안온 목록");
-        console.log(data);
-        setBundleList(data);
-      },
-      () => {
-        console.warn("bundle load fail");
-      }
-    );
-  }, 10000);
+  // 10초마다 묶음 제안 요청 왔는지 확인
+  // useInterval(() => {
+  //   getLiveBundle(
+  //     sessionId,
+  //     ({ data }) => {
+  //       console.log("제안온 목록");
+  //       console.log(data);
+  //       setBundleList(data);
+  //     },
+  //     () => {
+  //       console.warn("bundle load fail");
+  //     }
+  //   );
+  // }, 10000);
 
   useEffect(() => {
     getLiveDetail(
@@ -124,7 +130,6 @@ export default function LiveshowBuyer() {
           </StyledSide>
         </StyledHeader>
         <StyledBody>
-          <LiveChatting />
           <ChatInput />
         </StyledBody>
       </LiveLayout>

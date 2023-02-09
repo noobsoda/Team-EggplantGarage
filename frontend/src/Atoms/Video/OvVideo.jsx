@@ -8,5 +8,5 @@ export default function OpenViduVideoComponent({ streamManager }) {
     streamManager.addVideoElement(videoRef.current);
   }, [streamManager]);
 
-  return <video autoPlay={true} ref={videoRef} />;
+  return <video height={"100%"} autoPlay={true} ref={videoRef} />;
 }
