@@ -129,13 +129,6 @@ export default function LiveShowSeller({ liveId }) {
             <UserVideoComponent streamManager={sub} />
           </div>
         ))}
-      <button
-        onClick={() => {
-          leaveSession();
-        }}
-      >
-        종료
-      </button>
     </div>
   );
 }
