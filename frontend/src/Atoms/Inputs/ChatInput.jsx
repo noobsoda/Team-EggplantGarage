@@ -4,13 +4,30 @@ import { getStompClient } from "../../store/socket";
 import { useLocation, useParams } from "react-router-dom";
 
 const StyledChatting = styled.div`
-  width: 200px;
+  padding: 8px;
+  width: calc(100% - 100px);
   height: 30vh;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  row-gap: 8px;
+  /* font-family: "Inter"; */
+  font-style: normal;
+  font-weight: 700;
+  /* font-size: 16px; */
+  /* line-height: 15px; */
+
+  /* border-radius: 8px; */
+  /* background-color: white; */
+  overflow-y: scroll;
+  -webkit-mask-image: linear-gradient(transparent, black);
+  mask-image: linear-gradient(transparent, black);
+  background-color: rgb(0, 0, 0, 0.4);
   border-radius: 8px;
-  background-color: white;
 `;
 
-const StyledMessage = styled.ul``;
+const StyledMessage = styled.div``;
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -21,7 +38,7 @@ const StyledContainer = styled.div`
   align-items: center;
 `;
 const StyledInput = styled.input`
-  width: calc(100% - 32px);
+  width: calc(100% - 80px);
   height: 40px;
   border: 2px solid ${({ theme }) => theme.color.white};
   border-radius: 8px;
@@ -35,15 +52,14 @@ const SendBtn = styled.button`
   height: 24px;
   background: url("/image/liveshow/send-icon.svg") no-repeat 0px 0px;
   //gradient 속성 찾기
-  /* &::-webkit-mask-image: -webkit-gradient(
-    linear,
-    left 50%,
-    left bottom,
-    to(rgba(0, 0, 0, 1)),
-    from(rgba(0, 0, 0, 0))
-  ); */
 `;
-
+const FlexBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+  justify-content: flex-end;
+`;
 export default function ChatInput() {
   // const nickname = useLocation().state.nickname;
   const nickname = "홍길동"; // 닉네임
@@ -73,6 +89,7 @@ export default function ChatInput() {
 
   useEffect(() => {
     scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, []);
 
   const connectSuccess = () => {
@@ -144,20 +161,22 @@ export default function ChatInput() {
   };
 
   return (
-    <StyledContainer>
+    <FlexBox>
       <StyledChatting ref={scrollRef}>
         <StyledMessage ref={messageArea} />
       </StyledChatting>
 
-      <StyledInput
-        type="text"
-        className="body1-regular"
-        onChange={inputChangeHandler}
-        placeholder="메세지를 입력해주세요"
-        value={message}
-        onKeyPress={onKeyPress}
-      ></StyledInput>
-      <SendBtn onClick={sendMessage} />
-    </StyledContainer>
+      <StyledContainer>
+        <StyledInput
+          type="text"
+          className="body1-regular"
+          onChange={inputChangeHandler}
+          placeholder="메세지를 입력해주세요"
+          value={message}
+          onKeyPress={onKeyPress}
+        ></StyledInput>
+        <SendBtn onClick={sendMessage} />
+      </StyledContainer>
+    </FlexBox>
   );
 }
