@@ -13,6 +13,8 @@ import lombok.Setter;
 @Builder
 @ApiModel("ProductHistoryResponse")
 public class ProductHistoryRes {
+    @ApiModelProperty(name = "Product id")
+    private long id;
     @ApiModelProperty(name = "Product name")
     private String productName;
     @ApiModelProperty(name = "Product soldPrice")
@@ -40,6 +42,7 @@ public class ProductHistoryRes {
 
     public static ProductHistoryRes of(Product product, User user, long myReviewId, long otherReviewId)  {
         ProductHistoryRes res = ProductHistoryRes.builder()
+                .id(product.getId())
                 .productName(product.getName())
                 .soldPrice(product.getSoldPrice())
                 .isPaid(product.isPaid())
