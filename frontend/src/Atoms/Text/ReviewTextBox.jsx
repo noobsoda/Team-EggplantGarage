@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 
-const StyledInput = styled.input`
+const StyledReviewTextBox = styled.div`
   width: calc(100% - 8px);
   height: 80px;
 
@@ -11,13 +11,6 @@ const StyledInput = styled.input`
   color: ${({ theme }) => theme.color.black};
 `;
 
-export default function TextInput({ placehold, onChange, type }) {
-  return (
-    <StyledInput
-      type={type}
-      className="body1-regular"
-      onChange={onChange}
-      placeholder={placehold}
-    ></StyledInput>
-  );
+export default function ReviewTextBox({ content }) {
+  return <StyledReviewTextBox>{content}</StyledReviewTextBox>;
 }

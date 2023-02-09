@@ -18,7 +18,7 @@ export default function PurchasedHistory() {
   //여기서 userInfo에서 myId 값을 빼와야하는데 롱 id값을 빼옴
   useEffect(() => {
     getPurchasedList(myId, ({ data }) => {
-      console.log(data);
+      // console.log(data);
       //우선 뭐들어오는지 보고
       setItems(data);
     });
@@ -27,12 +27,14 @@ export default function PurchasedHistory() {
     <StyledPurchasedHistory>
       {items &&
         items.map((item) => {
+          console.log(item);
           return (
             <ItemCard
               item={item}
               key={item.id}
               buttonType={"purchasedhistory"}
-              isReview={true}
+              isReview={item.myReviewId === 0}
+              isSeller={false}
             />
           );
         })}
