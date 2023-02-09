@@ -1,7 +1,7 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.request.ChatRoomPostReq;
-import com.ssafy.api.response.ChatRoomDetailRes;
+import com.ssafy.api.response.ChatMessageRes;
 import com.ssafy.api.response.ChatRoomRes;
 import com.ssafy.api.service.ChatService;
 import io.swagger.annotations.*;
@@ -32,6 +32,7 @@ public class ChatController {
     public ResponseEntity<ChatRoomRes> joinChatRoom(@RequestBody @ApiParam(value = "채팅방 정보", required = true) ChatRoomPostReq chatRoomPostReq) {
         long senderId = chatRoomPostReq.getSenderId();
         long receiverId = chatRoomPostReq.getReceiverId();
+
         ChatRoomRes res = chatService.getChatRoombyUsersId(senderId, receiverId);
         if (res == null) {
             res = chatService.createChatRoom(senderId, receiverId);
@@ -46,10 +47,10 @@ public class ChatController {
         return ResponseEntity.status(200).body(resList);
     }
 
-    @GetMapping(value = "/message/{chatRoomId}/{senderId}")
+    @GetMapping(value = "/message/{chatRoomId}")
     @ApiOperation(value = "채팅방 메시지 조회", notes = "채팅방 메시지를 조회합니다.")
-    public ResponseEntity<ChatRoomDetailRes> getChatMessageList(@PathVariable("chatRoomId") long chatRoomId, @PathVariable("senderId") long senderId) {
-        ChatRoomDetailRes res = chatService.getChatMessageListByChatRoomId(chatRoomId, senderId);
-        return ResponseEntity.status(200).body(res);
+    public ResponseEntity<List<ChatMessageRes>> getChatMessageList(@PathVariable("chatRoomId") long chatRoomId) {
+        List<ChatMessageRes> resList = chatService.getChatMessageByChatRoomId(chatRoomId);
+        return ResponseEntity.status(200).body(resList);
     }
 }

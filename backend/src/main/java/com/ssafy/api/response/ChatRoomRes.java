@@ -7,6 +7,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@ToString
 @ApiModel("ChatRoomResponse")
 public class ChatRoomRes {
     @ApiModelProperty(name = "ChatRoom id")
@@ -29,6 +31,9 @@ public class ChatRoomRes {
     LocalDateTime lastSendTime;
 
     public static ChatRoomRes of(ChatRoom chatRoom, long senderId)  {
+        System.out.println(chatRoom);
+        if(chatRoom == null) return null;
+
         User receiver = (chatRoom.getFirstUser().getId() != senderId) ? chatRoom.getFirstUser() : chatRoom.getSecondUser();
         ChatRoomRes res = ChatRoomRes.builder()
                 .chatRoomId(chatRoom.getId())
