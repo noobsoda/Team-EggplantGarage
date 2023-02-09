@@ -148,19 +148,6 @@ export default function ChatRoom() {
           <div>
             <ChattingMessage chattingMessages={chattingMessages} />
           </div>
-          <div>
-            <div>
-              <input
-                id="sendMessage"
-                type="text"
-                value={message}
-                placeholder="메시지를 입력하세요"
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyPress={onKeyPress}
-              />
-            </div>
-            <button onClick={sendMessage}>전송</button>
-          </div>
         </ChatBody>
         <StyledContainer>
           <StyledInput
