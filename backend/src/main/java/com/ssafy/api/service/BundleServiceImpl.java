@@ -10,7 +10,6 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -57,11 +56,13 @@ public class BundleServiceImpl implements BundleService {
         return bundleId;
     }
 
-    public List<List<BundledItemsProductRes>> getBundleItemsProduct(List<Bundle> bundleList) {
+    // 공통
+    public List<List<BundledItemsProductRes>> getBundleItemsProduct(List<Bundle> bundleList, String who) {
         List<List<BundledItemsProductRes>> productAllList = new ArrayList<>();
         int size = bundleList.size();
 
         for(int i = 0; i < size; i++) {
+            boolean flag = false;
             long id = bundleList.get(i).getId();
             List<BundledItemsProductRes> productList = new ArrayList<>();
 
@@ -70,6 +71,14 @@ public class BundleServiceImpl implements BundleService {
 
             for(int j = 0; j < itemsSize; j++) {
                 Product product = bundledItemsRelationList.get(j).getProduct();
+
+                // 판매자는 이미 승인된 상품이 있는 목록은 추가 X
+                if(who.equals("seller") && product.isApproval()) {
+                    flag = true;
+                    refuseBundle(id);
+                    break;
+                }
+
                 BundledItemsProductRes res = new BundledItemsProductRes(
                         product.getName(), product.getSoldPrice(),
                         product.isPaid(), product.getLeftTopX(),
@@ -80,7 +89,7 @@ public class BundleServiceImpl implements BundleService {
                 productList.add(res);
             }
 
-            productAllList.add(productList);
+            if(!flag) productAllList.add(productList);
         }
         return productAllList;
     }
@@ -88,13 +97,13 @@ public class BundleServiceImpl implements BundleService {
     @Override
     public List<List<BundledItemsProductRes>> getSellerSuggestList(Long liveId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalse(liveId).get();
-        return getBundleItemsProduct(bundleList);
+        return getBundleItemsProduct(bundleList, "seller");
     }
 
     @Override
     public List<List<BundledItemsProductRes>> getBuyerSuggestList(long liveId, long buyerId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserId(liveId, buyerId).get();
-        return getBundleItemsProduct(bundleList);
+        return getBundleItemsProduct(bundleList, "buyer");
     }
 
     @Override
