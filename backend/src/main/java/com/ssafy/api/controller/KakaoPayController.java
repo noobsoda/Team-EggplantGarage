@@ -49,7 +49,7 @@ public class KakaoPayController {
     }
 
     @GetMapping("/success")
-    public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
+    public ResponseEntity<?> kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
 //        log.info("GET: kakaoPaySuccess 결제 승인");
         //System.out.println("GET: kakaoPaySuccess 결제 승인");
 
@@ -61,6 +61,6 @@ public class KakaoPayController {
         bundle.get().setPaid(true);
         bundleRepository.save(bundle.get());
 
-        return "success";
+        return ResponseEntity.status(200).body("결제 완료");
     }
 }

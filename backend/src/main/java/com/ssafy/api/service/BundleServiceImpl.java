@@ -64,6 +64,7 @@ public class BundleServiceImpl implements BundleService {
         for(int i = 0; i < size; i++) {
             boolean flag = false;
             long id = bundleList.get(i).getId();
+            int totalPrice = bundleList.get(i).getPrice();
             List<BundledItemsProductRes> productList = new ArrayList<>();
 
             List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(id).get();
@@ -80,11 +81,12 @@ public class BundleServiceImpl implements BundleService {
                 }
 
                 BundledItemsProductRes res = new BundledItemsProductRes(
-                        product.getName(), product.getSoldPrice(),
-                        product.isPaid(), product.getLeftTopX(),
-                        product.getLeftTopY(), product.getRightBottomX(),
-                        product.getRightBottomY(), product.getImageUrl(),
-                        product.getBuyerId(), bundleList.get(i).getUser().getNickname());
+                        id, product.getName(),
+                        product.getSoldPrice(), product.isPaid(),
+                        product.getLeftTopX(), product.getLeftTopY(),
+                        product.getRightBottomX(), product.getRightBottomY(),
+                        product.getImageUrl(), product.getBuyerId(),
+                        bundleList.get(i).getUser().getNickname(), totalPrice);
 
                 productList.add(res);
             }
