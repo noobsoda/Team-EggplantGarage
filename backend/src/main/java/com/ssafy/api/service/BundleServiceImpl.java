@@ -107,6 +107,13 @@ public class BundleServiceImpl implements BundleService {
     }
 
     @Override
+    public List<List<BundledItemsProductRes>> getApprovalNoPaidSuggestList(long liveId, long buyerId) {
+        System.out.println("승인받고 결제 아직 안한 상품 목록");
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidFalse(liveId, buyerId).get();
+        return getBundleItemsProduct(bundleList, "buyer");
+    }
+
+    @Override
     public List<Product> getBundleItemsList(long bundleId) {
         List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundleId).get();
         List<Product> productList = new ArrayList<>();

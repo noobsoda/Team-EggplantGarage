@@ -45,6 +45,21 @@ public class BundleController {
         return ResponseEntity.status(200).body(getProductList);
     }
 
+    // 구매자 - 묶음 제안 목록 (승인완료- 결제X)
+    @GetMapping("/approval/noPaid/{liveId}/{buyerId}")
+    public ResponseEntity<?> getApprovalNoPaidSuggestList(@PathVariable("liveId") Long liveId, @PathVariable("buyerId") Long buyerId) {
+        List<List<BundledItemsProductRes>> getProductList = bundleService.getApprovalNoPaidSuggestList(liveId, buyerId);
+        return ResponseEntity.status(200).body(getProductList);
+    }
+
+    // 구매자 - 묶음 제안 목록 (승인완료- 결제O)
+
+    // 구매자 - 묶음 제안 목록 (대기)
+
+
+    // 구매자 - 묶음 제안 목록 (거부)
+
+
     // bundleId의 묶음 상품들 보기
     @GetMapping("/items/{bundleId}")
     public ResponseEntity<?> getBundledItemsRelation(@PathVariable("bundleId") Long bundleId) {
