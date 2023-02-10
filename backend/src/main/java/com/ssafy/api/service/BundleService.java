@@ -12,6 +12,7 @@ public interface BundleService {
     List<List<BundledItemsProductRes>> getSellerSuggestList(Long liveId);
     List<List<BundledItemsProductRes>> getBuyerSuggestList(long liveId, long buyerId);
     List<List<BundledItemsProductRes>> getApprovalNoPaidSuggestList(long liveId, long buyerId);
+    List<List<BundledItemsProductRes>> getApprovalYesPaidSuggestList(long liveId, long buyerId);
     void approvalBundle(long bundleId);
     void refuseBundle(long bundleId);
 }

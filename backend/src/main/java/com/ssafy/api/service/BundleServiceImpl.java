@@ -114,6 +114,12 @@ public class BundleServiceImpl implements BundleService {
     }
 
     @Override
+    public List<List<BundledItemsProductRes>> getApprovalYesPaidSuggestList(long liveId, long buyerId) {
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidTrue(liveId, buyerId).get();
+        return getBundleItemsProduct(bundleList, "buyer");
+    }
+
+    @Override
     public List<Product> getBundleItemsList(long bundleId) {
         List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundleId).get();
         List<Product> productList = new ArrayList<>();
