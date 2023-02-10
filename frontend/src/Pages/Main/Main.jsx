@@ -28,6 +28,7 @@ export default function Main() {
   const [selected, setSelected] = useState("");
   //liveContentList 까지 가야됨.
   const navigate = useNavigate();
+
   function startLive() {
     navigate("/liveshowsubmit");
   }
@@ -65,7 +66,7 @@ export default function Main() {
     };
     getLives(nationalSearchCondition, ({ data }) => {
       // console.log(data.liveContentList);
-      console.log(nationalSearchCondition);
+      // console.log(nationalSearchCondition);
       setAllLives(data.liveContentList);
     });
     let location = { lat: lat, lng: lng };
@@ -77,18 +78,14 @@ export default function Main() {
       {/* 헤더 */}
       <Header isLogo={true} />
       <Body>
-        <div className="page-header" style={{ marginBottom: "8px" }}>
-          주변 라이브쇼
-        </div>
+        <div className="page-header" style={{ marginBottom: "8px" }}></div>
         <Container>
           {aroundLives &&
             aroundLives.map((show) => {
               return <LiveshowItem key={show.id} show={show} isViewer={true} />;
             })}
         </Container>
-        <div className="page-header" style={{ marginBottom: "8px" }}>
-          전국 라이브쇼
-        </div>
+        <div className="page-header" style={{ marginBottom: "8px" }}></div>
         <CategoryNav setSelected={setSelected} />
         <Container>
           {allLives &&
