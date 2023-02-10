@@ -135,7 +135,7 @@ export default function LiveShowSeller({ liveId }) {
         .filter((sub) => getNicknameTag(sub) === "admin")
         .map((sub, i) => (
           <FlexBox key={i}>
-            <UserVideoComponent streamManager={sub} />
+            {i === 0 ? <UserVideoComponent streamManager={sub} /> : undefined}
           </FlexBox>
         ))}
     </FlexBox>

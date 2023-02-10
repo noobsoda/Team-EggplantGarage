@@ -20,6 +20,7 @@ import {
   deleteFavoriteLive,
   addFavoriteLive,
 } from "../../util/api/favoriteApi";
+import { exitLive } from "../../util/api/liveApi";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -54,13 +55,16 @@ const StyledHeader = styled.div`
   justify-content: space-between;
 `;
 const StyledBody = styled.div`
-  height: calc(100% - 328px);
+  height: 50%;
+  width: 100%;
   //264+ padding값
   padding: 0 24px 24px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   row-gap: 24px;
+  position: absolute;
+  bottom: 0;
 `;
 const Title = styled.div`
   color: white;
@@ -73,7 +77,16 @@ export default function LiveshowBuyer() {
   const [liveInfo, setLiveInfo] = useState({});
   const [isSpeaker, setIsSpeaker] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
+  const [isExit, setIsExit] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const user = useSelector((state) => state.user.userInfo);
+  const exit = () => {
+    const exitReq = { userId: user.id, liveId: liveId };
+    if (isExit) {
+      exitLive(exitReq);
+    }
+  };
+
   useEffect(() => {
     getLiveDetail(
       liveId,
@@ -100,7 +113,7 @@ export default function LiveshowBuyer() {
     if (isLiked) {
       deleteFavoriteLive(
         { liveId: liveId, userId: userInfo.id },
-        () => { },
+        () => {},
         () => {
           console.warn("favor delete fail");
         }
@@ -108,7 +121,7 @@ export default function LiveshowBuyer() {
     } else {
       addFavoriteLive(
         { liveId: liveId, userId: userInfo.id },
-        () => { },
+        () => {},
         () => {
           console.warn("favor add fail");
         }
@@ -138,6 +151,8 @@ export default function LiveshowBuyer() {
             />
             <ExitBtn
               buttonClick={() => {
+                setIsExit(true);
+                exit();
                 navigate("/");
               }}
             />
