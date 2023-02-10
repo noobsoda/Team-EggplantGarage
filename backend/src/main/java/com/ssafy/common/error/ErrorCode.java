@@ -11,6 +11,7 @@ public enum ErrorCode {
 
     //404 NOT_FOUND 잘못된 리소스 접근
     USER_NOT_FOUND(404, "존재하지 않는 유저 ID 입니다."),
+    USER_LIVE_NOT_FOUND(404, "존재하지 않는 참가유저 입니다."),
     LIVE_NOT_FOUND(404, "존재하지 않는 라이브 ID 입니다."),
     REVIEW_NOT_FOUND(404, "존재하지 않는 리뷰 ID 입니다."),
     BUNDLE_NOT_FOUND(404, "존재하지 않는 묶음 ID 입니다."),

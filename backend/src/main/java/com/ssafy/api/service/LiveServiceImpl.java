@@ -2,6 +2,8 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.*;
 import com.ssafy.api.response.*;
+import com.ssafy.common.error.ErrorCode;
+import com.ssafy.common.exception.CustomException;
 import com.ssafy.common.util.DistanceModule;
 import com.ssafy.common.util.LocationDistance;
 import com.ssafy.db.entity.*;
@@ -56,6 +58,7 @@ public class LiveServiceImpl implements LiveService {
                 .user(user)
                 .build();
 
+        liveRepository.save(live);
         //유저라이브 헬퍼 테이블에 본인도 넣어주기
         UserLive userLive = UserLive.builder()
                 .live(live)
@@ -63,7 +66,6 @@ public class LiveServiceImpl implements LiveService {
                 .build();
         userLiveRepository.save(userLive);
 
-        liveRepository.save(live);
 
         return live;
     }
@@ -141,7 +143,7 @@ public class LiveServiceImpl implements LiveService {
         LiveListGetRes liveListGetRes = new LiveListGetRes();
         List<LiveContent> Content = new ArrayList<>();
         for (Live live : liveList) {
-            if(!live.isLive())
+            if (!live.isLive())
                 continue;
             //라이브 카테고리 헬퍼 테이블 순회
             List<LiveCategory> liveCategories = live.getLiveCategoryList();
@@ -184,36 +186,38 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public boolean postUserLiveByLiveId(LiveUserJoinReq liveUserJoinReq) {
+        if(liveUserJoinReq.getUserId() == null || liveUserJoinReq.getLiveId() == null)
+            throw new CustomException(ErrorCode.INVALID_PARAMETER);
         //유저 라이브 참가
         Optional<Live> oLive = liveRepository.findById(liveUserJoinReq.getLiveId());
-        Live live = oLive.orElse(null);
+        Live live = oLive
+                .orElseThrow(() -> new CustomException(ErrorCode.LIVE_NOT_FOUND));
 
         Optional<User> oUser = userRepository.findById(liveUserJoinReq.getUserId());
-        User user = oUser.orElse(null);
-
-        if (user == null || live == null)
-            return false;
+        User user = oUser
+                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
         Optional<List<UserLive>> oUserLiveList = userLiveRepository.findAllByUser_idAndLive_id(liveUserJoinReq.getUserId(), liveUserJoinReq.getLiveId());
         List<UserLive> userLiveList = oUserLiveList.orElse(null);
 
+        if (userLiveList.size() > 0)
+            throw new CustomException(ErrorCode.ALREADY_SAVED_USER);
+
         //이미 죽어있는 방송이면 들어가면 안됨
-        if(!live.isLive()){
-            return false;
+        if (!live.isLive()) {
+            throw new CustomException(ErrorCode.LIVE_NOT_FOUND);
         }
         //라이브에 이미 들어가있으면 들어가면 안됨
-        if (userLiveList == null || userLiveList.isEmpty()) {
 
 
-            UserLive userLive = UserLive.builder()
-                    .user(user)
-                    .live(live)
-                    .build();
-            userLiveRepository.save(userLive);
-            return true;
-        }else {
-            return false;
-        }
+        UserLive userLive = UserLive.builder()
+                .user(user)
+                .live(live)
+                .build();
+        userLiveRepository.save(userLive);
+
+        return true;
+
     }
 
     @Override
@@ -303,7 +307,7 @@ public class LiveServiceImpl implements LiveService {
     @Override
     public List<LiveContent> searchSortUserJoinLiveList(List<LiveContent> liveContentList, String userJoinSort) {
         //오름차순 정렬
-        if(userJoinSort.equals("ASC")){
+        if (userJoinSort.equals("ASC")) {
             Collections.sort(liveContentList, new Comparator<LiveContent>() {
                 @Override
                 public int compare(LiveContent o1, LiveContent o2) {
@@ -311,7 +315,7 @@ public class LiveServiceImpl implements LiveService {
                 }
             });
             //내림차순 정렬
-        }else if(userJoinSort.equals("DESC")){
+        } else if (userJoinSort.equals("DESC")) {
             Collections.sort(liveContentList, new Comparator<LiveContent>() {
                 @Override
                 public int compare(LiveContent o1, LiveContent o2) {
@@ -328,15 +332,14 @@ public class LiveServiceImpl implements LiveService {
         List<LiveContent> liveContentList = new ArrayList<>();
         int size = liveContentListInfo.size();
 
-        if(size <= page * 10 && size <= (page -1) * 10){
+        if (size <= page * 10 && size <= (page - 1) * 10) {
             return null;
-        }
-        else if(size > (page -1) * 10 && size < page * 10){
-            for(int i = ((page -1) * 10); i < liveContentListInfo.size(); i++){
+        } else if (size > (page - 1) * 10 && size < page * 10) {
+            for (int i = ((page - 1) * 10); i < liveContentListInfo.size(); i++) {
                 liveContentList.add(liveContentListInfo.get(i));
             }
-        }else{
-            for(int i = ((page -1) * 10); i < (page) * 10; i++){
+        } else {
+            for (int i = ((page - 1) * 10); i < (page) * 10; i++) {
                 liveContentList.add(liveContentListInfo.get(i));
             }
         }
@@ -350,7 +353,7 @@ public class LiveServiceImpl implements LiveService {
         Optional<Live> oLive = liveRepository.findById(liveId);
         Live live = oLive.orElse(null);
 
-        if(live == null)
+        if (live == null)
             return null;
 
         //라이브 카테고리 헬퍼 테이블 순회
@@ -361,7 +364,7 @@ public class LiveServiceImpl implements LiveService {
         for (Iterator<LiveCategory> it = liveCategories.iterator(); it.hasNext(); ) {
             LiveCategory liveCategory = it.next();
             //카테고리 아이디와 연관된 카테고리 테이블 조회
-            if(liveCategory.getCategory() == null)
+            if (liveCategory.getCategory() == null)
                 continue;
             categoryList.add(Category.builder()
                     .id(liveCategory.getCategory().getId())

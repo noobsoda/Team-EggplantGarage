@@ -194,13 +194,9 @@ public class LiveController {
     @ApiOperation(value = "유저 방 참가", notes = "유저의 방 참가")
     public ResponseEntity<? extends BaseResponseBody> postLiveUserJoin(@RequestBody @ApiParam(value = "유저 참가 정보", required = true) LiveUserJoinReq LiveUserJoinReq) {
 
+        liveService.postUserLiveByLiveId(LiveUserJoinReq);
 
-        if (liveService.postUserLiveByLiveId(LiveUserJoinReq)) {
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "유저 참가 성공"));
-        } else {
-            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "해당 라이브가 끝났거나 라이브, 유저가 없거나 이미 참가한 유저입니다."));
-        }
-
+        return ResponseEntity.status(200).body(BaseResponseBody.of(200, "유저 참가 성공"));
     }
 
     @DeleteMapping("/userlive")
