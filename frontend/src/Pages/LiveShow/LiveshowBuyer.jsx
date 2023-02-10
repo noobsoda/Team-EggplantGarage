@@ -88,7 +88,7 @@ export default function LiveshowBuyer() {
     isFavoriteLive(
       { liveId: liveId, userId: userInfo.id },
       ({ data }) => {
-        setIsLiked(data);
+        setIsLiked(data.favorite);
       },
       () => {
         console.warn("favor info fail");
@@ -100,7 +100,7 @@ export default function LiveshowBuyer() {
     if (isLiked) {
       deleteFavoriteLive(
         { liveId: liveId, userId: userInfo.id },
-        () => {},
+        () => { },
         () => {
           console.warn("favor delete fail");
         }
@@ -108,7 +108,7 @@ export default function LiveshowBuyer() {
     } else {
       addFavoriteLive(
         { liveId: liveId, userId: userInfo.id },
-        () => {},
+        () => { },
         () => {
           console.warn("favor add fail");
         }
