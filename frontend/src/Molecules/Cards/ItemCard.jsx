@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
 import ExtraSmallButton from "../../Atoms/Buttons/ExtraSmallBtn";
 import Check from "../../Atoms/Inputs/Check";
@@ -46,6 +46,9 @@ export default function ItemCard({
   buttonType,
   isReview,
   isSeller,
+  isSaleList,
+  check,
+  setCheck,
 }) {
   const navigate = useNavigate();
   return (
@@ -57,11 +60,18 @@ export default function ItemCard({
           <div className="body1-regular">
             {isSeller ? "제안자" : item.otherId}
           </div>
-          <div className="body1-regular">{item.soldPrice || 142879}원</div>
+
+          <div className="body1-regular">
+            {isSaleList ? item.initialPrice : item.soldPrice || 0}원
+          </div>
         </div>
       </ItemInfo>
       <ItemBtn>
-        {buttonType === "check" ? <Check /> : <></>}
+        {buttonType === "check" ? (
+          <Check check={check} setCheck={setCheck} disable={item.paid} />
+        ) : (
+          <></>
+        )}
         {buttonType === "saleshistory" ? (
           <ExtraSmallButton name="한개" />
         ) : (

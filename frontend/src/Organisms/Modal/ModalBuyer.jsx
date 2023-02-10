@@ -6,7 +6,6 @@ import { useState } from "react";
 import SalesList from "../../Templates/Modal/BuyerBody/SalesList";
 import SuggestionList from "../../Templates/Modal/BuyerBody/SuggestionList";
 import ModalBody from "../../Templates/Modal/ModalBody";
-import ExtraSmallButton from "../../Atoms/Buttons/ExtraSmallBtn";
 
 const Header = styled.div`
   width: 100%;
@@ -31,6 +30,9 @@ export default function ModalBuyer({
   bundleList,
   setModalOpen,
   isSeller,
+  userId,
+  liveId,
+  getSuggest,
 }) {
   const closeModal = () => {
     setModalOpen(false);
@@ -61,9 +63,20 @@ export default function ModalBuyer({
           />
         </FlexBox>
         {isSuggestion ? (
-          <SalesList isSeller={isSeller} productList={productList} />
+          <SalesList
+            liveId={liveId}
+            userId={userId}
+            isSeller={isSeller}
+            productList={productList}
+          />
         ) : (
-          <SuggestionList isSeller={isSeller} suggestList={bundleList} />
+          <SuggestionList
+            liveId={liveId}
+            userId={userId}
+            isSeller={isSeller}
+            suggestList={bundleList}
+            getSuggest={getSuggest}
+          />
         )}
       </ModalBody>
     </Modal>

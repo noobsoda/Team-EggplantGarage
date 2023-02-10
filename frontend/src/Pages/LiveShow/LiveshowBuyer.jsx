@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
 import styled from "styled-components";
+
 import LiveChatBox from "../../Molecules/Box/LiveChatBox";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
@@ -14,8 +15,17 @@ import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
 
 import Buyer from "../../Templates/LiveShow/Buyer";
 
+import getStompClient from "../../util/socket";
 import { getLiveDetail } from "../../util/api/liveApi";
-import { isFavoriteLive, deleteFavoriteLive, addFavoriteLive } from "../../util/api/favoriteApi";
+import {
+  isFavoriteLive,
+  deleteFavoriteLive,
+  addFavoriteLive,
+} from "../../util/api/favoriteApi";
+
+import { getBuyerSuggestList } from "../../util/api/productApi";
+
+import useInterval from "../../hook/useInterval";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -66,10 +76,48 @@ export default function LiveshowBuyer() {
   const { liveId } = useParams(); //방 아이디가 넘어온다.
   const userInfo = useSelector(checkUserInfo); //현재 유저의 정보
 
+  const [stompClient, setStompClient] = useState(getStompClient()); //소켓
+
   const [liveInfo, setLiveInfo] = useState({}); //방의 정보, 판매물품
   const [isSpeaker, setIsSpeaker] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+
+  const [bundleList, setBundleList] = useState([]);
+
+  //10초마다 묶음 제안 요청 왔는지 확인
+  useInterval(() => {
+    getSuggest();
+  }, 10000);
+
+  function getSuggest() {
+    getBuyerSuggestList(
+      liveId,
+      userInfo.id,
+      ({ data }) => {
+        console.log(data);
+        setBundleList(data);
+      },
+      () => {
+        console.warn("bundle load fail");
+      }
+    );
+  }
+
+  function connect() {
+    stompClient.connect(
+      {},
+      () => {
+        stompClient.subscribe("/sub/live/product/" + liveId, (data) => {
+          console.log(data);
+        });
+      },
+      (error) => {
+        console.warn("product error");
+      }
+    );
+  }
+
   useEffect(() => {
     getLiveDetail(
       liveId,
@@ -80,7 +128,7 @@ export default function LiveshowBuyer() {
         console.warn("live info fail");
       }
     );
-    // //현재 유저의 좋야요 유무
+    // //현재 유저의 좋아요 유무
     isFavoriteLive(
       { liveId: liveId, userId: userInfo.id },
       ({ data }) => {
@@ -90,6 +138,7 @@ export default function LiveshowBuyer() {
         console.warn("favor info fail");
       }
     );
+    connect();
   }, []);
 
   function clickLike() {
@@ -145,10 +194,13 @@ export default function LiveshowBuyer() {
       </LiveLayout>
       {modalOpen && (
         <ModalBuyer
-          bundleList={[]}
+          userId={userInfo.id}
+          liveId={liveId}
+          bundleList={bundleList}
           productList={liveInfo.liveProductInfoList}
           setModalOpen={setModalOpen}
           isSeller={false}
+          getSuggest={getSuggest}
         />
       )}
     </StyledPage>

@@ -36,63 +36,122 @@ async function getPurchasedList(buyerId, success, fail) {
 }
 
 /**
- * 
- * @param {*} success 
- * @param {*} fail 
- * @param {*} bundle 
- * "productIdList": [],
+ * 구매자가 묶음 상품을 등록한다.
+ * @param {*} bundle {"productIdList": [],
    "buyerId": 3,
    "soldPrice": 30000,
-   "liveId": 1
+   "liveId": 1}
+ * @param {*} success 
+ * @param {*} fail 
+ * 
  */
 async function postBundle(bundle, success, fail) {
   await api.post(`/api/v1/bundle`, bundle).then(success).catch(fail);
 }
 
+/**
+ * 판매자가 받은 묶음 제안 목록을 본다.
+ * @param {*} liveId
+ * @param {*} success
+ * @param {*} fail
+ */
 async function getSellerSuggestList(liveId, success, fail) {
   await api
-    .get(`/api/v1/bundle/` + liveId)
+    .get(`/api/v1/bundle/seller/` + liveId)
     .then(success)
     .catch(fail);
 }
+/**
+ * 구매자의 제안한 목록을 본다.
+ * @param {*} liveId
+ * @param {*} buyerId
+ * @param {*} success
+ * @param {*} fail
+ */
 async function getBuyerSuggestList(liveId, buyerId, success, fail) {
   await api
-    .get(`/api/v1/bundle/` + liveId + `/` + buyerId)
+    .get(`/api/v1/bundle/buyer/` + liveId + `/` + buyerId)
     .then(success)
     .catch(fail);
 }
+/**
+ * 구매자가 제안한 목록에서 승인을 받고 아직 결제를 진행하지 않는 목록
+ * @param {*} liveId
+ * @param {*} buyerId
+ * @param {*} success
+ * @param {*} fail
+ */
+async function getBuyerSuggestListPayWait(liveId, buyerId, success, fail) {
+  await api
+    .get(`/api/vi/bundle/buyer/approvalNoPaid/` + liveId + `/` + buyerId)
+    .then(success)
+    .catch(fail);
+}
+
+/**
+ * 구매자가 제안한 목록에서 승인과 결제를 진행한 목록
+ * @param {*} liveId
+ * @param {*} buyerId
+ * @param {*} success
+ * @param {*} fail
+ */
+async function getBuyerSuggestListPayComplete(liveId, buyerId, success, fail) {
+  await api
+    .get(`/api/vi/bundle/buyer/approvalYesPaid/` + liveId + `/` + buyerId)
+    .then(success)
+    .catch(fail);
+}
+
+/**
+ * 해당 묶음 상품들 목록을 조회한다.
+ * @param {*} bundleId 묶음 아이디
+ * @param {*} success
+ * @param {*} fail
+ */
 async function getBundleItemList(bundleId, success, fail) {
   await api
     .get(`/api/v1/bundle/items/` + bundleId)
     .then(success)
     .catch(fail);
 }
+/**
+ * 해당 묶음에 대해 승인
+ * @param {*} bundleId
+ * @param {*} success
+ * @param {*} fail
+ */
 async function setBundleApproval(bundleId, success, fail) {
   await api
     .put(`/api/v1/bundle/approval/` + bundleId)
     .then(success)
     .catch(fail);
 }
+/**
+ * 해당 묶음에 대해 거절
+ * @param {*} bundleId
+ * @param {*} success
+ * @param {*} fail
+ */
 async function setBundleRefuse(bundleId, success, fail) {
   await api
-    .put(`/api/v1/bundle/reffuse/` + bundleId)
+    .put(`/api/v1/bundle/refuse/` + bundleId)
     .then(success)
     .catch(fail);
 }
 
 /**
- * 해당 라이브에 요청된 묶음 가져오기
- * @param {*} liveId
+ * 카카오페이 결제 진행
+ * @param {*} bundleId
  * @param {*} success
  * @param {*} fail
  * @returns
  */
-async function getLiveBundle(liveId, success, fail) {
-  return await api.get(`/api/v1/bundle/${liveId}`).then(success).catch(fail);
+async function kakaopay(bundleId, success, fail) {
+  return await api
+    .post(`/api/v1/kakaoPay/`, { bundleId: bundleId })
+    .then(success)
+    .catch(fail);
 }
-
-//update bundle/approval
-//update bundle/refuge
 
 /**
  * 이미지 가져오기
@@ -100,7 +159,8 @@ async function getLiveBundle(liveId, success, fail) {
  * @returns
  */
 async function getImage(filename) {
-  return await api(`/api/v1/file/images/${filename}`)
+  return await api
+    .get(`/api/v1/file/images/${filename}`)
     .then((response) => response.blob())
     .then((blob) => {
       return URL.createObjectURL(blob);
@@ -113,8 +173,10 @@ export {
   getSellerSuggestList,
   getBundleItemList,
   getBuyerSuggestList,
+  getBuyerSuggestListPayWait,
+  getBuyerSuggestListPayComplete,
   setBundleApproval,
   setBundleRefuse,
   setLiveProduct,
-  getLiveBundle,
+  kakaopay,
 };

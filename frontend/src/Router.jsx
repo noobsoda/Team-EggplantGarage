@@ -48,6 +48,7 @@ const Router = () => {
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
     { path: "/signupemail", element: <SignUpEmail /> },
+    { path: "*", element: <Main /> },
   ]);
   return (
     <>

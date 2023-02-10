@@ -1,6 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { login, logout, userInfo, tokenRegeneration } from "../../util/api/userApi";
+import {
+  login,
+  logout,
+  userInfo,
+  tokenRegeneration,
+} from "../../util/api/userApi";
 
 export const userSlice = createSlice({
   name: "user",
@@ -33,7 +38,8 @@ export const checkIsValidToken = (state) => state.user.isValidToken;
 export const checkUserInfo = (state) => state.user.userInfo;
 
 // Action creators are generated for each case reducer function
-export const { setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } = userSlice.actions;
+export const { setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } =
+  userSlice.actions;
 
 /**
  * 해당 유저 정보로 로그인 진행
@@ -97,8 +103,8 @@ export const logoutAction = (navigate) => (dispatch) => {
       dispatch(setIsValidToken(false));
       navigate("/");
     },
-    (e) => {
-      console.log(e);
+    () => {
+      console.warn("logout fail");
     }
   );
 };
