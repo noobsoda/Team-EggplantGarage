@@ -77,14 +77,12 @@ export default function LiveshowBuyer() {
   const [liveInfo, setLiveInfo] = useState({});
   const [isSpeaker, setIsSpeaker] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [isExit, setIsExit] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const user = useSelector((state) => state.user.userInfo);
   const exit = () => {
     const exitReq = { userId: user.id, liveId: liveId };
-    if (isExit) {
-      exitLive(exitReq);
-    }
+    exitLive(exitReq);
+    navigate("/");
   };
 
   useEffect(() => {
@@ -151,9 +149,7 @@ export default function LiveshowBuyer() {
             />
             <ExitBtn
               buttonClick={() => {
-                setIsExit(true);
                 exit();
-                navigate("/");
               }}
             />
           </StyledSide>
