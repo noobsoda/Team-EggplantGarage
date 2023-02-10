@@ -9,6 +9,7 @@ import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
 import LikeBtn from "../../Atoms/IconButtons/liveshow/LikeBtn";
+import ViewerCntBox from "../../Molecules/Box/ViewerCntBox";
 
 import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
 
@@ -77,14 +78,12 @@ export default function LiveshowBuyer() {
   const [liveInfo, setLiveInfo] = useState({});
   const [isSpeaker, setIsSpeaker] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [isExit, setIsExit] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const user = useSelector((state) => state.user.userInfo);
   const exit = () => {
     const exitReq = { userId: user.id, liveId: liveId };
-    if (isExit) {
-      exitLive(exitReq);
-    }
+    exitLive(exitReq);
+    navigate("/");
   };
 
   useEffect(() => {
@@ -134,7 +133,19 @@ export default function LiveshowBuyer() {
       <Buyer liveId={liveId} />
       <LiveLayout>
         <StyledHeader>
-          <Title className="show-header">{liveInfo.title}</Title>
+          <div
+            style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}
+          >
+            <Title className="show-header">{liveInfo.title}</Title>
+            <div className="body1-header" style={{ color: "white" }}>
+              판매자명
+            </div>
+            <ViewerCntBox
+              viewerCnt={
+                liveInfo.userEntryResList && liveInfo.userEntryResList.length
+              }
+            />
+          </div>
           <StyledSide>
             <BigMenuBtn
               buttonClick={() => {
@@ -151,9 +162,7 @@ export default function LiveshowBuyer() {
             />
             <ExitBtn
               buttonClick={() => {
-                setIsExit(true);
                 exit();
-                navigate("/");
               }}
             />
           </StyledSide>

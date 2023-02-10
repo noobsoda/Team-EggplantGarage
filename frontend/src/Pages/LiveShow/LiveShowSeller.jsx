@@ -18,6 +18,7 @@ import { getLiveDetail } from "../../util/api/liveApi";
 import { getLiveBundle } from "../../util/api/productApi";
 
 import useInterval from "../../hook/useInterval";
+import ViewerCntBox from "../../Molecules/Box/ViewerCntBox";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -75,16 +76,15 @@ export default function LiveshowBuyer(toggleCamera) {
 
   const [liveInfo, setLiveInfo] = useState({});
   const [bundleList, setBundleList] = useState([]);
-  const [isExit, setIsExit] = useState(false);
+  // const [isExit, setIsExit] = useState(false);
 
   const navigate = useNavigate();
 
   const exit = () => {
-    if (isExit) {
-      closeLive(liveId, (data) => {
-        console.log(data);
-      });
-    }
+    // if (isExit) {
+    closeLive(liveId, (data) => {});
+    navigate("/");
+    // }
   };
 
   //10초마다 묶음 제안 요청 왔는지 확인
@@ -93,7 +93,6 @@ export default function LiveshowBuyer(toggleCamera) {
       liveId,
       ({ data }) => {
         console.log("제안온 목록");
-        console.log(data);
         setBundleList(data);
       },
       () => {
@@ -106,7 +105,6 @@ export default function LiveshowBuyer(toggleCamera) {
     getLiveDetail(
       liveId,
       ({ data }) => {
-        console.log(data);
         setLiveInfo(data);
       },
       () => {
@@ -125,7 +123,16 @@ export default function LiveshowBuyer(toggleCamera) {
       />
       <LiveLayout>
         <StyledHeader>
-          <Title className="show-header">{liveInfo.title}</Title>
+          <div
+            style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}
+          >
+            <Title className="show-header">{liveInfo.title}</Title>
+            <ViewerCntBox
+              viewerCnt={
+                liveInfo.userEntryResList && liveInfo.userEntryResList.length
+              }
+            />
+          </div>
           <StyledSide>
             <BigMenuBtn
               buttonClick={() => {
@@ -152,9 +159,9 @@ export default function LiveshowBuyer(toggleCamera) {
             />
             <ExitBtn
               buttonClick={() => {
-                setIsExit(true);
+                // setIsExit(true);
+                // console.log(isExit);
                 exit();
-                navigate("/");
               }}
             />
           </StyledSide>
