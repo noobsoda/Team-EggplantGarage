@@ -41,6 +41,7 @@ public class BundleServiceImpl implements BundleService {
         bundle.setPaid(false);
         bundle.setApproval(false);
         bundle.setRefuse(false);
+        bundle.setCancel(false);
 
         Long bundleId = bundleRepository.save(bundle).getId();
 
