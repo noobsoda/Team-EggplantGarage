@@ -30,6 +30,7 @@ public class Product extends BaseEntity {
     private int rightBottomY;
     private String imageUrl;
     private Long buyerId;
+    private boolean isApproval;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

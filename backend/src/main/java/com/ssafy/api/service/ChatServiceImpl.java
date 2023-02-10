@@ -51,7 +51,7 @@ public class ChatServiceImpl implements ChatService {
 
     @Override
     public List<ChatRoomRes> getChatRoomListByUserId(long senderId) {
-        List<ChatRoom> chatRoomList = chatRoomRepository.findByFirstUserIdOrSecondUserId(senderId);
+        List<ChatRoom> chatRoomList = chatRoomRepository.findAllByUserId(senderId);
         return ChatRoomRes.of(chatRoomList, senderId);
     }
 

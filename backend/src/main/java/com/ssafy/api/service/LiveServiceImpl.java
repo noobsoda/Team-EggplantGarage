@@ -56,6 +56,8 @@ public class LiveServiceImpl implements LiveService {
                 .user(user)
                 .build();
 
+        liveRepository.save(live);
+
         //유저라이브 헬퍼 테이블에 본인도 넣어주기
         UserLive userLive = UserLive.builder()
                 .live(live)
@@ -63,7 +65,6 @@ public class LiveServiceImpl implements LiveService {
                 .build();
         userLiveRepository.save(userLive);
 
-        liveRepository.save(live);
 
         return live;
     }
@@ -162,7 +163,7 @@ public class LiveServiceImpl implements LiveService {
             //Live와 연관된 유저 조회
             User user = live.getUser();
 
-            List<UserLive> userLiveList = live.getUserLiveList();
+            List<UserLive> userLiveList = userLiveRepository.findAllByLive_id(live.getId());
 
             LiveContent liveContent = LiveContent.builder()
                     .id(live.getId())
@@ -184,7 +185,7 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public boolean postUserLiveByLiveId(LiveUserJoinReq liveUserJoinReq) {
-        //라이브 아이디 조회
+        //유저 라이브 참가
         Optional<Live> oLive = liveRepository.findById(liveUserJoinReq.getLiveId());
         Live live = oLive.orElse(null);
 
@@ -194,19 +195,35 @@ public class LiveServiceImpl implements LiveService {
         if (user == null || live == null)
             return false;
 
-        UserLive userLive = UserLive.builder()
-                .user(user)
-                .live(live)
-                .build();
-        userLiveRepository.save(userLive);
-        return true;
+        Optional<List<UserLive>> oUserLiveList = userLiveRepository.findAllByUser_idAndLive_id(liveUserJoinReq.getUserId(), liveUserJoinReq.getLiveId());
+        List<UserLive> userLiveList = oUserLiveList.orElse(null);
+
+        //이미 죽어있는 방송이면 들어가면 안됨
+        if(!live.isLive()){
+            return false;
+        }
+        //라이브에 이미 들어가있으면 들어가면 안됨
+        if (userLiveList == null || userLiveList.isEmpty()) {
+
+
+            UserLive userLive = UserLive.builder()
+                    .user(user)
+                    .live(live)
+                    .build();
+            userLiveRepository.save(userLive);
+            return true;
+        }else {
+            return false;
+        }
     }
 
     @Override
     public boolean deleteUserLiveByLiveId(LiveUserJoinReq liveUserJoinReq) {
         //라이브 아이디 조회
-        List<UserLive> userLiveList = userLiveRepository.findAllByUser_idAndLive_id(liveUserJoinReq.getUserId(), liveUserJoinReq.getLiveId());
-        if (userLiveList.isEmpty())
+        Optional<List<UserLive>> oUserLiveList = userLiveRepository.findAllByUser_idAndLive_id(liveUserJoinReq.getUserId(), liveUserJoinReq.getLiveId());
+        List<UserLive> userLiveList = oUserLiveList.orElse(null);
+
+        if (userLiveList == null || userLiveList.isEmpty())
             return false;
 
         userLiveRepository.deleteAll(userLiveList);
@@ -229,8 +246,8 @@ public class LiveServiceImpl implements LiveService {
         favoriteRepository.deleteAll(favoriteList);
         //라이브에 참가한 유저, 유저라이브 테이블에서 전부 삭제
         //라이브 아디와 유저 아디가 판매자 본인과 만났을 경우 라이브 유저 전부 삭제해서 주석처리
-        /*List<UserLive> userLiveList = userLiveRepository.findAllByLive_id(liveId);
-        userLiveRepository.deleteAll(userLiveList);*/
+        List<UserLive> userLiveList = userLiveRepository.findAllByLive_id(liveId);
+        userLiveRepository.deleteAll(userLiveList);
 
 
         liveRepository.save(live);
@@ -358,7 +375,7 @@ public class LiveServiceImpl implements LiveService {
         User user = live.getUser();
 
 
-        List<UserLive> userLiveList = live.getUserLiveList();
+        List<UserLive> userLiveList = userLiveRepository.findAllByLive_id(live.getId());
         List<UserEntryRes> userEntryList = new ArrayList<>();
 
         for (Iterator<UserLive> it = userLiveList.iterator(); it.hasNext(); ) {
@@ -373,7 +390,7 @@ public class LiveServiceImpl implements LiveService {
             userEntryList.add(userEntryRes);
         }
         //라이브 아이디와 연관된 상품 테이블 조회
-        Optional<List<Product>> oProduct = productRepository.findByLive_IdOrderByCreatedAtDesc(live.getId());
+        Optional<List<Product>> oProduct = productRepository.findByLive_Id(live.getId());
         List<Product> productList = oProduct.orElse(null);
 
         List<LiveProductInfo> liveProductInfoList = new ArrayList<>();

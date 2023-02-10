@@ -1,21 +1,18 @@
 import { api } from "./api";
 
-async function getReviewMine(myreviewid, success, fail) {
-  const review = await api.get(`/api/v1/reviews/` + myreviewid).then(success);
-  // .catch();
-  return review;
+async function createChatRoom(users, success, fail) {
+  const chatRoom = await api.post(`/api/v1/chat`, users).then(success);
+  return chatRoom;
 }
 
-async function getReviewOther(otherreviewid, success, fail) {
-  const review = await api
-    .get(`/api/v1/reviews/` + otherreviewid)
-    .then(success);
-  // .catch();
-  return review;
+async function getChatRoomList(chatRoomId, success, fail) {
+  const chatRoomList = await api.get(`/api/v1/chat/list/` + chatRoomId).then(success);
+  return chatRoomList;
 }
 
-async function postReview(review, success, fail) {
-  await api.post(`/api/v1/reviews`, review).then(success).catch(fail);
+async function getChatMessageList(chatRoomId, success, fail) {
+  const chatMessageList = await api.get(`/api/v1/chat/message/` + chatRoomId).then(success);
+  return chatMessageList;
 }
 
-export { getReviewMine, getReviewOther, postReview };
+export { createChatRoom, getChatRoomList, getChatMessageList };

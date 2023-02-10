@@ -2,14 +2,8 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.response.LiveHistoryRes;
 import com.ssafy.api.response.ProductHistoryRes;
-import com.ssafy.db.entity.Live;
-import com.ssafy.db.entity.Product;
-import com.ssafy.db.entity.Review;
-import com.ssafy.db.entity.User;
-import com.ssafy.db.repository.LiveRepository;
-import com.ssafy.db.repository.ProductRepository;
-import com.ssafy.db.repository.ReviewRepository;
-import com.ssafy.db.repository.UserRepository;
+import com.ssafy.db.entity.*;
+import com.ssafy.db.repository.*;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,25 +16,24 @@ import java.util.Optional;
 public class HistoryServiceImpl implements HistoryService{
     private final Logger logger;
     private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final LiveRepository liveRepository;
+    private final ReviewRepository reviewRepository;
+    private final ChatRoomRepository chatRoomRepository;
 
     @Autowired
-    public HistoryServiceImpl(Logger logger, UserRepository userRepository) {
+    public HistoryServiceImpl(Logger logger, UserRepository userRepository, ProductRepository productRepository, LiveRepository liveRepository, ReviewRepository reviewRepository, ChatRoomRepository chatRoomRepository) {
         this.logger = logger;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
+        this.liveRepository = liveRepository;
+        this.reviewRepository = reviewRepository;
+        this.chatRoomRepository = chatRoomRepository;
     }
-
-    @Autowired
-    ProductRepository productRepository;
-
-    @Autowired
-    LiveRepository liveRepository;
-
-    @Autowired
-    ReviewRepository reviewRepository;
 
     @Override
     public List<LiveHistoryRes> getLiveHistoryBySellerId(long sellerId) {
-        List<Live> liveList = liveRepository.findByUser_IdAndIsLiveFalseOrderByCreatedAtDesc(sellerId).get();
+        List<Live> liveList = liveRepository.findByIsLiveFalseAndUser_IdOrderByCreatedAtDesc(sellerId).get();
         List<LiveHistoryRes> resList = new ArrayList<>();
         for (Live live : liveList) {
             LiveHistoryRes res = LiveHistoryRes.of(live);
@@ -51,16 +44,18 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public List<ProductHistoryRes> getProductHistoryByBuyerId(long buyerId) {
-        List<Product> productList = productRepository.findByBuyerIdOrderByCreatedAtDesc(buyerId).get();
+        List<Product> productList = productRepository.findByIsPaidTrueAndBuyerIdOrderByCreatedAtDesc(buyerId).get();
         List<ProductHistoryRes> resList = new ArrayList<>();
         for (Product product : productList) {
-            Optional<Review> myReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
-            long myReviewId = (myReview.isPresent()) ? myReview.get().getId() : 0;
-            Optional<Review> otherReview  = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId());
-            long otherReviewId = (otherReview.isPresent()) ? otherReview.get().getId() : 0;
+            Review myReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId()).orElse(null);;
+            long myReviewId = (myReview == null ) ? 0 : myReview.getId();
+            Review otherReview  = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId()).orElse(null);;
+            long otherReviewId = (otherReview == null) ? 0 : otherReview.getId();
 
             User seller = product.getLive().getUser();
-            ProductHistoryRes res = ProductHistoryRes.of(product, seller, myReviewId, otherReviewId);
+            ChatRoom chatRoom = chatRoomRepository.findOneByUsersId(seller.getId(), buyerId).orElse(null);
+            long chatRoomId = (chatRoom == null) ? 0 : chatRoom.getId();
+            ProductHistoryRes res = ProductHistoryRes.of(product, seller, myReviewId, otherReviewId, chatRoomId);
             resList.add(res);
         }
         return resList;
@@ -68,19 +63,19 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public List<ProductHistoryRes> getProductHistoryByLiveId(long liveId) {
-        List<Product> productList = productRepository.findByLive_IdOrderByCreatedAtDesc(liveId).get();
+        List<Product> productList = productRepository.findByIsPaidTrueAndLive_IdOrderByCreatedAtDesc(liveId).get();
         List<ProductHistoryRes> resList = new ArrayList<>();
         for (Product product : productList) {
-            Optional<Review> myReview = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId());
-            long myReviewId = (myReview.isPresent()) ? myReview.get().getId() : 0;
-            Optional<Review> otherReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId());
-            long otherReviewId = (otherReview.isPresent()) ? otherReview.get().getId() : 0;
+            Review myReview = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId()).orElse(null);
+            long myReviewId = (myReview == null) ? 0 : myReview.getId();
+            Review otherReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId()).orElse(null);;
+            long otherReviewId = (otherReview == null) ? 0 : otherReview.getId();
 
-            Optional<User> oUser = userRepository.findById(product.getBuyerId());
-            User buyer = oUser.orElse(null);
-            if(buyer == null)    continue;
-
-            ProductHistoryRes res = ProductHistoryRes.of(product, buyer, myReviewId, otherReviewId);
+            User buyer = userRepository.findById(product.getBuyerId()).orElse(null);
+            long sellerId = product.getLive().getUser().getId();
+            ChatRoom chatRoom = chatRoomRepository.findOneByUsersId(buyer.getId(), sellerId).orElse(null);
+            long chatRoomId = (chatRoom == null) ? 0 : chatRoom.getId();
+            ProductHistoryRes res = ProductHistoryRes.of(product, buyer, myReviewId, otherReviewId, chatRoomId);
             resList.add(res);
         }
         return resList;

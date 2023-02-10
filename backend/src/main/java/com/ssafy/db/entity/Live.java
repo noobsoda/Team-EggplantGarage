@@ -28,10 +28,8 @@ public class Live extends BaseEntity implements Serializable {
     @JoinColumn(name = "seller_id")
     private User user;
 
-    @OneToMany(mappedBy = "live")
+    @OneToMany(mappedBy = "live", cascade = CascadeType.ALL)
     private List<LiveCategory> liveCategoryList;
 
-    @OneToMany(mappedBy = "live")
-    private List<UserLive> userLiveList;
 
 }

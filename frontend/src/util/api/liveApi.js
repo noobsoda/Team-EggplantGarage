@@ -210,7 +210,7 @@ async function getLiveDetail(id, success, fail) {
  * @param {*} id liveId pk
  */
 async function closeLive(id, success, fail) {
-  return await api.fetch(`/api/v1/lives/${id}`).thend(success).catch(fail);
+  return await api.patch(`/api/v1/lives/${id}`).then(success).catch(fail);
 }
 async function getSalesHistory(sellerId, success, fail) {
   const lives = await api
@@ -218,7 +218,19 @@ async function getSalesHistory(sellerId, success, fail) {
     .then(success);
   return lives;
 }
-
+async function joinLive(joinReq, success, fail) {
+  return await api
+    .post(`/api/v1/lives/userlive`, joinReq)
+    .then(success)
+    .catch(fail);
+}
+//axios 통신 get or delete 할때 requestbody를 {data:body}로 감싸서 보내면 된다.
+async function exitLive(exitReq, success, fail) {
+  return await api
+    .delete(`/api/v1/lives/userlive`, { data: exitReq })
+    .then(success)
+    .catch(fail);
+}
 export {
   getToken,
   closeSession,
@@ -231,4 +243,6 @@ export {
   // getLiveDetails,
   getSalesHistory,
   getLives,
+  joinLive,
+  exitLive,
 };

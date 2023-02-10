@@ -10,6 +10,7 @@ import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
 import LikeBtn from "../../Atoms/IconButtons/liveshow/LikeBtn";
+import ViewerCntBox from "../../Molecules/Box/ViewerCntBox";
 
 import ModalBuyer from "../../Organisms/Modal/ModalBuyer";
 
@@ -22,6 +23,7 @@ import {
   deleteFavoriteLive,
   addFavoriteLive,
 } from "../../util/api/favoriteApi";
+import { exitLive } from "../../util/api/liveApi";
 
 import { getBuyerSuggestList } from "../../util/api/productApi";
 
@@ -60,13 +62,16 @@ const StyledHeader = styled.div`
   justify-content: space-between;
 `;
 const StyledBody = styled.div`
-  height: calc(100% - 328px);
+  height: 50%;
+  width: 100%;
   //264+ padding값
   padding: 0 24px 24px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   row-gap: 24px;
+  position: absolute;
+  bottom: 0;
 `;
 const Title = styled.div`
   color: white;
@@ -84,6 +89,12 @@ export default function LiveshowBuyer() {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [bundleList, setBundleList] = useState([]);
+
+  const exit = () => {
+    const exitReq = { userId: userInfo.id, liveId: liveId };
+    exitLive(exitReq);
+    navigate("/");
+  };
 
   //10초마다 묶음 제안 요청 왔는지 확인
   useInterval(() => {
@@ -166,7 +177,19 @@ export default function LiveshowBuyer() {
       <Buyer liveId={liveId} />
       <LiveLayout>
         <StyledHeader>
-          <Title className="show-header">{liveInfo.title}</Title>
+          <div
+            style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}
+          >
+            <Title className="show-header">{liveInfo.title}</Title>
+            <div className="body1-header" style={{ color: "white" }}>
+              판매자명
+            </div>
+            <ViewerCntBox
+              viewerCnt={
+                liveInfo.userEntryResList && liveInfo.userEntryResList.length
+              }
+            />
+          </div>
           <StyledSide>
             <BigMenuBtn
               buttonClick={() => {
@@ -183,7 +206,7 @@ export default function LiveshowBuyer() {
             />
             <ExitBtn
               buttonClick={() => {
-                navigate("/");
+                exit();
               }}
             />
           </StyledSide>

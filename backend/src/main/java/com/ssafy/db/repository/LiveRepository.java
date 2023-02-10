@@ -16,7 +16,7 @@ public interface LiveRepository extends JpaRepository<Live, Long> {
     Optional<List<Live>> findAllBySessionId(String sessionId);
     Optional<Live> findByUrl(String url);
     List<Live> findAllByUser_Id(Long sellerId);
-    Optional<List<Live>> findByUser_IdAndIsLiveFalseOrderByCreatedAtDesc(long sellerId);
-
+    Optional<List<Live>> findByIsLiveFalseAndUser_IdOrderByCreatedAtDesc(long sellerId);
+    // 종료된 라이브 중 해당 판매자가 방송했던 라이브 목록을 라이브 등록 최신순으로 반환
     Optional<List<Live>> findAllById(Long liveId);
 }
