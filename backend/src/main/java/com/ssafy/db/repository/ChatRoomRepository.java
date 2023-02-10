@@ -13,6 +13,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
     Optional<ChatRoom> findOneByUsersId(@Param("receiverId") long receiverId, @Param("senderId") long senderId);
 
     @Query("SELECT cr FROM ChatRoom cr WHERE :userId IN (cr.firstUser.id, cr.secondUser.id)")
-    List<ChatRoom> findByFirstUserIdOrSecondUserId(long userId);
+    List<ChatRoom> findAllByUserId(long userId);
     Optional<ChatRoom> findByid(long id);
 }
