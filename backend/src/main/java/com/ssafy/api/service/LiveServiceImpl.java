@@ -56,6 +56,8 @@ public class LiveServiceImpl implements LiveService {
                 .user(user)
                 .build();
 
+        liveRepository.save(live);
+
         //유저라이브 헬퍼 테이블에 본인도 넣어주기
         UserLive userLive = UserLive.builder()
                 .live(live)
@@ -63,7 +65,6 @@ public class LiveServiceImpl implements LiveService {
                 .build();
         userLiveRepository.save(userLive);
 
-        liveRepository.save(live);
 
         return live;
     }
