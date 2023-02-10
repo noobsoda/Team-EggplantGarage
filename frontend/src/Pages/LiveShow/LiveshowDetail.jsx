@@ -18,12 +18,12 @@ export default function LiveshowDetail() {
     getLiveDetail(state, ({ data }) => {
       // console.log(data);
       setLive(data);
-      setProductList(data.liveProductInfoList);
+      // setProductList(data.liveProductInfoList);
     });
     //이게 돼야 리뷰 관리가 가능함.
     getSalesItemHistory(state, ({ data }) => {
       console.log(data);
-      // setProductList(data);
+      setProductList(data);
     });
   }, []);
   return (

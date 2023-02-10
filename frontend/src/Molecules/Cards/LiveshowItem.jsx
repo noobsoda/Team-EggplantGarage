@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import LiveshowCard from "./LiveshowCard";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { joinLive } from "../../util/api/liveApi";
 
 const StyledLiveshowItem = styled.div`
   width: calc(50% - 4px);
@@ -24,8 +26,12 @@ const InfoBox = styled.div`
 export default function LiveshowItem({ isSearch, isViewer, show, isHistory }) {
   //useState , event
   const navigate = useNavigate();
+  const user = useSelector((state) => state.user.userInfo);
   function goTo() {
     if (isViewer) {
+      const joinReq = { userId: user.id, liveId: show.id };
+      console.log(joinReq);
+      joinLive(joinReq);
       console.log(show);
       navigate(`/liveshowbuyer/${show.id}`);
     } else {
