@@ -14,25 +14,38 @@ const StyledLive = styled.div`
   z-index: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   /* display */
 `;
 
-export default function Seller({ liveId }) {
+export default function Seller({ liveId, isCamera, isMic, isFlipped }) {
   const userInfo = useSelector(checkUserInfo);
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름
   const [session, setSession] = useState(undefined);
-  const [, setMainStreamManager] = useState(undefined); // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
+  const [mainStreamManager, setMainStreamManager] = useState(undefined); // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
-  const [, setCurrentVideoDevice] = useState(undefined);
+  const [currentVideoDevice, setCurrentVideoDevice] = useState(undefined);
 
   const [OV] = useState(new OpenVidu());
-
   useEffect(() => {
-    //판매자가 방 생성
     joinSession();
   }, []);
+
+  useEffect(() => {
+    if (publisher) {
+      publisher.publishAudio(isMic);
+      publisher.publishVideo(isCamera);
+    }
+  }, [isMic, isCamera]);
+
+  useEffect(() => {
+    if (currentVideoDevice !== undefined) switchCamera();
+  }, [isFlipped]);
 
   const leaveSession = useCallback(() => {
     // --- 7) 세션에서 나옴
@@ -52,6 +65,7 @@ export default function Seller({ liveId }) {
     const onbeforeunload = () => {
       leaveSession();
     };
+
     window.addEventListener("beforeunload", onbeforeunload); // componentDidMount
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
@@ -151,41 +165,37 @@ export default function Seller({ liveId }) {
     [subscribers]
   );
 
-  // async function switchCamera() {
-  //   try {
-  //     const devices = await OV.getDevices();
-  //     var videoDevices = devices.filter(
-  //       (device) => device.kind === "videoinput"
-  //     );
-
-  //     if (videoDevices && videoDevices.length > 1) {
-  //       var newVideoDevice = videoDevices.filter(
-  //         (device) => device.deviceId !== currentVideoDevice.deviceId
-  //       );
-
-  //       if (newVideoDevice.length > 0) {
-  //         // Creating a new publisher with specific videoSource
-  //         // In mobile devices the default and first camera is the front one
-  //         var newPublisher = OV.initPublisher(undefined, {
-  //           videoSource: newVideoDevice[0].deviceId,
-  //           publishAudio: true,
-  //           publishVideo: true,
-  //           mirror: true,
-  //         });
-
-  //         //newPublisher.once("accessAllowed", () => {
-  //         await session.unpublish(mainStreamManager);
-
-  //         await session.publish(newPublisher);
-  //         setCurrentVideoDevice(newVideoDevice[0]);
-  //         setMainStreamManager(newPublisher);
-  //         setPublisher(newPublisher);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
+  async function switchCamera() {
+    try {
+      const devices = await OV.getDevices();
+      var videoDevices = devices.filter(
+        (device) => device.kind === "videoinput"
+      );
+      if (videoDevices && videoDevices.length > 1) {
+        var newVideoDevice = videoDevices.filter(
+          (device) => device.deviceId !== currentVideoDevice.deviceId
+        );
+        if (newVideoDevice.length > 0) {
+          // Creating a new publisher with specific videoSource
+          // In mobile devices the default and first camera is the front one
+          var newPublisher = OV.initPublisher(undefined, {
+            videoSource: newVideoDevice[0].deviceId,
+            publishAudio: true,
+            publishVideo: true,
+            mirror: true,
+          });
+          //newPublisher.once("accessAllowed", () => {
+          await session.unpublish(mainStreamManager);
+          await session.publish(newPublisher);
+          setCurrentVideoDevice(newVideoDevice[0]);
+          setMainStreamManager(newPublisher);
+          setPublisher(newPublisher);
+        }
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   function getNicknameTag(streamManager) {
     // Gets the nickName of the user

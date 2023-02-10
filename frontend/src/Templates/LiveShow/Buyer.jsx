@@ -3,6 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../Atoms/Video/LiveVideo";
 import { getToken, closeSession } from "../../util/api/liveApi";
+import styled from "styled-components";
+
+const FlexBox = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
 
 export default function LiveShowSeller({ liveId }) {
   //해당 세션 아이디를 받아서 해당 라이브로 접속하기
@@ -121,14 +130,14 @@ export default function LiveShowSeller({ liveId }) {
   }
 
   return (
-    <div>
+    <FlexBox>
       {subscribers
         .filter((sub) => getNicknameTag(sub) === "admin")
         .map((sub, i) => (
-          <div key={i}>
-            <UserVideoComponent streamManager={sub} />
-          </div>
+          <FlexBox key={i}>
+            {i === 0 ? <UserVideoComponent streamManager={sub} /> : undefined}
+          </FlexBox>
         ))}
-    </div>
+    </FlexBox>
   );
 }
