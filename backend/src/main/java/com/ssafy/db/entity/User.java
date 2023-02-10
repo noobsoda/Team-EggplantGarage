@@ -38,7 +38,5 @@ public class User extends BaseEntity {
 
     private boolean isDelete;
 
-    @OneToMany(mappedBy = "user")
-    private List<Live> liveList;
 
 }

@@ -198,7 +198,7 @@ public class LiveController {
         if (liveService.postUserLiveByLiveId(LiveUserJoinReq)) {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "유저 참가 성공"));
         } else {
-            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "해당 라이브나 유저가 없습니다"));
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "해당 라이브가 끝났거나 라이브, 유저가 없거나 이미 참가한 유저입니다."));
         }
 
     }
