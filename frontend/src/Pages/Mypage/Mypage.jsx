@@ -73,10 +73,7 @@ export default function Mypage() {
             ></ExtraSmallBtn>
           </InfoFlex>
           <InfoFlex>
-            <SimpleFlex>
-              <img src="/image/star.svg" alt="" />
-              <div className="body1-header">5.0</div>
-            </SimpleFlex>
+            <div>　</div>
             <SimpleFlex>
               <div className="body1-header" style={{ height: "24px" }}>
                 회원정보수정
