@@ -1,7 +1,7 @@
 import { api } from "./api";
 
-async function joinChatRoom(users, success, fail) {
-  const chatRoom = await api.post(`/api/v1/chat/join`).then(success);
+async function createChatRoom(users, success, fail) {
+  const chatRoom = await api.post(`/api/v1/chat`).then(success);
   return chatRoom;
 }
 
@@ -15,4 +15,4 @@ async function getChatMessageList(chatRoomId, success, fail) {
   return chatMessageList;
 }
 
-export { joinChatRoom, getChatRoomList, getChatMessageList };
+export { createChatRoom, getChatRoomList, getChatMessageList };

@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ExtraSmallButton from "../../Atoms/Buttons/ExtraSmallBtn";
 import Check from "../../Atoms/Inputs/Check";
 import { useNavigate } from "react-router-dom";
+import { createChatRoom } from "../../util/api/chatApi";
+import { checkUserInfo } from "../../store/user";
 
 const StyledItemCard = styled.div`
   width: calc(100% -6px);
@@ -48,6 +51,14 @@ export default function ItemCard({
   isSeller,
 }) {
   const navigate = useNavigate();
+  const userInfo = useSelector(checkUserInfo);
+  const senderId = userInfo.id;
+  const [chatRoomId, setChatRoomId] = useState(item.chatRoomId);
+  const getChatRoomId = (receiverId) => {
+    createChatRoom({senderId: senderId, receiverId: receiverId}, ({ data }) => {
+      setChatRoomId(data)
+    });
+  };
   return (
     <StyledItemCard>
       <ItemImage />
@@ -68,7 +79,16 @@ export default function ItemCard({
           <></>
         )}
         {buttonType === "purchasedhistory" ? (
-          <ExtraSmallButton name="대화하기" />
+          <ExtraSmallButton 
+          name="대화하기" 
+          buttonClick={() => {
+            chatRoomId === 0 && getChatRoomId(item.otherId);
+            navigate(`/chat/room`, {
+              state: { chatRoomId: chatRoomId, receiverId: item.otherId, receiverName: item.otherName},
+            });
+            window.location.reload(`/chat/room`);
+          }}
+          />
         ) : (
           <></>
         )}
