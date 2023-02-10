@@ -56,12 +56,15 @@ public class BundleServiceImpl implements BundleService {
         return bundleId;
     }
 
-    public List<List<BundledItemsProductRes>> getBundleItemsProduct(List<Bundle> bundleList) {
+    // 공통
+    public List<List<BundledItemsProductRes>> getBundleItemsProduct(List<Bundle> bundleList, String who) {
         List<List<BundledItemsProductRes>> productAllList = new ArrayList<>();
         int size = bundleList.size();
 
         for(int i = 0; i < size; i++) {
+            boolean flag = false;
             long id = bundleList.get(i).getId();
+            int totalPrice = bundleList.get(i).getPrice();
             List<BundledItemsProductRes> productList = new ArrayList<>();
 
             List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(id).get();
@@ -69,17 +72,26 @@ public class BundleServiceImpl implements BundleService {
 
             for(int j = 0; j < itemsSize; j++) {
                 Product product = bundledItemsRelationList.get(j).getProduct();
+
+                // 판매자는 이미 승인된 상품이 있는 목록은 추가 X
+                if(who.equals("seller") && product.isApproval()) {
+                    flag = true;
+                    refuseBundle(id);
+                    break;
+                }
+
                 BundledItemsProductRes res = new BundledItemsProductRes(
-                        product.getName(), product.getSoldPrice(),
-                        product.isPaid(), product.getLeftTopX(),
-                        product.getLeftTopY(), product.getRightBottomX(),
-                        product.getRightBottomY(), product.getImageUrl(),
-                        product.getBuyerId(), bundleList.get(i).getUser().getNickname());
+                        id, product.getName(),
+                        product.getSoldPrice(), product.isPaid(),
+                        product.getLeftTopX(), product.getLeftTopY(),
+                        product.getRightBottomX(), product.getRightBottomY(),
+                        product.getImageUrl(), product.getBuyerId(),
+                        bundleList.get(i).getUser().getNickname(), totalPrice);
 
                 productList.add(res);
             }
 
-            productAllList.add(productList);
+            if(!flag) productAllList.add(productList);
         }
         return productAllList;
     }
@@ -87,13 +99,26 @@ public class BundleServiceImpl implements BundleService {
     @Override
     public List<List<BundledItemsProductRes>> getSellerSuggestList(Long liveId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalse(liveId).get();
-        return getBundleItemsProduct(bundleList);
+        return getBundleItemsProduct(bundleList, "seller");
     }
 
     @Override
     public List<List<BundledItemsProductRes>> getBuyerSuggestList(long liveId, long buyerId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserId(liveId, buyerId).get();
-        return getBundleItemsProduct(bundleList);
+        return getBundleItemsProduct(bundleList, "buyer");
+    }
+
+    @Override
+    public List<List<BundledItemsProductRes>> getApprovalNoPaidSuggestList(long liveId, long buyerId) {
+        System.out.println("승인받고 결제 아직 안한 상품 목록");
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidFalse(liveId, buyerId).get();
+        return getBundleItemsProduct(bundleList, "buyer");
+    }
+
+    @Override
+    public List<List<BundledItemsProductRes>> getApprovalYesPaidSuggestList(long liveId, long buyerId) {
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidTrue(liveId, buyerId).get();
+        return getBundleItemsProduct(bundleList, "buyer");
     }
 
     @Override
@@ -113,8 +138,17 @@ public class BundleServiceImpl implements BundleService {
     public void approvalBundle(long bundleId) {
         Optional<Bundle> bundle = bundleRepository.findById(bundleId);
         bundle.get().setApproval(true);
-        // 결제로 넘어가는 구현?
         bundleRepository.save(bundle.get());
+
+        // 묶음에 해당하는 상품들도 승인 처리해주기
+        List<Product> productList = getBundleItemsList(bundleId);
+        int size = productList.size();
+
+        for(int i = 0; i < size; i++) {
+            Product product = productList.get(i);
+            product.setApproval(true);
+            productRepository.save(product);
+        }
     }
 
     @Override

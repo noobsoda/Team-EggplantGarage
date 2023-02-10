@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ExtraSmallButton from "../../Atoms/Buttons/ExtraSmallBtn";
 import Check from "../../Atoms/Inputs/Check";
 import { useNavigate } from "react-router-dom";
+import { createChatRoom } from "../../util/api/chatApi";
+import { checkUserInfo } from "../../store/user";
 
 const StyledItemCard = styled.div`
   position: relative;
@@ -65,6 +68,17 @@ export default function ItemCard({
   isSold,
 }) {
   const navigate = useNavigate();
+  const userInfo = useSelector(checkUserInfo);
+  const senderId = userInfo.id;
+  const [chatRoomId, setChatRoomId] = useState(item.chatRoomId);
+  const createChatRoomAndMove = (receiverId) => {
+    createChatRoom({senderId: senderId, receiverId: receiverId}, ({ data }) => {
+      navigate(`/chat/room`, {
+        state: { chatRoomId: data.chatRoomId, receiverId: item.otherId, receiverName: item.otherName},
+      });
+      window.location.reload(`/chat/room`);
+    });
+  };
   return (
     <StyledItemCard>
       <ItemImage />
@@ -77,52 +91,60 @@ export default function ItemCard({
           <div className="body1-regular">{item.soldPrice || 21500}원</div>
         </div>
       </ItemInfo>
-      {isSold ? (
-        <ItemBtn />
-      ) : (
-        <ItemBtn>
-          {buttonType === "check" ? <Check /> : <></>}
-          {buttonType === "saleshistory" ? (
-            <ExtraSmallButton name="한개" />
-          ) : (
-            <></>
-          )}
-          {buttonType === "purchasedhistory" ? (
-            <ExtraSmallButton name="대화하기" />
-          ) : (
-            <></>
-          )}
-          {buttonType === "purchasedhistory" && isReview ? (
-            <ExtraSmallButton
-              name="후기작성"
-              buttonClick={() => {
-                navigate("/writereview", {
-                  state: { productId: item.id, isSellr: isSeller },
-                });
-              }}
-            />
-          ) : (
-            <></>
-          )}
-          {buttonType === "purchasedhistory" && !isReview ? (
-            <ExtraSmallButton
-              name="후기열람"
-              buttonClick={() => {
-                navigate("/review", {
-                  state: {
-                    myReviewId: item.myReviewId,
-                    otherReviewId: item.otherReviewId,
-                    otherName: item.otherName,
-                  },
-                });
-              }}
-            />
-          ) : (
-            <></>
-          )}
-        </ItemBtn>
-      )}
-      {isSold ? <Mask className="page-header">판매완료</Mask> : undefined}
+      <ItemBtn>
+        {buttonType === "check" ? <Check /> : <></>}
+        {buttonType === "saleshistory" ? (
+          <ExtraSmallButton name="한개" />
+        ) : (
+          <></>
+        )}
+        {buttonType === "purchasedhistory" ? (
+          <ExtraSmallButton 
+          name="대화하기" 
+          buttonClick={() => { 
+            if(chatRoomId === 0 ){
+              createChatRoomAndMove(item.otherId);
+              return;
+            }
+            navigate(`/chat/room`, {
+              state: { chatRoomId: chatRoomId, receiverId: item.otherId, receiverName: item.otherName},
+            });
+            window.location.reload(`/chat/room`);
+            console.log(chatRoomId);
+          }}
+          />
+        ) : (
+          <></>
+        )}
+        {buttonType === "purchasedhistory" && isReview ? (
+          <ExtraSmallButton
+            name="후기작성"
+            buttonClick={() => {
+              navigate("/writereview", {
+                state: { productId: item.id, isSellr: isSeller },
+              });
+            }}
+          />
+        ) : (
+          <></>
+        )}
+        {buttonType === "purchasedhistory" && !isReview ? (
+          <ExtraSmallButton
+            name="후기열람"
+            buttonClick={() => {
+              navigate("/review", {
+                state: {
+                  myReviewId: item.myReviewId,
+                  otherReviewId: item.otherReviewId,
+                  otherName: item.otherName,
+                },
+              });
+            }}
+          />
+        ) : (
+          <></>
+        )}
+      </ItemBtn>
     </StyledItemCard>
   );
 }

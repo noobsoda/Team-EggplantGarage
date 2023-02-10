@@ -58,7 +58,7 @@ export default function ChatRoom() {
   const chatRoomId = useLocation().state.chatRoomId; // 현재 URL을 통해 RoomId를 얻어옴
   const [chatMessagesList, setChatMessagesList] = useState([]); // 주고 받은 메시지 리스트
   const [message, setMessage] = useState(""); // 입력창 메시지
-  const stompClient = getStompClient();
+  const [stompClient] = useState(getStompClient());
   const scrollRef = useRef();
   let navigate = useNavigate();
   const dispatch = useDispatch();

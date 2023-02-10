@@ -32,18 +32,39 @@ public class BundleController {
     }
 
     // 판매자 - 묶음 제안 목록
-    @GetMapping("/{liveId}")
+    @GetMapping("/seller/{liveId}")
     public ResponseEntity<?> getSellerSuggestList(@PathVariable("liveId") Long liveId) {
         List<List<BundledItemsProductRes>> suggestList = bundleService.getSellerSuggestList(liveId);
         return ResponseEntity.status(200).body(suggestList);
     }
 
     // 구매자 - 묶음 제안 목록
-    @GetMapping("/{liveId}/{buyerId}")
+    @GetMapping("/buyer/{liveId}/{buyerId}")
     public ResponseEntity<?> getBuyerSuggestList(@PathVariable("liveId") Long liveId, @PathVariable("buyerId") Long buyerId) {
         List<List<BundledItemsProductRes>> getProductList = bundleService.getBuyerSuggestList(liveId, buyerId);
         return ResponseEntity.status(200).body(getProductList);
     }
+
+    // 구매자 - 묶음 제안 목록 (승인완료- 결제X)
+    @GetMapping("/buyer/approvalNoPaid/{liveId}/{buyerId}")
+    public ResponseEntity<?> getApprovalNoPaidSuggestList(@PathVariable("liveId") Long liveId, @PathVariable("buyerId") Long buyerId) {
+        List<List<BundledItemsProductRes>> getProductList = bundleService.getApprovalNoPaidSuggestList(liveId, buyerId);
+        return ResponseEntity.status(200).body(getProductList);
+    }
+
+    // 구매자 - 묶음 제안 목록 (승인완료- 결제O)
+    @GetMapping("/buyer/approvalYesPaid/{liveId}/{buyerId}")
+    public ResponseEntity<?> getApprovalYesPaidSuggestList(@PathVariable("liveId") Long liveId, @PathVariable("buyerId") Long buyerId) {
+        List<List<BundledItemsProductRes>> getProductList = bundleService.getApprovalYesPaidSuggestList(liveId, buyerId);
+        return ResponseEntity.status(200).body(getProductList);
+    }
+
+    // 구매자 - 묶음 제안 목록 (대기)
+
+
+    // 구매자 - 묶음 제안 목록 (거부)
+
+
 
     // bundleId의 묶음 상품들 보기
     @GetMapping("/items/{bundleId}")

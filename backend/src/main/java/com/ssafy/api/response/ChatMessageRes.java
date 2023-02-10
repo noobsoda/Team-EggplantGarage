@@ -2,7 +2,6 @@ package com.ssafy.api.response;
 
 import com.ssafy.db.entity.ChatMessage;
 import com.ssafy.db.entity.ChatRoom;
-import com.ssafy.db.entity.User;
 import io.swagger.annotations.ApiModel;
 import lombok.Builder;
 import lombok.Getter;
