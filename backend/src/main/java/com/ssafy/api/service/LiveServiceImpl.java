@@ -373,7 +373,7 @@ public class LiveServiceImpl implements LiveService {
             userEntryList.add(userEntryRes);
         }
         //라이브 아이디와 연관된 상품 테이블 조회
-        Optional<List<Product>> oProduct = productRepository.findByLive_IdOrderByCreatedAtDesc(live.getId());
+        Optional<List<Product>> oProduct = productRepository.findByLive_Id(live.getId());
         List<Product> productList = oProduct.orElse(null);
 
         List<LiveProductInfo> liveProductInfoList = new ArrayList<>();
