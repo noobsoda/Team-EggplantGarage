@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
-import { getStompClient } from "../../store/socket";
+import getStompClient from "../../util/socket";
 import Body from "../../Templates/Layout/Body";
 import styled from "styled-components";
 import ChattingMessage from "../../Organisms/Chat/ChattingMessage";
@@ -70,7 +70,7 @@ export default function ChatRoom() {
 
   // 메시지 받기 : 받은 메시지를 메시지 배열에 추가
   // stomp는 텍스트 처리만 가능하기 때문에 보낼 때 JSON.stringify(newMessage)) 받을 때 JSON.parse(data.body)처리를 꼭 해주어야 함
-  const connect = () => {
+  function connect() {
     stompClient.connect(
       {},
       () => {
@@ -83,7 +83,7 @@ export default function ChatRoom() {
         console.log(error);
       }
     );
-  };
+  }
 
   // 처음 컴포넌트가 새롭게 생성되는 시점에 한 번 실행
   // 백엔드 서버에 데이터를 요청할 때 axios 작업할 때 사용

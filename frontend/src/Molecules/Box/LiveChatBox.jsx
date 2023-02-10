@@ -1,9 +1,9 @@
 import { useEffect, useState, useRef } from "react";
-import styled from "styled-components";
-import { getStompClient } from "../../store/socket";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
-
+import styled from "styled-components";
+import getStompClient from "../../util/socket";
+import MessageLive from "../../Atoms/Text/MessageLive";
 const StyledChatting = styled.div`
   padding: 8px;
   width: calc(100% - 100px);
@@ -63,14 +63,15 @@ const FlexBox = styled.div`
 `;
 export default function ChatInput({ liveId }) {
   const userInfo = useSelector(checkUserInfo);
+  const [stompClient] = useState(getStompClient());
   const [message, setMessage] = useState(""); // 입력 메세지
-  const messageArea = useRef();
+  const [messageList, setMessageList] = useState([]);
+
+  // const messageArea = useRef();
   const scrollRef = useRef();
-  const stompClient = getStompClient();
 
   //연결
   const connect = () => {
-    console.log("connect");
     stompClient.connect({}, connectSuccess, connectError);
   };
 
@@ -87,7 +88,6 @@ export default function ChatInput({ liveId }) {
    * 연결 성공
    */
   const connectSuccess = () => {
-    console.warn("connectSuccess!");
     stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
     stompClient.send(
       "/pub/live/addUser/" + liveId,
@@ -112,35 +112,21 @@ export default function ChatInput({ liveId }) {
    * @param {*} payload
    */
   const onMessageReceived = (payload) => {
-    console.log("onMessageReceived!");
-
-    var message = JSON.parse(payload.body);
-    var messageElement = document.createElement("p");
-
+    const message = JSON.parse(payload.body);
+    let messageTmp = messageList;
     if (message.type === "JOIN") {
-      message.content = "[" + message.sender + "] 님이 입장하셨습니다.";
+      messageTmp.push({ content: "[" + message.sender + "] 님이 입장하셨습니다." });
+      setMessageList(messageTmp);
     } else {
-      var usernameElement = document.createElement("span");
-      var usernameText = document.createTextNode("[" + message.sender + "] ");
-
-      usernameElement.appendChild(usernameText);
-      messageElement.appendChild(usernameElement);
+      messageTmp.push({ sender: "[" + message.sender + "]", content: message.content });
+      setMessageList(messageTmp);
     }
-
-    var textElement = document.createElement("span");
-    var messageText = document.createTextNode(message.content);
-    textElement.appendChild(messageText);
-
-    messageElement.appendChild(textElement);
-    messageArea.current.appendChild(messageElement);
   };
 
   /**
    * 메시지 전송
    */
   const sendMessage = () => {
-    console.log("sendMessage!");
-
     if (message && stompClient) {
       var chatMessage = {
         sender: userInfo.nickname,
@@ -148,11 +134,7 @@ export default function ChatInput({ liveId }) {
         content: message,
         type: "CHAT",
       };
-      stompClient.send(
-        "/pub/live/message/" + liveId,
-        {},
-        JSON.stringify(chatMessage)
-      );
+      stompClient.send("/pub/live/message/" + liveId, {}, JSON.stringify(chatMessage));
       scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
     setMessage("");
@@ -179,7 +161,11 @@ export default function ChatInput({ liveId }) {
   return (
     <FlexBox>
       <StyledChatting ref={scrollRef}>
-        <StyledMessage ref={messageArea} />
+        <StyledMessage>
+          {messageList.map((msg, i) => (
+            <MessageLive key={i + msg.content} message={msg} />
+          ))}
+        </StyledMessage>
       </StyledChatting>
 
       <StyledContainer>

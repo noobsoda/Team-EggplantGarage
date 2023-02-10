@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -15,7 +15,7 @@ import { closeLive } from "../../util/api/liveApi";
 import Seller from "../../Templates/LiveShow/Seller";
 
 import { getLiveDetail } from "../../util/api/liveApi";
-import { getLiveBundle } from "../../util/api/productApi";
+import { getSellerSuggestList } from "../../util/api/productApi";
 
 import useInterval from "../../hook/useInterval";
 import ViewerCntBox from "../../Molecules/Box/ViewerCntBox";
@@ -89,17 +89,20 @@ export default function LiveshowBuyer(toggleCamera) {
 
   //10초마다 묶음 제안 요청 왔는지 확인
   useInterval(() => {
-    getLiveBundle(
+    getSuggest();
+  }, 10000);
+
+  function getSuggest() {
+    getSellerSuggestList(
       liveId,
       ({ data }) => {
-        console.log("제안온 목록");
         setBundleList(data);
       },
       () => {
         console.warn("bundle load fail");
       }
     );
-  }, 10000);
+  }
 
   useEffect(() => {
     getLiveDetail(
@@ -177,6 +180,7 @@ export default function LiveshowBuyer(toggleCamera) {
           bundleList={bundleList}
           setModalOpen={setModalOpen}
           isSeller={true}
+          getSuggest={getSuggest}
         />
       )}
     </StyledPage>

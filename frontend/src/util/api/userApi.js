@@ -27,10 +27,7 @@ async function emailCheck(userEmail, success, fail) {
  * @param {*} fail 실패시의 콜백함수
  */
 async function nickNameCheck(userNickName, success, fail) {
-  await api
-    .get(`/api/v1/users/nickname/${userNickName}`)
-    .then(success)
-    .catch(fail);
+  await api.get(`/api/v1/users/nickname/${userNickName}`).then(success).catch(fail);
 }
 
 /**
@@ -48,8 +45,6 @@ async function login(data, success, fail) {
  * @param {*} fail
  */
 async function userInfo(success, fail) {
-  console.log("정보좀");
-  console.log(sessionStorage.getItem("accessToken"));
   await api
     .get("/api/v1/users/me", {
       headers: {
@@ -78,12 +73,4 @@ async function tokenRegeneration(success, fail) {
   await api.post(`/api/v1/auth/reissue`).then(success).catch(fail);
 }
 
-export {
-  signup,
-  emailCheck,
-  nickNameCheck,
-  login,
-  userInfo,
-  logout,
-  tokenRegeneration,
-};
+export { signup, emailCheck, nickNameCheck, login, userInfo, logout, tokenRegeneration };
