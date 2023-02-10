@@ -10,6 +10,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -113,8 +114,17 @@ public class BundleServiceImpl implements BundleService {
     public void approvalBundle(long bundleId) {
         Optional<Bundle> bundle = bundleRepository.findById(bundleId);
         bundle.get().setApproval(true);
-        // 결제로 넘어가는 구현?
         bundleRepository.save(bundle.get());
+
+        // 묶음에 해당하는 상품들도 승인 처리해주기
+        List<Product> productList = getBundleItemsList(bundleId);
+        int size = productList.size();
+
+        for(int i = 0; i < size; i++) {
+            Product product = productList.get(i);
+            product.setApproval(true);
+            productRepository.save(product);
+        }
     }
 
     @Override
