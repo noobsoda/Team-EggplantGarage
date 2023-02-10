@@ -17,6 +17,7 @@ public class Bundle {
     private boolean isPaid;
     private boolean isApproval;
     private boolean isRefuse;
+    private boolean isCancel;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)

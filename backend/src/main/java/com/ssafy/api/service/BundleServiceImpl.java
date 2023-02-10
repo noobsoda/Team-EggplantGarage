@@ -41,6 +41,7 @@ public class BundleServiceImpl implements BundleService {
         bundle.setPaid(false);
         bundle.setApproval(false);
         bundle.setRefuse(false);
+        bundle.setCancel(false);
 
         Long bundleId = bundleRepository.save(bundle).getId();
 
@@ -98,7 +99,7 @@ public class BundleServiceImpl implements BundleService {
 
     @Override
     public List<List<BundledItemsProductRes>> getSellerSuggestList(Long liveId) {
-        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalse(liveId).get();
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalseAndIsCancelFalse(liveId).get();
         return getBundleItemsProduct(bundleList, "seller");
     }
 
@@ -122,7 +123,7 @@ public class BundleServiceImpl implements BundleService {
 
     @Override
     public List<List<BundledItemsProductRes>> getBuyerSuggestList(long liveId, long buyerId) {
-        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsRefuseFalseAndIsApprovalFalse(liveId, buyerId).get();
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsRefuseFalseAndIsApprovalFalseAndIsCancelFalse(liveId, buyerId).get();
         return getBundleItemsProduct(bundleList, "buyer");
     }
 
@@ -160,6 +161,13 @@ public class BundleServiceImpl implements BundleService {
     public void refuseBundle(long bundleId) {
         Optional<Bundle> bundle = bundleRepository.findById(bundleId);
         bundle.get().setRefuse(true);
+        bundleRepository.save(bundle.get());
+    }
+
+    @Override
+    public void cancelBundle(long bundleId) {
+        Optional<Bundle> bundle = bundleRepository.findById(bundleId);
+        bundle.get().setCancel(true);
         bundleRepository.save(bundle.get());
     }
 
