@@ -18,6 +18,7 @@ import { getLiveDetail } from "../../util/api/liveApi";
 import { getLiveBundle } from "../../util/api/productApi";
 
 import useInterval from "../../hook/useInterval";
+import ViewerCntBox from "../../Molecules/Box/ViewerCntBox";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -81,9 +82,7 @@ export default function LiveshowBuyer(toggleCamera) {
 
   const exit = () => {
     // if (isExit) {
-    closeLive(liveId, (data) => {
-      console.log(data);
-    });
+    closeLive(liveId, (data) => {});
     navigate("/");
     // }
   };
@@ -94,7 +93,6 @@ export default function LiveshowBuyer(toggleCamera) {
       liveId,
       ({ data }) => {
         console.log("제안온 목록");
-        console.log(data);
         setBundleList(data);
       },
       () => {
@@ -107,7 +105,6 @@ export default function LiveshowBuyer(toggleCamera) {
     getLiveDetail(
       liveId,
       ({ data }) => {
-        console.log(data);
         setLiveInfo(data);
       },
       () => {
@@ -126,7 +123,16 @@ export default function LiveshowBuyer(toggleCamera) {
       />
       <LiveLayout>
         <StyledHeader>
-          <Title className="show-header">{liveInfo.title}</Title>
+          <div
+            style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}
+          >
+            <Title className="show-header">{liveInfo.title}</Title>
+            <ViewerCntBox
+              viewerCnt={
+                liveInfo.userEntryResList && liveInfo.userEntryResList.length
+              }
+            />
+          </div>
           <StyledSide>
             <BigMenuBtn
               buttonClick={() => {
