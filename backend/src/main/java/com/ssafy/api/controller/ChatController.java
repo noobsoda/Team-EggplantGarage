@@ -26,17 +26,14 @@ public class ChatController {
         this.chatService = chatService;
     }
 
-    @PostMapping("/join")
-    @ApiOperation(value = "채팅방 입장", notes = "채팅방에 입장합니다.")
-    @ApiResponses({@ApiResponse(code = 201, message = "입장 성공"), @ApiResponse(code = 500, message = "서버 오류")})
-    public ResponseEntity<ChatRoomRes> joinChatRoom(@RequestBody @ApiParam(value = "채팅방 정보", required = true) ChatRoomPostReq chatRoomPostReq) {
+    @PostMapping()
+    @ApiOperation(value = "채팅방 생성", notes = "채팅방을 생성합니다.")
+    @ApiResponses({@ApiResponse(code = 201, message = "생성 성공"), @ApiResponse(code = 500, message = "서버 오류")})
+    public ResponseEntity<ChatRoomRes> createChatRoom(@RequestBody @ApiParam(value = "채팅방 정보", required = true) ChatRoomPostReq chatRoomPostReq) {
         long senderId = chatRoomPostReq.getSenderId();
         long receiverId = chatRoomPostReq.getReceiverId();
 
-        ChatRoomRes res = chatService.getChatRoombyUsersId(senderId, receiverId);
-        if (res == null) {
-            res = chatService.createChatRoom(senderId, receiverId);
-        }
+        ChatRoomRes res = chatService.createChatRoom(senderId, receiverId);
         return ResponseEntity.status(200).body(res);
     }
 
