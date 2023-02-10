@@ -49,9 +49,9 @@ export const { setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } =
 export const userConfirm = (userData, navigate) => (dispatch) => {
   login(
     userData,
-    ({ res }) => {
+    ({ data }) => {
       //토큰 받아오기
-      let accessToken = res["accessToken"];
+      let accessToken = data["accessToken"];
       dispatch(setIsLogin(true));
       dispatch(setIsLoginError(false));
       dispatch(setIsValidToken(true));
@@ -62,7 +62,7 @@ export const userConfirm = (userData, navigate) => (dispatch) => {
         ({ info }) => {
           dispatch(setUserInfo(info));
         },
-        () => {}
+        () => { }
       );
       navigate("/");
     },
