@@ -98,7 +98,7 @@ public class BundleServiceImpl implements BundleService {
 
     @Override
     public List<List<BundledItemsProductRes>> getSellerSuggestList(Long liveId) {
-        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalse(liveId).get();
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalseAndIsCancelFalse(liveId).get();
         return getBundleItemsProduct(bundleList, "seller");
     }
 
@@ -122,7 +122,7 @@ public class BundleServiceImpl implements BundleService {
 
     @Override
     public List<List<BundledItemsProductRes>> getBuyerSuggestList(long liveId, long buyerId) {
-        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsRefuseFalseAndIsApprovalFalse(liveId, buyerId).get();
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsRefuseFalseAndIsApprovalFalseAndIsCancelFalse(liveId, buyerId).get();
         return getBundleItemsProduct(bundleList, "buyer");
     }
 
