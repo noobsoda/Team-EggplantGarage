@@ -79,10 +79,17 @@ public class BundleController {
         return ResponseEntity.status(200).body("승인");
     }
 
-    // 거부 및 취소
+    // 거부
     @PutMapping("/refuse/{bundleId}")
     public ResponseEntity<?> refuseBundle(@PathVariable("bundleId") Long bundleId) {
         bundleService.refuseBundle(bundleId);
-        return ResponseEntity.status(200).body("거부 및 취소");
+        return ResponseEntity.status(200).body("거부");
+    }
+
+    // 취소
+    @PutMapping("/cancel/{bundleId}")
+    public ResponseEntity<?> cancelBundle(@PathVariable("bundleId") Long bundleId) {
+        bundleService.cancelBundle(bundleId);
+        return ResponseEntity.status(200).body("취소");
     }
 }

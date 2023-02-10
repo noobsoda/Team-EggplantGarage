@@ -163,5 +163,12 @@ public class BundleServiceImpl implements BundleService {
         bundleRepository.save(bundle.get());
     }
 
+    @Override
+    public void cancelBundle(long bundleId) {
+        Optional<Bundle> bundle = bundleRepository.findById(bundleId);
+        bundle.get().setCancel(true);
+        bundleRepository.save(bundle.get());
+    }
+
 
 }

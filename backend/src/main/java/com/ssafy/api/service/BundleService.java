@@ -17,4 +17,5 @@ public interface BundleService {
 
     void approvalBundle(long bundleId);
     void refuseBundle(long bundleId);
+    void cancelBundle(long bundleId);
 }
