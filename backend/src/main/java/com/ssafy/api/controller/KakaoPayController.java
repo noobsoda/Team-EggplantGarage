@@ -51,11 +51,9 @@ public class KakaoPayController {
     @GetMapping("/success")
     public ResponseEntity<?> kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
 //        log.info("GET: kakaoPaySuccess 결제 승인");
-        //System.out.println("GET: kakaoPaySuccess 결제 승인");
 
         ResponseEntity<KakaoPayApprovalRes> kakaoPResponseEntity = kakaoPayService.kakaoPaySuccess(kakaoPayApprovalRes, pg_token);
         //System.out.println("kakaoPaySuccess -> pg_token: " + pg_token);
-        //System.out.println("승인 받고나서: " + kakaoPResponseEntity.toString());
 
 //        model.addAttribute("info", kakaoPayService.kakaoPaySuccess(pg_token));
         bundle.get().setPaid(true);

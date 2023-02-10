@@ -103,14 +103,7 @@ public class BundleServiceImpl implements BundleService {
     }
 
     @Override
-    public List<List<BundledItemsProductRes>> getBuyerSuggestList(long liveId, long buyerId) {
-        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserId(liveId, buyerId).get();
-        return getBundleItemsProduct(bundleList, "buyer");
-    }
-
-    @Override
     public List<List<BundledItemsProductRes>> getApprovalNoPaidSuggestList(long liveId, long buyerId) {
-        System.out.println("승인받고 결제 아직 안한 상품 목록");
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidFalse(liveId, buyerId).get();
         return getBundleItemsProduct(bundleList, "buyer");
     }
@@ -118,6 +111,18 @@ public class BundleServiceImpl implements BundleService {
     @Override
     public List<List<BundledItemsProductRes>> getApprovalYesPaidSuggestList(long liveId, long buyerId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidTrue(liveId, buyerId).get();
+        return getBundleItemsProduct(bundleList, "buyer");
+    }
+
+    @Override
+    public List<List<BundledItemsProductRes>> getRefuseSuggestList(long liveId, long buyerId) {
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsRefuseTrue(liveId, buyerId).get();
+        return getBundleItemsProduct(bundleList, "buyer");
+    }
+
+    @Override
+    public List<List<BundledItemsProductRes>> getBuyerSuggestList(long liveId, long buyerId) {
+        List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsRefuseFalseAndIsApprovalFalse(liveId, buyerId).get();
         return getBundleItemsProduct(bundleList, "buyer");
     }
 

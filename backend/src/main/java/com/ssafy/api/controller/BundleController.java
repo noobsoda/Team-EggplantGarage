@@ -26,8 +26,6 @@ public class BundleController {
     @PostMapping()
     public ResponseEntity<?> addBundle(@RequestBody BundleReq bundleReq) {
         Long bundleId = bundleService.addBundle(bundleReq);
-        
-        // 프론트한테 bundleId 보내주기
         return ResponseEntity.status(200).body("묶음 상품 등록 성공: " + bundleId);
     }
 
@@ -36,13 +34,6 @@ public class BundleController {
     public ResponseEntity<?> getSellerSuggestList(@PathVariable("liveId") Long liveId) {
         List<List<BundledItemsProductRes>> suggestList = bundleService.getSellerSuggestList(liveId);
         return ResponseEntity.status(200).body(suggestList);
-    }
-
-    // 구매자 - 묶음 제안 목록
-    @GetMapping("/buyer/{liveId}/{buyerId}")
-    public ResponseEntity<?> getBuyerSuggestList(@PathVariable("liveId") Long liveId, @PathVariable("buyerId") Long buyerId) {
-        List<List<BundledItemsProductRes>> getProductList = bundleService.getBuyerSuggestList(liveId, buyerId);
-        return ResponseEntity.status(200).body(getProductList);
     }
 
     // 구매자 - 묶음 제안 목록 (승인완료- 결제X)
@@ -60,10 +51,18 @@ public class BundleController {
     }
 
     // 구매자 - 묶음 제안 목록 (대기)
-
+    @GetMapping("/buyer/{liveId}/{buyerId}")
+    public ResponseEntity<?> getBuyerSuggestList(@PathVariable("liveId") Long liveId, @PathVariable("buyerId") Long buyerId) {
+        List<List<BundledItemsProductRes>> getProductList = bundleService.getBuyerSuggestList(liveId, buyerId);
+        return ResponseEntity.status(200).body(getProductList);
+    }
 
     // 구매자 - 묶음 제안 목록 (거부)
-
+    @GetMapping("/buyer/refuse/{liveId}/{buyerId}")
+    public ResponseEntity<?> getRefuseSuggestList(@PathVariable("liveId") Long liveId, @PathVariable("buyerId") Long buyerId) {
+        List<List<BundledItemsProductRes>> getProductList = bundleService.getRefuseSuggestList(liveId, buyerId);
+        return ResponseEntity.status(200).body(getProductList);
+    }
 
 
     // bundleId의 묶음 상품들 보기
