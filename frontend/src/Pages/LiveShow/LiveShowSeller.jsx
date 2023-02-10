@@ -4,11 +4,13 @@ import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 
 import ModalSeller from "../../Organisms/Modal/ModalBuyer";
-import LiveChatting from "../../Molecules/Box/LiveChatting";
-import ChatInput from "../../Atoms/Inputs/ChatInput";
+import LiveChatBox from "../../Molecules/Box/LiveChatBox";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
+import MicBtn from "../../Atoms/IconButtons/liveshow/MicBtn";
+import CameraBtn from "../../Atoms/IconButtons/liveshow/CameraBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
+import { closeLive } from "../../util/api/liveApi";
 
 import Seller from "../../Templates/LiveShow/Seller";
 
@@ -63,10 +65,11 @@ const LiveLayout = styled.div`
   height: 100%;
   z-index: 1;
 `;
-export default function LiveshowBuyer() {
-  const { sessionId } = useParams(); //방 아이디
+export default function LiveshowBuyer(toggleCamera) {
+  const { liveId } = useParams(); //방 아이디
 
-  const [isSpeaker, setIsSpeaker] = useState(false);
+  const [isMic, setIsMic] = useState(true);
+  const [isCamera, setIsCamera] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
 
   const [liveInfo, setLiveInfo] = useState({});
@@ -74,27 +77,31 @@ export default function LiveshowBuyer() {
 
   const navigate = useNavigate();
 
-  // 10초마다 묶음 제안 요청 왔는지 확인
-  // useInterval(() => {
-  //   getLiveBundle(
-  //     sessionId,
-  //     ({ data }) => {
-  //       console.log("제안온 목록");
-  //       console.log(data);
-  //       setBundleList(data);
-  //     },
-  //     () => {
-  //       console.warn("bundle load fail");
-  //     }
-  //   );
-  // }, 10000);
+  const exit = () => {
+    closeLive(liveId, (data) => {
+      console.log(data);
+    });
+  };
+
+  //10초마다 묶음 제안 요청 왔는지 확인
+  useInterval(() => {
+    getLiveBundle(
+      liveId,
+      ({ data }) => {
+        console.log("제안온 목록");
+        console.log(data);
+        setBundleList(data);
+      },
+      () => {
+        console.warn("bundle load fail");
+      }
+    );
+  }, 10000);
 
   useEffect(() => {
     getLiveDetail(
-      sessionId,
+      liveId,
       ({ data }) => {
-        console.log("라이브 정보에요");
-        console.log(data);
         setLiveInfo(data);
       },
       () => {
@@ -105,7 +112,7 @@ export default function LiveshowBuyer() {
 
   return (
     <StyledPage>
-      <Seller sessionId={sessionId} />
+      <Seller liveId={liveId} isCamera={isCamera} isMic={isMic} />
       <LiveLayout>
         <StyledHeader>
           <Title className="show-header">{liveInfo.title}</Title>
@@ -116,21 +123,28 @@ export default function LiveshowBuyer() {
               }}
             />
             <div>　</div>
-            <SpeakerBtn
+            <CameraBtn
               buttonClick={() => {
-                setIsSpeaker((cur) => !cur);
+                setIsCamera((cur) => !cur);
               }}
-              isClicked={isSpeaker}
+              isClicked={!isCamera}
+            />
+            <MicBtn
+              buttonClick={() => {
+                setIsMic((cur) => !cur);
+              }}
+              isClicked={!isMic}
             />
             <ExitBtn
               buttonClick={() => {
+                exit();
                 navigate("/");
               }}
             />
           </StyledSide>
         </StyledHeader>
         <StyledBody>
-          <ChatInput />
+          <LiveChatBox liveId={liveId} />
         </StyledBody>
       </LiveLayout>
 

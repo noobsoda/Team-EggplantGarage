@@ -1,6 +1,5 @@
 import { OpenVidu } from "openvidu-browser";
 import React, { useCallback, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
 import styled from "styled-components";
@@ -15,10 +14,14 @@ const StyledLive = styled.div`
   z-index: 0;
   width: 100%;
   height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
   /* display */
 `;
 
-export default function Seller({ sessionId, liveId }) {
+export default function Seller({ liveId, isCamera, isMic }) {
   const userInfo = useSelector(checkUserInfo);
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름
@@ -27,14 +30,18 @@ export default function Seller({ sessionId, liveId }) {
   const [publisher, setPublisher] = useState(undefined);
   const [subscribers, setSubscribers] = useState([]);
   const [, setCurrentVideoDevice] = useState(undefined);
+  const [isVideo, SetIsVideo] = useState(true);
 
   const [OV] = useState(new OpenVidu());
-
   useEffect(() => {
-    //판매자가 방 생성
     joinSession();
   }, []);
-
+  useEffect(() => {
+    if (publisher) {
+      publisher.publishAudio(isMic);
+      publisher.publishVideo(isCamera);
+    }
+  }, [isMic, isCamera]);
   const leaveSession = useCallback(() => {
     // --- 7) 세션에서 나옴
     const mySession = session;
@@ -46,12 +53,14 @@ export default function Seller({ sessionId, liveId }) {
     setMainStreamManager(undefined);
 
     closeLive(liveId);
+    closeSession();
   }, [session]);
 
   useEffect(() => {
     const onbeforeunload = () => {
       leaveSession();
     };
+
     window.addEventListener("beforeunload", onbeforeunload); // componentDidMount
     return () => {
       window.removeEventListener("beforeunload", onbeforeunload);
@@ -86,7 +95,7 @@ export default function Seller({ sessionId, liveId }) {
     });
 
     // --- 4) 토큰을 받아서 연결을 한다.
-    getToken(sessionId, "PUBLISHER").then((token) => {
+    getToken(liveId, "PUBLISHER").then((token) => {
       mySession
         .connect(token, { clientData: myUserName }) //해당 토큰을 가지고 유저명과 함께 연결을 진행
         .then(async () => {

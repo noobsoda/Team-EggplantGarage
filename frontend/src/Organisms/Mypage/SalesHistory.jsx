@@ -8,9 +8,7 @@ import { useSelector } from "react-redux";
 
 export default function SalesHistory() {
   const [lives, setLives] = useState(undefined);
-  // const myId = useSelector((state) => state.user.userInfo);
-  const myId = 1; //일단 트래쉬값 넣어놓자
-  //여기서 userInfo에서 myId 값을 빼와야하는데 롱 id값을 빼옴
+  const myId = useSelector((state) => state.user.userInfo.id);
   useEffect(() => {
     getSalesHistory(myId, ({ data }) => {
       console.log(data);

@@ -137,11 +137,11 @@ async function getMyLives(myId, success, fail) {
     }
   ]
  */
-async function getLiveDetails(sessionId, success, fail) {
-  const live = await api.get(`/api/v1/lives`, sessionId).then(success);
-  // .catch();
-  return live;
-}
+// async function getLiveDetails(sessionId, success, fail) {
+//   const live = await api.get(`/api/v1/lives`, sessionId).then(success);
+//   // .catch();
+//   return live;
+// }
 
 /**
  * 라이브 시작하기
@@ -210,7 +210,7 @@ async function getLiveDetail(id, success, fail) {
  * @param {*} id liveId pk
  */
 async function closeLive(id, success, fail) {
-  return await api.fetch(`/api/v1/lives/${id}`).thend(success).catch(fail);
+  return await api.patch(`/api/v1/lives/${id}`).then(success).catch(fail);
 }
 async function getSalesHistory(sellerId, success, fail) {
   const lives = await api
@@ -228,7 +228,7 @@ export {
   getLiveDetail,
   closeLive,
   getMyLives,
-  getLiveDetails,
+  // getLiveDetails,
   getSalesHistory,
   getLives,
 };

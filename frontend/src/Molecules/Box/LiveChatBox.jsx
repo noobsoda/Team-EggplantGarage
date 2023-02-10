@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { getStompClient } from "../../store/socket";
-import { useLocation, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { checkUserInfo } from "../../store/user";
 
 const StyledChatting = styled.div`
   padding: 8px;
@@ -60,52 +61,56 @@ const FlexBox = styled.div`
   row-gap: 16px;
   justify-content: flex-end;
 `;
-export default function ChatInput() {
-  // const nickname = useLocation().state.nickname;
-  const nickname = "홍길동"; // 닉네임
+export default function ChatInput({ liveId }) {
+  const userInfo = useSelector(checkUserInfo);
   const [message, setMessage] = useState(""); // 입력 메세지
-  const stompClient = getStompClient();
-  // const liveId = useLocation().state.liveId;
-  // const { sessionId } = useParams();
-  const liveId = 1; // 라이브 방ID
   const messageArea = useRef();
   const scrollRef = useRef();
+  const stompClient = getStompClient();
 
-  // console.log("nickname: " + nickname);
-  // console.log("liveId: " + liveId);
-
+  //연결
   const connect = () => {
     console.log("connect");
     stompClient.connect({}, connectSuccess, connectError);
   };
 
   useEffect(() => {
-    console.log("useEffect!");
     if (stompClient === null) {
       return;
     }
-    connect();
-  }, []);
-
-  useEffect(() => {
+    connect(); //연결
     scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, []);
 
+  /**
+   * 연결 성공
+   */
   const connectSuccess = () => {
-    console.log("connectSuccess!");
+    console.warn("connectSuccess!");
     stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
     stompClient.send(
       "/pub/live/addUser/" + liveId,
       {},
-      JSON.stringify({ sender: nickname, type: "JOIN", roomId: liveId })
+      JSON.stringify({
+        sender: userInfo.nickname,
+        type: "JOIN",
+        roomId: liveId,
+      })
     );
   };
 
-  const connectError = (error) => {
-    console.log("connectError!");
+  /**
+   * 연결 실패
+   */
+  const connectError = () => {
+    console.warn("connectError!");
   };
 
+  /**
+   * 메시지 받음
+   * @param {*} payload
+   */
   const onMessageReceived = (payload) => {
     console.log("onMessageReceived!");
 
@@ -130,12 +135,15 @@ export default function ChatInput() {
     messageArea.current.appendChild(messageElement);
   };
 
+  /**
+   * 메시지 전송
+   */
   const sendMessage = () => {
     console.log("sendMessage!");
 
     if (message && stompClient) {
       var chatMessage = {
-        sender: nickname,
+        sender: userInfo.nickname,
         roomId: liveId,
         content: message,
         type: "CHAT",
@@ -150,12 +158,20 @@ export default function ChatInput() {
     setMessage("");
   };
 
+  /**
+   * enter입력
+   * @param {*} e
+   */
   const onKeyPress = (e) => {
     if (e.key === "Enter") {
       sendMessage();
     }
   };
 
+  /**
+   * 입력 이벤트
+   * @param {*} event
+   */
   const inputChangeHandler = (event) => {
     setMessage(event.target.value);
   };

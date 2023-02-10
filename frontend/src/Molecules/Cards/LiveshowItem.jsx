@@ -21,19 +21,15 @@ const InfoBox = styled.div`
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
 */
-export default function LiveshowItem({
-  isSearch,
-  isViewer,
-  show = { id: 12341, sessionId: "세션아이디" },
-  isHistory,
-}) {
+export default function LiveshowItem({ isSearch, isViewer, show, isHistory }) {
   //useState , event
   const navigate = useNavigate();
   function goTo() {
     if (isViewer) {
-      navigate("/liveshowbuyer", { state: show.sessionId });
+      console.log(show);
+      navigate(`/liveshowbuyer/${show.id}`);
     } else {
-      navigate("/liveshowdetail", { state: show.id });
+      navigate("/liveshowdetail", { state: show.liveId });
     }
   }
   return (

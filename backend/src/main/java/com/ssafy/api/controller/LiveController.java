@@ -99,7 +99,9 @@ public class LiveController {
     @ApiOperation(value = "방 상세정보 조회", notes = "방의 상세 정보와 유저 목록을 조회한다.")
     public ResponseEntity<? extends LiveDetailGetRes> getLiveDetailInfo(@RequestBody HashMap<String, Long> sessionMap) {
         Long liveId = sessionMap.get("liveId");
-
+        if(liveId == null){
+            return ResponseEntity.status(404).body(null);
+        }
         LiveDetailGetRes liveDetailGetRes = liveService.getLiveDetailBySessionId(liveId);
         //상품도 추가로 보여주기
 
@@ -196,7 +198,7 @@ public class LiveController {
         if (liveService.postUserLiveByLiveId(LiveUserJoinReq)) {
             return ResponseEntity.status(200).body(BaseResponseBody.of(200, "유저 참가 성공"));
         } else {
-            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "해당 라이브나 유저가 없습니다"));
+            return ResponseEntity.status(404).body(BaseResponseBody.of(404, "해당 라이브가 끝났거나 라이브, 유저가 없거나 이미 참가한 유저입니다."));
         }
 
     }

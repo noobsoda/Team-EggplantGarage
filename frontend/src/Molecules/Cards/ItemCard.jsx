@@ -57,7 +57,7 @@ export default function ItemCard({
           <div className="body1-regular">
             {isSeller ? "제안자" : item.otherId}
           </div>
-          <div className="body1-regular">{item.soldPrice || 142879}원</div>
+          <div className="body1-regular">{item.soldPrice || 21500}원</div>
         </div>
       </ItemInfo>
       <ItemBtn>
