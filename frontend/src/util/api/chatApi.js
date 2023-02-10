@@ -1,7 +1,7 @@
 import { api } from "./api";
 
 async function createChatRoom(users, success, fail) {
-  const chatRoom = await api.post(`/api/v1/chat`).then(success);
+  const chatRoom = await api.post(`/api/v1/chat`, users).then(success);
   return chatRoom;
 }
 

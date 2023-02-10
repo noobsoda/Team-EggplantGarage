@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
 import ExtraSmallButton from "../../Atoms/Buttons/ExtraSmallBtn";
@@ -54,9 +54,12 @@ export default function ItemCard({
   const userInfo = useSelector(checkUserInfo);
   const senderId = userInfo.id;
   const [chatRoomId, setChatRoomId] = useState(item.chatRoomId);
-  const getChatRoomId = (receiverId) => {
+  const createChatRoomAndMove = (receiverId) => {
     createChatRoom({senderId: senderId, receiverId: receiverId}, ({ data }) => {
-      setChatRoomId(data)
+      navigate(`/chat/room`, {
+        state: { chatRoomId: data.chatRoomId, receiverId: item.otherId, receiverName: item.otherName},
+      });
+      window.location.reload(`/chat/room`);
     });
   };
   return (
@@ -81,12 +84,16 @@ export default function ItemCard({
         {buttonType === "purchasedhistory" ? (
           <ExtraSmallButton 
           name="대화하기" 
-          buttonClick={() => {
-            chatRoomId === 0 && getChatRoomId(item.otherId);
+          buttonClick={() => { 
+            if(chatRoomId === 0 ){
+              createChatRoomAndMove(item.otherId);
+              return;
+            }
             navigate(`/chat/room`, {
               state: { chatRoomId: chatRoomId, receiverId: item.otherId, receiverName: item.otherName},
             });
             window.location.reload(`/chat/room`);
+            console.log(chatRoomId);
           }}
           />
         ) : (
