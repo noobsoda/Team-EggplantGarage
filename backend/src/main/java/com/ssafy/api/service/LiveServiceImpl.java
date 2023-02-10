@@ -8,12 +8,16 @@ import com.ssafy.common.util.DistanceModule;
 import com.ssafy.common.util.LocationDistance;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+import static com.ssafy.common.error.ErrorCode.*;
+
 @Service("liveService")
+@RequiredArgsConstructor
 public class LiveServiceImpl implements LiveService {
 
     private final LiveRepository liveRepository;
@@ -23,18 +27,8 @@ public class LiveServiceImpl implements LiveService {
     private final UserLiveRepository userLiveRepository;
     private final ProductRepository productRepository;
     private final FavoriteRepository favoriteRepository;
+    private final int MAX_PAGE = 10;
 
-    @Autowired
-    public LiveServiceImpl(LiveRepository liveRepository, CategoryRepository categoryRepository, UserRepository userRepository, LiveCategoryRepository liveCategoryRepository, UserLiveRepository userLiveRepository
-            , ProductRepository productRepository, FavoriteRepository favoriteRepository) {
-        this.liveRepository = liveRepository;
-        this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
-        this.liveCategoryRepository = liveCategoryRepository;
-        this.userLiveRepository = userLiveRepository;
-        this.productRepository = productRepository;
-        this.favoriteRepository = favoriteRepository;
-    }
 
     @Override
     public Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user) {
@@ -70,22 +64,29 @@ public class LiveServiceImpl implements LiveService {
         return live;
     }
 
+    /**
+     * sessionId 중복을 체크하는 메서드
+     */
     //url 중복 체크할 메서드
     public boolean getLiveCheckSessionIdBySessionId(String sessionId) {
         // 디비에 방송 url 정보 조회
         Optional<Live> oLive = liveRepository.findBySessionId(sessionId);
-        if (!oLive.isPresent())
-            return false;
+        oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
+
         return true;
     }
+
+    /**
+     * 라이브 아이디에 썸네일 이미지 주소를 넣어주는 메소드
+     */
 
     @Override
     public boolean postLiveByThumbnailUrl(Long liveId, String thumbnailUrl) {
 
-        Optional<List<Live>> oLiveList = liveRepository.findAllById(liveId);
-        List<Live> liveList = oLiveList.orElse(null);
+        List<Live> liveList = liveRepository.findAllById(liveId);
 
-        if (liveList == null || liveList.size() == 0) return false;
+        if (liveList == null || liveList.isEmpty())
+            throw new CustomException(LIVE_NOT_FOUND);
 
         for (Live live : liveList) {
             //현재 라이브를 하고 있을 때만 썸네일 바꾸기
@@ -101,46 +102,45 @@ public class LiveServiceImpl implements LiveService {
 
     @Override
     public boolean postLiveByCategories(LiveCategoriesReq liveCategoriesReq) {
-        Optional<List<Live>> oLiveList = liveRepository.findAllById(liveCategoriesReq.getLiveId());
-        List<Live> liveList = oLiveList.orElse(null);
+        Optional<Live> oLive = liveRepository.findById(liveCategoriesReq.getLiveId());
+        Live live = oLive.orElseThrow(()-> new CustomException(LIVE_NOT_FOUND));
 
-        if (liveList == null || liveList.size() == 0) return false;
-
-        for (Live live : liveList) {
-
-            //현재 라이브를 하고 있을 때만 카테고리 넣어주기
-            if (live.isLive()) {
-                live.getLiveCategoryList();
-                List<LiveCategory> liveCategoryList = new ArrayList<>();
-
-                for (LiveCategoryReq liveCategoryReq : liveCategoriesReq.getLiveCategoryReqList()) {
-                    Optional<Category> oCategory = categoryRepository.findByName(liveCategoryReq.getCategoryName());
-                    Category category = oCategory.orElse(null);
-
-                    liveCategoryList.add(LiveCategory.builder()
-                            .category(category)
-                            .live(live)
-                            .build());
-
-                }
-                liveCategoryRepository.saveAll(liveCategoryList);
-
-
-                liveRepository.save(live);
-            }
+        if(!live.isLive()){
+            throw new CustomException(ALREADY_LIVE_END);
         }
+
+
+        //현재 라이브를 하고 있을 때만 카테고리 넣어주기
+        if (live.isLive()) {
+            live.getLiveCategoryList();
+            List<LiveCategory> liveCategoryList = new ArrayList<>();
+
+            for (LiveCategoryReq liveCategoryReq : liveCategoriesReq.getLiveCategoryReqList()) {
+                Optional<Category> oCategory = categoryRepository.findByName(liveCategoryReq.getCategoryName());
+                Category category = oCategory.orElse(null);
+
+                liveCategoryList.add(LiveCategory.builder()
+                        .category(category)
+                        .live(live)
+                        .build());
+
+            }
+            liveCategoryRepository.saveAll(liveCategoryList);
+
+
+            liveRepository.save(live);
+        }
+
         return true;
     }
 
     @Override
     public List<LiveContent> getLiveListByTitle(String title) {
-        Optional<List<Live>> oliveList = liveRepository.findAllByTitleContains(title);
-        List<Live> liveList = oliveList.orElse(null);
+        List<Live> liveList = liveRepository.findAllByTitleContains(title);
 
-        if (liveList == null)
-            return null;
+        if (liveList == null || liveList.isEmpty())
+            throw new CustomException(LIVE_NOT_FOUND);
 
-        LiveListGetRes liveListGetRes = new LiveListGetRes();
         List<LiveContent> Content = new ArrayList<>();
         for (Live live : liveList) {
             if (!live.isLive())
@@ -154,6 +154,10 @@ public class LiveServiceImpl implements LiveService {
                 LiveCategory liveCategory = it.next();
                 //카테고리 아이디와 연관된 카테고리 테이블 조회
 
+                if(liveCategory.getCategory() == null){
+                    throw new CustomException(CATEGORY_NOT_FOUND);
+                }
+
                 categoryList.add(Category.builder()
                         .id(liveCategory.getCategory().getId())
                         .name(liveCategory.getCategory().getName())
@@ -162,7 +166,6 @@ public class LiveServiceImpl implements LiveService {
             //라이브 카테고리 조회 끝
 
             //Live와 연관된 유저 조회
-            User user = live.getUser();
 
             List<UserLive> userLiveList = userLiveRepository.findAllByLive_id(live.getId());
 
@@ -184,28 +187,31 @@ public class LiveServiceImpl implements LiveService {
         return Content;
     }
 
+    /**
+     * 유저 라이브 참가 API
+     */
     @Override
     public boolean postUserLiveByLiveId(LiveUserJoinReq liveUserJoinReq) {
-        if(liveUserJoinReq.getUserId() == null || liveUserJoinReq.getLiveId() == null)
-            throw new CustomException(ErrorCode.INVALID_PARAMETER);
+        if (liveUserJoinReq.getUserId() == null || liveUserJoinReq.getLiveId() == null)
+            throw new CustomException(INVALID_PARAMETER);
         //유저 라이브 참가
         Optional<Live> oLive = liveRepository.findById(liveUserJoinReq.getLiveId());
         Live live = oLive
-                .orElseThrow(() -> new CustomException(ErrorCode.LIVE_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
 
         Optional<User> oUser = userRepository.findById(liveUserJoinReq.getUserId());
         User user = oUser
-                .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
-        Optional<List<UserLive>> oUserLiveList = userLiveRepository.findAllByUser_idAndLive_id(liveUserJoinReq.getUserId(), liveUserJoinReq.getLiveId());
-        List<UserLive> userLiveList = oUserLiveList.orElse(null);
+        List<UserLive> userLiveList = userLiveRepository.findAllByUser_idAndLive_id(liveUserJoinReq.getUserId(), liveUserJoinReq.getLiveId());
 
-        if (userLiveList.size() > 0)
-            throw new CustomException(ErrorCode.ALREADY_SAVED_USER);
+        //유저 라이브 중복이 있다면
+        if (!userLiveList.isEmpty())
+            throw new CustomException(ALREADY_SAVED_USER);
 
         //이미 죽어있는 방송이면 들어가면 안됨
         if (!live.isLive()) {
-            throw new CustomException(ErrorCode.LIVE_NOT_FOUND);
+            throw new CustomException(LIVE_NOT_FOUND);
         }
         //라이브에 이미 들어가있으면 들어가면 안됨
 
@@ -220,32 +226,37 @@ public class LiveServiceImpl implements LiveService {
 
     }
 
+    /**
+     * 유저 라이브 테이블에서 유저를 삭제한다.
+     */
     @Override
     public boolean deleteUserLiveByLiveId(LiveUserJoinReq liveUserJoinReq) {
         //라이브 아이디 조회
-        Optional<List<UserLive>> oUserLiveList = userLiveRepository.findAllByUser_idAndLive_id(liveUserJoinReq.getUserId(), liveUserJoinReq.getLiveId());
-        List<UserLive> userLiveList = oUserLiveList.orElse(null);
+        List<UserLive> userLiveList = userLiveRepository.findAllByUser_idAndLive_id(liveUserJoinReq.getUserId(), liveUserJoinReq.getLiveId());
 
         if (userLiveList == null || userLiveList.isEmpty())
-            return false;
+            throw new CustomException(USER_LIVE_NOT_FOUND);
 
         userLiveRepository.deleteAll(userLiveList);
         return true;
     }
 
-    //라이브 상태 끝내기
+    /**
+     * 라이브 끝내기 API
+     * 라이브를 찜한 유저 테이블 데이터 삭제
+     * 라이브에 참가한 유저 테이블 데이터 삭제
+     */
+
     @Override
     public boolean patchLiveEndById(Long liveId) {
         //라이브 상태 false로 변경
         Optional<Live> oLive = liveRepository.findById(liveId);
-        Live live = oLive.orElse(null);
-        if (live == null)
-            return false;
+        Live live = oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
+
         live.setLive(false);
 
         //라이브에 찜한 유저의 찜 테이블에서 전부 삭제
-        Optional<List<Favorite>> oFavoriteList = favoriteRepository.findByLive_id(liveId);
-        List<Favorite> favoriteList = oFavoriteList.orElse(null);
+        List<Favorite> favoriteList = favoriteRepository.findByLive_id(liveId);
         favoriteRepository.deleteAll(favoriteList);
         //라이브에 참가한 유저, 유저라이브 테이블에서 전부 삭제
         //라이브 아디와 유저 아디가 판매자 본인과 만났을 경우 라이브 유저 전부 삭제해서 주석처리
@@ -257,6 +268,11 @@ public class LiveServiceImpl implements LiveService {
         return true;
     }
 
+    /**
+     * @param liveContentList 타이틀을 검색한 라이브 리스트
+     * @param category        필터링할 카테고리
+     * @return 카테고리로 필터링된 값
+     */
     @Override
     public List<LiveContent> searchCategoryLiveList(List<LiveContent> liveContentList, String category) {
         List<LiveContent> tempLiveContentList = new ArrayList<>();
@@ -275,6 +291,12 @@ public class LiveServiceImpl implements LiveService {
         return tempLiveContentList;
     }
 
+    /**
+     * @param liveContentList 제목, 카테고리 등으로 필터링된 값
+     * @param location        현재 구매자의 위치
+     * @param isNational      true면 전국, false면 지역 5km 이내
+     * @return 필터링되고 정렬된 값
+     */
     @Override
     public List<DistanceModule> searchLocationLiveList(List<LiveContent> liveContentList, Location location, boolean isNational) {
         List<DistanceModule> distanceModuleList = new ArrayList<>();
@@ -284,7 +306,9 @@ public class LiveServiceImpl implements LiveService {
             Live live = oLive.orElse(null);
             if (live == null)
                 continue;
-            ;
+
+            if (location.getLatitude() == null || location.getLongitude() == null)
+                throw new CustomException(INVALID_PARAMETER);
             // 킬로미터(Kilo Meter) 단위
             double distanceKiloMeter =
                     LocationDistance.distance(location.getLatitude(), location.getLongitude(),
@@ -304,6 +328,11 @@ public class LiveServiceImpl implements LiveService {
         return distanceModuleList;
     }
 
+    /**
+     * @param liveContentList 필터링(제목, 카테고리 등등)된 값
+     * @param userJoinSort    유저수로 정렬할 값 ASC, DESC
+     * @return 정렬된 값
+     */
     @Override
     public List<LiveContent> searchSortUserJoinLiveList(List<LiveContent> liveContentList, String userJoinSort) {
         //오름차순 정렬
@@ -327,34 +356,42 @@ public class LiveServiceImpl implements LiveService {
         return liveContentList;
     }
 
+    /**
+     * @param liveContentListInfo 필터링된 최종 값
+     * @param page                페이지 적용해서 10페이지씩 가져온다.
+     * @return 페이징으로 뽑아낸 값
+     */
+
     @Override
     public List<LiveContent> setPageaLiveList(List<LiveContent> liveContentListInfo, int page) {
         List<LiveContent> liveContentList = new ArrayList<>();
         int size = liveContentListInfo.size();
 
-        if (size <= page * 10 && size <= (page - 1) * 10) {
+        if (size <= page * MAX_PAGE && size <= (page - 1) * MAX_PAGE) {
             return null;
-        } else if (size > (page - 1) * 10 && size < page * 10) {
-            for (int i = ((page - 1) * 10); i < liveContentListInfo.size(); i++) {
+        } else if (size > (page - 1) * MAX_PAGE && size < page * MAX_PAGE) {
+            for (int i = ((page - 1) * MAX_PAGE); i < liveContentListInfo.size(); i++) {
                 liveContentList.add(liveContentListInfo.get(i));
             }
         } else {
-            for (int i = ((page - 1) * 10); i < (page) * 10; i++) {
+            for (int i = ((page - 1) * MAX_PAGE); i < (page) * MAX_PAGE; i++) {
                 liveContentList.add(liveContentListInfo.get(i));
             }
         }
         return liveContentList;
     }
 
+    /**
+     * @param liveId 조회할 라이브 아이디
+     * @return 라이브 상세보기 값
+     */
     //방 상세보기 가져올 메서드
     @Override
     public LiveDetailGetRes getLiveDetailBySessionId(Long liveId) {
         // 디비에 방송 url 정보 조회
         Optional<Live> oLive = liveRepository.findById(liveId);
-        Live live = oLive.orElse(null);
+        Live live = oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
 
-        if (live == null)
-            return null;
 
         //라이브 카테고리 헬퍼 테이블 순회
         List<LiveCategory> liveCategories = live.getLiveCategoryList();

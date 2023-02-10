@@ -1,6 +1,7 @@
 package com.ssafy.db.entity;
 
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class Favorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

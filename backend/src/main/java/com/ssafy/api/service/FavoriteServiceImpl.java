@@ -3,6 +3,8 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.FavoritePostReq;
 import com.ssafy.api.response.FavoriteGetInfo;
 import com.ssafy.api.response.LiveContent;
+import com.ssafy.common.error.ErrorCode;
+import com.ssafy.common.exception.CustomException;
 import com.ssafy.db.entity.Favorite;
 import com.ssafy.db.entity.Live;
 import com.ssafy.db.entity.User;
@@ -15,6 +17,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.ssafy.common.error.ErrorCode.*;
 
 @Service("favoriteService")
 public class FavoriteServiceImpl implements FavoriteService{
@@ -31,14 +35,10 @@ public class FavoriteServiceImpl implements FavoriteService{
     @Override
     public boolean postFavorite(FavoritePostReq favoritePostInfo) {
         Optional<User> oUser = userRepository.findById(favoritePostInfo.getUserId());
-        User user = oUser.orElse(null);
+        User user = oUser.orElseThrow(()->new CustomException(USER_NOT_FOUND));
 
         Optional<Live> oLive = liveRepository.findById(favoritePostInfo.getLiveId());
-        Live live = oLive.orElse(null);
-
-        if(user == null || live == null){
-            return false;
-        }
+        Live live = oLive.orElseThrow(()-> new CustomException(LIVE_NOT_FOUND));
 
         Favorite favorite = Favorite.builder()
                 .user(user)
@@ -51,10 +51,10 @@ public class FavoriteServiceImpl implements FavoriteService{
 
     @Override
     public List<FavoriteGetInfo> getFavoriteLiveByUserId(Long userId) {
-        Optional<List<Favorite>> oFavoriteList = favoriteRepository.findByUser_id(userId);
-        List<Favorite> favoriteList = oFavoriteList.orElse(null);
-        if(favoriteList == null)
-            return null;
+        List<Favorite> favoriteList = favoriteRepository.findByUser_id(userId);
+
+        if(favoriteList == null || favoriteList.isEmpty())
+            throw new CustomException(FAVORITE_NOT_FOUND);
 
         List<FavoriteGetInfo> favoriteGetInfoList = new ArrayList<>();
         for(Favorite favorite : favoriteList) {
@@ -90,16 +90,15 @@ public class FavoriteServiceImpl implements FavoriteService{
     @Override
     public boolean deleteFavorite(Long userId, Long liveId) {
         Optional<User> oUser = userRepository.findById(userId);
-        User user = oUser.orElse(null);
+        User user = oUser.orElseThrow(()->new CustomException(USER_NOT_FOUND));
 
         Optional<Live> oLive = liveRepository.findById(liveId);
-        Live live = oLive.orElse(null);
+        Live live = oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
 
-        Optional<List<Favorite>> oFavoriteList = favoriteRepository.findByUser_idAndLive_id(userId, liveId);
-        List<Favorite> favoriteList = oFavoriteList.orElse(null);
+        List<Favorite> favoriteList = favoriteRepository.findByUser_idAndLive_id(userId, liveId);
 
-        if(user == null || live == null || favoriteList.size() == 0){
-            return false;
+        if(favoriteList == null || favoriteList.isEmpty()){
+            throw new CustomException(FAVORITE_NOT_FOUND);
         }
 
 
@@ -109,10 +108,10 @@ public class FavoriteServiceImpl implements FavoriteService{
 
     @Override
     public boolean postFavoriteIsFavorite(Long userId, Long liveId) {
-        Optional<List<Favorite>> oFavoriteList = favoriteRepository.findByUser_idAndLive_id(userId, liveId);
-        List<Favorite> favoriteList = oFavoriteList.orElse(null);
-        if(favoriteList == null || favoriteList.size() == 0)
-            return false;
+
+        List<Favorite> favoriteList = favoriteRepository.findByUser_idAndLive_id(userId, liveId);
+        if(favoriteList == null || favoriteList.isEmpty())
+            throw new CustomException(FAVORITE_NOT_FOUND);
 
         return true;
     }

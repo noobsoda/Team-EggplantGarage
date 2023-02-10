@@ -3,9 +3,12 @@ package com.ssafy.api.controller;
 import com.ssafy.api.request.ReviewWritePostReq;
 import com.ssafy.api.response.ReviewRes;
 import com.ssafy.api.service.ReviewService;
-import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.model.response.CommonResponse;
+import com.ssafy.common.model.response.ResponseService;
 import com.ssafy.db.entity.Review;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
+import org.omg.CORBA.COMM_FAILURE;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,24 +18,21 @@ import java.util.List;
 
 @Api(value = "리뷰 API", tags = {"Review."})
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
     private final Logger logger;
 
-    @Autowired
-    public ReviewController(Logger logger) {
-        this.logger = logger;
-    }
-
-    @Autowired
     ReviewService reviewService;
+
+    ResponseService responseService;
 
     @PostMapping()
     @ApiOperation(value = "리뷰 생성", notes = "리뷰를 등록합니다.")
     @ApiResponses({@ApiResponse(code = 201, message = "생성 성공"), @ApiResponse(code = 500, message = "서버 오류")})
-    public ResponseEntity<? extends BaseResponseBody> writeReview(@RequestBody @ApiParam(value = "리뷰 정보", required = true) ReviewWritePostReq reviewWriteInfo) {
+    public ResponseEntity<? extends CommonResponse> writeReview(@RequestBody @ApiParam(value = "리뷰 정보", required = true) ReviewWritePostReq reviewWriteInfo) {
         Review review = reviewService.writeReview(reviewWriteInfo);
-        return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Created"));
+        return ResponseEntity.status(201).body(responseService.getSuccessResponse(201, "리뷰 생성 성공"));
     }
 
     @GetMapping("/seller/{sellerId}")

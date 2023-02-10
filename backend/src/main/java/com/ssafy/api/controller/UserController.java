@@ -2,8 +2,10 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.request.UserDeleteReq;
 import com.ssafy.api.request.UserInfoPatchReq;
+import com.ssafy.common.model.response.CommonResponse;
+import com.ssafy.common.model.response.ResponseService;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -28,27 +30,22 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api(value = "유저 API", tags = {"User"})
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
 public class UserController {
     private final Logger logger;
-
-    @Autowired
-    public UserController(Logger logger) {
-        this.logger = logger;
-    }
-
-    @Autowired
-    UserService userService;
+    private final UserService userService;
+    private final ResponseService responseService;
 
     @PostMapping()
     @ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.")
     @ApiResponses({@ApiResponse(code = 201, message = "생성 성공"), @ApiResponse(code = 401, message = "인증 실패"), @ApiResponse(code = 404, message = "사용자 없음"), @ApiResponse(code = 500, message = "서버 오류")})
-    public ResponseEntity<? extends BaseResponseBody> register(@RequestBody @ApiParam(value = "회원가입 정보", required = true) UserRegisterPostReq registerInfo) {
+    public ResponseEntity<? extends CommonResponse> register(@RequestBody @ApiParam(value = "회원가입 정보", required = true) UserRegisterPostReq registerInfo) {
 
         // 임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
         User user = userService.createUser(registerInfo);
 
-        return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Created"));
+        return ResponseEntity.status(201).body(responseService.getSuccessResponse(201, "회원가입 성공"));
     }
 
     @GetMapping("/me")
@@ -74,11 +71,12 @@ public class UserController {
     //유저 이메일 중복이 있는지 확인하는 메소드
     public ResponseEntity<? extends BaseResponseBody> checkUserEmail(@PathVariable("email") String email) {
 
+
         User user = userService.getUserByEmail(email);
         if (user != null) {
-            return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 사용자 ID입니다."));
+            return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 사용자 ID입니다.", false));
         } else {
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "현재 ID는 사용 가능합니다"));
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "현재 ID는 사용 가능합니다", true));
         }
 
     }
@@ -91,9 +89,9 @@ public class UserController {
 
         User user = userService.getUserByNickname(nickname);
         if (user != null) {
-            return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 사용자 닉네임입니다."));
+            return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 사용자 닉네임입니다.", false));
         } else {
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "현재 닉네임은 사용 가능합니다"));
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "현재 닉네임은 사용 가능합니다", true));
         }
 
     }
@@ -105,9 +103,9 @@ public class UserController {
                                                                  @PathVariable("email") String email) {
 
         if (userService.deleteUserByEmail(email, userDeleteReq)) {
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success", true));
         } else {
-            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized", false));
         }
 
     }
@@ -121,9 +119,9 @@ public class UserController {
         String userEmail = userDetails.getUsername();
 
         if (userService.patchUserByEmail(userEmail, userInfoPatchReq)) {
-            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+            return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success", true));
         } else {
-            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized"));
+            return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Unauthorized", false));
         }
 
 

@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.response.LiveHistoryRes;
 import com.ssafy.api.response.ProductHistoryRes;
+import com.ssafy.common.exception.CustomException;
 import com.ssafy.db.entity.Live;
 import com.ssafy.db.entity.Product;
 import com.ssafy.db.entity.Review;
@@ -17,6 +18,8 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.ssafy.common.error.ErrorCode.*;
 
 @Service("historyService")
 public class HistoryServiceImpl implements HistoryService{
@@ -40,7 +43,10 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public List<LiveHistoryRes> getLiveHistoryBySellerId(long sellerId) {
-        List<Live> liveList = liveRepository.findByIsLiveFalseAndUser_IdOrderByCreatedAtDesc(sellerId).get();
+        List<Live> liveList = liveRepository.findByIsLiveFalseAndUser_IdOrderByCreatedAtDesc(sellerId);
+        if(liveList == null || liveList.isEmpty())
+            throw new CustomException(LIVE_NOT_FOUND);
+
         List<LiveHistoryRes> resList = new ArrayList<>();
         for (Live live : liveList) {
             LiveHistoryRes res = LiveHistoryRes.of(live);

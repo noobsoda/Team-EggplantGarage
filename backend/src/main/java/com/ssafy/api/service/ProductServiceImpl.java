@@ -2,19 +2,20 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.ProductReq;
 import com.ssafy.api.request.ProductsRegisterPostReq;
+import com.ssafy.common.exception.CustomException;
 import com.ssafy.db.entity.Live;
 import com.ssafy.db.entity.Product;
-import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.LiveRepository;
 import com.ssafy.db.repository.ProductRepository;
 import com.ssafy.db.repository.UserRepository;
-import org.checkerframework.checker.nullness.Opt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import static com.ssafy.common.error.ErrorCode.*;
 
 @Service("productService")
 public class ProductServiceImpl implements ProductService {
@@ -41,9 +42,9 @@ public class ProductServiceImpl implements ProductService {
 
         for (ProductReq productReq : productReqList) {
             Optional<Live> oLive = liveRepository.findById(productReq.getLiveId());
-            Live live = oLive.orElse(null);
-            if(live == null)
-                continue;
+            
+            //해당하는 라이브가 없으면 상품을 넣을수가 없음
+            Live live = oLive.orElseThrow(()->new CustomException(LIVE_NOT_FOUND));
 
 
             Product product = Product.builder()

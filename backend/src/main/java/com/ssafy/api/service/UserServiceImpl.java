@@ -3,6 +3,7 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.UserDeleteReq;
 import com.ssafy.api.request.UserInfoPatchReq;
 import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.common.exception.CustomException;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-//import com.ssafy.db.repository.UserRepositorySupport;
+
+import static com.ssafy.common.error.ErrorCode.*;
 
 /**
  * 유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -177,10 +179,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserById(Long sellerId) {
         Optional<User> oUser = userRepository.findById(sellerId);
-        User user = oUser.orElse(null);
+        User user = oUser.orElseThrow(()->new CustomException(USER_NOT_FOUND));
 
-        if(user == null)
-            return null;
 
         return user;
     }
