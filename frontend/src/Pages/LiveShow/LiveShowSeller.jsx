@@ -6,8 +6,11 @@ import { useNavigate, useParams } from "react-router-dom";
 import ModalSeller from "../../Organisms/Modal/ModalBuyer";
 import LiveChatBox from "../../Molecules/Box/LiveChatBox";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
+import MicBtn from "../../Atoms/IconButtons/liveshow/MicBtn";
+import CameraBtn from "../../Atoms/IconButtons/liveshow/CameraBtn";
 import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
+import { closeLive } from "../../util/api/liveApi";
 
 import Seller from "../../Templates/LiveShow/Seller";
 
@@ -62,16 +65,23 @@ const LiveLayout = styled.div`
   height: 100%;
   z-index: 1;
 `;
-export default function LiveshowBuyer() {
+export default function LiveshowBuyer(toggleCamera) {
   const { liveId } = useParams(); //방 아이디
 
-  const [isSpeaker, setIsSpeaker] = useState(false);
+  const [isMic, setIsMic] = useState(true);
+  const [isCamera, setIsCamera] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
 
   const [liveInfo, setLiveInfo] = useState({});
   const [bundleList, setBundleList] = useState([]);
 
   const navigate = useNavigate();
+
+  const exit = () => {
+    closeLive(liveId, (data) => {
+      console.log(data);
+    });
+  };
 
   //10초마다 묶음 제안 요청 왔는지 확인
   useInterval(() => {
@@ -102,7 +112,7 @@ export default function LiveshowBuyer() {
 
   return (
     <StyledPage>
-      <Seller liveId={liveId} />
+      <Seller liveId={liveId} isCamera={isCamera} isMic={isMic} />
       <LiveLayout>
         <StyledHeader>
           <Title className="show-header">{liveInfo.title}</Title>
@@ -113,14 +123,21 @@ export default function LiveshowBuyer() {
               }}
             />
             <div>　</div>
-            <SpeakerBtn
+            <CameraBtn
               buttonClick={() => {
-                setIsSpeaker((cur) => !cur);
+                setIsCamera((cur) => !cur);
               }}
-              isClicked={isSpeaker}
+              isClicked={!isCamera}
+            />
+            <MicBtn
+              buttonClick={() => {
+                setIsMic((cur) => !cur);
+              }}
+              isClicked={!isMic}
             />
             <ExitBtn
               buttonClick={() => {
+                exit();
                 navigate("/");
               }}
             />
