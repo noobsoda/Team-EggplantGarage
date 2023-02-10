@@ -7,6 +7,12 @@ const StyledBox = styled.div`
   flex-direction: column;
   row-gap: 8px;
   /* justify-content: ; */
+  width: calc(100% - 41x);
+  height: 56px;
+  padding: 16px;
+  border-radius: 16px;
+  border: solid 2px;
+  border-color: ${({ theme }) => theme.color.red};
 `;
 
 export default function ChattingItem({
@@ -30,7 +36,16 @@ export default function ChattingItem({
   };
   return (
     <StyledBox onClick={room}>
-      <div>{receiverName}님과의 채팅</div>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-end",
+        }}
+      >
+        <div className="body1-header">{receiverName}님과의 채팅</div>
+        <div>{lastSendTime}</div>
+      </div>
       <div>
         {lastSendMessage !== null ? (
           lastSendMessage.length < 15 ? (
@@ -42,7 +57,6 @@ export default function ChattingItem({
           <div></div>
         )}
       </div>
-      <div>{lastSendTime}</div>
     </StyledBox>
   );
 }
