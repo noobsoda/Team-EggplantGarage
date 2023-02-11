@@ -225,6 +225,15 @@ export default function ProductSubmitBox({
     ctx.drawImage(img, 0, 0, img.width, img.height);
     setGoCropRest(!goCropRest);
   }
+
+  function onCheckChange(e) {
+    if (e.target.checked) {
+      setCheck(true);
+    } else {
+      setCheck(false);
+    }
+  }
+
   return (
     <StyledBox>
       <StyledNoneCanvas ref={originCanvas}></StyledNoneCanvas>
@@ -260,7 +269,7 @@ export default function ProductSubmitBox({
             text="즉시구매가 입력하기"
             textSize="body1-regular"
             check={check}
-            setCheck={setCheck}
+            setCheck={onCheckChange}
           />
           <InputBox
             placehold="즉시구매가를 입력하세요"

@@ -65,6 +65,9 @@ export default function ItemCard({
   buttonType,
   isReview,
   isSeller,
+  isSaleList,
+  check,
+  setCheck,
   isSold,
 }) {
   const navigate = useNavigate();
@@ -95,14 +98,21 @@ export default function ItemCard({
           <div className="body1-regular">
             {isSeller ? "제안자" : item.otherId}
           </div>
-          <div className="body1-regular">{item.soldPrice || 21500}원</div>
+
+          <div className="body1-regular">
+            {isSaleList ? item.initialPrice : item.soldPrice || 0}원
+          </div>
         </div>
       </ItemInfo>
       {isSold ? (
         <ItemBtn />
       ) : (
         <ItemBtn>
-          {buttonType === "check" ? <Check /> : <></>}
+          {buttonType === "check" ? (
+            <Check check={check} setCheck={setCheck} disable={item.paid} />
+          ) : (
+            <></>
+          )}
           {buttonType === "saleshistory" ? (
             <ExtraSmallButton name="한개" />
           ) : (
