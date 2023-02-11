@@ -10,6 +10,7 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -143,17 +144,33 @@ public class BundleServiceImpl implements BundleService {
     @Override
     public void approvalBundle(long bundleId) {
         Optional<Bundle> bundle = bundleRepository.findById(bundleId);
+
         bundle.get().setApproval(true);
         bundleRepository.save(bundle.get());
-
         // 묶음에 해당하는 상품들도 승인 처리해주기
-        List<Product> productList = getBundleItemsList(bundleId);
-        int size = productList.size();
+        Optional<List<BundledItemsRelation>> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundleId);
+//        List<Product> productList = getBundleItemsList(bundleId);
+//        int size = productList.size();
+        int size = bundledItemsRelationList.get().size();
 
         for(int i = 0; i < size; i++) {
-            Product product = productList.get(i);
+            Long productId = bundledItemsRelationList.get().get(i).getProduct().getId();
+            Product product = productRepository.findById(productId).get();
+            System.out.println(product.getLive());
+            System.out.println("product.getLive(): " + product.getLive().getId() + " " + product.getLive().getUser().getId());
+            System.out.println("상품명: " + product.getName());
+            product.setName(product.getName());
+            product.setInitialPrice(product.getInitialPrice());
+            product.setLeftTopX(product.getLeftTopX());
+            product.setLeftTopY(product.getLeftTopY());
+            product.setRightBottomX(product.getRightBottomX());
+            product.setRightBottomY(product.getRightBottomY());
+            product.setImageUrl(product.getImageUrl());
             product.setApproval(true);
+            product.setLive(product.getLive());
+
             productRepository.save(product);
+            System.out.println("id: " + product.getLive().getId());
         }
     }
 

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.parameters.P;
 
 import javax.annotation.security.DenyAll;
 import javax.persistence.*;
@@ -40,7 +41,13 @@ public class Product extends BaseEntity {
     })
     private Live live;
 
-    @OneToMany(mappedBy = "product")
-    private List<BundledItemsRelation> bundledItemsRelationList;
+//    @OneToMany(mappedBy = "product")
+//    private List<BundledItemsRelation> bundledItemsRelationList;
+
+    public static Product of(Live live) {
+        Product product = new Product();
+        product.setLive(live);
+        return product;
+    }
 
 }

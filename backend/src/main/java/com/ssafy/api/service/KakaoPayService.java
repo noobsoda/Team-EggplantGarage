@@ -65,7 +65,7 @@ public class KakaoPayService {
         params.add("item_name", productName); // 상품명
         params.add("quantity", String.valueOf(quantity)); // 상품 수량
         params.add("total_amount", String.valueOf(bundle.getPrice())); // 상품 총액
-        params.add("tax_free_amount", "100"); // 상품 비과세 금액
+        params.add("tax_free_amount", "0"); // 상품 비과세 금액
         params.add("approval_url", "https://localhost:8000/api/v1/kakaoPay/success"); // 결제 성공 시 redirect url
         params.add("cancel_url", "https://localhost:8000/api/v1/kakaoPay/cancel"); // 결제 취소 시 redirect url
         params.add("fail_url", "https://localhost:8000/api/v1/kakaoPay/fail"); // 결제 실패 시 redirect url
@@ -107,22 +107,15 @@ public class KakaoPayService {
 
             Long buyer = bundledItemsRelationList.get().get(0).getBundle().getUser().getId();
             for(int i = 0; i < quantity; i++) {
-                Product pro = bundledItemsRelationList.get().get(i).getProduct();
-                pro.setName(pro.getName());
-                pro.setSoldAt(LocalDateTime.now());
-                pro.setSoldPrice(soldPrice);
-                pro.setPaid(true);
-                pro.setInitialPrice(pro.getInitialPrice());
-                pro.setLeftTopX(pro.getLeftTopX());
-                pro.setLeftTopY(pro.getLeftTopY());
-                pro.setRightBottomX(pro.getRightBottomX());
-                pro.setRightBottomY(pro.getRightBottomY());
-                pro.setImageUrl(pro.getImageUrl());
-                pro.setBuyerId(buyer);
-                pro.setApproval(pro.isApproval());
-                pro.setLive(pro.getLive());
+                Long productId = bundledItemsRelationList.get().get(i).getProduct().getId();
+                Product product = productRepository.findById(productId).get();
 
-                productRepository.save(pro);
+                product.setSoldAt(LocalDateTime.now());
+                product.setSoldPrice(soldPrice);
+                product.setPaid(true);
+                product.setBuyerId(buyer);
+
+                productRepository.save(product);
             }
 
             return new ResponseEntity<>(kakaoPayApprovalRes, HttpStatus.OK);
