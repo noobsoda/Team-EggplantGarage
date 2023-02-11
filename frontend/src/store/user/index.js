@@ -59,8 +59,8 @@ export const userConfirm = (userData, navigate) => (dispatch) => {
       sessionStorage.setItem("accessToken", accessToken);
       //해당 유저의 간단 정보 가져와서 info에 저장
       userInfo(
-        ({ info }) => {
-          dispatch(setUserInfo(info));
+        ({ data }) => {
+          dispatch(setUserInfo(data));
         },
         () => { }
       );
