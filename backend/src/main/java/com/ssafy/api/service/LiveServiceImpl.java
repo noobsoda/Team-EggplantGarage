@@ -29,17 +29,6 @@ public class LiveServiceImpl implements LiveService {
     private final FavoriteRepository favoriteRepository;
     private final int MAX_PAGE = 10;
 
-    @Autowired
-    public LiveServiceImpl(LiveRepository liveRepository, CategoryRepository categoryRepository, UserRepository userRepository, LiveCategoryRepository liveCategoryRepository, UserLiveRepository userLiveRepository
-            , ProductRepository productRepository, FavoriteRepository favoriteRepository) {
-        this.liveRepository = liveRepository;
-        this.categoryRepository = categoryRepository;
-        this.userRepository = userRepository;
-        this.liveCategoryRepository = liveCategoryRepository;
-        this.userLiveRepository = userLiveRepository;
-        this.productRepository = productRepository;
-        this.favoriteRepository = favoriteRepository;
-    }
 
     @Override
     public Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user) {
