@@ -18,11 +18,7 @@ import Buyer from "../../Templates/LiveShow/Buyer";
 
 import getStompClient from "../../util/socket";
 import { getLiveDetail } from "../../util/api/liveApi";
-import {
-  isFavoriteLive,
-  deleteFavoriteLive,
-  addFavoriteLive,
-} from "../../util/api/favoriteApi";
+import { isFavoriteLive, deleteFavoriteLive, addFavoriteLive } from "../../util/api/favoriteApi";
 import { exitLive } from "../../util/api/liveApi";
 
 import { getBuyerSuggestList } from "../../util/api/productApi";
@@ -106,7 +102,6 @@ export default function LiveshowBuyer() {
       liveId,
       userInfo.id,
       ({ data }) => {
-        console.log(data);
         setBundleList(data);
       },
       () => {
@@ -177,17 +172,13 @@ export default function LiveshowBuyer() {
       <Buyer liveId={liveId} />
       <LiveLayout>
         <StyledHeader>
-          <div
-            style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}>
             <Title className="show-header">{liveInfo.title}</Title>
             <div className="body1-header" style={{ color: "white" }}>
               판매자명
             </div>
             <ViewerCntBox
-              viewerCnt={
-                liveInfo.userEntryResList && liveInfo.userEntryResList.length
-              }
+              viewerCnt={liveInfo.userEntryResList && liveInfo.userEntryResList.length}
             />
           </div>
           <StyledSide>
