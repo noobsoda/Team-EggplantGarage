@@ -9,12 +9,10 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
   }, []);
 
   function bundleCancle(bundleId) {
-    console.log("번들 취소");
     setBundleRefuse(
       bundleId,
       () => {
         getSuggest();
-        console.log("취소 완료");
       },
       () => {
         console.warn("bundle reject fail");
@@ -37,22 +35,10 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
           >
             {items
               .map((ele) => {
-                return {
-                  key: ele.id,
-                  id: ele.id,
-                  bundleId: ele.bundleId,
-                  productName: ele.name,
-                  imageUrl: ele.imageUrl,
-                  leftTopX: ele.leftTopX,
-                  leftTopY: ele.leftTopY,
-                  rightBottomX: ele.rightBottomX,
-                  rightBottomY: ele.rightBottomY,
-                  paid: ele.paid,
-                  initialPrice: ele.initialPrice,
-                  soldPrice: ele.soldPrice,
-                  nickName: ele.nickName,
-                  isSaleList: true,
-                };
+                ele["key"] = ele.id;
+                ele["productName"] = ele.name;
+                ele["isSaleList"] = true;
+                return ele;
               })
               .map((item) => {
                 return (
@@ -61,6 +47,7 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
                     item={item}
                     isBundle={true}
                     isSeller={isSeller}
+                    isSaleList={item.isSaleList}
                   />
                 );
               })}
