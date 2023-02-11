@@ -5,6 +5,7 @@ import com.ssafy.api.response.ChatMessageRes;
 import com.ssafy.api.response.ChatRoomRes;
 import com.ssafy.api.service.ChatService;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,16 +16,11 @@ import java.util.List;
 
 @Api(value = "채팅방 API", tags = {"Chat."})
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/chat")
 public class ChatController {
     private final Logger logger;
     private final ChatService chatService;
-
-    @Autowired
-    public ChatController(Logger logger, ChatService chatService) {
-        this.logger = logger;
-        this.chatService = chatService;
-    }
 
     @PostMapping("/join")
     @ApiOperation(value = "채팅방 입장", notes = "채팅방에 입장합니다.")

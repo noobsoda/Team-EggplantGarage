@@ -3,6 +3,9 @@ package com.ssafy.api.controller;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.ssafy.common.error.ErrorCode;
 import com.ssafy.common.exception.CustomException;
+import com.ssafy.common.model.response.CommonResponse;
+import com.ssafy.common.model.response.ResponseService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,17 +38,13 @@ import static com.ssafy.common.error.ErrorCode.*;
  */
 @Api(value = "인증 API", tags = {"Auth."})
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class AuthController {
 
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public AuthController(UserService userService, PasswordEncoder passwordEncoder) {
-        this.userService = userService;
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final ResponseService responseService;
 
 
     @PostMapping("/login")
@@ -81,10 +80,10 @@ public class AuthController {
             return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", true, JwtTokenUtil.getAccessToken(userEmail)));
         }
         else{
-
+            // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
+            throw new CustomException(INVALID_PASSWORD);
         }
-        // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
-        return ResponseEntity.status(401).body(UserLoginPostRes.of(401, "Invalid Password", false, null));
+
     }
 
     @PostMapping("/logout")
@@ -95,7 +94,7 @@ public class AuthController {
             @ApiResponse(code = 404, message = "요청 실패", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<BaseResponseBody> logout(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<? extends CommonResponse> logout(HttpServletRequest request, HttpServletResponse response) {
 
         String refreshToken = null;
 
@@ -125,7 +124,7 @@ public class AuthController {
             cookie.setPath("/");
 
             response.addCookie(cookie);
-            return ResponseEntity.ok(BaseResponseBody.of(200, "Success", true));
+            return ResponseEntity.status(200).body(responseService.getSuccessResponse(200, "refresh토큰 쿠키에서 제거 성공"));
         }
 
         // DB에 refreshToken 이 없으면 토큰 없음 에러
@@ -165,7 +164,7 @@ public class AuthController {
         if (token != null) {
             DecodedJWT decodedJWT = JwtTokenUtil.getVerifier().verify(refreshToken.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
             String email = decodedJWT.getSubject();
-            return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", true, JwtTokenUtil.getAccessToken(email)));
+            return ResponseEntity.status(200).body(UserLoginPostRes.of(200, "Success", true, JwtTokenUtil.getAccessToken(email)));
         }
         // DB에 refreshToken 이 없으면 토큰 없음 에러
         else{

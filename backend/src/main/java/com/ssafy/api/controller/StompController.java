@@ -5,6 +5,7 @@ import com.ssafy.api.request.LiveChatReq;
 import com.ssafy.api.service.ChatService;
 import com.ssafy.db.entity.ChatMessage;
 import com.ssafy.db.entity.ChatRoom;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -13,14 +14,10 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 @Controller
+@RequiredArgsConstructor
 public class StompController {
     private final ChatService chatService;
     private final SimpMessagingTemplate template; // 특정 Broker로 메세지를 전달
-    @Autowired
-    public StompController(ChatService chatService, SimpMessagingTemplate template) {
-        this.chatService = chatService;
-        this.template = template;
-    }
 
     // STOMP subscribe destination : /sub/chat/room/{chatRoomId}
     // STOMP send destination : /pub/chat/message

@@ -23,6 +23,7 @@ public enum ErrorCode {
     REFRESH_TOKEN_NOT_FOUND(false, 404, "Not Exist refreshToken"),
 
     INVALID_TOKEN(false, 401, "Invalid Token"),
+    INVALID_PASSWORD(false, 401, "Invalid Token"),
 
     // 409 CONFLICT 중복된 리소스
     ALREADY_SAVED_LIVE(false, 409, "이미 저장한 라이브입니다."),

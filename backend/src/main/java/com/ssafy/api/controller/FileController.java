@@ -2,6 +2,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.service.FileService;
 import io.swagger.annotations.Api;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -14,13 +15,10 @@ import java.net.MalformedURLException;
 
 @Api(value = "파일 API", tags = {"File."})
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/file")
 public class FileController {
-    FileService fileService;
-    @Autowired
-    public FileController(FileService fileService){
-        this.fileService = fileService;
-    }
+    private final FileService fileService;
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         //file:/Users/.../uuid 로 작성된 파일명

@@ -8,9 +8,7 @@ import com.ssafy.common.model.response.ResponseService;
 import com.ssafy.db.entity.Review;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
-import org.omg.CORBA.COMM_FAILURE;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,10 +20,8 @@ import java.util.List;
 @RequestMapping("/api/v1/reviews")
 public class ReviewController {
     private final Logger logger;
-
-    ReviewService reviewService;
-
-    ResponseService responseService;
+    private final ReviewService reviewService;
+    private final ResponseService responseService;
 
     @PostMapping()
     @ApiOperation(value = "리뷰 생성", notes = "리뷰를 등록합니다.")
