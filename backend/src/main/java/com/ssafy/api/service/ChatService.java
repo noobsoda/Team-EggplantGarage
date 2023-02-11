@@ -14,6 +14,5 @@ public interface ChatService {
     List<ChatRoomRes> getChatRoomListByUserId(long userId);
     List<ChatMessageRes> getChatMessageByChatRoomId(long chatRoomId);
     ChatMessage saveMessage(ChatMessageSendReq chatMessageSendReq);
-
     ChatRoom updateChatRoom(ChatMessage chatMessage);
 }

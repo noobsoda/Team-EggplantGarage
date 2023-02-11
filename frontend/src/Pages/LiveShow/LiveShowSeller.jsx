@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -8,16 +8,17 @@ import LiveChatBox from "../../Molecules/Box/LiveChatBox";
 import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
 import MicBtn from "../../Atoms/IconButtons/liveshow/MicBtn";
 import CameraBtn from "../../Atoms/IconButtons/liveshow/CameraBtn";
-import SpeakerBtn from "../../Atoms/IconButtons/liveshow/SpeakerBtn";
+import FlipBtn from "../../Atoms/IconButtons/liveshow/FlipBtn";
 import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
 import { closeLive } from "../../util/api/liveApi";
 
 import Seller from "../../Templates/LiveShow/Seller";
 
 import { getLiveDetail } from "../../util/api/liveApi";
-import { getLiveBundle } from "../../util/api/productApi";
+import { getSellerSuggestList } from "../../util/api/productApi";
 
 import useInterval from "../../hook/useInterval";
+import ViewerCntBox from "../../Molecules/Box/ViewerCntBox";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -70,33 +71,38 @@ export default function LiveshowBuyer(toggleCamera) {
 
   const [isMic, setIsMic] = useState(true);
   const [isCamera, setIsCamera] = useState(true);
+  const [isFlipped, setIsFlipped] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
 
   const [liveInfo, setLiveInfo] = useState({});
   const [bundleList, setBundleList] = useState([]);
+  // const [isExit, setIsExit] = useState(false);
 
   const navigate = useNavigate();
 
   const exit = () => {
-    closeLive(liveId, (data) => {
-      console.log(data);
-    });
+    // if (isExit) {
+    closeLive(liveId, (data) => {});
+    navigate("/");
+    // }
   };
 
   //10초마다 묶음 제안 요청 왔는지 확인
   useInterval(() => {
-    getLiveBundle(
+    getSuggest();
+  }, 10000);
+
+  function getSuggest() {
+    getSellerSuggestList(
       liveId,
       ({ data }) => {
-        console.log("제안온 목록");
-        console.log(data);
         setBundleList(data);
       },
       () => {
         console.warn("bundle load fail");
       }
     );
-  }, 10000);
+  }
 
   useEffect(() => {
     getLiveDetail(
@@ -112,10 +118,24 @@ export default function LiveshowBuyer(toggleCamera) {
 
   return (
     <StyledPage>
-      <Seller liveId={liveId} isCamera={isCamera} isMic={isMic} />
+      <Seller
+        liveId={liveId}
+        isCamera={isCamera}
+        isMic={isMic}
+        isFlipped={isFlipped}
+      />
       <LiveLayout>
         <StyledHeader>
-          <Title className="show-header">{liveInfo.title}</Title>
+          <div
+            style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}
+          >
+            <Title className="show-header">{liveInfo.title}</Title>
+            <ViewerCntBox
+              viewerCnt={
+                liveInfo.userEntryResList && liveInfo.userEntryResList.length
+              }
+            />
+          </div>
           <StyledSide>
             <BigMenuBtn
               buttonClick={() => {
@@ -123,6 +143,11 @@ export default function LiveshowBuyer(toggleCamera) {
               }}
             />
             <div>　</div>
+            <FlipBtn
+              buttonClick={() => {
+                setIsFlipped((cur) => !cur);
+              }}
+            />
             <CameraBtn
               buttonClick={() => {
                 setIsCamera((cur) => !cur);
@@ -137,8 +162,9 @@ export default function LiveshowBuyer(toggleCamera) {
             />
             <ExitBtn
               buttonClick={() => {
+                // setIsExit(true);
+                // console.log(isExit);
                 exit();
-                navigate("/");
               }}
             />
           </StyledSide>
@@ -154,6 +180,7 @@ export default function LiveshowBuyer(toggleCamera) {
           bundleList={bundleList}
           setModalOpen={setModalOpen}
           isSeller={true}
+          getSuggest={getSuggest}
         />
       )}
     </StyledPage>

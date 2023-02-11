@@ -29,10 +29,7 @@ public class ChatController {
         long senderId = chatRoomPostReq.getSenderId();
         long receiverId = chatRoomPostReq.getReceiverId();
 
-        ChatRoomRes res = chatService.getChatRoombyUsersId(senderId, receiverId);
-        if (res == null) {
-            res = chatService.createChatRoom(senderId, receiverId);
-        }
+        ChatRoomRes res = chatService.createChatRoom(senderId, receiverId);
         return ResponseEntity.status(200).body(res);
     }
 

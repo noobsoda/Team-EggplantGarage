@@ -11,6 +11,9 @@ import java.util.Optional;
 @Repository
 public interface BundleRepository extends JpaRepository<Bundle, Long> {
     Optional<Bundle> findById(long id);
-    Optional<List<Bundle>> findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalse(long id);
-    Optional<List<Bundle>> findAllByLive_IdAndUserId(long liveId, long userId);
+    Optional<List<Bundle>> findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalseAndIsCancelFalse(long id);
+    Optional<List<Bundle>> findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidFalse(long id, long userId);
+    Optional<List<Bundle>> findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidTrue(long id, long userId);
+    Optional<List<Bundle>> findAllByLive_IdAndUserIdAndIsRefuseFalseAndIsApprovalFalseAndIsCancelFalse(long liveId, long userId);
+    Optional<List<Bundle>> findAllByLive_IdAndUserIdAndIsRefuseTrue(long id, long userId);
 }

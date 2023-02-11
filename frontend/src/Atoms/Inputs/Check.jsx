@@ -13,14 +13,14 @@ const StyledInput = styled.input`
   }
 `;
 
-export default function Check({ boxId, setCheck, check }) {
-  function onChange(e) {
-    if (e.target.checked) {
-      setCheck(true);
-    } else {
-      setCheck(false);
-    }
-  }
-
-  return <StyledInput id={boxId} type="checkbox" checked={check} onChange={onChange} />;
+export default function Check({ boxId, setCheck, check, disable }) {
+  return (
+    <StyledInput
+      id={boxId}
+      type="checkbox"
+      checked={check}
+      onChange={setCheck}
+      disabled={disable}
+    />
+  );
 }

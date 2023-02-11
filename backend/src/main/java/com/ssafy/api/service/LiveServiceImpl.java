@@ -29,6 +29,17 @@ public class LiveServiceImpl implements LiveService {
     private final FavoriteRepository favoriteRepository;
     private final int MAX_PAGE = 10;
 
+    @Autowired
+    public LiveServiceImpl(LiveRepository liveRepository, CategoryRepository categoryRepository, UserRepository userRepository, LiveCategoryRepository liveCategoryRepository, UserLiveRepository userLiveRepository
+            , ProductRepository productRepository, FavoriteRepository favoriteRepository) {
+        this.liveRepository = liveRepository;
+        this.categoryRepository = categoryRepository;
+        this.userRepository = userRepository;
+        this.liveCategoryRepository = liveCategoryRepository;
+        this.userLiveRepository = userLiveRepository;
+        this.productRepository = productRepository;
+        this.favoriteRepository = favoriteRepository;
+    }
 
     @Override
     public Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user) {
@@ -53,6 +64,7 @@ public class LiveServiceImpl implements LiveService {
                 .build();
 
         liveRepository.save(live);
+
         //유저라이브 헬퍼 테이블에 본인도 넣어주기
         UserLive userLive = UserLive.builder()
                 .live(live)
@@ -60,6 +72,7 @@ public class LiveServiceImpl implements LiveService {
                 .build();
         userLiveRepository.save(userLive);
 
+        liveRepository.save(live);
 
         return live;
     }
@@ -392,6 +405,8 @@ public class LiveServiceImpl implements LiveService {
         Optional<Live> oLive = liveRepository.findById(liveId);
         Live live = oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
 
+        if(live == null)
+            return null;
 
         //라이브 카테고리 헬퍼 테이블 순회
         List<LiveCategory> liveCategories = live.getLiveCategoryList();

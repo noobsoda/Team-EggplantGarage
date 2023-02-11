@@ -13,7 +13,7 @@ const FlexBox = styled.div`
   justify-content: center;
 `;
 
-export default function LiveShowSeller({ liveId }) {
+export default function Buyer({ liveId }) {
   //해당 세션 아이디를 받아서 해당 라이브로 접속하기
   //seller는 방송하기를 위한 카메라세팅, 카메라 접근권한이 필요하다.
 
@@ -135,7 +135,7 @@ export default function LiveShowSeller({ liveId }) {
         .filter((sub) => getNicknameTag(sub) === "admin")
         .map((sub, i) => (
           <FlexBox key={i}>
-            <UserVideoComponent streamManager={sub} />
+            {i === 0 ? <UserVideoComponent streamManager={sub} /> : undefined}
           </FlexBox>
         ))}
     </FlexBox>
