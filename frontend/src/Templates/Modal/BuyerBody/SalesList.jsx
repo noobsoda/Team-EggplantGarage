@@ -14,36 +14,36 @@ const InfoBox = styled.div`
 `;
 
 export default function SalesList({ userId, liveId, isSeller, productList }) {
-  const [check, setCheck] = useState(
-    productList.map((ele, i) => {
-      return { id: ele.id, check: false };
+  const [productCheck, setProductCheck] = useState(
+    productList.map((ele) => {
+      ele["check"] = false;
+      return ele;
     })
   );
 
   const [bundlePrice, setBundlePrice] = useState(0);
 
-  useEffect(() => {
-    console.log(check);
-  }, [check]);
-
   const changeHandler = (e, id) => {
     let checked = e.currentTarget.checked;
     let bundlePriceTmp = 0; //가격 계산
-    setCheck(
-      check.map((ele, i) => {
+    setProductCheck(
+      productCheck.map((ele) => {
         //기존 체크한거 계산
         if (ele.check) {
-          bundlePriceTmp += productList[i].initialPrice;
+          bundlePriceTmp += ele.initialPrice;
         }
         if (ele.id === id) {
           if (checked) {
             //이번에 체크된거
-            bundlePriceTmp += productList[i].initialPrice;
+            bundlePriceTmp += ele.initialPrice;
           } else {
             //이번에 체크 해제된경우 - 위에서 먼저 계산이 되었기 때문에
-            bundlePriceTmp -= productList[i].initialPrice;
+            bundlePriceTmp -= ele.initialPrice;
           }
-          return { id: id, check: checked };
+          let tmpEle = { ...ele };
+
+          tmpEle.check = checked;
+          return tmpEle;
         }
         return ele;
       })
@@ -57,18 +57,20 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
   function bundle() {
     postBundle(
       {
-        productIdList: check.map((ele) => ele.id),
+        productIdList: productCheck.filter((ele) => ele.check).map((ele) => ele.id), //check한것만 묶음 요청
         buyerId: userId,
         soldPrice: bundlePrice,
         liveId: liveId,
       },
       () => {
         //번들 요청 성공
-        setBundlePrice(0);
+        setBundlePrice(0); //가격 리셋
         //체크한것 다시 해제
-        setCheck(
-          check.map((ele, i) => {
-            return { id: ele.id, check: false };
+        setProductCheck(
+          productCheck.map((ele) => {
+            let tmpEle = { ...ele };
+            tmpEle["check"] = false;
+            return tmpEle;
           })
         );
       },
@@ -83,33 +85,24 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
   }
   return (
     <>
-      {productList
+      {productCheck
         .map((ele) => {
-          return {
-            key: ele.id,
-            id: ele.id,
-            productName: ele.name,
-            imageUrl: ele.imageUrl,
-            leftTopX: ele.leftTopX,
-            leftTopY: ele.leftTopY,
-            rightBottomX: ele.rightBottomX,
-            rightBottomY: ele.rightBottomY,
-            paid: ele.paid,
-            initialPrice: ele.initialPrice,
-            isSaleList: true,
-          };
+          ele["key"] = ele.id;
+          ele["productName"] = ele.name;
+          ele["isSaleList"] = true;
+          return ele;
         })
-        .map((item, i) => {
+        .map((item) => {
           return (
             <ItemCard
               key={item.key}
-              buttonType={"check"}
+              buttonType={isSeller ? undefined : "check"}
               isSeller={isSeller}
               item={item}
-              check={check[i].checked}
+              check={item.check}
               isSaleList={item.isSaleList}
               setCheck={(e) => {
-                changeHandler(e, i);
+                changeHandler(e, item.id);
               }}
             />
           );

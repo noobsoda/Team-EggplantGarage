@@ -7,6 +7,7 @@ public class BundledItemsProductRes {
     private Long bundleId;
     private String name;
     private int soldPrice;
+    private int initialPrice;
     private boolean isPaid;
     private int leftTopX;
     private int leftTopY;
@@ -17,10 +18,11 @@ public class BundledItemsProductRes {
     private String nickname;
     private int totalPrice;
 
-    public BundledItemsProductRes(Long bundleId, String name, int soldPrice, boolean isPaid, int leftTopX, int leftTopY, int rightBottomX, int rightBottomY, String imageUrl, Long buyerId, String nickname, int totalPrice) {
+    public BundledItemsProductRes(Long bundleId, String name, int soldPrice, int initialPrice, boolean isPaid, int leftTopX, int leftTopY, int rightBottomX, int rightBottomY, String imageUrl, Long buyerId, String nickname, int totalPrice) {
         this.bundleId = bundleId;
         this.name = name;
         this.soldPrice = soldPrice;
+        this.initialPrice = initialPrice;
         this.isPaid = isPaid;
         this.leftTopX = leftTopX;
         this.leftTopY = leftTopY;

@@ -22,6 +22,7 @@ export default function SignUpEmail() {
   const [password2, setPassword2] = useState({ value: "", check: true });
   const [nickName, setNickName] = useState({ value: "", check: true });
   const [name, setName] = useState({ value: "", check: true });
+  const [phone, setPhone] = useState({ value: "", check: true });
 
   function emailValue(e) {
     if (e.target.value !== "") {
@@ -47,6 +48,7 @@ export default function SignUpEmail() {
     }
     setPassword({ value: e.target.value, check: isPassword });
   }
+  //닉네임 입력
   function nickNameValue(e) {
     if (e.target.value !== "") {
       nickNameCheck(
@@ -63,8 +65,13 @@ export default function SignUpEmail() {
       setNickName({ value: e.target.value, check: true });
     }
   }
+  //이름 입력
   function nameValue(e) {
     setName({ value: e.target.value, check: true });
+  }
+  //핸드폰 입력
+  function phoneValue(e) {
+    setPhone({ value: e.target.value, check: true });
   }
 
   function passwordValueCheck(e) {
@@ -114,6 +121,7 @@ export default function SignUpEmail() {
         password: password.value,
         name: name.value,
         nickname: nickName.value,
+        phoneNumber: phone.value,
       },
       () => {
         alert("회원가입 완료");
@@ -154,13 +162,7 @@ export default function SignUpEmail() {
           onChange={nickNameValue}
         />
         <BigInputBox placehold="이름" inputValue={nameValue} />
-        <InputButtonBox placehold="휴대폰 번호" buttonName="전송" />
-        <InputButtonBox
-          placehold="인증번호"
-          buttonName="확인"
-          text="인증번호가 일치하지 않습니다."
-          isCheck={true}
-        />
+        <BigInputBox placehold="휴대폰 번호" inputValue={phoneValue} />
         <BigColorBtn name="가입하기" buttonClick={signUpCheck} />
       </StyledMainBody>
     </div>
