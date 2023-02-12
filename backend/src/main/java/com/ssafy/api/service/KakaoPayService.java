@@ -27,7 +27,7 @@ import java.util.Optional;
 @Transactional
 public class KakaoPayService {
     private static final String HOST = "https://kapi.kakao.com";
-    private static final String DOMAIN = "https://i8b105.p.ssafy.io:8000/api/v1/kakaoPay";
+    private static final String DOMAIN = "https://i8b105.p.ssafy.io/api/v1/kakaoPay";
 //    private static final String DOMAIN = "https://localhost:8000/api/v1/kakaoPay";
     private static final String ADMIN = "7ad3ade6c404bf95e1713af49e12b31f";
     private KakaoPayReadyRes kakaoPayReadyRes;
