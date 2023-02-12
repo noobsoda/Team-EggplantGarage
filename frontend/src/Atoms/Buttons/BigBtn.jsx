@@ -14,7 +14,6 @@ const StyledDefaultBtn = styled.button`
   border-radius: 12px;
   outline: none;
   border: none;
-  background-image: linear-gradient(to right, #32be8f, #38d39f, #32be8f);
   background-size: 200%;
   // font-size: 1.2rem;
   // font-family: "Poppins", sans-serif;
@@ -24,7 +23,7 @@ const StyledDefaultBtn = styled.button`
   transition: 0.5s;
   width: 100%;
   height: 40px;
-  background-color: ${({ theme }) => theme.color.red};
+  background-color: ${({ theme }) => theme.color.graypurple};
   color: ${({ theme }) => theme.color.white};
 `;
 

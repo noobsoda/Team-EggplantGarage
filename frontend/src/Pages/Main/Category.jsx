@@ -37,7 +37,7 @@ export default function Category() {
     },
     {
       name: "생활/주방",
-      src: "/image/category/생활주방.",
+      src: "/image/category/생활주방.png",
     },
     {
       name: "유아용품",
