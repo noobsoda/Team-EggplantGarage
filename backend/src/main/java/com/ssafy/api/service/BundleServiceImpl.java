@@ -143,14 +143,12 @@ public class BundleServiceImpl implements BundleService {
 
     @Override
     public void approvalBundle(long bundleId) {
-        Optional<Bundle> bundle = bundleRepository.findById(bundleId);
+        Bundle bundle = bundleRepository.findById(bundleId).get();
+        bundle.setApproval(true);
+        bundleRepository.save(bundle);
 
-        bundle.get().setApproval(true);
-        bundleRepository.save(bundle.get());
         // 묶음에 해당하는 상품들도 승인 처리해주기
         Optional<List<BundledItemsRelation>> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundleId);
-//        List<Product> productList = getBundleItemsList(bundleId);
-//        int size = productList.size();
         int size = bundledItemsRelationList.get().size();
 
         for(int i = 0; i < size; i++) {
@@ -159,15 +157,16 @@ public class BundleServiceImpl implements BundleService {
             System.out.println(product.getLive());
             System.out.println("product.getLive(): " + product.getLive().getId() + " " + product.getLive().getUser().getId());
             System.out.println("상품명: " + product.getName());
-            product.setName(product.getName());
-            product.setInitialPrice(product.getInitialPrice());
-            product.setLeftTopX(product.getLeftTopX());
-            product.setLeftTopY(product.getLeftTopY());
-            product.setRightBottomX(product.getRightBottomX());
-            product.setRightBottomY(product.getRightBottomY());
-            product.setImageUrl(product.getImageUrl());
+
+//            product.setName(product.getName());
+//            product.setInitialPrice(product.getInitialPrice());
+//            product.setLeftTopX(product.getLeftTopX());
+//            product.setLeftTopY(product.getLeftTopY());
+//            product.setRightBottomX(product.getRightBottomX());
+//            product.setRightBottomY(product.getRightBottomY());
+//            product.setImageUrl(product.getImageUrl());
+//            product.setLive(product.getLive());
             product.setApproval(true);
-            product.setLive(product.getLive());
 
             productRepository.save(product);
             System.out.println("id: " + product.getLive().getId());
