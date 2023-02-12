@@ -9,9 +9,26 @@ import { passwordReg, emailReg } from "../../util/regex";
 import { emailCheck, nickNameCheck, signup } from "../../util/api/userApi";
 
 const StyledMainBody = styled.div`
+  width: clac(80%)
   display: flex;
   flex-direction: column;
-  row-gap: 16px;
+  margin: 0 auto;
+`;
+
+const StyledHead = styled.h1`
+  display: flex;
+  margin: 32px 0px;
+  padding-bottom: 8px;
+  justify-content: center;
+`;
+
+const StyledRowCenter = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: calc(80%);
+  justify-content: center;
+  margin: 0 auto;
+  row-gap: 12px;
 `;
 
 export default function SignUpEmail() {
@@ -127,41 +144,48 @@ export default function SignUpEmail() {
   return (
     <div>
       <StyledMainBody>
-        <InputBox
-          placehold="이메일"
-          text="이미 존재하는 이메일 주소 입니다."
-          isCheck={email.check}
-          onChange={emailValue}
-        />
-        <InputBox
-          placehold="비밀번호"
-          text="8~16이내 !@#$%^&*만 써주세요"
-          type="password"
-          isCheck={password.check}
-          onChange={passwordValue}
-        />
-        <InputBox
-          placehold="비밀번호 확인"
-          text="비밀번호를 확인해주세요"
-          type="password"
-          isCheck={password2.check}
-          onChange={passwordValueCheck}
-        />
-        <InputBox
-          placehold="닉네임"
-          text="이미 존재하는 닉네임 입니다."
-          isCheck={nickName.check}
-          onChange={nickNameValue}
-        />
-        <BigInputBox placehold="이름" inputValue={nameValue} />
-        <InputButtonBox placehold="휴대폰 번호" buttonName="전송" />
-        <InputButtonBox
-          placehold="인증번호"
-          buttonName="확인"
-          text="인증번호가 일치하지 않습니다."
-          isCheck={true}
-        />
-        <BigColorBtn name="가입하기" buttonClick={signUpCheck} />
+        <StyledRowCenter>
+          <StyledHead className="page-header">정보 입력</StyledHead>
+        </StyledRowCenter>
+        <StyledRowCenter>
+          <InputBox
+            placehold="이메일"
+            text="이미 존재하는 이메일 주소 입니다."
+            isCheck={email.check}
+            onChange={emailValue}
+          />
+          <InputBox
+            placehold="비밀번호"
+            text="8~16이내 !@#$%^&*만 써주세요"
+            type="password"
+            isCheck={password.check}
+            onChange={passwordValue}
+          />
+          <InputBox
+            placehold="비밀번호 확인"
+            text="비밀번호를 확인해주세요"
+            type="password"
+            isCheck={password2.check}
+            onChange={passwordValueCheck}
+          />
+          <InputBox
+            placehold="닉네임"
+            text="이미 존재하는 닉네임 입니다."
+            isCheck={nickName.check}
+            onChange={nickNameValue}
+          />
+          <BigInputBox placehold="이름" inputValue={nameValue} />
+          <InputButtonBox placehold="휴대폰 번호" buttonName="전송" />
+          <InputButtonBox
+            placehold="인증번호"
+            buttonName="확인"
+            text="인증번호가 일치하지 않습니다."
+            isCheck={true}
+          />
+          <div></div>
+          <div></div>
+          <BigColorBtn name="가입하기" buttonClick={signUpCheck} />
+        </StyledRowCenter>
       </StyledMainBody>
     </div>
   );
