@@ -55,7 +55,11 @@ export default function BundleBox({
           ) : (
             <></>
           )}
-          <ExtraSmallButton name={isSeller ? "거절" : "취소"} buttonClick={reject} />
+          {isPay ? (
+            <></>
+          ) : (
+            <ExtraSmallButton name={isSeller ? "거절" : "취소"} buttonClick={reject} />
+          )}
         </BtnBox>
       </Status>
     </StyledBundleBox>

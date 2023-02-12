@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import BundleBox from "../../../Molecules/Cards/BundleBox";
 import ItemCard from "../../../Molecules/Cards/ItemCard";
-import { getBuyerSuggestListPayWait } from "../../../util/api/productApi";
+import { kakaopay } from "../../../util/api/productApi";
 
 export default function PayList({ payList, getPayList }) {
   useEffect(() => {
@@ -9,13 +9,22 @@ export default function PayList({ payList, getPayList }) {
   }, []);
   function bundlePay(bundleId) {
     console.log("해당 번들 결제 시작");
+    kakaopay(
+      bundleId,
+      ({ data }) => {
+        window.open(data.split("redirect:")[1]);
+      },
+      () => {
+        console.warn("pay fail");
+      }
+    );
   }
   return (
     <>
       {payList.map((items, i) => {
         console.log(items);
         return (
-          <BundleBox key={i} accept={() => bundlePay(items[0].bundleId)}>
+          <BundleBox key={i} isPay={true} accept={() => bundlePay(items[0].bundleId)}>
             {items
               .map((ele) => {
                 ele["key"] = ele.id;

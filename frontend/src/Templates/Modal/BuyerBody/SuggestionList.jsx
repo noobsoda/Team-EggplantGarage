@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import BundleBox from "../../../Molecules/Cards/BundleBox";
 import ItemCard from "../../../Molecules/Cards/ItemCard";
-import { setBundleRefuse } from "../../../util/api/productApi";
+import { setBundleRefuse, setBundleApproval } from "../../../util/api/productApi";
 
 export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
   useEffect(() => {
@@ -20,7 +20,15 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
     );
   }
   function bundleAccept(bundleId) {
-    console.log("해당 번들 수락");
+    setBundleApproval(
+      bundleId,
+      () => {
+        getSuggest();
+      },
+      () => {
+        console.warn("bundle accept fail");
+      }
+    );
   }
   return (
     <>
