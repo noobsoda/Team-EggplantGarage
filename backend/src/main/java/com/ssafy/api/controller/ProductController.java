@@ -3,22 +3,17 @@ package com.ssafy.api.controller;
 import com.ssafy.api.request.ProductsRegisterPostReq;
 import com.ssafy.api.service.FileService;
 import com.ssafy.api.service.ProductService;
-import com.ssafy.api.service.UserService;
 import com.ssafy.common.error.ErrorCode;
 import com.ssafy.common.exception.CustomException;
-import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.model.response.CommonResponse;
 import com.ssafy.common.model.response.ResponseService;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Api(value = "상품 API", tags = {"Product"})

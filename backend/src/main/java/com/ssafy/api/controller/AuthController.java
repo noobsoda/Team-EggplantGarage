@@ -6,7 +6,6 @@ import com.ssafy.common.exception.CustomException;
 import com.ssafy.common.model.response.CommonResponse;
 import com.ssafy.common.model.response.ResponseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +35,7 @@ import static com.ssafy.common.error.ErrorCode.*;
 /**
  * 인증 관련 API 요청 처리를 위한 컨트롤러 정의.
  */
-@Api(value = "인증 API", tags = {"Auth."})
+@Api(value = "인증 API", tags = { "Auth." })
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
@@ -46,7 +45,6 @@ public class AuthController {
     private final PasswordEncoder passwordEncoder;
     private final ResponseService responseService;
 
-
     @PostMapping("/login")
     @ApiOperation(value = "로그인", notes = "<strong>아이디와 패스워드</strong>를 통해 로그인 한다.")
     @ApiResponses({
@@ -55,7 +53,9 @@ public class AuthController {
             @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserLoginPostRes> login(@RequestBody @ApiParam(value = "로그인 정보", required = true) UserLoginPostReq loginInfo, HttpServletResponse response) {
+    public ResponseEntity<UserLoginPostRes> login(
+            @RequestBody @ApiParam(value = "로그인 정보", required = true) UserLoginPostReq loginInfo,
+            HttpServletResponse response) {
         String userEmail = loginInfo.getEmail();
         String password = loginInfo.getPassword();
 
@@ -78,8 +78,7 @@ public class AuthController {
             response.addCookie(cookie);
 
             return ResponseEntity.ok(UserLoginPostRes.of(200, "Success", true, JwtTokenUtil.getAccessToken(userEmail)));
-        }
-        else{
+        } else {
             // 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
             throw new CustomException(INVALID_PASSWORD);
         }
@@ -128,7 +127,7 @@ public class AuthController {
         }
 
         // DB에 refreshToken 이 없으면 토큰 없음 에러
-        else{
+        else {
             throw new CustomException(INVALID_TOKEN);
         }
     }
@@ -141,7 +140,7 @@ public class AuthController {
             @ApiResponse(code = 404, message = "요청 실패", response = BaseResponseBody.class),
             @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-    public ResponseEntity<UserLoginPostRes> reIssue(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<UserLoginPostRes> reIssue(HttpServletRequest request) {
         String refreshToken = null;
         Cookie[] cookies = request.getCookies();
         if (cookies == null) {
@@ -162,12 +161,14 @@ public class AuthController {
         String token = userService.getUserTokenByRefreshToken(refreshToken);
 
         if (token != null) {
-            DecodedJWT decodedJWT = JwtTokenUtil.getVerifier().verify(refreshToken.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
+            DecodedJWT decodedJWT = JwtTokenUtil.getVerifier()
+                    .verify(refreshToken.replace(JwtTokenUtil.TOKEN_PREFIX, ""));
             String email = decodedJWT.getSubject();
-            return ResponseEntity.status(200).body(UserLoginPostRes.of(200, "Success", true, JwtTokenUtil.getAccessToken(email)));
+            return ResponseEntity.status(200)
+                    .body(UserLoginPostRes.of(200, "Success", true, JwtTokenUtil.getAccessToken(email)));
         }
         // DB에 refreshToken 이 없으면 토큰 없음 에러
-        else{
+        else {
             throw new CustomException(INVALID_TOKEN);
         }
     }

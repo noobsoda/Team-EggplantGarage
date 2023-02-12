@@ -9,7 +9,6 @@ import com.ssafy.api.service.LiveService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.error.ErrorCode;
 import com.ssafy.common.exception.CustomException;
-import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.model.response.CommonResponse;
 import com.ssafy.common.model.response.ResponseService;
 import com.ssafy.common.util.DistanceModule;
@@ -24,7 +23,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,11 +71,10 @@ public class LiveController {
             throw new CustomException(ErrorCode.INVALID_PARAMETER);
         }
         String filename = fileService.filename(img);
-        Path path = fileService.fileSave(img, filename);
-        String thumbnailUrl = filename;
+        fileService.fileSave(img, filename);
         //이메일로 아이디 찾고
         //그 아이디로 셀러 아이디 조회하고 해당 객체에 이미지 넣기
-        liveService.postLiveByThumbnailUrl(liveId, thumbnailUrl);
+        liveService.postLiveByThumbnailUrl(liveId, filename);
         return responseService.getSuccessResponse(200, "이미지 넣기 성공");
 
 
@@ -113,14 +110,14 @@ public class LiveController {
     public ResponseEntity<LiveListGetRes> getLiveSearchListInfo(@RequestBody @ApiParam(value = "방 검색 정보", required = true) LiveAllInfoGetReq liveAllInfoGetReq) {
         List<LiveContent> liveContentList;
         //제목기준으로 방 목록 조회하기 제목이 없으면 전체 조회
-        if (StringUtils.trimToEmpty(liveAllInfoGetReq.getTitle()) == "") {
+        if (StringUtils.trimToEmpty(liveAllInfoGetReq.getTitle()).equals("")) {
             liveContentList = liveService.getLiveListByTitle("");
         } else {
             liveContentList = liveService.getLiveListByTitle(liveAllInfoGetReq.getTitle());
         }
 
         //카테고리 기준으로 방 목록 조회하기, 카테고리 설정 안하면 넘어가기
-        if (StringUtils.trimToEmpty(liveAllInfoGetReq.getCategory()) != "") {
+        if (!StringUtils.trimToEmpty(liveAllInfoGetReq.getCategory()).equals("")) {
             liveContentList = liveService.searchCategoryLiveList(liveContentList, liveAllInfoGetReq.getCategory());
         }
 
@@ -144,7 +141,7 @@ public class LiveController {
         String userJoinSort = StringUtils.trimToEmpty(liveAllInfoGetReq.getJoinUserSort());
         userJoinSort = StringUtils.upperCase(userJoinSort);
         //유저별 정렬
-        if (userJoinSort != "") {
+        if (!userJoinSort.equals("")) {
             liveContentList = liveService.searchSortUserJoinLiveList(liveContentList, userJoinSort);
         }
 

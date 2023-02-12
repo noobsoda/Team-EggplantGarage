@@ -6,6 +6,7 @@ import com.ssafy.db.entity.Bundle;
 import com.ssafy.db.entity.BundledItemsRelation;
 import com.ssafy.db.entity.Product;
 import com.ssafy.db.repository.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,18 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Log
+@RequiredArgsConstructor
 @Service("bundleService")
 public class BundleServiceImpl implements BundleService {
-    @Autowired
-    BundleRepository bundleRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private LiveRepository liveRepository;
-    @Autowired
-    private BundledItemsRelationRepository bundledItemsRelationRepository;
+    private final BundleRepository bundleRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final LiveRepository liveRepository;
+    private final BundledItemsRelationRepository bundledItemsRelationRepository;
 
     @Override
     public Long addBundle(BundleReq bundleReq) {

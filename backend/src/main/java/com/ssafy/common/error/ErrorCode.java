@@ -18,6 +18,7 @@ public enum ErrorCode {
     BUNDLE_NOT_FOUND(false, 404, "존재하지 않는 묶음 ID 입니다."),
     FAVORITE_NOT_FOUND(false, 404, "존재하지 않는 찜 입니다."),
     CATEGORY_NOT_FOUND(false, 404, "존재하지 않는 캍고리 입니다."),
+    FILE_NOT_FOUND(false, 404, "존재하지 않는 파일 입니다."),
 
     COOKIE_NOT_FOUND(false, 404, "Cookies is null"),
     REFRESH_TOKEN_NOT_FOUND(false, 404, "Not Exist refreshToken"),
@@ -30,6 +31,7 @@ public enum ErrorCode {
     ALREADY_LIVE_END(false, 409, "이미 끝난 라이브입니다."),
     ALREADY_SAVED_USER(false, 409, "이미 저장한 유저입니다"),
     ALREADY_SAVED_REVIEW(false, 409, "이미 저장한 리뷰입니다."),
+    ALREADY_SAVED_FAVORITE(false, 409, "이미 저장한 찜입니다."),
 
     // 500 INTERNAL SERVER ERROR
     INTERNAL_SERVER_ERROR(false, 500, "서버 에러입니다. 서버 팀에 연락주세요!");

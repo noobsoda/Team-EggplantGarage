@@ -3,7 +3,6 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.FavoritePostReq;
 import com.ssafy.api.response.FavoriteGetInfo;
 import com.ssafy.api.response.LiveContent;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

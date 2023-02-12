@@ -10,19 +10,16 @@ import com.ssafy.api.service.FavoriteService;
 import com.ssafy.api.service.LiveService;
 import com.ssafy.common.error.ErrorCode;
 import com.ssafy.common.exception.CustomException;
-import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.model.response.CommonResponse;
 import com.ssafy.common.model.response.ResponseService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Api(value = "찜 API", tags = {"Favorite."})
 @RestController

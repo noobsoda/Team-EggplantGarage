@@ -8,7 +8,7 @@ import com.ssafy.db.entity.Product;
 import com.ssafy.db.repository.LiveRepository;
 import com.ssafy.db.repository.ProductRepository;
 import com.ssafy.db.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,18 +18,12 @@ import java.util.Optional;
 import static com.ssafy.common.error.ErrorCode.*;
 
 @Service("productService")
+@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
     private final LiveRepository liveRepository;
-
-    @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, UserRepository userRepository, LiveRepository liveRepository) {
-        this.userRepository = userRepository;
-        this.liveRepository = liveRepository;
-        this.productRepository = productRepository;
-    }
+    
 
     @Override
     public boolean postProductById(ProductsRegisterPostReq productList, Map<String, Object> reqMap) {
