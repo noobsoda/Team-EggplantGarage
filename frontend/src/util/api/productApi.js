@@ -155,13 +155,8 @@ async function kakaopay(payInfo, success, fail) {
  * @param {*} filename
  * @returns
  */
-async function getImage(filename) {
-  return await api
-    .get(`/api/v1/file/images/${filename}`)
-    .then((response) => response.blob())
-    .then((blob) => {
-      return URL.createObjectURL(blob);
-    });
+function getImage(filename) {
+  return `${process.env.REACT_APP_API_URL}api/v1/file/images/${filename}`;
 }
 
 async function getSalesItemHistory(liveId, success, fail) {
@@ -183,4 +178,5 @@ export {
   setLiveProduct,
   kakaopay,
   getSalesItemHistory,
+  getImage,
 };

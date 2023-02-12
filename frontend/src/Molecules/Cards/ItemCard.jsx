@@ -6,6 +6,9 @@ import Check from "../../Atoms/Inputs/Check";
 import { useNavigate } from "react-router-dom";
 import { createChatRoom } from "../../util/api/chatApi";
 import { checkUserInfo } from "../../store/user";
+import ImageBox from "../../Atoms/canvas/ImageBox";
+
+import { getImage } from "../../util/api/productApi";
 
 const StyledItemCard = styled.div`
   position: relative;
@@ -19,6 +22,7 @@ const StyledItemCard = styled.div`
   flex-direction: row;
   column-gap: 8px;
   justify-content: space-between;
+  overflow: hidden;
 `;
 const Mask = styled.div`
   position: absolute;
@@ -40,8 +44,8 @@ const ItemImage = styled.div`
   height: 72px;
   border-radius: 8px 0px 0px 8px;
   box-sizing: border-box;
-  //   background: url(${(props) => props.imgSrc}) no-repeat 0px 0px;
-  background: url(./image/item-sample.png);
+  background: url(${(props) => props.imgSrc}) no-repeat 0px 0px;
+  /* background: url(./image/item-sample.png); */
   background-size: cover;
 `;
 const ItemInfo = styled.div`
@@ -88,7 +92,15 @@ export default function ItemCard({
   };
   return (
     <StyledItemCard>
-      <ItemImage />
+      {/* <ItemImage imgSrc={getImage(item.imgSrc)} /> */}
+      <ImageBox
+        imgSrc={getImage(item.imageUrl)}
+        leftTopX={item.leftTopX}
+        rightBottomX={item.rightBottomX}
+        leftTopY={item.leftTopY}
+        rightBottomY={item.rightBottomY}
+        boxSize="72"
+      />
       <ItemInfo>
         <div className="body1-header">{item.productName || "제품명"}</div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>

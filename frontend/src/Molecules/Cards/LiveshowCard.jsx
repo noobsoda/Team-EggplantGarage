@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { getImage } from "../../util/api/productApi";
 
 const StyledLiveshowCard = styled.div`
   width: 100%;
@@ -36,9 +37,8 @@ const Text = styled.div`
 `;
 export default function LiveshowCard({ imgSrc, viewerCnt, buttonClick, isHistory }) {
   //썸네일 시청자수 등등... 일단은 백그라운드 그레이로 가자
-  console.log(imgSrc);
   return (
-    <StyledLiveshowCard onClick={buttonClick} imgSrc={imgSrc || "/image/liveshow.jpg"}>
+    <StyledLiveshowCard onClick={buttonClick} imgSrc={getImage(imgSrc)}>
       {isHistory ? (
         <></>
       ) : (
