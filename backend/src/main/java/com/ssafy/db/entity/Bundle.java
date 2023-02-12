@@ -3,12 +3,14 @@ package com.ssafy.db.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@DynamicUpdate
 public class Bundle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

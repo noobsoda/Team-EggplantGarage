@@ -151,22 +151,9 @@ public class BundleServiceImpl implements BundleService {
         for(int i = 0; i < size; i++) {
             Long productId = bundledItemsRelationList.get().get(i).getProduct().getId();
             Product product = productRepository.findById(productId).get();
-            System.out.println(product.getLive());
-            System.out.println("product.getLive(): " + product.getLive().getId() + " " + product.getLive().getUser().getId());
-            System.out.println("상품명: " + product.getName());
 
-//            product.setName(product.getName());
-//            product.setInitialPrice(product.getInitialPrice());
-//            product.setLeftTopX(product.getLeftTopX());
-//            product.setLeftTopY(product.getLeftTopY());
-//            product.setRightBottomX(product.getRightBottomX());
-//            product.setRightBottomY(product.getRightBottomY());
-//            product.setImageUrl(product.getImageUrl());
-//            product.setLive(product.getLive());
             product.setApproval(true);
-
             productRepository.save(product);
-            System.out.println("id: " + product.getLive().getId());
         }
     }
 

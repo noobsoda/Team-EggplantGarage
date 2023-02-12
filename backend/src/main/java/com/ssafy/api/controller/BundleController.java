@@ -70,21 +70,21 @@ public class BundleController {
     }
 
     // 승인
-    @PutMapping("/approval/{bundleId}")
+    @PatchMapping("/approval/{bundleId}")
     public ResponseEntity<?> approvalBundle(@PathVariable("bundleId") Long bundleId) {
         bundleService.approvalBundle(bundleId);
         return ResponseEntity.status(200).body("승인");
     }
 
     // 거부
-    @PutMapping("/refuse/{bundleId}")
+    @PatchMapping("/refuse/{bundleId}")
     public ResponseEntity<?> refuseBundle(@PathVariable("bundleId") Long bundleId) {
         bundleService.refuseBundle(bundleId);
         return ResponseEntity.status(200).body("거부");
     }
 
     // 취소
-    @PutMapping("/cancel/{bundleId}")
+    @PatchMapping("/cancel/{bundleId}")
     public ResponseEntity<?> cancelBundle(@PathVariable("bundleId") Long bundleId) {
         bundleService.cancelBundle(bundleId);
         return ResponseEntity.status(200).body("취소");
