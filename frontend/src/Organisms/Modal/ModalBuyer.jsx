@@ -5,6 +5,7 @@ import Modal from "../../Atoms/Modal/Modal";
 import { useState } from "react";
 import SalesList from "../../Templates/Modal/BuyerBody/SalesList";
 import SuggestionList from "../../Templates/Modal/BuyerBody/SuggestionList";
+import PayList from "../../Templates/Modal/BuyerBody/PayList";
 import ModalBody from "../../Templates/Modal/ModalBody";
 
 const Header = styled.div`
@@ -33,6 +34,8 @@ export default function ModalBuyer({
   userId,
   liveId,
   getSuggest,
+  getApprovSuggest,
+  payList,
 }) {
   const closeModal = () => {
     setModalOpen(false);
@@ -41,6 +44,7 @@ export default function ModalBuyer({
     closeModal();
   };
   const [isSuggestion, setIsSuggestion] = useState(false);
+  const [isPay, setIsPay] = useState(false);
   return (
     <Modal>
       <Header>
@@ -49,20 +53,38 @@ export default function ModalBuyer({
       </Header>
       <ModalBody>
         <FlexBox>
+          {payList !== undefined && (
+            <SmallBtn
+              name="구매 목록"
+              buttonClick={() => {
+                setIsPay(true);
+              }}
+            />
+          )}
+
           <SmallBtn
             name="제안목록"
             buttonClick={() => {
+              setIsPay(false);
               setIsSuggestion(false);
             }}
           />
           <SmallBtn
             name="판매목록"
             buttonClick={() => {
+              setIsPay(false);
               setIsSuggestion(true);
             }}
           />
         </FlexBox>
-        {isSuggestion ? (
+        {isPay ? (
+          <PayList
+            liveId={liveId}
+            userId={userId}
+            payList={payList}
+            getPayList={getApprovSuggest}
+          />
+        ) : isSuggestion ? (
           <SalesList
             liveId={liveId}
             userId={userId}

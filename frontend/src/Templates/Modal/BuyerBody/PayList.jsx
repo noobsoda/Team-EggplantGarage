@@ -1,39 +1,21 @@
 import React, { useEffect } from "react";
 import BundleBox from "../../../Molecules/Cards/BundleBox";
 import ItemCard from "../../../Molecules/Cards/ItemCard";
-import { setBundleRefuse } from "../../../util/api/productApi";
+import { getBuyerSuggestListPayWait } from "../../../util/api/productApi";
 
-export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
+export default function PayList({ payList, getPayList }) {
   useEffect(() => {
-    getSuggest();
+    getPayList();
   }, []);
-
-  function bundleCancle(bundleId) {
-    setBundleRefuse(
-      bundleId,
-      () => {
-        getSuggest();
-      },
-      () => {
-        console.warn("bundle reject fail");
-      }
-    );
-  }
-  function bundleAccept(bundleId) {
-    console.log("해당 번들 수락");
+  function bundlePay(bundleId) {
+    console.log("해당 번들 결제 시작");
   }
   return (
     <>
-      {suggestList.map((items, i) => {
+      {payList.map((items, i) => {
         console.log(items);
         return (
-          <BundleBox
-            key={i}
-            isSeller={isSeller}
-            bundleUser={items[0].nickname}
-            reject={() => bundleCancle(items[0].bundleId)}
-            accept={() => bundleAccept(items[0].bundleId)}
-          >
+          <BundleBox key={i} accept={() => bundlePay(items[0].bundleId)}>
             {items
               .map((ele) => {
                 ele["key"] = ele.id;
@@ -47,8 +29,8 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
                     key={item.productName}
                     item={item}
                     isBundle={true}
-                    isSeller={isSeller}
                     isSaleList={item.isSaleList}
+                    isPay={true}
                   />
                 );
               })}

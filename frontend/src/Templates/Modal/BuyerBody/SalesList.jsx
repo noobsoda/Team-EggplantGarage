@@ -96,7 +96,7 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
           return (
             <ItemCard
               key={item.key}
-              buttonType={"check"}
+              buttonType={isSeller ? undefined : "check"}
               isSeller={isSeller}
               item={item}
               check={item.check}

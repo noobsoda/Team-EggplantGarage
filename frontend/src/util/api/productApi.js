@@ -83,7 +83,7 @@ async function getBuyerSuggestList(liveId, buyerId, success, fail) {
  */
 async function getBuyerSuggestListPayWait(liveId, buyerId, success, fail) {
   await api
-    .get(`/api/vi/bundle/buyer/approvalNoPaid/` + liveId + `/` + buyerId)
+    .get(`/api/v1/bundle/buyer/approvalNoPaid/` + liveId + `/` + buyerId)
     .then(success)
     .catch(fail);
 }
@@ -97,7 +97,7 @@ async function getBuyerSuggestListPayWait(liveId, buyerId, success, fail) {
  */
 async function getBuyerSuggestListPayComplete(liveId, buyerId, success, fail) {
   await api
-    .get(`/api/vi/bundle/buyer/approvalYesPaid/` + liveId + `/` + buyerId)
+    .get(`/api/v1/bundle/buyer/approvalYesPaid/` + liveId + `/` + buyerId)
     .then(success)
     .catch(fail);
 }
@@ -147,10 +147,7 @@ async function setBundleRefuse(bundleId, success, fail) {
  * @returns
  */
 async function kakaopay(bundleId, success, fail) {
-  return await api
-    .post(`/api/v1/kakaoPay/`, { bundleId: bundleId })
-    .then(success)
-    .catch(fail);
+  return await api.post(`/api/v1/kakaoPay/`, { bundleId: bundleId }).then(success).catch(fail);
 }
 
 /**

@@ -35,6 +35,7 @@ export default function BundleBox({
   bundlePrice,
   children,
   isSeller,
+  isPay,
   accept,
   reject,
 }) {
@@ -43,21 +44,18 @@ export default function BundleBox({
       {children}
       <Status>
         <InfoBox>
-          <div className="body1-header">
-            {isSeller ? `제안자 : ${bundleUser}` : " "}
-          </div>
+          <div className="body1-header">{isSeller ? `제안자 : ${bundleUser}` : " "}</div>
           <div className="body1-header">{bundlePrice} 제안가격</div>
         </InfoBox>
         <BtnBox>
           {isSeller ? (
             <ExtraSmallButton name="승인" buttonClick={accept} />
+          ) : isPay ? (
+            <ExtraSmallButton name="결제" buttonClick={accept} />
           ) : (
             <></>
           )}
-          <ExtraSmallButton
-            name={isSeller ? "거절" : "취소"}
-            buttonClick={reject}
-          />
+          <ExtraSmallButton name={isSeller ? "거절" : "취소"} buttonClick={reject} />
         </BtnBox>
       </Status>
     </StyledBundleBox>
