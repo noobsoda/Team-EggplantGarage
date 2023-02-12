@@ -3,12 +3,13 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.UserDeleteReq;
 import com.ssafy.api.request.UserInfoPatchReq;
 import com.ssafy.api.request.UserRegisterPostReq;
+import com.ssafy.common.error.ErrorCode;
 import com.ssafy.common.exception.CustomException;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,8 +22,8 @@ import static com.ssafy.common.error.ErrorCode.*;
  * 유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
 @Service("userService")
-@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
     private final Logger logger;
 
     private final UserRepository userRepository;
@@ -32,10 +33,25 @@ public class UserServiceImpl implements UserService {
      * UserRepositorySupport userRepositorySupport;
      */
 
+    @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    public UserServiceImpl(Logger logger, UserRepository userRepository) {
+        this.logger = logger;
+        this.userRepository = userRepository;
+    }
 
     @Override
     public User createUser(UserRegisterPostReq userRegisterInfo) {
+
+        Optional<User> oUserEmail = userRepository.findByEmail(userRegisterInfo.getEmail());
+        Optional<User> oUserNickname = userRepository.findByNickname(userRegisterInfo.getNickname());
+        if(oUserEmail.isPresent() || oUserNickname.isPresent())
+            throw new CustomException(ALREADY_SAVED_USER);
+
+
+
         User user = new User();
         user.setEmail(userRegisterInfo.getEmail());
         // 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
