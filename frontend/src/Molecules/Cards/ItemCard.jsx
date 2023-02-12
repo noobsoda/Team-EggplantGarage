@@ -37,7 +37,7 @@ const Mask = styled.div`
   border-radius: 8px;
   align-items: center;
   background-color: rgb(10, 10, 10, 0.7);
-  color: #ff2a00e3;
+  color: red;
 `;
 const ItemImage = styled.div`
   width: 72px;
@@ -173,7 +173,7 @@ export default function ItemCard({
           )}
         </ItemBtn>
       )}
-      {isSold ? <Mask /> : undefined}
+      {isSold ? <Mask className="page-header">판매완료</Mask> : undefined}
     </StyledItemCard>
   );
 }

@@ -67,8 +67,8 @@ export default function Search() {
     }
     let searchCondition = {
       category: category === "전체" || category === "인기" ? "" : category,
-      distanceSort: sort ? "ASC" : "",
-      joinUserSort: sort ? "" : "desc",
+      distanceSort: sort ? "" : "ASC",
+      joinUserSort: sort ? "desc" : "",
       latitude: location.lat,
       longitude: location.lng,
       national: isNational,
