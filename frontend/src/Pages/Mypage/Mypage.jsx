@@ -47,6 +47,7 @@ const SimpleFlex = styled.div`
   align-items: center;
   column-gap: 8px;
 `;
+
 export default function Mypage() {
   const [isPurchase, setisPurchase] = useState(true);
   const navigate = useNavigate();
@@ -83,10 +84,18 @@ export default function Mypage() {
           </InfoFlex>
         </Info>
         <SelectBar>
-          <button className="body1-header" onClick={() => setisPurchase(true)}>
+          <button
+            className="body1-header"
+            style={{ color: isPurchase ? "black" : "#979797" }}
+            onClick={() => setisPurchase(true)}
+          >
             구매내역
           </button>
-          <button className="body1-header" onClick={() => setisPurchase(false)}>
+          <button
+            className="body1-header"
+            style={{ color: isPurchase ? "#979797" : "black" }}
+            onClick={() => setisPurchase(false)}
+          >
             판매내역
           </button>
         </SelectBar>
