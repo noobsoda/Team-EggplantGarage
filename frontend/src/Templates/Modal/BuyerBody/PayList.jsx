@@ -2,15 +2,15 @@ import React, { useEffect } from "react";
 import BundleBox from "../../../Molecules/Cards/BundleBox";
 import ItemCard from "../../../Molecules/Cards/ItemCard";
 import { kakaopay } from "../../../util/api/productApi";
+import { isMobile } from "../../../util";
 
 export default function PayList({ payList, getPayList }) {
   useEffect(() => {
     getPayList();
   }, []);
   function bundlePay(bundleId) {
-    console.log("해당 번들 결제 시작");
     kakaopay(
-      bundleId,
+      { bundleId: bundleId, pcOrMobile: isMobile() ? "mobile" : "pc" },
       ({ data }) => {
         window.open(data.split("redirect:")[1]);
       },

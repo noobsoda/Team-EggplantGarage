@@ -141,13 +141,13 @@ async function setBundleRefuse(bundleId, success, fail) {
 
 /**
  * 카카오페이 결제 진행
- * @param {*} bundleId
+ * @param {*} payInfo { bundleId: bundleId, pcOrMobile: pc }
  * @param {*} success
  * @param {*} fail
  * @returns
  */
-async function kakaopay(bundleId, success, fail) {
-  return await api.post(`/api/v1/kakaoPay/`, { bundleId: bundleId }).then(success).catch(fail);
+async function kakaopay(payInfo, success, fail) {
+  return await api.post(`/api/v1/kakaoPay/`, payInfo).then(success).catch(fail);
 }
 
 /**
