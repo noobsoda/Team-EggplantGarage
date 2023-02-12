@@ -31,7 +31,6 @@ public class KakaoPayController {
     @PostMapping()
     public String kakaoPay(@RequestBody KakaoPayReq kakaoPayReq) {
 //        log.info("POST: kakaoPay 결제 준비");
-//        System.out.println("POST: kakaoPay 결제 준비");
 
         bundle = bundleRepository.findById(kakaoPayReq.getBundleId());
 
@@ -42,26 +41,19 @@ public class KakaoPayController {
                 String.valueOf(bundle.get().getId()),
                 String.valueOf(bundle.get().getUser().getId()));
 
-//        return  kakaoPayReadyRes;
-
-//        return "redirect:" + kakaoPayReadyRes.getNext_redirect_mobile_url();
-        return "redirect:" + kakaoPayReadyRes.getNext_redirect_pc_url();
+        if(kakaoPayReq.getPcOrMobile().equals("pc")) return "redirect:" + kakaoPayReadyRes.getNext_redirect_pc_url();
+        else return "redirect:" + kakaoPayReadyRes.getNext_redirect_mobile_url();
     }
 
     @GetMapping("/success")
-    public String kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
+    public ResponseEntity<?> kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
 //        log.info("GET: kakaoPaySuccess 결제 승인");
-//        System.out.println("GET: kakaoPaySuccess 결제 승인");
 
         ResponseEntity<KakaoPayApprovalRes> kakaoPResponseEntity = kakaoPayService.kakaoPaySuccess(kakaoPayApprovalRes, pg_token);
-//        System.out.println("kakaoPaySuccess -> pg_token: " + pg_token);
-//        System.out.println("승인 받고나서: " + kakaoPResponseEntity.toString());
 
-//        model.addAttribute("info", kakaoPayService.kakaoPaySuccess(pg_token));
         bundle.get().setPaid(true);
         bundleRepository.save(bundle.get());
 
-
-        return "success";
+        return ResponseEntity.status(200).body("결제 완료");
     }
 }

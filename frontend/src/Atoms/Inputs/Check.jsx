@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const StyledInput = styled.input`
@@ -13,6 +13,14 @@ const StyledInput = styled.input`
   }
 `;
 
-export default function Check({ boxId }) {
-  return <StyledInput id={boxId} type="checkbox" />;
+export default function Check({ boxId, setCheck, check, disable }) {
+  return (
+    <StyledInput
+      id={boxId}
+      type="checkbox"
+      checked={check}
+      onChange={setCheck}
+      disabled={disable}
+    />
+  );
 }

@@ -2,10 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.response.KakaoPayApprovalRes;
 import com.ssafy.api.response.KakaoPayReadyRes;
-import com.ssafy.db.entity.Bundle;
-import com.ssafy.db.entity.BundledItemsRelation;
-import com.ssafy.db.entity.Product;
-import com.ssafy.db.entity.User;
+import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.BundledItemsRelationRepository;
 import com.ssafy.db.repository.ProductRepository;
 import lombok.extern.java.Log;
@@ -30,6 +27,8 @@ import java.util.Optional;
 @Transactional
 public class KakaoPayService {
     private static final String HOST = "https://kapi.kakao.com";
+    private static final String DOMAIN = "https://i8b105.p.ssafy.io/api/v1/kakaoPay";
+//    private static final String DOMAIN = "https://localhost:8000/api/v1/kakaoPay";
     private static final String ADMIN = "7ad3ade6c404bf95e1713af49e12b31f";
     private KakaoPayReadyRes kakaoPayReadyRes;
     private int quantity, soldPrice;
@@ -46,7 +45,6 @@ public class KakaoPayService {
     // 결제 준비
     public KakaoPayReadyRes KakaoPayReady(Bundle bundle) {
 //        log.info("Service: 결제 준비 시작");
-//        System.out.println("Service: 결제 준비 시작");
 
         bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundle.getId());
         quantity = bundledItemsRelationList.get().size();
@@ -69,10 +67,10 @@ public class KakaoPayService {
         params.add("item_name", productName); // 상품명
         params.add("quantity", String.valueOf(quantity)); // 상품 수량
         params.add("total_amount", String.valueOf(bundle.getPrice())); // 상품 총액
-        params.add("tax_free_amount", "100"); // 상품 비과세 금액
-        params.add("approval_url", "https://localhost:8000/api/v1/kakaoPay/success"); // 결제 성공 시 redirect url
-        params.add("cancel_url", "https://localhost:8000/api/v1/kakaoPay/cancel"); // 결제 취소 시 redirect url
-        params.add("fail_url", "https://localhost:8000/api/v1/kakaoPay/fail"); // 결제 실패 시 redirect url
+        params.add("tax_free_amount", "0"); // 상품 비과세 금액
+        params.add("approval_url", DOMAIN + "/success"); // 결제 성공 시 redirect url
+        params.add("cancel_url", DOMAIN + "/cancel"); // 결제 취소 시 redirect url
+        params.add("fail_url", DOMAIN + "/fail"); // 결제 실패 시 redirect url
 
         HttpEntity<MultiValueMap<String, String>> body = new HttpEntity<>(params, headers);
         try {
@@ -88,7 +86,6 @@ public class KakaoPayService {
     // 결제 승인
     public ResponseEntity<KakaoPayApprovalRes> kakaoPaySuccess(KakaoPayApprovalRes kakaoPayApprovalRes, String pg_token) {
 //        log.info("Service: 결제 승인 단계 시작");
-//        System.out.println("Service: 결제 승인 단계 시작");
 
         RestTemplate restTemplate = new RestTemplate();
 
@@ -110,19 +107,19 @@ public class KakaoPayService {
         try {
             kakaoPayApprovalRes = restTemplate.postForObject(new URI(HOST + "/v1/payment/approve"), body, KakaoPayApprovalRes.class);
 
-            User user = bundledItemsRelationList.get().get(0).getBundle().getUser();
-
+            Long buyer = bundledItemsRelationList.get().get(0).getBundle().getUser().getId();
             for(int i = 0; i < quantity; i++) {
+                Long productId = bundledItemsRelationList.get().get(i).getProduct().getId();
+                Product product = productRepository.findById(productId).get();
 
-                bundledItemsRelationList.get().get(i).getProduct().setBuyerId(user.getId());
-                bundledItemsRelationList.get().get(i).getProduct().setSoldAt(LocalDateTime.now());
-                bundledItemsRelationList.get().get(i).getProduct().setSoldPrice(soldPrice);
-                bundledItemsRelationList.get().get(i).getProduct().setPaid(true);
+                product.setSoldAt(LocalDateTime.now());
+                product.setSoldPrice(soldPrice);
+                product.setPaid(true);
+                product.setBuyerId(buyer);
 
-                productRepository.save(bundledItemsRelationList.get().get(i).getProduct());
+                productRepository.save(product);
             }
 
-//            return kakaoPayApprovalRes;
             return new ResponseEntity<>(kakaoPayApprovalRes, HttpStatus.OK);
         } catch (RestClientException | URISyntaxException e){
             e.printStackTrace();

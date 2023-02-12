@@ -6,6 +6,7 @@ import com.ssafy.db.entity.Product;
 import com.ssafy.db.entity.Review;
 import com.ssafy.db.repository.ProductRepository;
 import com.ssafy.db.repository.ReviewRepository;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,18 +14,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service("reviewService")
-public class ReviewServiceImpl implements ReviewService{
+@RequiredArgsConstructor
+public class ReviewServiceImpl implements ReviewService {
     private final Logger logger;
 
-    public ReviewServiceImpl(Logger logger) {
-        this.logger = logger;
-    }
+    private final ReviewRepository reviewRepository;
 
-    @Autowired
-    ReviewRepository reviewRepository;
-
-    @Autowired
-    ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @Override
     public Review writeReview(ReviewWritePostReq reviewWriteInfo) {
@@ -42,13 +38,15 @@ public class ReviewServiceImpl implements ReviewService{
 
     @Override
     public List<ReviewRes> getSellerReviews(long sellerId) {
-        List<Review> reviewList = reviewRepository.findByProduct_Live_User_IdAndIsSellerTrueOrderByCreatedAtDesc(sellerId).get();
+        List<Review> reviewList = reviewRepository
+                .findByProduct_Live_User_IdAndIsSellerTrueOrderByCreatedAtDesc(sellerId).get();
         return ReviewRes.of(reviewList);
     }
 
     @Override
     public List<ReviewRes> getBuyerReviews(long buyerId) {
-        List<Review> reviewList = reviewRepository.findByProduct_BuyerIdAndIsSellerFalseOrderByCreatedAtDesc(buyerId).get();
+        List<Review> reviewList = reviewRepository.findByProduct_BuyerIdAndIsSellerFalseOrderByCreatedAtDesc(buyerId)
+                .get();
         return ReviewRes.of(reviewList);
     }
 

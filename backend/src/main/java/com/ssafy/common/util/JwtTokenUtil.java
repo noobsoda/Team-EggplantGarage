@@ -9,11 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -23,21 +21,25 @@ import static com.google.common.collect.Lists.newArrayList;
 @Component
 public class JwtTokenUtil {
     private static String secretKey;
-    private static Integer expirationTime;
+    private static Integer accessExpirationTime;
+    public static Integer refreshExpirationTime;
+
+
 
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
-    public static final String ISSUER = "ssafy.com";
+    public static final String ISSUER = "EggplantGarage.com";
 
     @Autowired
-    public JwtTokenUtil(@Value("${jwt.secret}") String secretKey, @Value("${jwt.expiration}") Integer expirationTime) {
+    public JwtTokenUtil(@Value("${jwt.secret}") String secretKey, @Value("${jwt.access-expiration}") Integer accessExpirationTime, @Value("${jwt.refresh-expiration}") Integer refreshExpirationTime) {
         this.secretKey = secretKey;
-        this.expirationTime = expirationTime;
+        this.accessExpirationTime = accessExpirationTime;
+        this.refreshExpirationTime = refreshExpirationTime;
     }
 
     public void setExpirationTime() {
         //JwtTokenUtil.expirationTime = Integer.parseInt(expirationTime);
-        JwtTokenUtil.expirationTime = expirationTime;
+        JwtTokenUtil.accessExpirationTime = accessExpirationTime;
     }
 
     public static JWTVerifier getVerifier() {
@@ -47,20 +49,21 @@ public class JwtTokenUtil {
                 .build();
     }
 
-    public static String getToken(String userId) {
-        Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
+    public static String getAccessToken(String userEmail) {
+        Date expires = JwtTokenUtil.getTokenExpiration(accessExpirationTime);
         return JWT.create()
-                .withSubject(userId)
+                .withSubject(userEmail)
                 .withExpiresAt(expires)
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));
     }
 
-    public static String getToken(Instant expires, String userId) {
+    public static String getRefreshToken(String userEmail) {
+        Date refreshExpires = JwtTokenUtil.getTokenExpiration(refreshExpirationTime);
         return JWT.create()
-                .withSubject(userId)
-                .withExpiresAt(Date.from(expires))
+                .withSubject(userEmail)
+                .withExpiresAt(refreshExpires)
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
                 .sign(Algorithm.HMAC512(secretKey.getBytes()));

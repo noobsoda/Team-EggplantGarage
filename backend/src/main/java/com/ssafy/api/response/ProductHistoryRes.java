@@ -13,6 +13,8 @@ import lombok.Setter;
 @Builder
 @ApiModel("ProductHistoryResponse")
 public class ProductHistoryRes {
+    @ApiModelProperty(name = "Product id")
+    private long id;
     @ApiModelProperty(name = "Product name")
     private String productName;
     @ApiModelProperty(name = "Product soldPrice")
@@ -37,9 +39,12 @@ public class ProductHistoryRes {
     private long myReviewId;
     @ApiModelProperty(name = "Other review id")
     private long otherReviewId;
+    @ApiModelProperty(name = "ChatRoom id")
+    private long chatRoomId;
 
-    public static ProductHistoryRes of(Product product, User user, long myReviewId, long otherReviewId)  {
+    public static ProductHistoryRes of(Product product, User user, long myReviewId, long otherReviewId, long chatRoomId)  {
         ProductHistoryRes res = ProductHistoryRes.builder()
+                .id(product.getId())
                 .productName(product.getName())
                 .soldPrice(product.getSoldPrice())
                 .isPaid(product.isPaid())
@@ -52,6 +57,7 @@ public class ProductHistoryRes {
                 .otherName(user.getName())
                 .myReviewId(myReviewId)
                 .otherReviewId(otherReviewId)
+                .chatRoomId(chatRoomId)
                 .build();
         return res;
     }

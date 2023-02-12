@@ -1,9 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { checkUserInfo } from "../../store/user";
 
 import styled from "styled-components";
 import MidBtn from "../../Atoms/Buttons/MediumBtn";
 import BigBtn from "../../Atoms/Buttons/BigBtn";
+
+import PictureBox from "../../Organisms/Camera/PictureBox";
+
 import TitleCategoryBox from "../../Templates/LiveShowSubmit/TitleCategoryBox";
 import PictureSubmitBox from "../../Templates/LiveShowSubmit/PictureSubmitBox";
 import ProductSubmitBox from "../../Templates/LiveShowSubmit/ProductSubmitBox";
@@ -11,10 +16,19 @@ import ProductListBox from "../../Templates/LiveShowSubmit/ProductListBox";
 import ProuctModifyBox from "../../Templates/LiveShowSubmit/ProductModifyBox";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
+import Body from "../../Templates/Layout/Body";
+
+import {
+  createLive,
+  setLiveCategory,
+  setLiveImage,
+} from "../../util/api/liveApi";
+import { setLiveProduct } from "../../util/api/productApi";
+import { dataURItoBlob } from "../../util/data";
 
 const StyledBox = styled.div`
   display: flex;
-  width: 1440px;
+  width: 1800px;
 
   transform: ${(props) => `translateX(${-props.phase * 360}px)`};
   transition: transform 0.2s ease-in-out;
@@ -26,23 +40,25 @@ const StyledWindow = styled.div`
   width: 360px;
 `;
 const BtnFlex = styled.div`
-  position: absolute;
-  left: 0px;
-  bottom: 72px;
-  margin: 0 40px;
+  display: flex;
+  justify-content: space-around;
 `;
 
 export default function LiveShowSubmit() {
+  const userInfo = useSelector(checkUserInfo);
   const navigate = useNavigate();
 
   const [imgSrc, setImgSrc] = useState("//:0"); //회전후 결과를 담는 canvas
 
   const [step, setStep] = useState(0);
-  const [isModify, setIsModify] = useState(false);
+  const [modifyProduct, setModifyProduct] = useState({});
 
   const [title, setTitle] = useState({ value: "", check: false });
   const [categorys, setCategorys] = useState({ value: [], check: false });
   const [productList, setProductList] = useState({ value: [], check: false });
+
+  const [camera, setCamera] = useState(false);
+  const [goCrop, setGoCrop] = useState(true); //수정화면의 자르기
 
   function nextStep() {
     if (step === 3) return;
@@ -87,66 +103,198 @@ export default function LiveShowSubmit() {
   }
 
   /**
+   * 카메라 키고 끄기
+   */
+  function cameraEvent(flag) {
+    setCamera(flag);
+  }
+  /**
    * 방송 시작을 위한 정보 전송
    */
   function goLive() {
-    // console.log("방송시작");
     //제목
-    // console.log(`방송 제목 ${title.value},${title.check}`);
-
+    if (!title.check) {
+      alert("제목을 작성해주세요");
+      setStep(0);
+      return;
+    }
     //카테고리들
-    // console.log(`카테고리 ${categorys.value},${categorys.check}`);
+    if (!categorys.check) {
+      alert("카테고리를 입력해주세요");
+      setStep(0);
+      return;
+    }
 
-    //이미지 소스
-    // console.log(`이미지 ${imgSrc}`);
+    if (!productList.check) {
+      alert("물품을 한개이상 등록해주세요");
+      setStep(2);
+      return;
+    }
 
-    //물품정보
-    //---제품 이미지 위치
-    //---제품명
-    //---제품가격
-    // console.log(`물품 리스트 ${productList.value},${productList.check}`);
+    const id = userInfo.id;
+    const liveInfo = {
+      title: title.value,
+      description: "",
+      url: `${process.env.REACT_APP_API_URL}test/${id}`,
+      live: true,
+      latitude: "",
+      longitude: "",
+      sessionId: id,
+      sellerId: id,
+    };
 
-    //판매자(나) 이메일
+    createLive(
+      liveInfo,
+      async ({ data }) => {
+        //라이브 카테고리 등록
+        const liveId = data.liveId;
+        const categoryInfo = {
+          liveId: liveId,
+          liveCategoryReqList: categorys.value.map((ele) => {
+            return { categoryName: ele };
+          }),
+        };
+        await setLiveCategory(
+          categoryInfo,
+          ({ data }) => {},
+          () => {
+            console.warn("category fail");
+          }
+        );
 
-    navigate("/liveshowseller/12");
+        //라이브 상품등록
+        let formData = new FormData(); // formData 객체를 생성한다.
+        const productInfo = productList.value.map((ele) => {
+          return {
+            liveId: data.liveId,
+            sellerId: id,
+            name: ele.productName,
+            initialPrice: ele.productPrice,
+            leftTopX: Math.floor(ele.leftTopX),
+            leftTopY: Math.floor(ele.leftTopY),
+            rightBottomX: Math.floor(ele.rightBottomX),
+            rightBottomY: Math.floor(ele.rightBottomY),
+          };
+        });
+
+        //array json을 전송하기위해 맞춘 형식 BE에서 이런 형태로 받음
+        for (let i = 0; i < productInfo.length; i++) {
+          for (let key in productInfo[0]) {
+            formData.append(`productList[${i}].${key}`, productInfo[i][key]); //상품 정보
+          }
+        }
+        formData.append("img", dataURItoBlob(imgSrc)); //이미지 소스
+
+        await setLiveProduct(
+          formData,
+          ({ data }) => {},
+          () => {
+            console.warn("product fail");
+          }
+        );
+
+        //섬네일 지정
+        formData = new FormData(); // formData 객체를 생성한다.
+        let file = dataURItoBlob(imgSrc);
+        formData.append("img", file);
+        formData.append("liveId", liveId);
+        await setLiveImage(
+          formData,
+          ({ data }) => {},
+          () => {
+            console.warn("image fail");
+          }
+        );
+
+        navigate(`/liveshowseller/${liveId}`);
+      },
+      (e) => {
+        console.log(e);
+        console.warn("live fail");
+      }
+    );
+  }
+
+  function deleteProduct(productId) {
+    let productTmp = productList.value.filter((ele) => ele.id !== productId);
+
+    if (productTmp.length === 0) {
+      setProductList({ value: [], check: false });
+    } else {
+      setProductList({ value: productTmp, check: true });
+    }
+  }
+
+  function modiProduct(productId) {
+    //찾기
+    for (let i = 0; i < productList.value.length; i++) {
+      if (productList.value[i].id === productId) {
+        setModifyProduct(productList.value[i]);
+        break;
+      }
+    }
+    setStep(4); //수정 페이지로 이동
   }
   return (
     <Page>
       <Header isName={true} headerName="라이브쇼 등록" />
-      <StyledWindow>
-        <StyledBox phase={step}>
-          <TitleCategoryBox
-            onTitleChange={titleValue}
-            categorys={categorys.value}
-            onCategoryChange={onChange}
-            delCategory={delCategory}
-          />
-          <PictureSubmitBox setOriImgSrc={setImgSrc} />
-          <ProductSubmitBox
-            imgSrc={imgSrc}
-            productList={productList}
-            setProductList={setProductList}
-          />
-          <ProductListBox imgSrc={imgSrc} productList={productList} />
-        </StyledBox>
-      </StyledWindow>
-      <BtnFlex>
-        {step === 0 ? (
-          <BigBtn name="NEXT" buttonClick={nextStep} />
-        ) : step === 3 ? (
-          <>
-            <MidBtn name="PREV" buttonClick={backStep} />
-            <MidBtn name="방송시작" buttonClick={goLive} />
-          </>
-        ) : (
-          <>
-            <MidBtn name="PREV" buttonClick={backStep} />
-            <MidBtn name="NEXT" buttonClick={nextStep} />
-          </>
-        )}
-      </BtnFlex>
+      <Body>
+        <StyledWindow>
+          <StyledBox phase={step}>
+            <TitleCategoryBox
+              onTitleChange={titleValue}
+              categorys={categorys.value}
+              onCategoryChange={onChange}
+              delCategory={delCategory}
+            />
+            <PictureSubmitBox imgSrc={imgSrc} cameraEvent={cameraEvent} />
 
-      {isModify ? <ProuctModifyBox /> : <></>}
+            <ProductSubmitBox
+              imgSrc={imgSrc}
+              productList={productList}
+              setProductList={setProductList}
+            />
+            <ProductListBox
+              imgSrc={imgSrc}
+              productList={productList}
+              onModifyClick={modiProduct}
+              onDeleteClick={deleteProduct}
+            />
+            <ProuctModifyBox
+              imgSrc={imgSrc}
+              modifyProduct={modifyProduct}
+              productList={productList.value}
+              setProductList={setProductList}
+              deleteProduct={deleteProduct}
+              backStep={backStep}
+            />
+          </StyledBox>
+        </StyledWindow>
+        <BtnFlex>
+          {step === 0 ? (
+            <BigBtn name="NEXT" buttonClick={nextStep} />
+          ) : step === 3 ? (
+            <>
+              <MidBtn name="PREV" buttonClick={backStep} />
+              <MidBtn name="방송시작" buttonClick={goLive} />
+            </>
+          ) : step === 4 ? (
+            <>
+              <BigBtn name="뒤로" buttonClick={backStep} />
+            </>
+          ) : (
+            <>
+              <MidBtn name="PREV" buttonClick={backStep} />
+              <MidBtn name="NEXT" buttonClick={nextStep} />
+            </>
+          )}
+        </BtnFlex>
+      </Body>
+      {camera ? (
+        <PictureBox setOriImgSrc={setImgSrc} cameraEvent={cameraEvent} />
+      ) : (
+        <></>
+      )}
     </Page>
   );
 }
