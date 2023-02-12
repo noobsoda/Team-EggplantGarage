@@ -41,8 +41,8 @@ public class KakaoPayController {
                 String.valueOf(bundle.get().getId()),
                 String.valueOf(bundle.get().getUser().getId()));
 
-//        return "redirect:" + kakaoPayReadyRes.getNext_redirect_mobile_url();
-        return "redirect:" + kakaoPayReadyRes.getNext_redirect_pc_url();
+        if(kakaoPayReq.getPcOrMobile().equals("pc")) return "redirect:" + kakaoPayReadyRes.getNext_redirect_pc_url();
+        else return "redirect:" + kakaoPayReadyRes.getNext_redirect_mobile_url();
     }
 
     @GetMapping("/success")
