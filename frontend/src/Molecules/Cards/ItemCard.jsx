@@ -12,13 +12,14 @@ const StyledItemCard = styled.div`
   width: calc(100% -6px);
   height: 72px;
   border-radius: 12px;
-  border: 3px solid;
+  border: 1px solid ${({ theme }) => theme.color.lightgrey};
   /* box-sizing: border-box; */
   background-color: ${({ theme }) => theme.color.white};
   display: flex;
   flex-direction: row;
   column-gap: 8px;
   justify-content: space-between;
+  box-shadow: 0px 0px 20px ${({ theme }) => theme.color.lightgrey};
 `;
 const Mask = styled.div`
   position: absolute;
@@ -49,8 +50,9 @@ const ItemInfo = styled.div`
   height: 72px;
   display: flex;
   flex-direction: column;
-  row-gap: 24px;
+  row-gap: 8px;
   background-color: white;
+  justify-content: center;
 `;
 const ItemBtn = styled.div`
   width: 72px;
