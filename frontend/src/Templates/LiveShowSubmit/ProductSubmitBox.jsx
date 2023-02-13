@@ -4,6 +4,7 @@ import InputBox from "../../Molecules/Input/InputBox";
 import Checkbox from "../../Molecules/Input/CheckBox";
 
 import styled from "styled-components";
+import { isNumber } from "../../util/regex";
 const StyledBox = styled.div`
   width: 360px;
 `;
@@ -188,6 +189,12 @@ export default function ProductSubmitBox({
     if (check) {
       if (productPrice === "") {
         alert("구매가를 입력해주세요");
+        return;
+      }
+
+      //숫자만 입력햇는지 확인
+      if (!productPrice.match(isNumber)) {
+        alert("숫자만 입력해주세요");
         return;
       }
       price = productPrice;

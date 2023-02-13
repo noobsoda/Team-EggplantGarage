@@ -207,7 +207,7 @@ export default function LiveshowBuyer() {
           >
             <Title className="show-header">{liveInfo.title}</Title>
             <div className="body1-header" style={{ color: "white" }}>
-              판매자명
+              판매자 {liveInfo.seller_nickname} 님
             </div>
             <ViewerCntBox
               viewerCnt={
