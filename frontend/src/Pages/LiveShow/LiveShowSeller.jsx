@@ -108,6 +108,12 @@ export default function LiveshowBuyer(toggleCamera) {
     getLiveDetail(
       liveId,
       ({ data }) => {
+        //라이브 중인지 확인
+        if (!data.live) {
+          alert("종료된 방입니다.");
+          navigate("/");
+          return;
+        }
         setLiveInfo(data);
       },
       () => {

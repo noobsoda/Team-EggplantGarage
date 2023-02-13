@@ -21,14 +21,6 @@ export default function Chat() {
     <Page>
       <Header isName="True" headerName="채팅 목록" />
       <Body>
-        <ChattingItem
-          key={2}
-          id={2}
-          receiverId={1}
-          receiverName={"야호"}
-          lastSendTime={"2023"}
-          lastSendMessage={"yaho"}
-        />
         {chatRommList.length === 0 ? (
           <div>
             <span>채팅 목록이 없습니다.</span>

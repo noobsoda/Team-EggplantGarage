@@ -4,8 +4,9 @@ import Button from "../../Atoms/Buttons/ExtraSmallBtn";
 
 const StyledBox = styled.div`
   height: 640px;
-  width: 280px;
-  margin: 24px 40px;
+  width: 100%;
+  /* flex: 1 1; */
+  /* margin: 24px 40px; */
 `;
 const StyledGreenBox = styled.div`
   color: ${({ theme }) => theme.color.green};
@@ -17,7 +18,7 @@ const StyledHead = styled.h1`
 `;
 
 const StyledImg = styled.img`
-  width: 280px;
+  width: 100%;
   margin-top: 16px;
 `;
 

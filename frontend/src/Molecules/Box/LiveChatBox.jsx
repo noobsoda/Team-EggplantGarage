@@ -66,6 +66,7 @@ export default function ChatInput({ liveId }) {
   const [stompClient] = useState(getStompClient());
   const [message, setMessage] = useState(""); // 입력 메세지
   const [messageList, setMessageList] = useState([]);
+  const [messageContent, setMessageContent] = useState("");
 
   // const messageArea = useRef();
   const scrollRef = useRef();
@@ -83,6 +84,10 @@ export default function ChatInput({ liveId }) {
     scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, []);
+
+  useEffect(() => {
+    setMessageList([...messageList, messageContent]);
+  }, [messageContent]);
 
   /**
    * 연결 성공
@@ -113,13 +118,10 @@ export default function ChatInput({ liveId }) {
    */
   const onMessageReceived = (payload) => {
     const message = JSON.parse(payload.body);
-    let messageTmp = messageList;
     if (message.type === "JOIN") {
-      messageTmp.push({ content: "[" + message.sender + "] 님이 입장하셨습니다." });
-      setMessageList(messageTmp);
+      setMessageContent("[" + message.sender + "] 님이 입장하셨습니다.");
     } else {
-      messageTmp.push({ sender: "[" + message.sender + "]", content: message.content });
-      setMessageList(messageTmp);
+      setMessageContent("[" + message.sender + "] " + message.content);
     }
   };
 
@@ -134,7 +136,11 @@ export default function ChatInput({ liveId }) {
         content: message,
         type: "CHAT",
       };
-      stompClient.send("/pub/live/message/" + liveId, {}, JSON.stringify(chatMessage));
+      stompClient.send(
+        "/pub/live/message/" + liveId,
+        {},
+        JSON.stringify(chatMessage)
+      );
       scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
     setMessage("");
@@ -163,7 +169,7 @@ export default function ChatInput({ liveId }) {
       <StyledChatting ref={scrollRef}>
         <StyledMessage>
           {messageList.map((msg, i) => (
-            <MessageLive key={i + msg.content} message={msg} />
+            <MessageLive key={i + msg} message={msg} />
           ))}
         </StyledMessage>
       </StyledChatting>

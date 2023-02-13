@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledSelect = styled.select`
-  width: 280px;
+  width: 100%;
   height: 40px;
   border: 2px solid ${({ theme }) => theme.color.darkgrey};
   border-radius: 8px;

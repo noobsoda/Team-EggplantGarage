@@ -68,7 +68,7 @@ public class KakaoPayService {
         params.add("quantity", String.valueOf(quantity)); // 상품 수량
         params.add("total_amount", String.valueOf(bundle.getPrice())); // 상품 총액
         params.add("tax_free_amount", "0"); // 상품 비과세 금액
-        params.add("approval_url", DOMAIN + "/success"); // 결제 성공 시 redirect url
+        params.add("approval_url", DOMAIN + "/success/"); // 결제 성공 시 redirect url
         params.add("cancel_url", DOMAIN + "/cancel"); // 결제 취소 시 redirect url
         params.add("fail_url", DOMAIN + "/fail"); // 결제 실패 시 redirect url
 

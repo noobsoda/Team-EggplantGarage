@@ -140,6 +140,18 @@ async function setBundleRefuse(bundleId, success, fail) {
 }
 
 /**
+ * 해당 묶음에 대해 구매자가 취소
+ * @param {*} bundleId
+ * @param {*} success
+ * @param {*} fail
+ */
+async function setBundleCancel(bundleId, success, fail) {
+  await api
+    .patch(`/api/v1/bundle/cancel/` + bundleId)
+    .then(success)
+    .catch(fail);
+}
+/**
  * 카카오페이 결제 진행
  * @param {*} payInfo { bundleId: bundleId, pcOrMobile: pc }
  * @param {*} success
@@ -175,6 +187,7 @@ export {
   getBuyerSuggestListPayComplete,
   setBundleApproval,
   setBundleRefuse,
+  setBundleCancel,
   setLiveProduct,
   kakaopay,
   getSalesItemHistory,

@@ -43,7 +43,7 @@ export default function ChattingItem({
           alignItems: "flex-end",
         }}
       >
-        <div className="body1-header">{receiverName}님과의 채팅</div>
+        <div className="body1-header">{receiverName}</div>
         <div>{lastSendTime}</div>
       </div>
       <div>

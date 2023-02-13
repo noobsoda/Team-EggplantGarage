@@ -19,16 +19,18 @@ const StyledCamera = styled.div`
 `;
 const StyledVideo = styled.video`
   /* height: 640px; */
-  height: 100%;
+  /* height: 100%; */
+  width: 100%;
 `;
 
 const StyledBtn = styled.button`
-  width: 180px;
+  width: 60px;
+  height: 60px;
   color: white;
-  background-color: black;
+  background-color: white;
   font-size: 16px;
   border-radius: 30px;
-  border: none;
+  border: 4px solid black;
   padding: 15px 20px;
   text-align: center;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0, 0.2);
@@ -51,7 +53,7 @@ const VIDEO_RECORD_WIDTH = 1024;
 
 //우리가 보는 비디오 표시 크기
 const VIDEO_RESULT_HEIGHT = 640;
-const VIDEO_RESULT_WIDTH = 360;
+const VIDEO_RESULT_WIDTH = 1024;
 
 //카메라 설정
 const getWebcam = (callback) => {
@@ -119,16 +121,16 @@ export default function PictureBox({ setOriImgSrc, cameraEvent }) {
       );
 
     //270도 회전하기
-    canvasRef2.current.width = canvasRef.current.height;
-    canvasRef2.current.height = canvasRef.current.width;
+    // canvasRef2.current.width = canvasRef.current.height;
+    // canvasRef2.current.height = canvasRef.current.width;
 
-    canvasRef2.current.getContext("2d").rotate((270 * Math.PI) / 180);
-    canvasRef2.current
-      .getContext("2d")
-      .drawImage(canvasRef.current, canvasRef.current.width * -1, 0);
+    // // canvasRef2.current.getContext("2d").rotate((270 * Math.PI) / 180);
+    // canvasRef2.current
+    //   .getContext("2d")
+    //   .drawImage(canvasRef.current, canvasRef.current.width * -1, 0);
 
     //캔버스의 값을 이미지화
-    setOriImgSrc(canvasRef2.current.toDataURL("image/webp"));
+    setOriImgSrc(canvasRef.current.toDataURL("image/webp"));
     endCamera();
   }
 
@@ -139,7 +141,7 @@ export default function PictureBox({ setOriImgSrc, cameraEvent }) {
         <StyledCanvas ref={canvasRef2}></StyledCanvas>
         <StyledCamera>
           <StyledVideo ref={videoRef} autoPlay playsInline></StyledVideo>
-          <StyledBtn onClick={snapShot}>사진촬영</StyledBtn>
+          <StyledBtn onClick={snapShot}></StyledBtn>
         </StyledCamera>
       </div>
     </Back>
