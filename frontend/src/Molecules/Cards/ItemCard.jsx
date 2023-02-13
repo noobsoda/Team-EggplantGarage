@@ -22,11 +22,8 @@ const StyledItemCard = styled.div`
   flex-direction: row;
   column-gap: 8px;
   justify-content: space-between;
-<<<<<<< HEAD
   box-shadow: 0px 0px 20px ${({ theme }) => theme.color.lightgrey};
-=======
   overflow: hidden;
->>>>>>> develop
 `;
 const Mask = styled.div`
   position: absolute;
@@ -84,16 +81,19 @@ export default function ItemCard({
   const senderId = userInfo.id;
   const [chatRoomId, setChatRoomId] = useState(item.chatRoomId);
   const createChatRoomAndMove = (receiverId) => {
-    createChatRoom({ senderId: senderId, receiverId: receiverId }, ({ data }) => {
-      navigate(`/chat/room`, {
-        state: {
-          chatRoomId: data.chatRoomId,
-          receiverId: item.otherId,
-          receiverName: item.otherName,
-        },
-      });
-      window.location.reload(`/chat/room`);
-    });
+    createChatRoom(
+      { senderId: senderId, receiverId: receiverId },
+      ({ data }) => {
+        navigate(`/chat/room`, {
+          state: {
+            chatRoomId: data.chatRoomId,
+            receiverId: item.otherId,
+            receiverName: item.otherName,
+          },
+        });
+        window.location.reload(`/chat/room`);
+      }
+    );
   };
   return (
     <StyledItemCard>
@@ -109,7 +109,9 @@ export default function ItemCard({
       <ItemInfo>
         <div className="body1-header">{item.productName || "제품명"}</div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div className="body1-regular">{/* {isSeller ? "제안자" : item.otherId} */}</div>
+          <div className="body1-regular">
+            {/* {isSeller ? "제안자" : item.otherId} */}
+          </div>
 
           <div className="body1-regular">
             {isSaleList ? item.initialPrice : item.soldPrice || 0}원
@@ -125,7 +127,11 @@ export default function ItemCard({
           ) : (
             <></>
           )}
-          {buttonType === "saleshistory" ? <ExtraSmallButton name="한개" /> : <></>}
+          {buttonType === "saleshistory" ? (
+            <ExtraSmallButton name="한개" />
+          ) : (
+            <></>
+          )}
           {buttonType === "purchasedhistory" ? (
             <ExtraSmallButton
               name="대화하기"

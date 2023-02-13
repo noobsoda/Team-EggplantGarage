@@ -57,14 +57,16 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
   function bundle() {
     postBundle(
       {
-        productIdList: productCheck.filter((ele) => ele.check).map((ele) => ele.id), //check한것만 묶음 요청
-        buyerId: userId,
-        soldPrice: bundlePrice,
-        liveId: liveId,
+        productIdList: productCheck
+          .filter((ele) => ele.check)
+          .map((ele) => ele.id), //check한것만 묶음 요청
+        buyerId: userId, //구매자 아이디
+        soldPrice: bundlePrice, //가격 제안
+        liveId: liveId, //라이브 아이디
       },
       () => {
         //번들 요청 성공
-        setBundlePrice(0); //가격 리셋
+        setBundlePrice(0); //가격 리셋ㅡ
         //체크한것 다시 해제
         setProductCheck(
           productCheck.map((ele) => {

@@ -44,8 +44,10 @@ export default function BundleBox({
       {children}
       <Status>
         <InfoBox>
-          <div className="body1-header">{isSeller ? `제안자 : ${bundleUser}` : " "}</div>
-          <div className="body1-header">{bundlePrice} 제안가격</div>
+          <div className="body1-header">
+            {isSeller ? `제안자 : ${bundleUser}` : " "}
+          </div>
+          <div className="body1-header">제안가격 {bundlePrice} 원 </div>
         </InfoBox>
         <BtnBox>
           {isSeller ? (
@@ -58,7 +60,10 @@ export default function BundleBox({
           {isPay ? (
             <></>
           ) : (
-            <ExtraSmallButton name={isSeller ? "거절" : "취소"} buttonClick={reject} />
+            <ExtraSmallButton
+              name={isSeller ? "거절" : "취소"}
+              buttonClick={reject}
+            />
           )}
         </BtnBox>
       </Status>
