@@ -5,7 +5,13 @@ import Checkbox from "../../Molecules/Input/CheckBox";
 
 import styled from "styled-components";
 const StyledBox = styled.div`
-  width: 360px;
+  /* width: 360px; */
+  /* flex: 1 1; */
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* align-items: center; */
+  row-gap: 8px;
 `;
 
 const StyledNoneCanvas = styled.canvas`
@@ -13,12 +19,11 @@ const StyledNoneCanvas = styled.canvas`
 `;
 
 const StyledCanvas = styled.canvas`
-  width: 360px;
+  width: 100%;
 `;
 
 const StyledResultBox = styled.div`
-  margin-left: 40px;
-  width: 280px;
+  width: 100%;
 `;
 
 export default function ProductSubmitBox({
@@ -236,7 +241,15 @@ export default function ProductSubmitBox({
 
   return (
     <StyledBox>
-      <StyledNoneCanvas ref={originCanvas}></StyledNoneCanvas>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <StyledNoneCanvas ref={originCanvas}></StyledNoneCanvas>
+      </div>
       <div>
         <StyledCanvas
           ref={drawCanvas}

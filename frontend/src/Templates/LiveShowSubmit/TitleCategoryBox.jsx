@@ -4,8 +4,12 @@ import CategorySelect from "../../Molecules/Category/CategorySelect";
 import styled from "styled-components";
 
 const StyledBox = styled.div`
-  width: 280px;
-  margin: 24px 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  /* flex: 1 1; */
+  /* margin: 24px 24px; */
 `;
 
 const StyledHead = styled.h1`

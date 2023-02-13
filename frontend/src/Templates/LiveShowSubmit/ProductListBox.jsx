@@ -3,14 +3,17 @@ import ProductBox from "../../Molecules/Cards/ProductBox";
 import styled from "styled-components";
 
 const StyledBox = styled.div`
-  width: 282px;
-  margin: 24px 40px;
+  width: 100%;
+  /* flex: 1 1; */
+  /* width: 282px;
+  margin: 24px 40px; */
 `;
 const StyledHead = styled.h1`
   padding-bottom: 16px;
 `;
 
 const StyledListBox = styled.div`
+  width: 100%;
   height: 384px;
   overflow: scroll;
 `;
