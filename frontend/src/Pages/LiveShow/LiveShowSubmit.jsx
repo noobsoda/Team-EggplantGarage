@@ -208,8 +208,7 @@ export default function LiveShowSubmit() {
 
         navigate(`/seller/${liveId}`);
       },
-      (e) => {
-        console.log(e);
+      () => {
         console.warn("live fail");
       }
     );
