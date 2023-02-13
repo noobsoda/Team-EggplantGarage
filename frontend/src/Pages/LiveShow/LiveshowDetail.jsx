@@ -42,7 +42,7 @@ export default function LiveshowDetail() {
                 item={item}
                 buttonType={"purchasedhistory"}
                 isSeller={true}
-                isReview={false}
+                isReview={item.myReviewId === 0}
               />
             );
           })}

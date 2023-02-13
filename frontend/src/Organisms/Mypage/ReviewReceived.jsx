@@ -16,7 +16,7 @@ export default function ReviewReceived(review, otherName) {
   return (
     <StyledReview>
       <div className="page-header">{otherName}가 남긴 후기</div>
-      <Rating readOnly size="large" value={review && review.score} />
+      <Rating readOnly size="large" value={review ? review.score : 5} />
       <ReviewTextBox conten={review && review.content}></ReviewTextBox>
     </StyledReview>
   );

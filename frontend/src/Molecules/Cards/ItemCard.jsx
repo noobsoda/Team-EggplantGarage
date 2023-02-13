@@ -158,7 +158,7 @@ export default function ItemCard({
               name="후기작성"
               buttonClick={() => {
                 navigate("/writereview", {
-                  state: { productId: item.id, isSellr: isSeller },
+                  state: { productId: item.id, isSeller: isSeller },
                 });
               }}
             />
