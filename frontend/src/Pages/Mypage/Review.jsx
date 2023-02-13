@@ -18,17 +18,20 @@ export default function Review() {
   const [otherName, setOtherName] = useState(undefined);
   useEffect(() => {
     if (initLocation.state !== null) {
+      console.log(initLocation.state);
       setMyReviewId(initLocation.state.myReviewId);
       setOtherReviewId(initLocation.state.otherReviewId);
       setOtherName(initLocation.state.otherName);
     }
 
-    getReviewMine(myReviewId, ({ data }) => {
+    getReviewMine(initLocation.state.myReviewId, ({ data }) => {
+      // console.log(data);
       setMyReviewContent(data);
     });
-    getReviewOther(otherReviewId, ({ data }) => {
-      setOtherReviewContent(data);
-    });
+    if (initLocation.state.otherReviewId !== 0)
+      getReviewOther(initLocation.state.otherReviewId, ({ data }) => {
+        setOtherReviewContent(data);
+      });
   }, []);
   return (
     <Page>
@@ -37,6 +40,7 @@ export default function Review() {
         {myreview ? (
           <ReviewSent
             review={myReviewContent}
+            isReceived={otherReviewId !== 0}
             otherName={otherName}
             buttonClick={() => {
               setMyreview(false);

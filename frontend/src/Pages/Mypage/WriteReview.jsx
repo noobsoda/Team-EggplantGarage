@@ -6,14 +6,15 @@ import TextInput from "../../Atoms/Inputs/TextInput";
 import Rating from "@mui/material/Rating";
 import BigBtn from "../../Atoms/Buttons/BigBtn";
 import ItemCard from "../../Molecules/Cards/ItemCard";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { postReview } from "../../util/api/reviewApi";
 
 export default function WriteReview() {
+  const navigate = useNavigate();
   const [value, setValue] = React.useState(5);
-  const [productId, setProductId] = useState(undefined);
-  const [isSeller, setIsSeller] = useState(undefined);
-  const [content, setContent] = useState(undefined);
+  const [productId, setProductId] = useState(0);
+  const [isSeller, setIsSeller] = useState(true);
+  const [content, setContent] = useState("");
   //   const [txt, setTxt] = React.useState("");
   //value에 레이팅이 기록된다.
   //mui 사용해서 install 해야함..
@@ -24,8 +25,10 @@ export default function WriteReview() {
       setProductId(initLocation.state.productId);
       setIsSeller(initLocation.state.isSeller);
     }
+  }, []);
+  const writeReview = () => {
     let review = {
-      content: "리뷰 내용입니다.",
+      content: content,
       productId: productId,
       score: value,
       seller: isSeller,
@@ -35,14 +38,13 @@ export default function WriteReview() {
       console.log(review);
       console.log(data); // 입력 성공인지 체크해보자
     });
-  }, [value, isSeller, productId]);
-
+    navigate("/mypage");
+  };
   return (
     <Page>
       <Header isName={true} headerName="리뷰작성" />
       <Body>
         <div className="page-header">상대방</div>
-        <ItemCard />
         <Rating
           size="large"
           value={value}
@@ -51,12 +53,12 @@ export default function WriteReview() {
           }}
         />
         <TextInput
-          onChange={(event, value) => {
-            setContent(value);
+          onChange={(e) => {
+            setContent(e.target.value);
           }}
           placehold={"리뷰를 작성해주세요 (140자 이하)"}
         />
-        <BigBtn name="작성완료" />
+        <BigBtn buttonClick={writeReview} name="작성완료" />
       </Body>
     </Page>
   );
