@@ -18,6 +18,19 @@ import { getLives } from "../../util/api/liveApi";
 import { useDispatch } from "react-redux";
 import { setLocation } from "../../store/location";
 
+const StyledPageHeader = styled.div`
+  margin: 8px 4px 4px 0px;
+`;
+
+const StyledHr = styled.hr`
+  background-color: #DDDDDD;
+  padding: 0;
+  margin: 8px -24px 4px -24px;
+  border: 0;
+  height: 1px;
+  justify-content: center;
+`;
+
 export default function Main() {
   const isLogin = useSelector(checkIsLogin);
 
@@ -77,18 +90,15 @@ export default function Main() {
       {/* 헤더 */}
       <Header isLogo={true} />
       <Body>
-        <div className="page-header" style={{ marginBottom: "8px" }}>
-          주변 라이브쇼
-        </div>
+        <StyledPageHeader className="page-header">주변 라이브쇼</StyledPageHeader>
         <Container>
           {aroundLives &&
             aroundLives.map((show) => {
               return <LiveshowItem key={show.id} show={show} isViewer={true} />;
             })}
         </Container>
-        <div className="page-header" style={{ marginBottom: "8px" }}>
-          전국 라이브쇼
-        </div>
+        <StyledHr/>
+        <StyledPageHeader className="page-header">전국 라이브쇼</StyledPageHeader>
         <CategoryNav setSelected={setSelected} />
         <Container>
           {allLives &&

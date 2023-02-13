@@ -20,6 +20,12 @@ const InfoBox = styled.div`
   display: flex;
   flex-direction: column;
 `;
+const StyledTitle = styled.div`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: clip;
+`;
+
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
 */
@@ -40,22 +46,10 @@ export default function LiveshowItem({ isSearch, isViewer, show, isHistory }) {
   }
   return (
     <StyledLiveshowItem isSearch={isSearch} onClick={goTo}>
-      <LiveshowCard
-        viewerCnt={show.joinUsersNum}
-        imgSrc={show.thumbnailUrl}
-        isHistory={isHistory}
-      />
+      <LiveshowCard viewerCnt={show.joinUsersNum} imgSrc={show.thumbnailUrl} isHistory={isHistory} />
       <InfoBox>
-        {show && (
-          <div className="body1-header">{show.title || "라이브방 제목"}</div>
-        )}
-        {show && (
-          <div className="body1-regular">
-            {isHistory
-              ? show.createdAt || "판매날짜"
-              : show.owner || "판매자명"}
-          </div>
-        )}
+        {show && <StyledTitle className="body1-header">{show.title || "라이브방 제목"}</StyledTitle>}
+        {show && <div className="body1-regular">{isHistory ? show.createdAt || "판매날짜" : show.owner || "판매자명"}</div>}
       </InfoBox>
     </StyledLiveshowItem>
   );

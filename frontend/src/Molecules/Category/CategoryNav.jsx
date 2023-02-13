@@ -9,6 +9,7 @@ const StyledContainer = styled.div`
   // row-gap: 8px;
   column-gap: 8px;
   overflow-x: scroll;
+  margin: auto 0;
   // height: 16px;
 `;
 /*
