@@ -5,6 +5,8 @@ import CategoryCheckBtn from "../../Atoms/Buttons/CategoryCheckBtn";
 import Modal from "../../Atoms/Modal/Modal";
 import ModalBody from "../../Templates/Modal/ModalBody";
 import { useState } from "react";
+import { categoriesAll } from "../../util/category";
+
 const Header = styled.div`
   width: 360px;
   display: flex;
@@ -17,29 +19,7 @@ const CloseBtn = styled.button`
   background-repeat: no-repeat;
   background-position: 16px 0px;
 `;
-const categories = [
-  "전체",
-  "인기",
-  "디지털기기",
-  "생활가전",
-  "가구",
-  "생활/주방",
-  "유아용품",
-  "유아도서",
-  "여성의류",
-  "여성잡화",
-  "남성의류",
-  "남성잡화",
-  "뷰티/미용",
-  "스포츠",
-  "취미/게임",
-  "음반",
-  "도서",
-  "티켓",
-  "반려동물",
-  "식물",
-  "기타",
-];
+
 const CBox = styled.div`
   display: flex;
   flex-direction: column;
@@ -80,7 +60,7 @@ export default function ModalSetCategory({ setModalOpen, select }) {
       </Header>
       <ModalBody>
         <CBox>
-          {categories.map((text, index) => {
+          {categoriesAll.map((text, index) => {
             return (
               <CategoryCheckBtn
                 key={index}
