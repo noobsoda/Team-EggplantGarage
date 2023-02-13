@@ -1,21 +1,37 @@
 import React, { useEffect } from "react";
 import BundleBox from "../../../Molecules/Cards/BundleBox";
 import ItemCard from "../../../Molecules/Cards/ItemCard";
-import { setBundleRefuse, setBundleApproval } from "../../../util/api/productApi";
+import {
+  setBundleRefuse,
+  setBundleCancel,
+  setBundleApproval,
+} from "../../../util/api/productApi";
 
 export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
   useEffect(() => {
     getSuggest();
   }, []);
 
-  function bundleCancle(bundleId) {
+  function bundleRefuse(bundleId) {
     setBundleRefuse(
       bundleId,
       () => {
         getSuggest();
       },
       () => {
-        console.warn("bundle reject fail");
+        console.warn("bundle refuce fail");
+      }
+    );
+  }
+
+  function bundleCancel(bundleId) {
+    setBundleCancel(
+      bundleId,
+      () => {
+        getSuggest();
+      },
+      () => {
+        console.warn("bundle cancle fail");
       }
     );
   }
@@ -33,14 +49,15 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
   return (
     <>
       {suggestList.map((items, i) => {
-        console.log(items);
         return (
           <BundleBox
             key={i}
             isSeller={isSeller}
             bundleUser={items[0].nickname}
-            reject={() => bundleCancle(items[0].bundleId)}
+            cancel={() => bundleCancel(items[0].bundleId)}
+            refuse={() => bundleRefuse(items[0].bundleId)}
             accept={() => bundleAccept(items[0].bundleId)}
+            bundlePrice={items[0].totalPrice}
           >
             {items
               .map((ele) => {

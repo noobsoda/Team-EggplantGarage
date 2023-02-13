@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 //redux
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { checkIsLogin } from "../../store/user";
+import { setLocation } from "../../store/location";
 
 import Header from "../../Templates/Layout/Header";
 import Body from "../../Templates/Layout/Body";
@@ -11,19 +13,15 @@ import styled from "styled-components";
 import LiveshowItem from "../../Molecules/Cards/LiveshowItem";
 import LiveStartBtn from "../../Atoms/IconButtons/LiveStartBtn";
 import CategoryNav from "../../Molecules/Category/CategoryNav";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import Container from "../../Templates/Layout/Container";
 import { getLives } from "../../util/api/liveApi";
-import { useDispatch } from "react-redux";
-import { setLocation } from "../../store/location";
 
 const StyledPageHeader = styled.div`
   margin: 8px 4px 4px 0px;
 `;
 
 const StyledHr = styled.hr`
-  background-color: #DDDDDD;
+  background-color: #dddddd;
   padding: 0;
   margin: 8px -24px 4px -24px;
   border: 0;
@@ -42,7 +40,7 @@ export default function Main() {
   //liveContentList 까지 가야됨.
   const navigate = useNavigate();
   function startLive() {
-    navigate("/liveshowsubmit");
+    navigate("/submit");
   }
   const dispatch = useDispatch();
 
@@ -90,15 +88,19 @@ export default function Main() {
       {/* 헤더 */}
       <Header isLogo={true} />
       <Body>
-        <StyledPageHeader className="page-header">주변 라이브쇼</StyledPageHeader>
+        <StyledPageHeader className="page-header">
+          주변 라이브쇼
+        </StyledPageHeader>
         <Container>
           {aroundLives &&
             aroundLives.map((show) => {
               return <LiveshowItem key={show.id} show={show} isViewer={true} />;
             })}
         </Container>
-        <StyledHr/>
-        <StyledPageHeader className="page-header">전국 라이브쇼</StyledPageHeader>
+        <StyledHr />
+        <StyledPageHeader className="page-header">
+          전국 라이브쇼
+        </StyledPageHeader>
         <CategoryNav setSelected={setSelected} />
         <Container>
           {allLives &&

@@ -4,6 +4,7 @@ import ItemCard from "../../../Molecules/Cards/ItemCard";
 import BigBtn from "../../../Atoms/Buttons/BigBtn";
 import BigInput from "../../../Atoms/Inputs/BigInput";
 import { postBundle } from "../../../util/api/productApi";
+import { isNumber } from "../../../util/regex";
 
 const InfoBox = styled.div`
   padding: 16px 0;
@@ -55,16 +56,25 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
    * 지금까지 선택한 물품 구매 요청
    */
   function bundle() {
+    //제안 가격에 숫자만 입력햇는지 확인
+    let price = 0;
+    if (bundlePrice !== "" && !bundlePrice.match(isNumber)) {
+      alert("숫자만 입력해주세요");
+      return;
+    }
+    price = bundlePrice;
     postBundle(
       {
-        productIdList: productCheck.filter((ele) => ele.check).map((ele) => ele.id), //check한것만 묶음 요청
-        buyerId: userId,
-        soldPrice: bundlePrice,
-        liveId: liveId,
+        productIdList: productCheck
+          .filter((ele) => ele.check)
+          .map((ele) => ele.id), //check한것만 묶음 요청
+        buyerId: userId, //구매자 아이디
+        soldPrice: price, //가격 제안
+        liveId: liveId, //라이브 아이디
       },
       () => {
         //번들 요청 성공
-        setBundlePrice(0); //가격 리셋
+        setBundlePrice(0); //가격 리셋ㅡ
         //체크한것 다시 해제
         setProductCheck(
           productCheck.map((ele) => {

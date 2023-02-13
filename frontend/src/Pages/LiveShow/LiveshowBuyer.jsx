@@ -18,10 +18,17 @@ import Buyer from "../../Templates/LiveShow/Buyer";
 
 import getStompClient from "../../util/socket";
 import { getLiveDetail } from "../../util/api/liveApi";
-import { isFavoriteLive, deleteFavoriteLive, addFavoriteLive } from "../../util/api/favoriteApi";
+import {
+  isFavoriteLive,
+  deleteFavoriteLive,
+  addFavoriteLive,
+} from "../../util/api/favoriteApi";
 import { exitLive } from "../../util/api/liveApi";
 
-import { getBuyerSuggestList, getBuyerSuggestListPayWait } from "../../util/api/productApi";
+import {
+  getBuyerSuggestList,
+  getBuyerSuggestListPayWait,
+} from "../../util/api/productApi";
 
 import useInterval from "../../hook/useInterval";
 
@@ -145,6 +152,12 @@ export default function LiveshowBuyer() {
     getLiveDetail(
       liveId,
       ({ data }) => {
+        //라이브 중인지 확인
+        if (!data.live) {
+          alert("종료된 방입니다.");
+          navigate("/");
+          return;
+        }
         setLiveInfo(data);
       },
       () => {
@@ -200,13 +213,17 @@ export default function LiveshowBuyer() {
       <Buyer liveId={liveId} />
       <LiveLayout>
         <StyledHeader>
-          <div style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}
+          >
             <Title className="show-header">{liveInfo.title}</Title>
             <div className="body1-header" style={{ color: "white" }}>
-              판매자명
+              판매자 {liveInfo.seller_nickname} 님
             </div>
             <ViewerCntBox
-              viewerCnt={liveInfo.userEntryResList && liveInfo.userEntryResList.length}
+              viewerCnt={
+                liveInfo.userEntryResList && liveInfo.userEntryResList.length
+              }
             />
           </div>
           <StyledSide>

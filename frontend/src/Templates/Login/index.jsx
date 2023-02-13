@@ -52,9 +52,10 @@ const LoginBox = styled.div`
 export default function Login() {
   const navigate = useNavigate();
 
-  const [check, setCheck] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const [isError, setIsError] = useState(false);
 
   //redux
   const dispatch = useDispatch();
@@ -72,7 +73,9 @@ export default function Login() {
       return;
     }
 
-    dispatch(userConfirm({ email: email, password: password }, navigate));
+    dispatch(
+      userConfirm({ email: email, password: password }, navigate, setIsError)
+    );
   }
 
   function signUpSubmit() {
@@ -105,15 +108,13 @@ export default function Login() {
               type="password"
             />
           </StyledIdPwBox>
-          <CheckBox
-            id="id-save"
-            text=" 아이디 저장"
-            textSize="body2-regular"
-            check={check}
-            setCheck={setCheck}
-          />
+
           <StyledRowCenter>
-            <RedSpan text="아이디 또는 비밀번호가 일치 하지 않습니다." />
+            {isError ? (
+              <RedSpan text="아이디 또는 비밀번호가 일치 하지 않습니다." />
+            ) : (
+              <></>
+            )}
           </StyledRowCenter>
         </LoginBox>
         <StyledRowCenter>
@@ -125,7 +126,6 @@ export default function Login() {
       </StyledColumnDirection>
 
       <StyledRowCenter>
-        {/* <Link link="/signup" value="회원가입" /> */}
         <Link link="/findpass" value="비밀번호 찾기" />
       </StyledRowCenter>
     </StyledLoginBox>

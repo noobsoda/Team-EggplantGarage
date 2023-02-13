@@ -46,7 +46,7 @@ export const { setIsLogin, setIsLoginError, setIsValidToken, setUserInfo } =
  * @param {*} userData {email:email, password:password}
  * @returns
  */
-export const userConfirm = (userData, navigate) => (dispatch) => {
+export const userConfirm = (userData, navigate, setError) => (dispatch) => {
   login(
     userData,
     ({ data }) => {
@@ -62,12 +62,13 @@ export const userConfirm = (userData, navigate) => (dispatch) => {
         ({ data }) => {
           dispatch(setUserInfo(data));
         },
-        () => { }
+        () => {}
       );
       navigate("/");
     },
     () => {
-      console.log("에러요");
+      setError(true);
+      console.warn("login error");
     }
   );
 };

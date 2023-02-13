@@ -3,9 +3,8 @@ import styled from "styled-components";
 
 import InputBox from "../../Atoms/Inputs/BigInput";
 
-import Checkbox from "../../Molecules/Input/CheckBox";
-
 import CropBox from "../../Organisms/LiveSubmit/CropBox";
+import { isNumber } from "../../util/regex";
 
 const StyledBox = styled.div`
   /* flex: 1 1; */
@@ -51,6 +50,12 @@ export default function ProductModifyBox({
     //제목 확인
     if (name === "") {
       alert("제목을 입력해주세요");
+      return;
+    }
+    //가격 숫자만 입력
+    //숫자만 입력햇는지 확인
+    if (price !== "" && !price.match(isNumber)) {
+      alert("숫자만 입력해주세요");
       return;
     }
 

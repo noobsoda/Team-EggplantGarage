@@ -5,7 +5,7 @@ import InputButtonBox from "../../Molecules/Input/InputButtonBox";
 import BigInputBox from "../../Atoms/Inputs/BigInput";
 import BigColorBtn from "../../Atoms/Buttons/BigBtn";
 import styled from "styled-components";
-import { passwordReg, emailReg } from "../../util/regex";
+import { passwordReg, emailReg, isNumber } from "../../util/regex";
 import { emailCheck, nickNameCheck, signup } from "../../util/api/userApi";
 
 const StyledMainBody = styled.div`
@@ -131,6 +131,11 @@ export default function SignUpEmail() {
       return;
     }
 
+    //전화번호 숫자만 입력
+    if (phone.value !== "" && !phone.value.match(isNumber)) {
+      alert("전화번호는 숫자만 입력해주세요");
+      return;
+    }
     //회원가입 진행
     signup(
       {

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
+import { getLocation } from "../../store/location";
 
 import styled from "styled-components";
 import MidBtn from "../../Atoms/Buttons/MediumBtn";
@@ -40,6 +41,7 @@ const BtnFlex = styled.div`
 
 export default function LiveShowSubmit() {
   const userInfo = useSelector(checkUserInfo);
+  const location = useSelector(getLocation);
   const navigate = useNavigate();
 
   const [imgSrc, setImgSrc] = useState("//:0"); //회전후 결과를 담는 canvas
@@ -131,8 +133,8 @@ export default function LiveShowSubmit() {
       description: "",
       url: `${process.env.REACT_APP_API_URL}test/${id}`,
       live: true,
-      latitude: "",
-      longitude: "",
+      latitude: location.lat,
+      longitude: location.lng,
       sessionId: id,
       sellerId: id,
     };
@@ -200,10 +202,9 @@ export default function LiveShowSubmit() {
           }
         );
 
-        navigate(`/liveshowseller/${liveId}`);
+        navigate(`/seller/${liveId}`);
       },
-      (e) => {
-        console.log(e);
+      () => {
         console.warn("live fail");
       }
     );

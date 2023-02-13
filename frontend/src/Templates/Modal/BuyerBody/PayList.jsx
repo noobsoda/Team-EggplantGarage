@@ -24,7 +24,12 @@ export default function PayList({ payList, getPayList }) {
       {payList.map((items, i) => {
         console.log(items);
         return (
-          <BundleBox key={i} isPay={true} accept={() => bundlePay(items[0].bundleId)}>
+          <BundleBox
+            key={i}
+            isPay={true}
+            bundlePrice={items[0].totalPrice}
+            accept={() => bundlePay(items[0].bundleId)}
+          >
             {items
               .map((ele) => {
                 ele["key"] = ele.id;

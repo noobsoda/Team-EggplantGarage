@@ -41,14 +41,11 @@ const Mask = styled.div`
   color: red;
 `;
 const ItemImage = styled.div`
-  width: 72px;
-  height: 72px;
-  border-radius: 8px 0px 0px 8px;
+  border-radius: 10px 0px 0px 10px;
   box-sizing: border-box;
-  background: url(${(props) => props.imgSrc}) no-repeat 0px 0px;
-  /* background: url(./image/item-sample.png); */
-  background-size: cover;
+  overflow: hidden;
 `;
+
 const ItemInfo = styled.div`
   width: calc(100% - 160px);
   height: 72px;
@@ -97,14 +94,16 @@ export default function ItemCard({
   };
   return (
     <StyledItemCard>
-      <ImageBox
-        imgSrc={getImage(item.imageUrl)}
-        leftTopX={item.leftTopX}
-        rightBottomX={item.rightBottomX}
-        leftTopY={item.leftTopY}
-        rightBottomY={item.rightBottomY}
-        boxSize="72"
-      />
+      <ItemImage>
+        <ImageBox
+          imgSrc={getImage(item.imageUrl)}
+          leftTopX={item.leftTopX}
+          rightBottomX={item.rightBottomX}
+          leftTopY={item.leftTopY}
+          rightBottomY={item.rightBottomY}
+          boxSize="72"
+        />
+      </ItemImage>
       <ItemInfo>
         <div className="body1-header">{item.productName || "제품명"}</div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
