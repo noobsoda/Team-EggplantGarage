@@ -9,7 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserLiveRepository extends JpaRepository<UserLive, Long> {
-    Optional<List<UserLive>> findAllByUser_idAndLive_id(Long userId, Long liveId);
+    List<UserLive> findAllByUser_idAndLive_id(Long userId, Long liveId);
     List<UserLive> findAllByLive_id(Long liveId);
 
 }

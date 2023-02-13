@@ -14,6 +14,7 @@ import lombok.Setter;
 @Setter
 @ApiModel("BaseResponseBody")
 public class BaseResponseBody {
+    Boolean isSuccess = null;
     @ApiModelProperty(name = "응답 메시지", example = "정상")
     String message = null;
     @ApiModelProperty(name = "응답 코드", example = "200")
@@ -26,15 +27,18 @@ public class BaseResponseBody {
         this.statusCode = statusCode;
     }
 
-    public BaseResponseBody(Integer statusCode, String message) {
+    public BaseResponseBody(Integer statusCode, String message, Boolean isSuccess) {
         this.statusCode = statusCode;
         this.message = message;
+        this.isSuccess = isSuccess;
     }
 
-    public static BaseResponseBody of(Integer statusCode, String message) {
+    public static BaseResponseBody of(Integer statusCode, String message, Boolean isSuccess) {
         BaseResponseBody body = new BaseResponseBody();
         body.message = message;
         body.statusCode = statusCode;
+        body.isSuccess = isSuccess;
+
         return body;
     }
 }

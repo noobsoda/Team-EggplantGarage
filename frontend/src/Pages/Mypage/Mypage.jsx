@@ -38,18 +38,19 @@ const SelectBar = styled.div`
   border-radius: 4px;
   justify-content: space-around;
   align-items: center;
-  // background-color: ${({ theme }) => theme.color.red};
+  border-bottom: solid;
+  border-bottom-color: ${({ theme }) => theme.color.lightgrey};
+  border-top: solid;
+  border-top-color: ${({ theme }) => theme.color.lightgrey};  
 `;
 
 const StyledBtn = styled.button`
   height: 80%;
-  width: 46%;
-  border-radius: 4px;
-  background-color: ${({ theme }) => theme.color.lightgrey};
+  width: 50%;
+  color: ${({ theme }) => theme.color.lightgrey};
   ${(props) =>
     props.selected &&
     css`
-      background-color: ${({ theme }) => theme.color.graypurple};
       color: black;
     `};
 `;

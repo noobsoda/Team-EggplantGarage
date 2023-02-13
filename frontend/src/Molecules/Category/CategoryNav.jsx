@@ -16,6 +16,8 @@ const StyledContainer = styled.div`
 */
 export default function CategoryNav({ setSelected }) {
   //useState , event
+  const [select, setSelect] = useState("인기");
+
   const categories = [
     "인기",
     "디지털기기",
@@ -48,7 +50,9 @@ export default function CategoryNav({ setSelected }) {
             name={name}
             buttonClick={() => {
               setSelected(name);
+              setSelect(name);
             }}
+            isSelected={name === select}
           />
         );
       })}

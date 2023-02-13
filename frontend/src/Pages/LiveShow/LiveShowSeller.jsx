@@ -115,6 +115,18 @@ export default function LiveshowBuyer(toggleCamera) {
       }
     );
   }, []);
+  //2초마다 아...유저수만 받아오게 하고싶긴한데
+  useInterval(() => {
+    getLiveDetail(
+      liveId,
+      ({ data }) => {
+        setLiveInfo(data);
+      },
+      () => {
+        console.warn("live info fail");
+      }
+    );
+  }, 2000);
 
   return (
     <StyledPage>

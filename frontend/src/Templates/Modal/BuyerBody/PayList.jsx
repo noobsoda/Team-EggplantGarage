@@ -1,47 +1,30 @@
 import React, { useEffect } from "react";
 import BundleBox from "../../../Molecules/Cards/BundleBox";
 import ItemCard from "../../../Molecules/Cards/ItemCard";
-import { setBundleRefuse, setBundleApproval } from "../../../util/api/productApi";
+import { kakaopay } from "../../../util/api/productApi";
+import { isMobile } from "../../../util";
 
-export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
+export default function PayList({ payList, getPayList }) {
   useEffect(() => {
-    getSuggest();
+    getPayList();
   }, []);
-
-  function bundleCancle(bundleId) {
-    setBundleRefuse(
-      bundleId,
-      () => {
-        getSuggest();
+  function bundlePay(bundleId) {
+    kakaopay(
+      { bundleId: bundleId, pcOrMobile: isMobile() ? "mobile" : "pc" },
+      ({ data }) => {
+        window.open(data.split("redirect:")[1]);
       },
       () => {
-        console.warn("bundle reject fail");
-      }
-    );
-  }
-  function bundleAccept(bundleId) {
-    setBundleApproval(
-      bundleId,
-      () => {
-        getSuggest();
-      },
-      () => {
-        console.warn("bundle accept fail");
+        console.warn("pay fail");
       }
     );
   }
   return (
     <>
-      {suggestList.map((items, i) => {
+      {payList.map((items, i) => {
         console.log(items);
         return (
-          <BundleBox
-            key={i}
-            isSeller={isSeller}
-            bundleUser={items[0].nickname}
-            reject={() => bundleCancle(items[0].bundleId)}
-            accept={() => bundleAccept(items[0].bundleId)}
-          >
+          <BundleBox key={i} isPay={true} accept={() => bundlePay(items[0].bundleId)}>
             {items
               .map((ele) => {
                 ele["key"] = ele.id;
@@ -55,8 +38,8 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
                     key={item.productName}
                     item={item}
                     isBundle={true}
-                    isSeller={isSeller}
                     isSaleList={item.isSaleList}
+                    isPay={true}
                   />
                 );
               })}

@@ -3,24 +3,21 @@ package com.ssafy.api.controller;
 import com.ssafy.api.request.BundleReq;
 import com.ssafy.api.response.BundledItemsProductRes;
 import com.ssafy.api.service.BundleService;
-import com.ssafy.db.entity.Bundle;
 import com.ssafy.db.entity.Product;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import retrofit2.http.Path;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 @Log
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/bundle")
 public class BundleController {
 
-    @Autowired
-    BundleService bundleService;
+    private final BundleService bundleService;
 
     // 구매자가 가격 제안함
     @PostMapping()
@@ -73,21 +70,21 @@ public class BundleController {
     }
 
     // 승인
-    @PutMapping("/approval/{bundleId}")
+    @PatchMapping("/approval/{bundleId}")
     public ResponseEntity<?> approvalBundle(@PathVariable("bundleId") Long bundleId) {
         bundleService.approvalBundle(bundleId);
         return ResponseEntity.status(200).body("승인");
     }
 
     // 거부
-    @PutMapping("/refuse/{bundleId}")
+    @PatchMapping("/refuse/{bundleId}")
     public ResponseEntity<?> refuseBundle(@PathVariable("bundleId") Long bundleId) {
         bundleService.refuseBundle(bundleId);
         return ResponseEntity.status(200).body("거부");
     }
 
     // 취소
-    @PutMapping("/cancel/{bundleId}")
+    @PatchMapping("/cancel/{bundleId}")
     public ResponseEntity<?> cancelBundle(@PathVariable("bundleId") Long bundleId) {
         bundleService.cancelBundle(bundleId);
         return ResponseEntity.status(200).body("취소");

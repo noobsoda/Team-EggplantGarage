@@ -8,15 +8,18 @@ const StyledCanvas = styled.canvas`
 const StyledCamera = styled.div`
   position: absolute;
   top: 0;
-  width: 360px;
-  height: 640px;
+  /* width: 360px;
+  height: 640px; */
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   overflow: hidden;
   z-index: 10;
 `;
 const StyledVideo = styled.video`
-  height: 640px;
+  /* height: 640px; */
+  height: 100%;
 `;
 
 const StyledBtn = styled.button`

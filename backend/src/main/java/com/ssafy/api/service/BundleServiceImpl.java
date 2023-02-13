@@ -6,6 +6,7 @@ import com.ssafy.db.entity.Bundle;
 import com.ssafy.db.entity.BundledItemsRelation;
 import com.ssafy.db.entity.Product;
 import com.ssafy.db.repository.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,18 +17,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Log
+@RequiredArgsConstructor
 @Service("bundleService")
 public class BundleServiceImpl implements BundleService {
-    @Autowired
-    BundleRepository bundleRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private LiveRepository liveRepository;
-    @Autowired
-    private BundledItemsRelationRepository bundledItemsRelationRepository;
+    private final BundleRepository bundleRepository;
+    private final UserRepository userRepository;
+    private final ProductRepository productRepository;
+    private final LiveRepository liveRepository;
+    private final BundledItemsRelationRepository bundledItemsRelationRepository;
 
     @Override
     public Long addBundle(BundleReq bundleReq) {
@@ -84,7 +81,7 @@ public class BundleServiceImpl implements BundleService {
 
                 BundledItemsProductRes res = new BundledItemsProductRes(
                         id, product.getName(),
-                        product.getSoldPrice(), product.isPaid(),
+                        product.getSoldPrice(),product.getInitialPrice(), product.isPaid(),
                         product.getLeftTopX(), product.getLeftTopY(),
                         product.getRightBottomX(), product.getRightBottomY(),
                         product.getImageUrl(), product.getBuyerId(),
@@ -154,22 +151,9 @@ public class BundleServiceImpl implements BundleService {
         for(int i = 0; i < size; i++) {
             Long productId = bundledItemsRelationList.get().get(i).getProduct().getId();
             Product product = productRepository.findById(productId).get();
-            System.out.println(product.getLive());
-            System.out.println("product.getLive(): " + product.getLive().getId() + " " + product.getLive().getUser().getId());
-            System.out.println("상품명: " + product.getName());
 
-//            product.setName(product.getName());
-//            product.setInitialPrice(product.getInitialPrice());
-//            product.setLeftTopX(product.getLeftTopX());
-//            product.setLeftTopY(product.getLeftTopY());
-//            product.setRightBottomX(product.getRightBottomX());
-//            product.setRightBottomY(product.getRightBottomY());
-//            product.setImageUrl(product.getImageUrl());
-//            product.setLive(product.getLive());
             product.setApproval(true);
-
             productRepository.save(product);
-            System.out.println("id: " + product.getLive().getId());
         }
     }
 

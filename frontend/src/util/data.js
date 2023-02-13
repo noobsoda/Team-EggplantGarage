@@ -2,8 +2,7 @@
 function dataURItoBlob(dataURI) {
   // convert base64/URLEncoded data component to raw binary data held in a string
   var byteString;
-  if (dataURI.split(",")[0].indexOf("base64") >= 0)
-    byteString = atob(dataURI.split(",")[1]);
+  if (dataURI.split(",")[0].indexOf("base64") >= 0) byteString = atob(dataURI.split(",")[1]);
   else byteString = unescape(dataURI.split(",")[1]);
 
   // separate out the mime component
@@ -17,4 +16,9 @@ function dataURItoBlob(dataURI) {
   return new Blob([ia], { type: mimeString });
 }
 
-export { dataURItoBlob };
+function getFileName(path) {
+  let tmp = path.split("\\");
+  return tmp[tmp.length - 1];
+}
+
+export { dataURItoBlob, getFileName };

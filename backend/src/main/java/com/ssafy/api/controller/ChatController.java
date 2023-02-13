@@ -5,8 +5,8 @@ import com.ssafy.api.response.ChatMessageRes;
 import com.ssafy.api.response.ChatRoomRes;
 import com.ssafy.api.service.ChatService;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,21 +15,16 @@ import java.util.List;
 
 @Api(value = "채팅방 API", tags = {"Chat."})
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/chat")
 public class ChatController {
     private final Logger logger;
     private final ChatService chatService;
 
-    @Autowired
-    public ChatController(Logger logger, ChatService chatService) {
-        this.logger = logger;
-        this.chatService = chatService;
-    }
-
-    @PostMapping()
-    @ApiOperation(value = "채팅방 생성", notes = "채팅방을 생성합니다.")
-    @ApiResponses({@ApiResponse(code = 201, message = "생성 성공"), @ApiResponse(code = 500, message = "서버 오류")})
-    public ResponseEntity<ChatRoomRes> createChatRoom(@RequestBody @ApiParam(value = "채팅방 정보", required = true) ChatRoomPostReq chatRoomPostReq) {
+    @PostMapping("/join")
+    @ApiOperation(value = "채팅방 입장", notes = "채팅방에 입장합니다.")
+    @ApiResponses({@ApiResponse(code = 201, message = "입장 성공"), @ApiResponse(code = 500, message = "서버 오류")})
+    public ResponseEntity<ChatRoomRes> joinChatRoom(@RequestBody @ApiParam(value = "채팅방 정보", required = true) ChatRoomPostReq chatRoomPostReq) {
         long senderId = chatRoomPostReq.getSenderId();
         long receiverId = chatRoomPostReq.getReceiverId();
 
