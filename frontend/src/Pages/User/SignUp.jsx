@@ -12,9 +12,18 @@ const ButtonBox = styled.div`
 `;
 
 const Center = styled(Body)`
+  width: calc(80%);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin: 0 auto;
+`;
+
+const StyledRowCenter = styled.div`
+  display: block;
+  width: calc(80%);
+  justify-content: center;
+  margin: 0 auto;
 `;
 
 export default function SignUp() {
@@ -26,9 +35,11 @@ export default function SignUp() {
     <Page>
       <Header headerName="회원가입" isName={true} />
       <Center>
-        <ButtonBox>
-          <BigBtn name="이메일로 가입하기" buttonClick={goToEmail}></BigBtn>
-        </ButtonBox>
+        <StyledRowCenter>
+          <ButtonBox>
+            <BigBtn name="이메일로 가입하기" buttonClick={goToEmail}></BigBtn>
+          </ButtonBox>
+        </StyledRowCenter>
       </Center>
     </Page>
   );

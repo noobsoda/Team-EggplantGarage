@@ -12,16 +12,19 @@ import RedSpan from "../../Atoms/Text/RedSpan";
 import styled from "styled-components";
 
 const StyledLoginBox = styled.div`
-  /* width: 280px;
+  width: calc(80%);
+  /*
   height: 500px;
   margin: 24px 40px;
   ; */
   height: 100%;
   display: flex;
   flex-direction: column;
+  margin: 0 auto;
   justify-content: space-around;
 `;
 const StyledHead = styled.h1`
+  margin-top: 40px;
   padding-bottom: 8px;
 `;
 
@@ -30,6 +33,7 @@ const StyledColumnDirection = styled.div`
   flex-direction: column;
   margin-bottom: 8px;
   row-gap: 8px;
+  width: 100%;
 `;
 const StyledIdPwBox = styled.div`
   display: flex;
@@ -71,6 +75,10 @@ export default function Login() {
     dispatch(userConfirm({ email: email, password: password }, navigate));
   }
 
+  function signUpSubmit() {
+    window.location.replace("/signup");
+  }
+
   function onEmailChange(e) {
     setEmail(e.target.value);
   }
@@ -79,8 +87,9 @@ export default function Login() {
   }
   return (
     <StyledLoginBox>
-      <StyledHead className="page-header">가지가라지</StyledHead>
-
+      <StyledRowCenter>
+        <StyledHead className="page-header">가지가라지</StyledHead>
+      </StyledRowCenter>
       <StyledColumnDirection>
         <LoginBox>
           <StyledIdPwBox>
@@ -107,12 +116,16 @@ export default function Login() {
             <RedSpan text="아이디 또는 비밀번호가 일치 하지 않습니다." />
           </StyledRowCenter>
         </LoginBox>
-
-        <Btn name="로그인" buttonClick={loginSubmit} />
+        <StyledRowCenter>
+          <Btn name="로그인" buttonClick={loginSubmit} />
+        </StyledRowCenter>
+        <StyledRowCenter>
+          <Btn name="회원가입" buttonClick={signUpSubmit} color="gray" />
+        </StyledRowCenter>
       </StyledColumnDirection>
 
       <StyledRowCenter>
-        <Link link="/signup" value="회원가입" />|
+        {/* <Link link="/signup" value="회원가입" /> */}
         <Link link="/findpass" value="비밀번호 찾기" />
       </StyledRowCenter>
     </StyledLoginBox>

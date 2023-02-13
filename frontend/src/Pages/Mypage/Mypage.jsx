@@ -1,8 +1,8 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import Body from "../../Templates/Layout/Body";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import PurchasedHistory from "../../Organisms/Mypage/PurchasedHistory";
 import { useState } from "react";
 import SalesHistory from "../../Organisms/Mypage/SalesHistory";
@@ -18,34 +18,41 @@ const Info = styled.div`
   display: flex;
   flex-direction: column;
   row-gap: 8px;
+  width: 100%;
+  justify-content: center;
+  margin: 20px 0px 12px 0px;
 `;
 const InfoFlex = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   height: 24px;
 `;
-const InfoEditBtn = styled.button`
-  width: 24px;
-  height: 24px;
-  background: url("/image/edit.svg") no-repeat 0px 0px;
-`;
 const SelectBar = styled.div`
+  margin-top: 12px;
   height: 40px;
   width: 100%;
   display: flex;
+  border-radius: 4px;
   justify-content: space-around;
+  align-items: center;
   border-bottom: solid;
   border-bottom-color: ${({ theme }) => theme.color.lightgrey};
   border-top: solid;
-  border-top-color: ${({ theme }) => theme.color.lightgrey};
+  border-top-color: ${({ theme }) => theme.color.lightgrey};  
 `;
-const SimpleFlex = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  column-gap: 8px;
+
+const StyledBtn = styled.button`
+  height: 80%;
+  width: 50%;
+  color: ${({ theme }) => theme.color.lightgrey};
+  ${(props) =>
+    props.selected &&
+    css`
+      color: black;
+    `};
 `;
 
 export default function Mypage() {
@@ -53,7 +60,7 @@ export default function Mypage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user.userInfo);
-  // console.log(user);
+
   function goInfoEdit() {
     navigate("/infoedit");
   }
@@ -75,29 +82,28 @@ export default function Mypage() {
           </InfoFlex>
           <InfoFlex>
             <div>　</div>
-            <SimpleFlex>
-              <div className="body1-header" style={{ height: "24px" }}>
-                회원정보수정
-              </div>
-              <InfoEditBtn onClick={goInfoEdit}></InfoEditBtn>
-            </SimpleFlex>
+            <ExtraSmallBtn
+              name="회원정보"
+              buttonClick={goInfoEdit}
+            ></ExtraSmallBtn>
           </InfoFlex>
         </Info>
+
         <SelectBar>
-          <button
+          <StyledBtn
             className="body1-header"
-            style={{ color: isPurchase ? "black" : "#979797" }}
             onClick={() => setisPurchase(true)}
+            selected={isPurchase}
           >
             구매내역
-          </button>
-          <button
+          </StyledBtn>
+          <StyledBtn
             className="body1-header"
-            style={{ color: isPurchase ? "#979797" : "black" }}
             onClick={() => setisPurchase(false)}
+            selected={!isPurchase}
           >
             판매내역
-          </button>
+          </StyledBtn>
         </SelectBar>
         {/* 이부분 따로 컴포넌트화 시켜서 빼서 켜고 닫히게 해야함 */}
         {isPurchase === true ? <PurchasedHistory /> : <SalesHistory />}

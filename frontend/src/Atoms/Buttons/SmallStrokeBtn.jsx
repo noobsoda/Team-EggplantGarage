@@ -1,18 +1,22 @@
-import React from "react";
+import React, { Fragment } from "react";
 import styled from "styled-components";
 
 const StyledBtn = styled.button`
   width: 80px;
   height: 40px;
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.color.red};
+  background-color: ${({ theme }) => theme.color.graypurple};
   color: ${({ theme }) => theme.color.white};
 `;
 
-export default function SmallStrokeBtn({ name, buttonClick }) {
+export default function SmallStrokeBtn({ name, buttonClick, color }) {
   return (
-    <StyledBtn className="body1-header" onClick={buttonClick}>
-      {name}
-    </StyledBtn>
+    <Fragment>
+      {color === undefined && (
+        <StyledBtn className="body1-header" onClick={buttonClick}>
+          {name}
+        </StyledBtn>
+      )}
+    </Fragment>
   );
 }

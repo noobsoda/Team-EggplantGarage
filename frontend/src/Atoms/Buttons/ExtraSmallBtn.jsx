@@ -5,7 +5,7 @@ const StyledExtraSmallButton = styled.button`
   width: 64px;
   height: 24px;
   border-radius: 8px;
-  background-color: ${({ theme }) => theme.color.red};
+  background-color: ${({ theme }) => theme.color.graypurple};
   color: ${({ theme }) => theme.color.white};
 `;
 

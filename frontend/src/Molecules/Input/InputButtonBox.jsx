@@ -15,12 +15,13 @@ export default function InputButtonbox({
   buttonName,
   text,
   isCheck,
+  color,
 }) {
   return (
     <div>
       <FlexBox>
         <MidInput placehold={placehold} />
-        <Button name={buttonName}></Button>
+        <Button name={buttonName} color={color}></Button>
       </FlexBox>
       {isCheck ? <></> : <RedParagraph text={text} />}
     </div>
