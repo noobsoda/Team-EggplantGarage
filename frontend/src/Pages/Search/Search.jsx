@@ -30,6 +30,15 @@ const Background = styled.div`
   background-color: rgb(0, 0, 0, 0.5);
 `;
 
+const StyledHr = styled.hr`
+  background-color: #DDDDDD;
+  padding: 0;
+  margin: 0px -24px 4px -24px;
+  border: 0;
+  height: 1px;
+  justify-content: center;
+`;
+
 export default function Search() {
   const [isResult, setIsResult] = useState(false);
 
@@ -112,6 +121,7 @@ export default function Search() {
             <SmallSelect name="카테고리" buttonClick={showModal_2} />
             <SmallSelect name="정렬방법" buttonClick={showModal_3} />
           </FlexBox>
+          <StyledHr/>
           {/* isSearch가 True일때만 영상들이 뽑혀나오게 하자 */}
           {isResult ? <SearchBody lives={lives} /> : <></>}
         </Body>
