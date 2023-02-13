@@ -27,7 +27,7 @@ public class ReviewController {
     @ApiOperation(value = "리뷰 생성", notes = "리뷰를 등록합니다.")
     @ApiResponses({@ApiResponse(code = 201, message = "생성 성공"), @ApiResponse(code = 500, message = "서버 오류")})
     public ResponseEntity<? extends CommonResponse> writeReview(@RequestBody @ApiParam(value = "리뷰 정보", required = true) ReviewWritePostReq reviewWriteInfo) {
-        Review review = reviewService.writeReview(reviewWriteInfo);
+        reviewService.writeReview(reviewWriteInfo);
         return ResponseEntity.status(201).body(responseService.getSuccessResponse(201, "리뷰 생성 성공"));
     }
 
