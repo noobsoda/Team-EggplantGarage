@@ -8,7 +8,8 @@ import Checkbox from "../../Molecules/Input/CheckBox";
 import CropBox from "../../Organisms/LiveSubmit/CropBox";
 
 const StyledBox = styled.div`
-  width: 360px;
+  /* flex: 1 1; */
+  width: 100%;
 `;
 
 export default function ProductModifyBox({
