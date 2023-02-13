@@ -122,7 +122,7 @@ async function getBundleItemList(bundleId, success, fail) {
  */
 async function setBundleApproval(bundleId, success, fail) {
   await api
-    .put(`/api/v1/bundle/approval/` + bundleId)
+    .patch(`/api/v1/bundle/approval/` + bundleId)
     .then(success)
     .catch(fail);
 }
@@ -134,7 +134,7 @@ async function setBundleApproval(bundleId, success, fail) {
  */
 async function setBundleRefuse(bundleId, success, fail) {
   await api
-    .put(`/api/v1/bundle/refuse/` + bundleId)
+    .patch(`/api/v1/bundle/refuse/` + bundleId)
     .then(success)
     .catch(fail);
 }
