@@ -49,7 +49,6 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
   return (
     <>
       {suggestList.map((items, i) => {
-        console.log(suggestList);
         return (
           <BundleBox
             key={i}

@@ -37,7 +37,8 @@ export default function BundleBox({
   isSeller,
   isPay,
   accept,
-  reject,
+  refuse,
+  cancel,
 }) {
   return (
     <StyledBundleBox>
@@ -62,7 +63,7 @@ export default function BundleBox({
           ) : (
             <ExtraSmallButton
               name={isSeller ? "거절" : "취소"}
-              buttonClick={reject}
+              buttonClick={isSeller ? refuse : cancel}
             />
           )}
         </BtnBox>
