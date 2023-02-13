@@ -29,8 +29,9 @@ import { dataURItoBlob } from "../../util/data";
 const StyledWindow = styled.div`
   display: flex;
   overflow: hidden;
-  width: 100%;
-  height: calc(100% - 56px);
+  width: 80%;
+  padding: 24px 10%;
+  height: calc(100% - 64px);
 `;
 const BtnFlex = styled.div`
   display: flex;
