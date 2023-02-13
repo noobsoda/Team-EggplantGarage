@@ -108,6 +108,7 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
               key={item.key}
               buttonType={isSeller ? undefined : "check"}
               isSeller={isSeller}
+              isSold={item.paid}
               item={item}
               check={item.check}
               isSaleList={item.isSaleList}
