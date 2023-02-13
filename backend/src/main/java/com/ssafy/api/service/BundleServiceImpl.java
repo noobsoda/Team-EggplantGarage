@@ -81,7 +81,7 @@ public class BundleServiceImpl implements BundleService {
 
                 BundledItemsProductRes res = new BundledItemsProductRes(
                         id, product.getName(),
-                        product.getSoldPrice(), product.isPaid(),
+                        product.getSoldPrice(),product.getInitialPrice(), product.isPaid(),
                         product.getLeftTopX(), product.getLeftTopY(),
                         product.getRightBottomX(), product.getRightBottomY(),
                         product.getImageUrl(), product.getBuyerId(),

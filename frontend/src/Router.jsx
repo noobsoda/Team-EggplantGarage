@@ -22,6 +22,7 @@ import LiveshowBuyer from "./Pages/LiveShow/LiveshowBuyer";
 
 //로그인 여부를 확인한다.
 import Auth from "./Templates/Auth";
+import FindPassword from "./Pages/User/FindPassword";
 
 const Router = () => {
   const router = createBrowserRouter([
@@ -49,6 +50,7 @@ const Router = () => {
     { path: "/signup", element: <SignUp /> },
     { path: "/signupemail", element: <SignUpEmail /> },
     { path: "*", element: <Main /> },
+    { path: "/findpass", element: <FindPassword /> },
   ]);
   return (
     <>

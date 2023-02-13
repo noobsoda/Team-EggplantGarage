@@ -9,15 +9,17 @@ const StyledLabel = styled.label`
   span {
     vertical-align: middle;
   }
-  margin-left: 8px;
+  margin: 8px -4px;
+  display: flex;
+  align-items: center;
+  user-select: none;
 `;
 
 export default function CheckBox({ id, text, check, setCheck, textSize }) {
   return (
     <div>
-      <Check boxId={id} setCheck={setCheck} check={check} />
-
       <StyledLabel htmlFor={id}>
+        <Check boxId={id} setCheck={setCheck} check={check} />
         <span className={textSize}>{text}</span>
       </StyledLabel>
     </div>

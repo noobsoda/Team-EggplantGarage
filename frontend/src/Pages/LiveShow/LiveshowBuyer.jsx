@@ -18,14 +18,10 @@ import Buyer from "../../Templates/LiveShow/Buyer";
 
 import getStompClient from "../../util/socket";
 import { getLiveDetail } from "../../util/api/liveApi";
-import {
-  isFavoriteLive,
-  deleteFavoriteLive,
-  addFavoriteLive,
-} from "../../util/api/favoriteApi";
+import { isFavoriteLive, deleteFavoriteLive, addFavoriteLive } from "../../util/api/favoriteApi";
 import { exitLive } from "../../util/api/liveApi";
 
-import { getBuyerSuggestList } from "../../util/api/productApi";
+import { getBuyerSuggestList, getBuyerSuggestListPayWait } from "../../util/api/productApi";
 
 import useInterval from "../../hook/useInterval";
 
@@ -89,6 +85,7 @@ export default function LiveshowBuyer() {
   const [modalOpen, setModalOpen] = useState(false);
 
   const [bundleList, setBundleList] = useState([]);
+  const [payList, setPayList] = useState([]);
 
   const exit = () => {
     const exitReq = { userId: userInfo.id, liveId: liveId };
@@ -99,18 +96,33 @@ export default function LiveshowBuyer() {
   //10초마다 묶음 제안 요청 왔는지 확인
   useInterval(() => {
     getSuggest();
+    getApprovSuggest();
   }, 10000);
 
+  //묶음 제안 확인
   function getSuggest() {
     getBuyerSuggestList(
       liveId,
       userInfo.id,
       ({ data }) => {
-        console.log(data);
         setBundleList(data);
       },
       () => {
         console.warn("bundle load fail");
+      }
+    );
+  }
+
+  //승인된것 확인-결제 대기
+  function getApprovSuggest() {
+    getBuyerSuggestListPayWait(
+      liveId,
+      userInfo.id,
+      ({ data }) => {
+        setPayList(data);
+      },
+      () => {
+        console.warn("pay load fail");
       }
     );
   }
@@ -177,17 +189,13 @@ export default function LiveshowBuyer() {
       <Buyer liveId={liveId} />
       <LiveLayout>
         <StyledHeader>
-          <div
-            style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}
-          >
+          <div style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}>
             <Title className="show-header">{liveInfo.title}</Title>
             <div className="body1-header" style={{ color: "white" }}>
               판매자명
             </div>
             <ViewerCntBox
-              viewerCnt={
-                liveInfo.userEntryResList && liveInfo.userEntryResList.length
-              }
+              viewerCnt={liveInfo.userEntryResList && liveInfo.userEntryResList.length}
             />
           </div>
           <StyledSide>
@@ -224,6 +232,8 @@ export default function LiveshowBuyer() {
           setModalOpen={setModalOpen}
           isSeller={false}
           getSuggest={getSuggest}
+          payList={payList}
+          getApprovSuggest={getApprovSuggest}
         />
       )}
     </StyledPage>

@@ -6,19 +6,27 @@ import Check from "../../Atoms/Inputs/Check";
 import { useNavigate } from "react-router-dom";
 import { createChatRoom } from "../../util/api/chatApi";
 import { checkUserInfo } from "../../store/user";
+import ImageBox from "../../Atoms/canvas/ImageBox";
+
+import { getImage } from "../../util/api/productApi";
 
 const StyledItemCard = styled.div`
   position: relative;
   width: calc(100% -6px);
   height: 72px;
   border-radius: 12px;
-  border: 3px solid;
+  border: 1px solid ${({ theme }) => theme.color.lightgrey};
   /* box-sizing: border-box; */
   background-color: ${({ theme }) => theme.color.white};
   display: flex;
   flex-direction: row;
   column-gap: 8px;
   justify-content: space-between;
+<<<<<<< HEAD
+  box-shadow: 0px 0px 20px ${({ theme }) => theme.color.lightgrey};
+=======
+  overflow: hidden;
+>>>>>>> develop
 `;
 const Mask = styled.div`
   position: absolute;
@@ -33,15 +41,15 @@ const Mask = styled.div`
   border-radius: 8px;
   align-items: center;
   background-color: rgb(10, 10, 10, 0.7);
-  color: #ff2a00e3;
+  color: red;
 `;
 const ItemImage = styled.div`
   width: 72px;
   height: 72px;
   border-radius: 8px 0px 0px 8px;
   box-sizing: border-box;
-  //   background: url(${(props) => props.imgSrc}) no-repeat 0px 0px;
-  background: url(./image/item-sample.png);
+  background: url(${(props) => props.imgSrc}) no-repeat 0px 0px;
+  /* background: url(./image/item-sample.png); */
   background-size: cover;
 `;
 const ItemInfo = styled.div`
@@ -49,8 +57,9 @@ const ItemInfo = styled.div`
   height: 72px;
   display: flex;
   flex-direction: column;
-  row-gap: 24px;
+  row-gap: 8px;
   background-color: white;
+  justify-content: center;
 `;
 const ItemBtn = styled.div`
   width: 72px;
@@ -75,29 +84,32 @@ export default function ItemCard({
   const senderId = userInfo.id;
   const [chatRoomId, setChatRoomId] = useState(item.chatRoomId);
   const createChatRoomAndMove = (receiverId) => {
-    createChatRoom(
-      { senderId: senderId, receiverId: receiverId },
-      ({ data }) => {
-        navigate(`/chat/room`, {
-          state: {
-            chatRoomId: data.chatRoomId,
-            receiverId: item.otherId,
-            receiverName: item.otherName,
-          },
-        });
-        window.location.reload(`/chat/room`);
-      }
-    );
+    createChatRoom({ senderId: senderId, receiverId: receiverId }, ({ data }) => {
+      navigate(`/chat/room`, {
+        state: {
+          chatRoomId: data.chatRoomId,
+          receiverId: item.otherId,
+          receiverName: item.otherName,
+        },
+      });
+      window.location.reload(`/chat/room`);
+    });
   };
   return (
     <StyledItemCard>
-      <ItemImage />
+      {/* <ItemImage imgSrc={getImage(item.imgSrc)} /> */}
+      <ImageBox
+        imgSrc={getImage(item.imageUrl)}
+        leftTopX={item.leftTopX}
+        rightBottomX={item.rightBottomX}
+        leftTopY={item.leftTopY}
+        rightBottomY={item.rightBottomY}
+        boxSize="72"
+      />
       <ItemInfo>
         <div className="body1-header">{item.productName || "제품명"}</div>
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <div className="body1-regular">
-            {isSeller ? "제안자" : item.otherId}
-          </div>
+          <div className="body1-regular">{/* {isSeller ? "제안자" : item.otherId} */}</div>
 
           <div className="body1-regular">
             {isSaleList ? item.initialPrice : item.soldPrice || 0}원
@@ -113,11 +125,7 @@ export default function ItemCard({
           ) : (
             <></>
           )}
-          {buttonType === "saleshistory" ? (
-            <ExtraSmallButton name="한개" />
-          ) : (
-            <></>
-          )}
+          {buttonType === "saleshistory" ? <ExtraSmallButton name="한개" /> : <></>}
           {buttonType === "purchasedhistory" ? (
             <ExtraSmallButton
               name="대화하기"
@@ -170,7 +178,7 @@ export default function ItemCard({
           )}
         </ItemBtn>
       )}
-      {isSold ? <Mask /> : undefined}
+      {isSold ? <Mask className="page-header">판매완료</Mask> : undefined}
     </StyledItemCard>
   );
 }

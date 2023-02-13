@@ -83,7 +83,7 @@ async function getBuyerSuggestList(liveId, buyerId, success, fail) {
  */
 async function getBuyerSuggestListPayWait(liveId, buyerId, success, fail) {
   await api
-    .get(`/api/vi/bundle/buyer/approvalNoPaid/` + liveId + `/` + buyerId)
+    .get(`/api/v1/bundle/buyer/approvalNoPaid/` + liveId + `/` + buyerId)
     .then(success)
     .catch(fail);
 }
@@ -97,7 +97,7 @@ async function getBuyerSuggestListPayWait(liveId, buyerId, success, fail) {
  */
 async function getBuyerSuggestListPayComplete(liveId, buyerId, success, fail) {
   await api
-    .get(`/api/vi/bundle/buyer/approvalYesPaid/` + liveId + `/` + buyerId)
+    .get(`/api/v1/bundle/buyer/approvalYesPaid/` + liveId + `/` + buyerId)
     .then(success)
     .catch(fail);
 }
@@ -122,7 +122,7 @@ async function getBundleItemList(bundleId, success, fail) {
  */
 async function setBundleApproval(bundleId, success, fail) {
   await api
-    .put(`/api/v1/bundle/approval/` + bundleId)
+    .patch(`/api/v1/bundle/approval/` + bundleId)
     .then(success)
     .catch(fail);
 }
@@ -134,23 +134,20 @@ async function setBundleApproval(bundleId, success, fail) {
  */
 async function setBundleRefuse(bundleId, success, fail) {
   await api
-    .put(`/api/v1/bundle/refuse/` + bundleId)
+    .patch(`/api/v1/bundle/refuse/` + bundleId)
     .then(success)
     .catch(fail);
 }
 
 /**
  * 카카오페이 결제 진행
- * @param {*} bundleId
+ * @param {*} payInfo { bundleId: bundleId, pcOrMobile: pc }
  * @param {*} success
  * @param {*} fail
  * @returns
  */
-async function kakaopay(bundleId, success, fail) {
-  return await api
-    .post(`/api/v1/kakaoPay/`, { bundleId: bundleId })
-    .then(success)
-    .catch(fail);
+async function kakaopay(payInfo, success, fail) {
+  return await api.post(`/api/v1/kakaoPay/`, payInfo).then(success).catch(fail);
 }
 
 /**
@@ -158,13 +155,8 @@ async function kakaopay(bundleId, success, fail) {
  * @param {*} filename
  * @returns
  */
-async function getImage(filename) {
-  return await api
-    .get(`/api/v1/file/images/${filename}`)
-    .then((response) => response.blob())
-    .then((blob) => {
-      return URL.createObjectURL(blob);
-    });
+function getImage(filename) {
+  return `${process.env.REACT_APP_API_URL}api/v1/file/images/${filename}`;
 }
 
 async function getSalesItemHistory(liveId, success, fail) {
@@ -186,4 +178,5 @@ export {
   setLiveProduct,
   kakaopay,
   getSalesItemHistory,
+  getImage,
 };
