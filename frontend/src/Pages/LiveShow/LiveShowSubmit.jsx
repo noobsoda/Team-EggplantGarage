@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
@@ -55,10 +55,6 @@ export default function LiveShowSubmit() {
 
   const [camera, setCamera] = useState(false);
   const [goCrop, setGoCrop] = useState(true); //수정화면의 자르기
-
-  useEffect(() => {
-    console.log(location);
-  }, []);
 
   function nextStep() {
     if (step === 3) return;
