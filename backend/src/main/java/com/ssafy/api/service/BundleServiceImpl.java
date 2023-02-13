@@ -141,6 +141,8 @@ public class BundleServiceImpl implements BundleService {
     @Override
     public void approvalBundle(long bundleId) {
         Bundle bundle = bundleRepository.findById(bundleId).get();
+
+        if(bundle.getPrice() == 0) bundle.setPaid(true);
         bundle.setApproval(true);
         bundleRepository.save(bundle);
 
@@ -151,6 +153,16 @@ public class BundleServiceImpl implements BundleService {
         for(int i = 0; i < size; i++) {
             Long productId = bundledItemsRelationList.get().get(i).getProduct().getId();
             Product product = productRepository.findById(productId).get();
+
+
+            // 0원이면 카카오페이 결제 가지 않고 바로 결제 완료
+            if(bundle.getPrice() == 0) {
+                System.out.println("0원 상품");
+                product.setPaid(true);
+                product.setSoldAt(LocalDateTime.now());
+                product.setSoldPrice(0);
+                product.setBuyerId(bundle.getId());
+            }
 
             product.setApproval(true);
             productRepository.save(product);
