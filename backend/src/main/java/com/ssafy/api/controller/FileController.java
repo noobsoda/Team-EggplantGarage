@@ -21,7 +21,7 @@ import java.net.MalformedURLException;
 public class FileController {
     private final FileService fileService;
     @GetMapping("/images/{filename}")
-    public String downloadImage(@PathVariable String filename) throws MalformedURLException {
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         //file:/Users/.../uuid 로 작성된 파일명
         //UrlResource 가 실제 서버의 파일 경로에 있는 파일을 찾아온다.
         Resource resource = new UrlResource("file:" + fileService.fileDownload(filename));
@@ -29,6 +29,6 @@ public class FileController {
         if(!resource.isReadable())
             throw new CustomException(ErrorCode.FILE_NOT_FOUND);
 
-        return fileService.fileDownload(filename);
+        return resource;
     }
 }
