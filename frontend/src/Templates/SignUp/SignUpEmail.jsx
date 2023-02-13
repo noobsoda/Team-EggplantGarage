@@ -132,7 +132,7 @@ export default function SignUpEmail() {
     }
 
     //전화번호 숫자만 입력
-    if (phone !== "" && phone.match(isNumber)) {
+    if (phone.value !== "" && !phone.value.match(isNumber)) {
       alert("전화번호는 숫자만 입력해주세요");
       return;
     }
