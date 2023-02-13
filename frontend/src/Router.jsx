@@ -31,9 +31,9 @@ const Router = () => {
       children: [
         { path: "/", element: <Main /> },
         { path: "/home", element: <Main /> },
-        { path: "/liveshowsubmit", element: <LiveShowSubmit /> },
-        { path: "/liveshowseller/:liveId", element: <LiveShowSeller /> },
-        { path: "/liveshowbuyer/:liveId", element: <LiveshowBuyer /> },
+        { path: "/submit", element: <LiveShowSubmit /> },
+        { path: "/seller/:liveId", element: <LiveShowSeller /> },
+        { path: "/liveshow/:liveId", element: <LiveshowBuyer /> },
         { path: "/search", element: <Search /> },
         { path: "/like", element: <Like /> },
         { path: "/chat", element: <Chat /> },

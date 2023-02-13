@@ -33,7 +33,7 @@ export default function LiveshowItem({ isSearch, isViewer, show, isHistory }) {
       console.log(joinReq);
       joinLive(joinReq);
       console.log(show);
-      navigate(`/liveshowbuyer/${show.id}`);
+      navigate(`/liveshow/${show.id}`);
     } else {
       navigate("/liveshowdetail", { state: show.liveId });
     }

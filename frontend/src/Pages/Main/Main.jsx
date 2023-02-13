@@ -29,7 +29,7 @@ export default function Main() {
   //liveContentList 까지 가야됨.
   const navigate = useNavigate();
   function startLive() {
-    navigate("/liveshowsubmit");
+    navigate("/submit");
   }
   const dispatch = useDispatch();
 

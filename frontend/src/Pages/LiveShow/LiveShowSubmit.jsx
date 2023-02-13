@@ -206,7 +206,7 @@ export default function LiveShowSubmit() {
           }
         );
 
-        navigate(`/liveshowseller/${liveId}`);
+        navigate(`/seller/${liveId}`);
       },
       (e) => {
         console.log(e);
