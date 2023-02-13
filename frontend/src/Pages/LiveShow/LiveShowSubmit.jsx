@@ -26,18 +26,12 @@ import {
 import { setLiveProduct } from "../../util/api/productApi";
 import { dataURItoBlob } from "../../util/data";
 
-const StyledBox = styled.div`
-  display: flex;
-  width: 1800px;
-
-  transform: ${(props) => `translateX(${-props.phase * 360}px)`};
-  transition: transform 0.2s ease-in-out;
-`;
-
 const StyledWindow = styled.div`
   display: flex;
   overflow: hidden;
-  width: 360px;
+  width: 80%;
+  padding: 24px 10%;
+  height: calc(100% - 64px);
 `;
 const BtnFlex = styled.div`
   display: flex;
@@ -240,26 +234,33 @@ export default function LiveShowSubmit() {
       <Header isName={true} headerName="라이브쇼 등록" />
       <Body>
         <StyledWindow>
-          <StyledBox phase={step}>
+          {step === 0 ? (
             <TitleCategoryBox
               onTitleChange={titleValue}
               categorys={categorys.value}
               onCategoryChange={onChange}
               delCategory={delCategory}
             />
+          ) : undefined}
+          {step === 1 ? (
             <PictureSubmitBox imgSrc={imgSrc} cameraEvent={cameraEvent} />
-
+          ) : undefined}
+          {step === 2 ? (
             <ProductSubmitBox
               imgSrc={imgSrc}
               productList={productList}
               setProductList={setProductList}
             />
+          ) : undefined}
+          {step === 3 ? (
             <ProductListBox
               imgSrc={imgSrc}
               productList={productList}
               onModifyClick={modiProduct}
               onDeleteClick={deleteProduct}
             />
+          ) : undefined}
+          {step === 4 ? (
             <ProuctModifyBox
               imgSrc={imgSrc}
               modifyProduct={modifyProduct}
@@ -268,7 +269,7 @@ export default function LiveShowSubmit() {
               deleteProduct={deleteProduct}
               backStep={backStep}
             />
-          </StyledBox>
+          ) : undefined}
         </StyledWindow>
         <BtnFlex>
           {step === 0 ? (

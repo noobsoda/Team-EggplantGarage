@@ -24,12 +24,13 @@ const StyledVideo = styled.video`
 `;
 
 const StyledBtn = styled.button`
-  width: 180px;
+  width: 60px;
+  height: 60px;
   color: white;
-  background-color: black;
+  background-color: white;
   font-size: 16px;
   border-radius: 30px;
-  border: none;
+  border: 4px solid black;
   padding: 15px 20px;
   text-align: center;
   box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0, 0.2);
@@ -140,7 +141,7 @@ export default function PictureBox({ setOriImgSrc, cameraEvent }) {
         <StyledCanvas ref={canvasRef2}></StyledCanvas>
         <StyledCamera>
           <StyledVideo ref={videoRef} autoPlay playsInline></StyledVideo>
-          <StyledBtn onClick={snapShot}>사진촬영</StyledBtn>
+          <StyledBtn onClick={snapShot}></StyledBtn>
         </StyledCamera>
       </div>
     </Back>
