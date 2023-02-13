@@ -41,6 +41,24 @@ export default function PurchasedHistory() {
         })}
       <ItemCard buttonType={"purchasedhistory"} isReview={true} isSold={true} />
       <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
+      <ItemCard buttonType={"purchasedhistory"} isReview={true} />
       {/* <ItemCard buttonType={"purchasedhistory"} isReview={false} />
       <ItemCard buttonType={"purchasedhistory"} isReview={false} />
       <ItemCard buttonType={"purchasedhistory"} isReview={true} />
