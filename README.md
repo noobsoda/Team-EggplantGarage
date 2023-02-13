@@ -823,3 +823,7 @@ Entity(엔티티)
 
 - 추가 데이터 생성
 - CSS Animation
+
+# 2023.02.11 프로젝트 업데이트
+
+- 메인화면 CSS Animation 추가
