@@ -4,9 +4,9 @@ import styled from "styled-components";
 const StyledSmallSelect = styled.button`
   flex: 1;
   height: 32px;
-  // border: 1.5px solid ${({ theme }) => theme.color.purple};
-  background-color: ${({ theme }) => theme.color.purple};
-  border-radius: 16px;
+  // border: 1.5px solid ${({ theme }) => theme.color.graypurple};
+  background-color: ${({ theme }) => theme.color.graypurple};
+  border-radius: 12px;
   color: ${({ theme }) => theme.color.white};
 `;
 

@@ -1,7 +1,9 @@
 import React from "react";
 import styled from "styled-components";
 const StyledBox = styled.div`
-  width: 88px;
+  flex: 0 0 auto;
+  text-align: center;
+  vertical-align: middle;
   height: 24px;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.color.red};
@@ -11,8 +13,8 @@ const StyledBox = styled.div`
   justify-content: center;
 
   margin-bottom: 8px;
-  margin-left: ${(props) => (props.center ? "8" : "0")}px;
-  margin-right: ${(props) => (props.center ? "8" : "0")}px;
+  /* margin-left: ${(props) => (props.center ? "8" : "0")}px;
+  margin-right: ${(props) => (props.center ? "8" : "0")}px; */
 `;
 
 const StyledInnerBox = styled.div`
