@@ -23,7 +23,7 @@ const StyledItemCard = styled.div`
   column-gap: 8px;
   justify-content: space-between;
   box-shadow: 0px 0px 20px ${({ theme }) => theme.color.lightgrey};
-  overflow: hidden;
+  // overflow: hidden;
 `;
 const Mask = styled.div`
   position: absolute;
