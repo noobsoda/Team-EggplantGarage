@@ -58,7 +58,11 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
   function bundle() {
     //제안 가격에 숫자만 입력햇는지 확인
     let price = 0;
-    if (bundlePrice !== "" && !bundlePrice.match(isNumber)) {
+    if (
+      bundlePrice !== 0 &&
+      bundlePrice !== "" &&
+      !bundlePrice.match(isNumber)
+    ) {
       alert("숫자만 입력해주세요");
       return;
     }
@@ -128,7 +132,7 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
             value={bundlePrice}
             inputValue={priceChange}
           />
-          <BigBtn name={"구매요청"} buttonClick={bundle} />
+          <BigBtn name={"구매요청33"} buttonClick={bundle} />
         </InfoBox>
       )}
     </>

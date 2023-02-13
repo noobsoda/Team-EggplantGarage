@@ -198,7 +198,7 @@ export default function ProductSubmitBox({
       }
 
       //숫자만 입력햇는지 확인
-      if (!productPrice.match(isNumber)) {
+      if (productPrice !== 0 && !productPrice.match(isNumber)) {
         alert("숫자만 입력해주세요");
         return;
       }
