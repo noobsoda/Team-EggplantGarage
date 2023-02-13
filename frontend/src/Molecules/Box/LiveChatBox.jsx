@@ -86,8 +86,6 @@ export default function ChatInput({ liveId }) {
   }, []);
 
   useEffect(() => {
-    console.log("바뀜~~");
-    console.log(messageContent);
     setMessageList([...messageList, messageContent]);
   }, [messageContent]);
 
@@ -119,8 +117,6 @@ export default function ChatInput({ liveId }) {
    * @param {*} payload
    */
   const onMessageReceived = (payload) => {
-    console.log("메시지 왓음~");
-    console.log(messageContent);
     const message = JSON.parse(payload.body);
     if (message.type === "JOIN") {
       setMessageContent("[" + message.sender + "] 님이 입장하셨습니다.");
