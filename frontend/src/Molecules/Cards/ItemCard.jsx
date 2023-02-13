@@ -22,11 +22,8 @@ const StyledItemCard = styled.div`
   flex-direction: row;
   column-gap: 8px;
   justify-content: space-between;
-<<<<<<< HEAD
   box-shadow: 0px 0px 20px ${({ theme }) => theme.color.lightgrey};
-=======
   overflow: hidden;
->>>>>>> develop
 `;
 const Mask = styled.div`
   position: absolute;
