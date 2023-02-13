@@ -163,6 +163,17 @@ export default function LiveshowBuyer() {
     );
     connect();
   }, []);
+  useInterval(() => {
+    getLiveDetail(
+      liveId,
+      ({ data }) => {
+        setLiveInfo(data);
+      },
+      () => {
+        console.warn("live info fail");
+      }
+    );
+  }, 2000);
 
   function clickLike() {
     if (isLiked) {
