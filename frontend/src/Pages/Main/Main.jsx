@@ -17,6 +17,7 @@ import Container from "../../Templates/Layout/Container";
 import { getLives } from "../../util/api/liveApi";
 import { useDispatch } from "react-redux";
 import { setLocation } from "../../store/location";
+import TypeIt from "typeit-react";
 
 export default function Main() {
   const isLogin = useSelector(checkIsLogin);
@@ -78,7 +79,7 @@ export default function Main() {
       <Header isLogo={true} />
       <Body>
         <div className="page-header" style={{ marginBottom: "8px" }}>
-          주변 라이브쇼
+          <TypeIt>주변 라이브쇼</TypeIt>
         </div>
         <Container>
           {aroundLives &&
@@ -87,7 +88,12 @@ export default function Main() {
             })}
         </Container>
         <div className="page-header" style={{ marginBottom: "8px" }}>
-          전국 라이브쇼
+          <TypeIt
+            getBeforeInit={(instane) => {
+              instane.type("전국 라이브쇼");
+              return instane;
+            }}
+          />
         </div>
         <CategoryNav setSelected={setSelected} />
         <Container>
