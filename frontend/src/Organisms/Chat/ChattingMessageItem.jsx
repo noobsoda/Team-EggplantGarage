@@ -44,7 +44,7 @@ export default function ChattingMessageItem({
       ) : (
         // 받은 메시지
         <ReceivedBox>
-          <div className="body1-header">{senderName}</div>
+          {/* <div className="body1-header">{senderName}</div> */}
           <div>{message}</div>
           <div>{sendDate}</div>
         </ReceivedBox>
