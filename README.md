@@ -231,3 +231,10 @@
 - 찜 조회 페이지 - 완료
   라이브 api 수정 sessionId -> liveId
   api 버그 수정
+
+## 0212 작업 내용
+
+- 커스텀클래스 만들어서 GlobalHandler로 예외처리 @ControllerAdvice
+  - 유저 테이블 CASCADE 되있던 점 수정
+  - 모든 컨트롤러 및 서비스에 예외처리 적용중
+    - 라이브, 찜, 유저, 인증에 예외처리 적용 완료
