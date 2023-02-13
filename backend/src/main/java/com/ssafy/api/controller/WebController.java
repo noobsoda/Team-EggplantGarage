@@ -9,7 +9,7 @@ public class WebController/* implements ErrorController */{
 
     //리액트 url 라우팅 설정
     @GetMapping(value = {"", "/home", "/submit", "/seller/**", "/login", "/signup", "/signupemail", "/search", "/like", "/chat/**", "/mypage", "category"
-    , "infoedit", "liveshowdetail", "writereview", "review", "liveshow/**"})
+    , "infoedit", "liveshowdetail", "writereview", "review", "liveshow/**", "/findpass"})
     public String forward() {
         return "forward:/index.html";
     }
