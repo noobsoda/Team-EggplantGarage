@@ -29,7 +29,7 @@ public class FileService {
         String ftype = file.getContentType();
 
         String newFileName = curDate + Long.toString(System.nanoTime());
-        if(ftype.equals("image/jpeg") || ftype.equals("image/jpg")){
+        if(("image/jpeg").equals(ftype) || ("image/jpg").equals(ftype)){
             newFileName += ".jpg";
         }
         else{

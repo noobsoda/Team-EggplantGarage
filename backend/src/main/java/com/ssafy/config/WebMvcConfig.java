@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
+import java.util.Objects;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -104,6 +105,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     Logger logger(InjectionPoint injectionPoint) {
-        return LoggerFactory.getLogger((injectionPoint.getMethodParameter().getContainingClass()));
+        return LoggerFactory.getLogger((Objects.requireNonNull(injectionPoint.getMethodParameter()).getContainingClass()));
     }
 }
