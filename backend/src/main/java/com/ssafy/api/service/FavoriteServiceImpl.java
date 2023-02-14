@@ -87,10 +87,10 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public boolean deleteFavorite(Long userId, Long liveId) {
         Optional<User> oUser = userRepository.findById(userId);
-        oUser.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
+        User user = oUser.orElseThrow(() -> new CustomException(USER_NOT_FOUND));
 
         Optional<Live> oLive = liveRepository.findById(liveId);
-        oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
+        Live live = oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
 
         List<Favorite> favoriteList = favoriteRepository.findByUser_idAndLive_id(userId, liveId);
 

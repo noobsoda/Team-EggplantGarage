@@ -70,7 +70,7 @@ public class LiveServiceImpl implements LiveService {
     public boolean getLiveCheckSessionIdBySessionId(String sessionId) {
         // 디비에 방송 url 정보 조회
         Optional<Live> oLive = liveRepository.findBySessionId(sessionId);
-        oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
+        Live live = oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
 
         return true;
     }
