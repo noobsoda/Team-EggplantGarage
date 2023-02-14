@@ -21,7 +21,7 @@ public class ChatController {
     private final Logger logger;
     private final ChatService chatService;
 
-    @PostMapping("/")
+    @PostMapping("")
     @ApiOperation(value = "채팅방 입장", notes = "채팅방에 입장합니다.")
     @ApiResponses({@ApiResponse(code = 201, message = "입장 성공"), @ApiResponse(code = 500, message = "서버 오류")})
     public ResponseEntity<ChatRoomRes> joinChatRoom(@RequestBody @ApiParam(value = "채팅방 정보", required = true) ChatRoomPostReq chatRoomPostReq) {
