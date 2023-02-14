@@ -12,6 +12,11 @@ const StyledContainer = styled.div`
   overflow-x: scroll;
   margin: auto 0;
   // height: 16px;
+  /* &::-webkit-scrollbar  */
+  /* display: none; */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
