@@ -116,7 +116,7 @@ export default function Seller({ liveId, isCamera, isMic, isFlipped, exit }) {
             resolution: `${window.innerWidth}x${window.innerHeight}`,
             frameRate: 30, // The frame rate of your video
             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-            mirror: false, // Whether to mirror your local video or not
+            mirror: true, // Whether to mirror your local video or not
           });
 
           // --- 6)
