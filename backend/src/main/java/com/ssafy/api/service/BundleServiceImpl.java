@@ -77,9 +77,6 @@ public class BundleServiceImpl implements BundleService {
             List<BundledItemsProductRes> productList = new ArrayList<>();
 
             List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(id);
-            if (bundledItemsRelationList.isEmpty())
-                throw new CustomException(BUNDLE_NOT_FOUND);
-
             int itemsSize = bundledItemsRelationList.size();
 
             for (int j = 0; j < itemsSize; j++) {
@@ -111,25 +108,18 @@ public class BundleServiceImpl implements BundleService {
     @Override
     public List<List<BundledItemsProductRes>> getSellerSuggestList(Long liveId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndIsRefuseFalseAndIsApprovalFalseAndIsCancelFalse(liveId);
-        if (bundleList.isEmpty())
-            throw new CustomException(BUNDLE_NOT_FOUND);
-
         return getBundleItemsProduct(bundleList, "seller");
     }
 
     @Override
     public List<List<BundledItemsProductRes>> getApprovalNoPaidSuggestList(long liveId, long buyerId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidFalse(liveId, buyerId);
-        if (bundleList.isEmpty())
-            throw new CustomException(BUNDLE_NOT_FOUND);
         return getBundleItemsProduct(bundleList, "buyer");
     }
 
     @Override
     public List<List<BundledItemsProductRes>> getApprovalYesPaidSuggestList(long liveId, long buyerId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsApprovalTrueAndIsPaidTrue(liveId, buyerId);
-        if (bundleList.isEmpty())
-            throw new CustomException(BUNDLE_NOT_FOUND);
         return getBundleItemsProduct(bundleList, "buyer");
     }
 
@@ -142,9 +132,6 @@ public class BundleServiceImpl implements BundleService {
     @Override
     public List<List<BundledItemsProductRes>> getBuyerSuggestList(long liveId, long buyerId) {
         List<Bundle> bundleList = bundleRepository.findAllByLive_IdAndUserIdAndIsRefuseFalseAndIsApprovalFalseAndIsCancelFalse(liveId, buyerId);
-        if (bundleList.isEmpty())
-            throw new CustomException(BUNDLE_NOT_FOUND);
-
         return getBundleItemsProduct(bundleList, "buyer");
     }
 
@@ -152,9 +139,6 @@ public class BundleServiceImpl implements BundleService {
     public List<Product> getBundleItemsList(long bundleId) {
         List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundleId);
         List<Product> productList = new ArrayList<>();
-
-        if (bundledItemsRelationList.isEmpty())
-            throw new CustomException(BUNDLE_NOT_FOUND);
 
         int size = bundledItemsRelationList.size();
         for (int i = 0; i < size; i++) {
@@ -183,17 +167,17 @@ public class BundleServiceImpl implements BundleService {
         for (int i = 0; i < size; i++) {
             Long productId = bundledItemsRelationList.get(i).getProduct().getId();
             Optional<Product> oProduct = productRepository.findById(productId);
+
             Product product = oProduct.orElse(null);
             if (product == null)
                 continue;
-
 
             // 0원이면 카카오페이 결제 가지 않고 바로 결제 완료
             if(bundle.getPrice() == 0) {
                 product.setPaid(true);
                 product.setSoldAt(LocalDateTime.now());
                 product.setSoldPrice(0);
-                product.setBuyerId(bundle.getId());
+                product.setBuyerId(bundle.getUser().getId());
             }
 
             product.setApproval(true);

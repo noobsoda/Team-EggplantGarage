@@ -37,7 +37,7 @@ const Mask = styled.div`
   border-radius: 8px;
   align-items: center;
   background-color: rgb(10, 10, 10, 0.7);
-  color: red;
+  color: #BE2E22;
 `;
 const ItemImage = styled.div`
   border-radius: 10px 0px 0px 10px;
@@ -76,6 +76,7 @@ export default function ItemCard({
   const userInfo = useSelector(checkUserInfo);
   const senderId = userInfo.id;
   const [chatRoomId, setChatRoomId] = useState(item.chatRoomId);
+  const formatter = new Intl.NumberFormat("ko-KR");
   const createChatRoomAndMove = (receiverId) => {
     createChatRoom(
       { senderId: senderId, receiverId: receiverId },
@@ -111,7 +112,10 @@ export default function ItemCard({
           </div>
 
           <div className="body1-regular">
-            {isSaleList ? item.initialPrice : item.soldPrice || 0}원
+            {isSaleList
+              ? formatter.format(item.initialPrice)
+              : formatter.format(item.soldPrice) || 0}
+            원
           </div>
         </div>
       </ItemInfo>

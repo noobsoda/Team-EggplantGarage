@@ -28,7 +28,7 @@ import java.util.Optional;
 @RequestMapping("/api/v1/kakaoPay")
 public class KakaoPayController {
 
-    KakaoPayService kakaoPayService;
+    private final KakaoPayService kakaoPayService;
     KakaoPayApprovalRes kakaoPayApprovalRes;
 
     private final BundleRepository bundleRepository;
@@ -42,24 +42,26 @@ public class KakaoPayController {
         Optional<Bundle> oBundle = bundleRepository.findById(kakaoPayReq.getBundleId());
         Bundle bundle = oBundle.orElseThrow(()->new CustomException(ErrorCode.BUNDLE_NOT_FOUND));
 
+        System.out.println(bundle);
         KakaoPayReadyRes kakaoPayReadyRes = kakaoPayService.KakaoPayReady(bundle);
 
         kakaoPayApprovalRes = new KakaoPayApprovalRes(
                 kakaoPayReadyRes.getTid(),
                 String.valueOf(bundle.getId()),
-                String.valueOf(bundle.getUser().getId()));
+                String.valueOf(bundle.getUser().getId()),
+                String.valueOf(bundle.getId()));
 
         if(kakaoPayReq.getPcOrMobile().equals("pc")) return "redirect:" + kakaoPayReadyRes.getNext_redirect_pc_url();
-        else return "redirect:" + kakaoPayReadyRes.getNext_redirect_mobile_url() + "/" + kakaoPayReq.getBundleId();
+        else return "redirect:" + kakaoPayReadyRes.getNext_redirect_mobile_url();
     }
 
     @GetMapping("/success")
-    public ResponseEntity<? extends CommonResponse> kakaoPaySuccess(@RequestParam("pg_token") String pg_token, Long bundleId) {
+    public ResponseEntity<? extends CommonResponse> kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
 //        log.info("GET: kakaoPaySuccess 결제 승인");
 
-        ResponseEntity<KakaoPayApprovalRes> kakaoPResponseEntity = kakaoPayService.kakaoPaySuccess(kakaoPayApprovalRes, pg_token, bundleId);
+        ResponseEntity<KakaoPayApprovalRes> kakaoPResponseEntity = kakaoPayService.kakaoPaySuccess(kakaoPayApprovalRes, pg_token);
 
-        Optional<Bundle> oBundle = bundleRepository.findById(bundleId);
+        Optional<Bundle> oBundle = bundleRepository.findById(Long.parseLong(kakaoPayApprovalRes.getItem_code()));
         Bundle bundle = oBundle.orElseThrow(()->new CustomException(ErrorCode.BUNDLE_NOT_FOUND));
 
         bundle.setPaid(true);

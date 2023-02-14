@@ -14,7 +14,7 @@ const StyledInput = styled.input`
     background-size: 100% 100%;
     background-position: 50%;
     background-repeat: no-repeat;
-    background-color: limegreen;
+    background-color: ${({ theme }) => theme.color.darkgrey};
   }
 `;
 

@@ -430,6 +430,7 @@ public class LiveServiceImpl implements LiveService {
                     .rightBottomY(product.getRightBottomY())
                     .imageUrl(product.getImageUrl())
                     .buyerId(product.getBuyerId())
+                    .isApproval(product.isApproval())
                     .build();
 
             liveProductInfoList.add(liveProductInfo);

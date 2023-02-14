@@ -32,7 +32,7 @@ import java.util.Optional;
 public class KakaoPayService {
     private static final String HOST = "https://kapi.kakao.com";
     private static final String DOMAIN = "https://i8b105.p.ssafy.io/api/v1/kakaoPay";
-    //    private static final String DOMAIN = "https://localhost:8000/api/v1/kakaoPay";
+//        private static final String DOMAIN = "https://localhost:8000/api/v1/kakaoPay";
     private static final String ADMIN = "7ad3ade6c404bf95e1713af49e12b31f";
     private KakaoPayReadyRes kakaoPayReadyRes;
     private int quantity, soldPrice;
@@ -67,9 +67,10 @@ public class KakaoPayService {
         params.add("partner_user_id", String.valueOf(bundle.getUser().getId())); // 가맹점 회원 id
         params.add("item_name", productName); // 상품명
         params.add("quantity", String.valueOf(quantity)); // 상품 수량
+        params.add("item_code", String.valueOf(bundle.getId())); // 묶음 아이디
         params.add("total_amount", String.valueOf(bundle.getPrice())); // 상품 총액
         params.add("tax_free_amount", "0"); // 상품 비과세 금액
-        params.add("approval_url", DOMAIN + "/success/"); // 결제 성공 시 redirect url
+        params.add("approval_url", DOMAIN + "/success"); // 결제 성공 시 redirect url
         params.add("cancel_url", DOMAIN + "/cancel"); // 결제 취소 시 redirect url
         params.add("fail_url", DOMAIN + "/fail"); // 결제 실패 시 redirect url
 
@@ -85,9 +86,9 @@ public class KakaoPayService {
     }
 
     // 결제 승인
-    public ResponseEntity<KakaoPayApprovalRes> kakaoPaySuccess(KakaoPayApprovalRes kakaoPayApprovalRes, String pg_token, Long bundleId) {
+    public ResponseEntity<KakaoPayApprovalRes> kakaoPaySuccess(KakaoPayApprovalRes kakaoPayApprovalRes, String pg_token) {
 //        log.info("Service: 결제 승인 단계 시작");
-        List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(bundleId);
+        List<BundledItemsRelation> bundledItemsRelationList = bundledItemsRelationRepository.findAllByBundle_Id(Long.valueOf(kakaoPayApprovalRes.getItem_code()));
 
         if (bundledItemsRelationList.isEmpty())
             throw new CustomException(ErrorCode.BUNDLE_NOT_FOUND);

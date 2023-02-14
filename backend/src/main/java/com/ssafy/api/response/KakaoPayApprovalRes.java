@@ -16,10 +16,11 @@ public class KakaoPayApprovalRes {
     private Integer quantity;
     private Date created_at, approved_at;
 
-    public KakaoPayApprovalRes(String tid, String partner_order_id, String partner_user_id) {
+    public KakaoPayApprovalRes(String tid, String partner_order_id, String partner_user_id, String item_code) {
         this.tid = tid;
         this.partner_order_id = partner_order_id;
         this.partner_user_id = partner_user_id;
+        this.item_code = item_code;
     }
 
 }

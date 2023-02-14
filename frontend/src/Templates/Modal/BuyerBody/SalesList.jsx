@@ -67,11 +67,12 @@ export default function SalesList({
     if (
       bundlePrice !== 0 &&
       bundlePrice !== "" &&
-      !bundlePrice.match(isNumber)
+      !(bundlePrice + "").match(isNumber)
     ) {
       alert("숫자만 입력해주세요");
       return;
     }
+    console.log(bundlePrice);
     price = bundlePrice;
     postBundle(
       {
@@ -102,8 +103,9 @@ export default function SalesList({
   }
 
   function priceChange(e) {
-    setBundlePrice(e.target.value);
+    setBundlePrice(e.target.value.replace(/\,/g, ""));
   }
+  const formatter = new Intl.NumberFormat("ko-KR");
   return (
     <>
       {productCheck
@@ -136,7 +138,7 @@ export default function SalesList({
           <BigInput
             placehold={"예상금액"}
             textalign="right"
-            value={bundlePrice}
+            value={formatter.format(bundlePrice)}
             inputValue={priceChange}
           />
           <BigBtn name={"구매요청"} buttonClick={bundle} />

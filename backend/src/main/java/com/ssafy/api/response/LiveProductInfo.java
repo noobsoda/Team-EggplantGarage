@@ -24,5 +24,6 @@ public class LiveProductInfo {
     private int rightBottomY;
     private String imageUrl;
     private Long buyerId;
+    private boolean isApproval;
 
 }

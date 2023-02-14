@@ -9,7 +9,7 @@ const StyledChatting = styled.div`
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   row-gap: 8px;
   /* font-family: "Inter"; */
   font-style: normal;
@@ -71,8 +71,10 @@ export default function ChatInput({
     if (stompClient === null) {
       return;
     }
-    scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    // scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    setTimeout(() => {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }, 0);
   }, [messageList]);
 
   /**
@@ -96,6 +98,7 @@ export default function ChatInput({
   return (
     <FlexBox>
       <StyledChatting ref={scrollRef}>
+        <div style={{ height: "30vh" }}>　</div>
         {messageList.map((msg, i) => (
           <MessageLive key={i + msg} message={msg} />
         ))}
