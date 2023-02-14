@@ -67,7 +67,7 @@ export default function SalesList({
     if (
       bundlePrice !== 0 &&
       bundlePrice !== "" &&
-      !bundlePrice.match(isNumber)
+      !(bundlePrice + "").match(isNumber)
     ) {
       alert("숫자만 입력해주세요");
       return;
