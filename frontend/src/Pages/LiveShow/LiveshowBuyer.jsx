@@ -84,7 +84,7 @@ export default function LiveshowBuyer() {
   const { liveId } = useParams(); //방 아이디가 넘어온다.
   const userInfo = useSelector(checkUserInfo); //현재 유저의 정보
 
-  const [stompClient, setStompClient] = useState(getStompClient()); //소켓
+  const [stompClient] = useState(getStompClient()); //소켓
 
   const [liveInfo, setLiveInfo] = useState({}); //방의 정보, 판매물품
   const [isSpeaker, setIsSpeaker] = useState(false);
@@ -94,59 +94,9 @@ export default function LiveshowBuyer() {
   const [bundleList, setBundleList] = useState([]);
   const [payList, setPayList] = useState([]);
 
-  const exit = () => {
-    const exitReq = { userId: userInfo.id, liveId: liveId };
-    exitLive(exitReq);
-    navigate("/");
-  };
-
-  //10초마다 묶음 제안 요청 왔는지 확인
-  useInterval(() => {
-    getSuggest();
-    getApprovSuggest();
-  }, 10000);
-
-  //묶음 제안 확인
-  function getSuggest() {
-    getBuyerSuggestList(
-      liveId,
-      userInfo.id,
-      ({ data }) => {
-        setBundleList(data);
-      },
-      () => {
-        console.warn("bundle load fail");
-      }
-    );
-  }
-
-  //승인된것 확인-결제 대기
-  function getApprovSuggest() {
-    getBuyerSuggestListPayWait(
-      liveId,
-      userInfo.id,
-      ({ data }) => {
-        setPayList(data);
-      },
-      () => {
-        console.warn("pay load fail");
-      }
-    );
-  }
-
-  function connect() {
-    stompClient.connect(
-      {},
-      () => {
-        stompClient.subscribe("/sub/live/product/" + liveId, (data) => {
-          console.log(data);
-        });
-      },
-      (error) => {
-        console.warn("product error");
-      }
-    );
-  }
+  //메시지
+  const [messageList, setMessageList] = useState([]);
+  const [message, setMessage] = useState(""); // 입력 메세지
 
   useEffect(() => {
     getLiveDetail(
@@ -176,6 +126,13 @@ export default function LiveshowBuyer() {
     );
     connect();
   }, []);
+
+  //10초마다 묶음 제안 요청 왔는지 확인
+  useInterval(() => {
+    getSuggest();
+    getApprovSuggest();
+  }, 10000);
+
   useInterval(() => {
     getLiveDetail(
       liveId,
@@ -188,6 +145,42 @@ export default function LiveshowBuyer() {
     );
   }, 2000);
 
+  //라이브 나가기
+  const exit = () => {
+    const exitReq = { userId: userInfo.id, liveId: liveId };
+    exitLive(exitReq);
+    navigate("/");
+  };
+
+  //묶음 제안 확인
+  function getSuggest() {
+    getBuyerSuggestList(
+      liveId,
+      userInfo.id,
+      ({ data }) => {
+        setBundleList(data);
+      },
+      () => {
+        console.warn("bundle load fail");
+      }
+    );
+  }
+
+  //승인된것 확인-결제 대기
+  function getApprovSuggest() {
+    getBuyerSuggestListPayWait(
+      liveId,
+      userInfo.id,
+      ({ data }) => {
+        setPayList(data);
+      },
+      () => {
+        console.warn("pay load fail");
+      }
+    );
+  }
+
+  //좋아요 클릭
   function clickLike() {
     if (isLiked) {
       deleteFavoriteLive(
@@ -208,6 +201,82 @@ export default function LiveshowBuyer() {
     }
     setIsLiked(!isLiked);
   }
+
+  //** 소켓 관련
+  //연결
+  const connect = () => {
+    stompClient.connect({}, connectSuccess, connectError);
+  };
+  /**
+   * 연결 성공
+   */
+  const connectSuccess = () => {
+    stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
+    stompClient.send(
+      "/pub/live/addUser/" + liveId,
+      {},
+      JSON.stringify({
+        sender: userInfo.nickname,
+        type: "JOIN",
+        roomId: liveId,
+      })
+    );
+  };
+
+  /**
+   * 연결 실패
+   */
+  const connectError = () => {
+    console.warn("connectError!");
+  };
+
+  /**
+   * 메시지 받음
+   * @param {*} payload
+   */
+  const onMessageReceived = (payload) => {
+    const messageRecv = JSON.parse(payload.body);
+    if (messageRecv.type === "JOIN") {
+      setMessageList((prevItems) => [
+        ...prevItems,
+        "[" + messageRecv.sender + "] 님이 입장하셨습니다.",
+      ]);
+      // setMessageContent("[" + message.sender + "] 님이 입장하셨습니다.");
+    } else {
+      setMessageList((prevItems) => [
+        ...prevItems,
+        "[" + messageRecv.sender + "] " + messageRecv.content,
+      ]);
+      // setMessageContent("[" + message.sender + "] " + message.content);
+    }
+  };
+
+  /**
+   * 메시지 전송
+   */
+  const sendMessage = (msg) => {
+    if (msg && stompClient) {
+      var chatMessage = {
+        sender: userInfo.nickname,
+        roomId: liveId,
+        content: msg,
+        type: "CHAT",
+      };
+      stompClient.send(
+        "/pub/live/message/" + liveId,
+        {},
+        JSON.stringify(chatMessage)
+      );
+      // scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+  };
+
+  //채팅 입력
+  const chatMessage = () => {
+    sendMessage(message);
+    setMessage("");
+  };
+
   return (
     <StyledPage>
       <Buyer liveId={liveId} />
@@ -248,12 +317,19 @@ export default function LiveshowBuyer() {
           </StyledSide>
         </StyledHeader>
         <StyledBody>
-          <LiveChatBox liveId={liveId} />
+          <LiveChatBox
+            message={message}
+            setMessage={setMessage}
+            messageList={messageList}
+            sendMessage={chatMessage}
+            stompClient={stompClient}
+          />
         </StyledBody>
       </LiveLayout>
       {modalOpen && (
         <ModalBuyer
-          userId={userInfo.id}
+          // userId={userInfo.id}
+          userInfo={userInfo}
           liveId={liveId}
           bundleList={bundleList}
           productList={liveInfo.liveProductInfoList}
@@ -262,6 +338,7 @@ export default function LiveshowBuyer() {
           getSuggest={getSuggest}
           payList={payList}
           getApprovSuggest={getApprovSuggest}
+          sendMessage={sendMessage}
         />
       )}
     </StyledPage>

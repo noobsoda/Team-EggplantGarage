@@ -7,15 +7,22 @@ import {
   setBundleApproval,
 } from "../../../util/api/productApi";
 
-export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
+export default function SuggestionList({
+  userInfo,
+  isSeller,
+  suggestList,
+  getSuggest,
+  sendMessage,
+}) {
   useEffect(() => {
     getSuggest();
   }, []);
 
-  function bundleRefuse(bundleId) {
+  function bundleRefuse(bundleId, item) {
     setBundleRefuse(
       bundleId,
       () => {
+        sendMessage(`${item.nickname}님의 요청이 거절됐어요.`);
         getSuggest();
       },
       () => {
@@ -28,6 +35,7 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
     setBundleCancel(
       bundleId,
       () => {
+        sendMessage(`${userInfo.nickname}님이 요청을 취소했어요`);
         getSuggest();
       },
       () => {
@@ -35,10 +43,11 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
       }
     );
   }
-  function bundleAccept(bundleId) {
+  function bundleAccept(bundleId, item) {
     setBundleApproval(
       bundleId,
       () => {
+        sendMessage(`${item.nickname}님의 묶음을 승락 했어요. 결제해주세요`);
         getSuggest();
       },
       () => {
@@ -55,8 +64,8 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
             isSeller={isSeller}
             bundleUser={items[0].nickname}
             cancel={() => bundleCancel(items[0].bundleId)}
-            refuse={() => bundleRefuse(items[0].bundleId)}
-            accept={() => bundleAccept(items[0].bundleId)}
+            refuse={() => bundleRefuse(items[0].bundleId, items[0])}
+            accept={() => bundleAccept(items[0].bundleId, items[0])}
             bundlePrice={items[0].totalPrice}
           >
             {items

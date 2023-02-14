@@ -77,17 +77,19 @@ export const userConfirm = (userData, navigate, setError) => (dispatch) => {
  * 유저의 정보 확인 - 토큰이 내장되서 전송
  * @returns
  */
-export const getUserInfo = (navigate) => (dispatch) => {
+export const getUserInfo = (navigate, setLoginCheck) => (dispatch) => {
   userInfo(
     ({ data }) => {
-      console.log(data);
       dispatch(setUserInfo(data));
+      setLoginCheck(true);
     },
     (e) => {
-      console.log(e);
-      alert("다시 로그인 해주쇼");
+      //alert("다시 로그인 해주쇼");
       //refresh로 access갱신
-      tokenRegenerationAction(navigate);
+      console.warn("no login");
+      setLoginCheck(false);
+      navigate("/login");
+      //dispatch(tokenRegenerationAction(navigate));
     }
   );
 };
@@ -99,9 +101,13 @@ export const getUserInfo = (navigate) => (dispatch) => {
 export const logoutAction = (navigate) => (dispatch) => {
   logout(
     () => {
+      //state reset
       dispatch(setIsLogin(false));
       dispatch(setUserInfo(null));
       dispatch(setIsValidToken(false));
+
+      //session reset
+      sessionStorage.removeItem("accessToken");
       navigate("/");
     },
     () => {
@@ -139,6 +145,7 @@ export const tokenRegenerationAction = (navigate) => (dispatch) => {
           console.warn("logout fail");
           dispatch(setIsLogin(false));
           dispatch(setUserInfo(null));
+          navigate("/login");
         }
       );
     }

@@ -1,7 +1,8 @@
-import React from "react";
-import { useState, useEffect } from "react";
 import styled from "styled-components";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { checkUserInfo } from "../../store/user";
 
 import ModalSeller from "../../Organisms/Modal/ModalBuyer";
 import LiveChatBox from "../../Molecules/Box/LiveChatBox";
@@ -19,6 +20,8 @@ import { getSellerSuggestList } from "../../util/api/productApi";
 
 import useInterval from "../../hook/useInterval";
 import ViewerCntBox from "../../Molecules/Box/ViewerCntBox";
+
+import getStompClient from "../../util/socket";
 
 const StyledPage = styled.div`
   width: 100%;
@@ -66,8 +69,9 @@ const LiveLayout = styled.div`
   height: 100%;
   z-index: 1;
 `;
-export default function LiveshowBuyer(toggleCamera) {
+export default function LiveshowSeller(toggleCamera) {
   const { liveId } = useParams(); //방 아이디
+  const userInfo = useSelector(checkUserInfo); //현재 유저의 정보
 
   const [isMic, setIsMic] = useState(true);
   const [isCamera, setIsCamera] = useState(true);
@@ -76,33 +80,14 @@ export default function LiveshowBuyer(toggleCamera) {
 
   const [liveInfo, setLiveInfo] = useState({});
   const [bundleList, setBundleList] = useState([]);
-  // const [isExit, setIsExit] = useState(false);
+
+  //소켓
+  const [stompClient] = useState(getStompClient()); //소켓
+  //메시지
+  const [messageList, setMessageList] = useState([]);
+  const [message, setMessage] = useState(""); // 입력 메세지
 
   const navigate = useNavigate();
-
-  const exit = () => {
-    // if (isExit) {
-    closeLive(liveId, (data) => {});
-    navigate("/");
-    // }
-  };
-
-  //10초마다 묶음 제안 요청 왔는지 확인
-  useInterval(() => {
-    getSuggest();
-  }, 10000);
-
-  function getSuggest() {
-    getSellerSuggestList(
-      liveId,
-      ({ data }) => {
-        setBundleList(data);
-      },
-      () => {
-        console.warn("bundle load fail");
-      }
-    );
-  }
 
   useEffect(() => {
     getLiveDetail(
@@ -120,7 +105,14 @@ export default function LiveshowBuyer(toggleCamera) {
         console.warn("live info fail");
       }
     );
+    connect();
   }, []);
+
+  //10초마다 묶음 제안 요청 왔는지 확인
+  useInterval(() => {
+    getSuggest();
+  }, 10000);
+
   //2초마다 아...유저수만 받아오게 하고싶긴한데
   useInterval(() => {
     getLiveDetail(
@@ -134,6 +126,101 @@ export default function LiveshowBuyer(toggleCamera) {
     );
   }, 2000);
 
+  const exit = () => {
+    // if (isExit) {
+    closeLive(liveId, (data) => {});
+    navigate("/");
+    // }
+  };
+
+  function getSuggest() {
+    getSellerSuggestList(
+      liveId,
+      ({ data }) => {
+        setBundleList(data);
+      },
+      () => {
+        console.warn("bundle load fail");
+      }
+    );
+  }
+
+  //** 소켓 관련
+  //연결
+  const connect = () => {
+    stompClient.connect({}, connectSuccess, connectError);
+  };
+  /**
+   * 연결 성공
+   */
+  const connectSuccess = () => {
+    stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
+    stompClient.send(
+      "/pub/live/addUser/" + liveId,
+      {},
+      JSON.stringify({
+        sender: userInfo.nickname,
+        type: "JOIN",
+        roomId: liveId,
+      })
+    );
+  };
+
+  /**
+   * 연결 실패
+   */
+  const connectError = () => {
+    console.warn("connectError!");
+  };
+
+  /**
+   * 메시지 받음
+   * @param {*} payload
+   */
+  const onMessageReceived = (payload) => {
+    const messageRecv = JSON.parse(payload.body);
+    if (messageRecv.type === "JOIN") {
+      setMessageList((prevItems) => [
+        ...prevItems,
+        "[" + messageRecv.sender + "] 님이 입장하셨습니다.",
+      ]);
+      // setMessageContent("[" + message.sender + "] 님이 입장하셨습니다.");
+    } else {
+      setMessageList((prevItems) => [
+        ...prevItems,
+        "[" + messageRecv.sender + "] " + messageRecv.content,
+      ]);
+      // setMessageContent("[" + message.sender + "] " + message.content);
+    }
+  };
+
+  /**
+   * 메시지 전송
+   */
+  const sendMessage = (msg) => {
+    if (msg && stompClient) {
+      var chatMessage = {
+        sender: userInfo.nickname,
+        roomId: liveId,
+        content: msg,
+        type: "CHAT",
+      };
+      stompClient.send(
+        "/pub/live/message/" + liveId,
+        {},
+        JSON.stringify(chatMessage)
+      );
+      // scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    }
+    setMessage("");
+  };
+
+  //채팅 입력
+  const chatMessage = () => {
+    sendMessage(message);
+    setMessage("");
+  };
+
   return (
     <StyledPage>
       <Seller
@@ -141,6 +228,7 @@ export default function LiveshowBuyer(toggleCamera) {
         isCamera={isCamera}
         isMic={isMic}
         isFlipped={isFlipped}
+        exit={exit}
       />
       <LiveLayout>
         <StyledHeader>
@@ -188,12 +276,19 @@ export default function LiveshowBuyer(toggleCamera) {
           </StyledSide>
         </StyledHeader>
         <StyledBody>
-          <LiveChatBox liveId={liveId} />
+          <LiveChatBox
+            message={message}
+            setMessage={setMessage}
+            messageList={messageList}
+            sendMessage={chatMessage}
+            stompClient={stompClient}
+          />
         </StyledBody>
       </LiveLayout>
 
       {modalOpen && (
         <ModalSeller
+          sendMessage={sendMessage}
           productList={liveInfo.liveProductInfoList}
           bundleList={bundleList}
           setModalOpen={setModalOpen}
