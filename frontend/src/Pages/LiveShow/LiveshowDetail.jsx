@@ -31,7 +31,10 @@ export default function LiveshowDetail() {
       <Header isName="True" headerName="라이브쇼상세" />
       <Body>
         <div className="page-header">{live && live.title}</div>
-        <div className="body1-regular">{live && live.createAt}</div>
+        <div className="body1-regular">
+          {live &&
+            live.createAt.split(":")[0] + ":" + live.createAt.split(":")[1]}
+        </div>
         <hr></hr>
         <div className="body1-header">판매제품 목록</div>
         {productList &&
