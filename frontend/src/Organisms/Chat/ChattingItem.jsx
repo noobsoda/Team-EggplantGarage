@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { format, render, cancel, register } from "timeago.js";
+import koLocale from "timeago.js/lib/lang/ko";
 
 const StyledBox = styled.div`
   display: flex;
@@ -14,7 +16,6 @@ const StyledBox = styled.div`
   border: solid 2px;
   border-color: ${({ theme }) => theme.color.red};
 `;
-
 export default function ChattingItem({
   id,
   receiverId,
@@ -34,6 +35,7 @@ export default function ChattingItem({
     });
     window.location.reload(`/chat/room`);
   };
+  register("ko", koLocale);
   return (
     <StyledBox onClick={room}>
       <div
@@ -44,7 +46,8 @@ export default function ChattingItem({
         }}
       >
         <div className="body1-header">{receiverName}</div>
-        <div>{lastSendTime}</div>
+        {/* <div>{lastSendTime}</div> */}
+        <div>{format(lastSendTime, "ko")}</div>
       </div>
       <div>
         {lastSendMessage !== null ? (
