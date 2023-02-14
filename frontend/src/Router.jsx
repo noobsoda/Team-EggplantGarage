@@ -19,6 +19,7 @@ import LiveshowDetail from "./Pages/LiveShow/LiveshowDetail";
 import WriteReview from "./Pages/Mypage/WriteReview";
 import Review from "./Pages/Mypage/Review";
 import LiveshowBuyer from "./Pages/LiveShow/LiveshowBuyer";
+import NotFound from "./Pages/Error/404";
 
 //로그인 여부를 확인한다.
 import Auth from "./Templates/Auth";
@@ -49,7 +50,7 @@ const Router = () => {
     { path: "/login", element: <Login /> },
     { path: "/signup", element: <SignUp /> },
     { path: "/signupemail", element: <SignUpEmail /> },
-    { path: "*", element: <Main /> },
+    { path: "*", element: <NotFound /> },
     { path: "/findpass", element: <FindPassword /> },
   ]);
   return (
