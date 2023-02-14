@@ -28,6 +28,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'org.springframework.boot' version "${springBootVer}"
+    id "org.sonarqube" version "3.0"
 }
 
 apply plugin: 'io.spring.dependency-management'
@@ -232,12 +233,13 @@ dependencies {
     // https://mvnrepository.com/artifact/javax.interceptor/javax.interceptor-api
     implementation 'javax.interceptor:javax.interceptor-api:1.2.2'
 
-    compile("javax.annotation:javax.annotation-api:1.2")
+    /*compile("javax.annotation:javax.annotation-api:1.2")*/
+    implementation 'javax.annotation:javax.annotation-api:1.2'
 
     implementation("org.projectlombok:lombok:1.18.20")
     annotationProcessor("org.projectlombok:lombok:1.18.20")
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    /*testCompile('org.springframework.boot:spring-boot-starter-test')*/
 }
 
 test {

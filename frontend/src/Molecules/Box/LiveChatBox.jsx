@@ -11,7 +11,7 @@ const StyledChatting = styled.div`
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   row-gap: 8px;
   /* font-family: "Inter"; */
   font-style: normal;
@@ -21,14 +21,13 @@ const StyledChatting = styled.div`
 
   /* border-radius: 8px; */
   /* background-color: white; */
-  overflow-y: scroll;
   -webkit-mask-image: linear-gradient(transparent, black);
   mask-image: linear-gradient(transparent, black);
   background-color: rgb(0, 0, 0, 0.4);
+  overflow-y: scroll;
+  /* overflow: auto; */
   border-radius: 8px;
 `;
-
-const StyledMessage = styled.div``;
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -99,11 +98,17 @@ export default function ChatInput({
   return (
     <FlexBox>
       <StyledChatting ref={scrollRef}>
-        <StyledMessage>
-          {messageList.map((msg, i) => (
-            <MessageLive key={i + msg} message={msg} />
-          ))}
-        </StyledMessage>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        {messageList.map((msg, i) => (
+          <MessageLive key={i + msg} message={msg} />
+        ))}
       </StyledChatting>
 
       <StyledContainer>

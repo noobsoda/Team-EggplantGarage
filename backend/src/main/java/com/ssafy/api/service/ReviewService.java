@@ -7,7 +7,7 @@ import com.ssafy.db.entity.Review;
 import java.util.List;
 
 public interface ReviewService {
-    Review writeReview(ReviewWritePostReq review);
+    boolean writeReview(ReviewWritePostReq review);
     List<ReviewRes> getSellerReviews(long sellerId);
     List<ReviewRes> getBuyerReviews(long buyerId);
 
