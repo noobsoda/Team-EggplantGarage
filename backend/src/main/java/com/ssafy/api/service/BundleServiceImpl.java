@@ -85,7 +85,7 @@ public class BundleServiceImpl implements BundleService {
                         product.getLeftTopX(), product.getLeftTopY(),
                         product.getRightBottomX(), product.getRightBottomY(),
                         product.getImageUrl(), product.getBuyerId(),
-                        bundleList.get(i).getUser().getNickname(), totalPrice);
+                        bundleList.get(i).getUser().getNickname(), totalPrice, product.isApproval());
 
                 productList.add(res);
             }
@@ -157,7 +157,6 @@ public class BundleServiceImpl implements BundleService {
 
             // 0원이면 카카오페이 결제 가지 않고 바로 결제 완료
             if(bundle.getPrice() == 0) {
-                System.out.println("0원 상품");
                 product.setPaid(true);
                 product.setSoldAt(LocalDateTime.now());
                 product.setSoldPrice(0);
