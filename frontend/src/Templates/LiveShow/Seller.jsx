@@ -21,7 +21,7 @@ const StyledLive = styled.div`
   /* display */
 `;
 
-export default function Seller({ liveId, isCamera, isMic, isFlipped }) {
+export default function Seller({ liveId, isCamera, isMic, isFlipped, exit }) {
   const userInfo = useSelector(checkUserInfo);
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름

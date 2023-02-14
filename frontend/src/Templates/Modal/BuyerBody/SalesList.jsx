@@ -14,7 +14,13 @@ const InfoBox = styled.div`
   align-items: center;
 `;
 
-export default function SalesList({ userId, liveId, isSeller, productList }) {
+export default function SalesList({
+  userInfo,
+  liveId,
+  isSeller,
+  productList,
+  sendMessage,
+}) {
   const [productCheck, setProductCheck] = useState(
     productList.map((ele) => {
       ele["check"] = false;
@@ -72,7 +78,7 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
         productIdList: productCheck
           .filter((ele) => ele.check)
           .map((ele) => ele.id), //check한것만 묶음 요청
-        buyerId: userId, //구매자 아이디
+        buyerId: userInfo.id, //구매자 아이디
         soldPrice: price, //가격 제안
         liveId: liveId, //라이브 아이디
       },
@@ -87,6 +93,7 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
             return tmpEle;
           })
         );
+        sendMessage(`${userInfo.nickname}이 묶음 요청 했어요`);
       },
       () => {
         console.warn("bundle fail");
@@ -132,7 +139,7 @@ export default function SalesList({ userId, liveId, isSeller, productList }) {
             value={bundlePrice}
             inputValue={priceChange}
           />
-          <BigBtn name={"구매요청33"} buttonClick={bundle} />
+          <BigBtn name={"구매요청"} buttonClick={bundle} />
         </InfoBox>
       )}
     </>

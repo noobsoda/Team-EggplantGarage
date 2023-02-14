@@ -4,14 +4,15 @@ import ItemCard from "../../../Molecules/Cards/ItemCard";
 import { kakaopay } from "../../../util/api/productApi";
 import { isMobile } from "../../../util";
 
-export default function PayList({ payList, getPayList }) {
+export default function PayList({ payList, getPayList, sendMessage }) {
   useEffect(() => {
     getPayList();
   }, []);
-  function bundlePay(bundleId) {
+  function bundlePay(bundleId, item) {
     kakaopay(
       { bundleId: bundleId, pcOrMobile: isMobile() ? "mobile" : "pc" },
       ({ data }) => {
+        sendMessage(`${item.nickname}님이 결제를 완료했습니다.`);
         window.open(data.split("redirect:")[1]);
       },
       () => {
@@ -28,7 +29,7 @@ export default function PayList({ payList, getPayList }) {
             key={i}
             isPay={true}
             bundlePrice={items[0].totalPrice}
-            accept={() => bundlePay(items[0].bundleId)}
+            accept={() => bundlePay(items[0].bundleId, items[0])}
           >
             {items
               .map((ele) => {
