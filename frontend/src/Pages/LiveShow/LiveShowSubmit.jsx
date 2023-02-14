@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
+import { getLocation } from "../../store/location";
 
 import styled from "styled-components";
 import MidBtn from "../../Atoms/Buttons/MediumBtn";
@@ -26,18 +27,12 @@ import {
 import { setLiveProduct } from "../../util/api/productApi";
 import { dataURItoBlob } from "../../util/data";
 
-const StyledBox = styled.div`
-  display: flex;
-  width: 1800px;
-
-  transform: ${(props) => `translateX(${-props.phase * 360}px)`};
-  transition: transform 0.2s ease-in-out;
-`;
-
 const StyledWindow = styled.div`
   display: flex;
   overflow: hidden;
-  width: 360px;
+  width: 80%;
+  padding: 24px 10%;
+  height: calc(100% - 64px);
 `;
 const BtnFlex = styled.div`
   display: flex;
@@ -46,6 +41,7 @@ const BtnFlex = styled.div`
 
 export default function LiveShowSubmit() {
   const userInfo = useSelector(checkUserInfo);
+  const location = useSelector(getLocation);
   const navigate = useNavigate();
 
   const [imgSrc, setImgSrc] = useState("//:0"); //회전후 결과를 담는 canvas
@@ -137,8 +133,8 @@ export default function LiveShowSubmit() {
       description: "",
       url: `${process.env.REACT_APP_API_URL}test/${id}`,
       live: true,
-      latitude: "",
-      longitude: "",
+      latitude: location.lat,
+      longitude: location.lng,
       sessionId: id,
       sellerId: id,
     };
@@ -206,10 +202,9 @@ export default function LiveShowSubmit() {
           }
         );
 
-        navigate(`/liveshowseller/${liveId}`);
+        navigate(`/seller/${liveId}`);
       },
-      (e) => {
-        console.log(e);
+      () => {
         console.warn("live fail");
       }
     );
@@ -240,26 +235,33 @@ export default function LiveShowSubmit() {
       <Header isName={true} headerName="라이브쇼 등록" />
       <Body>
         <StyledWindow>
-          <StyledBox phase={step}>
+          {step === 0 ? (
             <TitleCategoryBox
               onTitleChange={titleValue}
               categorys={categorys.value}
               onCategoryChange={onChange}
               delCategory={delCategory}
             />
+          ) : undefined}
+          {step === 1 ? (
             <PictureSubmitBox imgSrc={imgSrc} cameraEvent={cameraEvent} />
-
+          ) : undefined}
+          {step === 2 ? (
             <ProductSubmitBox
               imgSrc={imgSrc}
               productList={productList}
               setProductList={setProductList}
             />
+          ) : undefined}
+          {step === 3 ? (
             <ProductListBox
               imgSrc={imgSrc}
               productList={productList}
               onModifyClick={modiProduct}
               onDeleteClick={deleteProduct}
             />
+          ) : undefined}
+          {step === 4 ? (
             <ProuctModifyBox
               imgSrc={imgSrc}
               modifyProduct={modifyProduct}
@@ -268,7 +270,7 @@ export default function LiveShowSubmit() {
               deleteProduct={deleteProduct}
               backStep={backStep}
             />
-          </StyledBox>
+          ) : undefined}
         </StyledWindow>
         <BtnFlex>
           {step === 0 ? (

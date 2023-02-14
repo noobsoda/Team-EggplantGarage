@@ -1,28 +1,53 @@
 import React, { useEffect } from "react";
 import BundleBox from "../../../Molecules/Cards/BundleBox";
 import ItemCard from "../../../Molecules/Cards/ItemCard";
-import { setBundleRefuse, setBundleApproval } from "../../../util/api/productApi";
+import {
+  setBundleRefuse,
+  setBundleCancel,
+  setBundleApproval,
+} from "../../../util/api/productApi";
 
-export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
+export default function SuggestionList({
+  userInfo,
+  isSeller,
+  suggestList,
+  getSuggest,
+  sendMessage,
+}) {
   useEffect(() => {
     getSuggest();
   }, []);
 
-  function bundleCancle(bundleId) {
+  function bundleRefuse(bundleId, item) {
     setBundleRefuse(
       bundleId,
       () => {
+        sendMessage(`${item.nickname}님의 요청이 거절됐어요.`);
         getSuggest();
       },
       () => {
-        console.warn("bundle reject fail");
+        console.warn("bundle refuce fail");
       }
     );
   }
-  function bundleAccept(bundleId) {
+
+  function bundleCancel(bundleId) {
+    setBundleCancel(
+      bundleId,
+      () => {
+        sendMessage(`${userInfo.nickname}님이 요청을 취소했어요`);
+        getSuggest();
+      },
+      () => {
+        console.warn("bundle cancle fail");
+      }
+    );
+  }
+  function bundleAccept(bundleId, item) {
     setBundleApproval(
       bundleId,
       () => {
+        sendMessage(`${item.nickname}님의 묶음을 승락 했어요. 결제해주세요`);
         getSuggest();
       },
       () => {
@@ -33,14 +58,15 @@ export default function SuggestionList({ isSeller, suggestList, getSuggest }) {
   return (
     <>
       {suggestList.map((items, i) => {
-        console.log(items);
         return (
           <BundleBox
             key={i}
             isSeller={isSeller}
             bundleUser={items[0].nickname}
-            reject={() => bundleCancle(items[0].bundleId)}
-            accept={() => bundleAccept(items[0].bundleId)}
+            cancel={() => bundleCancel(items[0].bundleId)}
+            refuse={() => bundleRefuse(items[0].bundleId, items[0])}
+            accept={() => bundleAccept(items[0].bundleId, items[0])}
+            bundlePrice={items[0].totalPrice}
           >
             {items
               .map((ele) => {

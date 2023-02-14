@@ -2,13 +2,14 @@ import React from "react";
 import styled from "styled-components";
 
 const StyledInput = styled.input`
-  width: calc(100% - 80px);
-  height: 40px;
-  border: 2px solid ${({ theme }) => theme.color.darkgrey};
-  border-radius: 16px;
-  color: ${({ theme }) => theme.color.black};
-  padding: 8px;
-  box-sizing: border-box;
+width: calc(100% - 80px);
+height: 40px;
+border: 1px solid ${({ theme }) => theme.color.lightgrey};
+background-color: #f6f7fa;
+border-radius: 12px;
+color: ${({ theme }) => theme.color.black};
+padding: 8px;
+box-sizing: border-box;
 `;
 
 export default function SearchInput({ onChange, type, value }) {

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CategoryNavBtn from "../../Atoms/Buttons/CategoryNavBtn";
 import Container from "../../Templates/Layout/Container";
 import styled from "styled-components";
+import { categories } from "../../util/category";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -11,6 +12,11 @@ const StyledContainer = styled.div`
   overflow-x: scroll;
   margin: auto 0;
   // height: 16px;
+  /* &::-webkit-scrollbar  */
+  /* display: none; */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
@@ -18,29 +24,6 @@ const StyledContainer = styled.div`
 export default function CategoryNav({ setSelected }) {
   //useState , event
   const [select, setSelect] = useState("인기");
-
-  const categories = [
-    "인기",
-    "디지털기기",
-    "생활가전",
-    "가구",
-    "생활/주방",
-    "유아용품",
-    "유아도서",
-    "여성의류",
-    "여성잡화",
-    "남성의류",
-    "남성잡화",
-    "뷰티/미용",
-    "스포츠",
-    "취미/게임",
-    "음반",
-    "도서",
-    "티켓",
-    "반려동물",
-    "식물",
-    "기타",
-  ];
 
   return (
     <StyledContainer>

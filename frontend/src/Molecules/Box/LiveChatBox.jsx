@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { checkUserInfo } from "../../store/user";
 import styled from "styled-components";
-import getStompClient from "../../util/socket";
 import MessageLive from "../../Atoms/Text/MessageLive";
+
 const StyledChatting = styled.div`
   padding: 8px;
   width: calc(100% - 100px);
@@ -11,7 +11,7 @@ const StyledChatting = styled.div`
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   row-gap: 8px;
   /* font-family: "Inter"; */
   font-style: normal;
@@ -21,14 +21,13 @@ const StyledChatting = styled.div`
 
   /* border-radius: 8px; */
   /* background-color: white; */
-  overflow-y: scroll;
   -webkit-mask-image: linear-gradient(transparent, black);
   mask-image: linear-gradient(transparent, black);
   background-color: rgb(0, 0, 0, 0.4);
+  overflow-y: scroll;
+  /* overflow: auto; */
   border-radius: 8px;
 `;
-
-const StyledMessage = styled.div``;
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -61,84 +60,22 @@ const FlexBox = styled.div`
   row-gap: 16px;
   justify-content: flex-end;
 `;
-export default function ChatInput({ liveId }) {
-  const userInfo = useSelector(checkUserInfo);
-  const [stompClient] = useState(getStompClient());
-  const [message, setMessage] = useState(""); // 입력 메세지
-  const [messageList, setMessageList] = useState([]);
-
-  // const messageArea = useRef();
+export default function ChatInput({
+  message,
+  setMessage,
+  messageList,
+  stompClient,
+  sendMessage,
+}) {
   const scrollRef = useRef();
-
-  //연결
-  const connect = () => {
-    stompClient.connect({}, connectSuccess, connectError);
-  };
 
   useEffect(() => {
     if (stompClient === null) {
       return;
     }
-    connect(); //연결
     scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, []);
-
-  /**
-   * 연결 성공
-   */
-  const connectSuccess = () => {
-    stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
-    stompClient.send(
-      "/pub/live/addUser/" + liveId,
-      {},
-      JSON.stringify({
-        sender: userInfo.nickname,
-        type: "JOIN",
-        roomId: liveId,
-      })
-    );
-  };
-
-  /**
-   * 연결 실패
-   */
-  const connectError = () => {
-    console.warn("connectError!");
-  };
-
-  /**
-   * 메시지 받음
-   * @param {*} payload
-   */
-  const onMessageReceived = (payload) => {
-    const message = JSON.parse(payload.body);
-    let messageTmp = messageList;
-    if (message.type === "JOIN") {
-      messageTmp.push({ content: "[" + message.sender + "] 님이 입장하셨습니다." });
-      setMessageList(messageTmp);
-    } else {
-      messageTmp.push({ sender: "[" + message.sender + "]", content: message.content });
-      setMessageList(messageTmp);
-    }
-  };
-
-  /**
-   * 메시지 전송
-   */
-  const sendMessage = () => {
-    if (message && stompClient) {
-      var chatMessage = {
-        sender: userInfo.nickname,
-        roomId: liveId,
-        content: message,
-        type: "CHAT",
-      };
-      stompClient.send("/pub/live/message/" + liveId, {}, JSON.stringify(chatMessage));
-      scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    }
-    setMessage("");
-  };
 
   /**
    * enter입력
@@ -161,11 +98,17 @@ export default function ChatInput({ liveId }) {
   return (
     <FlexBox>
       <StyledChatting ref={scrollRef}>
-        <StyledMessage>
-          {messageList.map((msg, i) => (
-            <MessageLive key={i + msg.content} message={msg} />
-          ))}
-        </StyledMessage>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        {messageList.map((msg, i) => (
+          <MessageLive key={i + msg} message={msg} />
+        ))}
       </StyledChatting>
 
       <StyledContainer>

@@ -2,15 +2,14 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.BundleReq;
 import com.ssafy.api.response.BundledItemsProductRes;
-import com.ssafy.common.error.ErrorCode;
 import com.ssafy.common.exception.CustomException;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.checkerframework.checker.nullness.Opt;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -99,7 +98,7 @@ public class BundleServiceImpl implements BundleService {
                         product.getLeftTopX(), product.getLeftTopY(),
                         product.getRightBottomX(), product.getRightBottomY(),
                         product.getImageUrl(), product.getBuyerId(),
-                        bundleList.get(i).getUser().getNickname(), totalPrice);
+                        bundleList.get(i).getUser().getNickname(), totalPrice, product.isApproval());
 
                 productList.add(res);
             }
@@ -170,6 +169,7 @@ public class BundleServiceImpl implements BundleService {
         Optional<Bundle> oBundle = bundleRepository.findById(bundleId);
         Bundle bundle = oBundle.orElseThrow(() -> new CustomException(BUNDLE_NOT_FOUND));
 
+        if(bundle.getPrice() == 0) bundle.setPaid(true);
         bundle.setApproval(true);
         bundleRepository.save(bundle);
 
@@ -186,6 +186,15 @@ public class BundleServiceImpl implements BundleService {
             Product product = oProduct.orElse(null);
             if (product == null)
                 continue;
+
+
+            // 0원이면 카카오페이 결제 가지 않고 바로 결제 완료
+            if(bundle.getPrice() == 0) {
+                product.setPaid(true);
+                product.setSoldAt(LocalDateTime.now());
+                product.setSoldPrice(0);
+                product.setBuyerId(bundle.getId());
+            }
 
             product.setApproval(true);
             productRepository.save(product);

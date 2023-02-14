@@ -21,25 +21,22 @@ const StyledContainer = styled.div`
 const StyledInput = styled.input`
   width: calc(100% - 32px);
   height: 40px;
-  border: 2px solid ${({ theme }) => theme.color.black};
+  border: 2px solid ${({ theme }) => theme.color.red};
   border-radius: 8px;
   box-sizing: border-box;
   background-color: rgba(255, 255, 255, 0);
-  color: ${({ theme }) => theme.color.black};
+  color: ${({ theme }) => theme.color.red};
   padding: 0 8px;
+  &::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: ${({ theme }) => theme.color.red};
+    opacity: 1; /* Firefox */
+  }
 `;
 const SendBtn = styled.button`
   width: 24px;
   height: 24px;
   background: url("/image/send-icon.svg") no-repeat 0px 0px;
-  //gradient 속성 찾기
-  /* &::-webkit-mask-image: -webkit-gradient(
-    linear,
-    left 50%,
-    left bottom,
-    to(rgba(0, 0, 0, 1)),
-    from(rgba(0, 0, 0, 0))
-  ); */
 `;
 const ChatBody = styled.div`
   height: calc(100% - 56px);
@@ -49,8 +46,7 @@ const ChatBody = styled.div`
 `;
 
 export default function ChatRoom() {
-  console.log(useLocation().state);
-  const InputRef = useRef(undefined);
+  // console.log(useLocation().state);
   const userInfo = useSelector(checkUserInfo);
   const senderId = userInfo.id;
   const receiverId = useLocation().state.receiverId;
@@ -59,7 +55,6 @@ export default function ChatRoom() {
   const [chatMessagesList, setChatMessagesList] = useState([]); // 주고 받은 메시지 리스트
   const [message, setMessage] = useState(""); // 입력창 메시지
   const [stompClient] = useState(getStompClient());
-  const scrollRef = useRef();
   let navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -101,9 +96,6 @@ export default function ChatRoom() {
   // 의존성 변수 chattingMessages가 변경될 때만 함수 호출
   // 새로운 메시지가 생성될때 채팅 스크롤
   // 메시지가 추가될 경우 이벤트가 발생하여, 스크롤을 가장 밑으로 내림
-  useEffect(() => {
-    scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-  }, [chatMessagesList]);
 
   // 메시지 보내기
   const sendMessage = () => {
@@ -119,7 +111,7 @@ export default function ChatRoom() {
           sendTime: null,
         })
       );
-      scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      // scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
     setMessage(""); // 메시지 전송 후 문자열 초기화
   };
@@ -137,11 +129,13 @@ export default function ChatRoom() {
       <Header isName="True" headerName="채팅방" />
       {/* scrollRef를 이용하여 아래 div 영역을 스크롤 조작 */}
       <Body>
-        <ChatBody ref={scrollRef}>
-          <div> {receiverName}님과의 채팅방</div>
-          <div>
-            <ChattingMessage chattingMessages={chatMessagesList} />
-          </div>
+        <ChatBody>
+          <div className="body1-header"> {receiverName}님과의 채팅방</div>
+          <ChattingMessage
+            chattingMessages={chatMessagesList}
+            senderName={receiverName}
+            myId={userInfo.id}
+          />
         </ChatBody>
         <StyledContainer>
           <StyledInput

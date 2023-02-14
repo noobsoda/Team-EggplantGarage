@@ -40,5 +40,10 @@ export default function ImageBox({
       );
     };
   }, [imgSrc, leftTopX, rightBottomX, leftTopY, rightBottomY]);
-  return <StyledResultCanvas boxSize={boxSize} ref={resultCanvas}></StyledResultCanvas>;
+  return (
+    <StyledResultCanvas
+      boxSize={boxSize}
+      ref={resultCanvas}
+    ></StyledResultCanvas>
+  );
 }

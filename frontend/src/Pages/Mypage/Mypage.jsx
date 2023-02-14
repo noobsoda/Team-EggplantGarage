@@ -41,7 +41,7 @@ const SelectBar = styled.div`
   border-bottom: solid;
   border-bottom-color: ${({ theme }) => theme.color.lightgrey};
   border-top: solid;
-  border-top-color: ${({ theme }) => theme.color.lightgrey};  
+  border-top-color: ${({ theme }) => theme.color.lightgrey};
 `;
 
 const StyledBtn = styled.button`
@@ -53,6 +53,11 @@ const StyledBtn = styled.button`
     css`
       color: black;
     `};
+`;
+
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 export default function Mypage() {
@@ -74,34 +79,23 @@ export default function Mypage() {
       <Body>
         <Info>
           <InfoFlex>
-            <div className="page-header">{user.nickname}</div>
-            <ExtraSmallBtn
-              name="로그아웃"
-              buttonClick={logoutClick}
-            ></ExtraSmallBtn>
+            <StyledDiv>
+              <img src="/image/category/19.png" width="24px"></img>
+              <div className="page-header">{user.nickname}</div>
+            </StyledDiv>
+            <ExtraSmallBtn name="로그아웃" buttonClick={logoutClick}></ExtraSmallBtn>
           </InfoFlex>
           <InfoFlex>
             <div>　</div>
-            <ExtraSmallBtn
-              name="회원정보"
-              buttonClick={goInfoEdit}
-            ></ExtraSmallBtn>
+            <ExtraSmallBtn name="정보수정" buttonClick={goInfoEdit}></ExtraSmallBtn>
           </InfoFlex>
         </Info>
 
         <SelectBar>
-          <StyledBtn
-            className="body1-header"
-            onClick={() => setisPurchase(true)}
-            selected={isPurchase}
-          >
+          <StyledBtn className="body1-header" onClick={() => setisPurchase(true)} selected={isPurchase}>
             구매내역
           </StyledBtn>
-          <StyledBtn
-            className="body1-header"
-            onClick={() => setisPurchase(false)}
-            selected={!isPurchase}
-          >
+          <StyledBtn className="body1-header" onClick={() => setisPurchase(false)} selected={!isPurchase}>
             판매내역
           </StyledBtn>
         </SelectBar>
