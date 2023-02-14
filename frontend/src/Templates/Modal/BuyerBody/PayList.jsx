@@ -12,7 +12,7 @@ export default function PayList({ payList, getPayList, sendMessage }) {
     kakaopay(
       { bundleId: bundleId, pcOrMobile: isMobile() ? "mobile" : "pc" },
       ({ data }) => {
-        sendMessage(`${item.nickname}님이 결제를 완료했습니다.`);
+        sendMessage(`${item.nickname}님이 결제를 완료했습니다.`, "PAY");
         window.open(data.split("redirect:")[1]);
       },
       () => {

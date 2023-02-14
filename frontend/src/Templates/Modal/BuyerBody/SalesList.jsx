@@ -94,7 +94,7 @@ export default function SalesList({
             return tmpEle;
           })
         );
-        sendMessage(`${userInfo.nickname}님이 묶음 요청 했어요`);
+        sendMessage(`${userInfo.nickname}이 묶음 요청 했어요`, "SUGGEST");
       },
       () => {
         console.warn("bundle fail");

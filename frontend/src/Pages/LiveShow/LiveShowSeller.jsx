@@ -182,42 +182,67 @@ export default function LiveshowSeller(toggleCamera) {
     if (messageRecv.type === "JOIN") {
       setMessageList((prevItems) => [
         ...prevItems,
-        "[" + messageRecv.sender + "] 님이 입장하셨습니다.",
+        {
+          color: "white",
+          content: "[" + messageRecv.sender + "] 님이 입장하셨습니다.",
+        },
       ]);
-      // setMessageContent("[" + message.sender + "] 님이 입장하셨습니다.");
     } else {
+      //REJECT, ACCEP,PAY,SUGGEST, CHAT
+      let color = "";
+      switch (messageRecv.type) {
+        case "REJECT":
+          color = "red";
+          break;
+        case "ACCEPT":
+          color = "green";
+          break;
+        case "PAY":
+          color = "green";
+          break;
+        case "SUGGEST":
+          color = "purple";
+          break;
+        default:
+          color = "white";
+          break;
+      }
+
       setMessageList((prevItems) => [
         ...prevItems,
-        "[" + messageRecv.sender + "] " + messageRecv.content,
+        {
+          color: color,
+          content: `[${
+            messageRecv.type === "CHAT" ? messageRecv.sender : "INFO"
+          }] ${messageRecv.content}`,
+        },
       ]);
-      // setMessageContent("[" + message.sender + "] " + message.content);
     }
   };
 
   /**
    * 메시지 전송
    */
-  const sendMessage = (msg) => {
+  const sendMessage = (msg, type) => {
     if (msg && stompClient) {
       var chatMessage = {
         sender: userInfo.nickname,
         roomId: liveId,
         content: msg,
-        type: "CHAT",
+        type: type,
       };
       stompClient.send(
         "/pub/live/message/" + liveId,
         {},
         JSON.stringify(chatMessage)
       );
-      // scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
     setMessage("");
   };
 
   //채팅 입력
   const chatMessage = () => {
-    sendMessage(message);
+    sendMessage(message, "CHAT");
     setMessage("");
   };
 

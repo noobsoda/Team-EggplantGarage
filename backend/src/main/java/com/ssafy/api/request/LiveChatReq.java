@@ -12,6 +12,10 @@ public class LiveChatReq {
     public enum MessageType {
         CHAT,
         JOIN,
-        LEAVE
+        LEAVE,
+        REJECT,
+        ACCEP,
+        PAY,
+        SUGGEST
     }
 }
