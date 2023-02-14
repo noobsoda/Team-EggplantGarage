@@ -41,7 +41,7 @@ export default function ChattingMessage({
             message={chattingMessage.content}
             senderName={senderName}
             isMine={chattingMessage.senderId === myId}
-            sendDate={chattingMessage.sendDate}
+            sendDate={chattingMessage.sendTime}
           />
         ))}
     </FlexBox>

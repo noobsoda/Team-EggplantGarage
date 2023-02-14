@@ -6,24 +6,26 @@ const Message = styled.div`
 `;
 
 const SendBox = styled.div`
-  border: solid 2px ${({ theme }) => theme.color.graypurple};
-  background-color: ${({ theme }) => theme.color.lightpurple};
+  // border: solid 2px ${({ theme }) => theme.color.graypurple};
+  background-color: #DFD5E9;
   float: right;
   border-radius: 8px;
-  padding: 8px;
+  padding: 12px;
   max-width: 70%;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   row-gap: 4px;
 `;
 const ReceivedBox = styled.div`
   max-width: 70%;
-  padding: 8px;
+  float: left;
+  padding: 12px;
   border-radius: 8px;
-  border: solid 2px ${({ theme }) => theme.color.graypurple};
+  // border: solid 2px ${({ theme }) => theme.color.graypurple};
+  background-color: #EEEEEE;
   float: left;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   row-gap: 4px;
 `;
 
@@ -33,7 +35,6 @@ export default function ChattingMessageItem({
   sendDate,
   isMine,
 }) {
-  const myName = "나"; // 리덕스에서 현재 사용자 이름 가져오기
   return (
     <Message>
       {isMine ? ( // 보낸 메시지
@@ -44,7 +45,6 @@ export default function ChattingMessageItem({
       ) : (
         // 받은 메시지
         <ReceivedBox>
-          {/* <div className="body1-header">{senderName}</div> */}
           <div>{message}</div>
           <div>{sendDate}</div>
         </ReceivedBox>
