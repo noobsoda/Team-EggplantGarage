@@ -11,7 +11,7 @@ const StyledChatting = styled.div`
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  /* justify-content: flex-end; */
   row-gap: 8px;
   /* font-family: "Inter"; */
   font-style: normal;
@@ -21,14 +21,13 @@ const StyledChatting = styled.div`
 
   /* border-radius: 8px; */
   /* background-color: white; */
-  overflow-y: scroll;
   -webkit-mask-image: linear-gradient(transparent, black);
   mask-image: linear-gradient(transparent, black);
   background-color: rgb(0, 0, 0, 0.4);
+  overflow-y: scroll;
+  /* overflow: auto; */
   border-radius: 8px;
 `;
-
-const StyledMessage = styled.div``;
 
 const StyledContainer = styled.div`
   width: 100%;
@@ -81,8 +80,6 @@ export default function ChatInput({ liveId }) {
       return;
     }
     connect(); //연결
-    scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, []);
 
   useEffect(() => {
@@ -121,7 +118,7 @@ export default function ChatInput({ liveId }) {
     if (message.type === "JOIN") {
       setMessageContent("[" + message.sender + "] 님이 입장하셨습니다.");
     } else {
-      setMessageContent("[" + message.sender + "] " + message.content);
+      setMessageContent("[" + message.sender + "]  " + message.content);
     }
   };
 
@@ -141,7 +138,9 @@ export default function ChatInput({ liveId }) {
         {},
         JSON.stringify(chatMessage)
       );
-      scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      setTimeout(() => {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }, 10);
     }
     setMessage("");
   };
@@ -167,11 +166,17 @@ export default function ChatInput({ liveId }) {
   return (
     <FlexBox>
       <StyledChatting ref={scrollRef}>
-        <StyledMessage>
-          {messageList.map((msg, i) => (
-            <MessageLive key={i + msg} message={msg} />
-          ))}
-        </StyledMessage>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        <MessageLive message={"　"}></MessageLive>
+        {messageList.map((msg, i) => (
+          <MessageLive key={i + msg} message={msg} />
+        ))}
       </StyledChatting>
 
       <StyledContainer>
