@@ -76,6 +76,7 @@ export default function ItemCard({
   const userInfo = useSelector(checkUserInfo);
   const senderId = userInfo.id;
   const [chatRoomId, setChatRoomId] = useState(item.chatRoomId);
+  const formatter = new Intl.NumberFormat("ko-KR");
   const createChatRoomAndMove = (receiverId) => {
     createChatRoom(
       { senderId: senderId, receiverId: receiverId },
@@ -111,7 +112,10 @@ export default function ItemCard({
           </div>
 
           <div className="body1-regular">
-            {isSaleList ? item.initialPrice : item.soldPrice || 0}원
+            {isSaleList
+              ? formatter.format(item.initialPrice)
+              : formatter.format(item.soldPrice) || 0}
+            원
           </div>
         </div>
       </ItemInfo>

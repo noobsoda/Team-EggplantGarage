@@ -40,6 +40,7 @@ export default function BundleBox({
   refuse,
   cancel,
 }) {
+  const formatter = new Intl.NumberFormat("ko-KR");
   return (
     <StyledBundleBox>
       {children}
@@ -48,7 +49,9 @@ export default function BundleBox({
           <div className="body1-header">
             {isSeller ? `제안자 : ${bundleUser}` : " "}
           </div>
-          <div className="body1-header">제안가격 {bundlePrice} 원 </div>
+          <div className="body1-header">
+            제안가격 {formatter.format(bundlePrice)} 원{" "}
+          </div>
         </InfoBox>
         <BtnBox>
           {isSeller ? (
