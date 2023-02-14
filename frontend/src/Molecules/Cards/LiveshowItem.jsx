@@ -46,10 +46,27 @@ export default function LiveshowItem({ isSearch, isViewer, show, isHistory }) {
   }
   return (
     <StyledLiveshowItem isSearch={isSearch} onClick={goTo}>
-      <LiveshowCard viewerCnt={show.joinUsersNum} imgSrc={show.thumbnailUrl} isHistory={isHistory} />
+      <LiveshowCard
+        viewerCnt={show.joinUsersNum}
+        imgSrc={show.thumbnailUrl}
+        isHistory={isHistory}
+      />
       <InfoBox>
-        {show && <StyledTitle className="body1-header">{show.title || "라이브방 제목"}</StyledTitle>}
-        {show && <div className="body1-regular">{isHistory ? show.createdAt || "판매날짜" : show.owner || "판매자명"}</div>}
+        {show && (
+          <StyledTitle className="body1-header">
+            {show.title || "라이브방 제목"}
+          </StyledTitle>
+        )}
+        {/* show.createdAt */}
+        {show && (
+          <div className="body1-regular">
+            {isHistory
+              ? show.createdAt.split(":")[0] +
+                  ":" +
+                  show.createdAt.split(":")[1] || "판매날짜"
+              : show.owner || "판매자명"}
+          </div>
+        )}
       </InfoBox>
     </StyledLiveshowItem>
   );
