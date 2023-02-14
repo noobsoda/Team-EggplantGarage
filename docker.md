@@ -338,3 +338,24 @@ docker image prune -a
 
 docker exec -it "이미지 이름" bash
 export LC_ALL=C.UTF-8
+
+## Sonarqube 관련
+
+### Front
+
+frontend 디렉토리에서
+
+```
+sonar-scanner.bat -D"sonar.projectKey=S08P12B105"
+-D"sonar.sources=."
+-D"sonar.host.url=https://sonarqube.ssafy.com"
+-D"sonar.login=424f13f7befeb7570208e0254b569c91b8bff971"
+```
+
+### Backend
+
+backend 디렉토리에서
+
+```
+./gradlew sonarqube -D"sonar.projectKey=S08P12B105" -D"sonar.host.url=https://sonarqube.ssafy.com" -D"sonar.login=424f13f7befeb7570208e0254b569c91b8bff971"
+```
