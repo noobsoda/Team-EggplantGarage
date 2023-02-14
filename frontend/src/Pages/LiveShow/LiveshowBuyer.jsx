@@ -241,13 +241,11 @@ export default function LiveshowBuyer() {
         ...prevItems,
         "[" + messageRecv.sender + "] 님이 입장하셨습니다.",
       ]);
-      // setMessageContent("[" + message.sender + "] 님이 입장하셨습니다.");
     } else {
       setMessageList((prevItems) => [
         ...prevItems,
         "[" + messageRecv.sender + "] " + messageRecv.content,
       ]);
-      // setMessageContent("[" + message.sender + "] " + message.content);
     }
   };
 

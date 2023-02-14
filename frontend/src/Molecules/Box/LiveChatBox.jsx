@@ -11,7 +11,7 @@ const StyledChatting = styled.div`
   color: white;
   display: flex;
   flex-direction: column;
-  /* justify-content: flex-end; */
+  justify-content: flex-end;
   row-gap: 8px;
   /* font-family: "Inter"; */
   font-style: normal;
@@ -75,7 +75,7 @@ export default function ChatInput({
     }
     scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-  }, []);
+  }, [messageList]);
 
   /**
    * enter입력
@@ -98,14 +98,6 @@ export default function ChatInput({
   return (
     <FlexBox>
       <StyledChatting ref={scrollRef}>
-        <MessageLive message={"　"}></MessageLive>
-        <MessageLive message={"　"}></MessageLive>
-        <MessageLive message={"　"}></MessageLive>
-        <MessageLive message={"　"}></MessageLive>
-        <MessageLive message={"　"}></MessageLive>
-        <MessageLive message={"　"}></MessageLive>
-        <MessageLive message={"　"}></MessageLive>
-        <MessageLive message={"　"}></MessageLive>
         {messageList.map((msg, i) => (
           <MessageLive key={i + msg} message={msg} />
         ))}
