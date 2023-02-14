@@ -9,7 +9,7 @@ import { passwordReg, emailReg, isNumber } from "../../util/regex";
 import { emailCheck, nickNameCheck, signup } from "../../util/api/userApi";
 
 const StyledMainBody = styled.div`
-  width: clac(80%)
+  width: clac(80%);
   display: flex;
   flex-direction: column;
   margin: 0 auto;
