@@ -1,6 +1,4 @@
 import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-import { checkUserInfo } from "../../store/user";
 import styled from "styled-components";
 import MessageLive from "../../Atoms/Text/MessageLive";
 

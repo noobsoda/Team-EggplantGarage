@@ -22,7 +22,7 @@ export default function SuggestionList({
     setBundleRefuse(
       bundleId,
       () => {
-        sendMessage(`${item.nickname}님의 요청이 거절됐어요.`);
+        sendMessage(`${item.nickname}님의 요청이 거절됐어요.`, "REJECT");
         getSuggest();
       },
       () => {
@@ -35,7 +35,7 @@ export default function SuggestionList({
     setBundleCancel(
       bundleId,
       () => {
-        sendMessage(`${userInfo.nickname}님이 요청을 취소했어요`);
+        sendMessage(`${userInfo.nickname}님이 요청을 취소했어요`, "REJECT");
         getSuggest();
       },
       () => {
@@ -47,7 +47,10 @@ export default function SuggestionList({
     setBundleApproval(
       bundleId,
       () => {
-        sendMessage(`${item.nickname}님의 묶음을 승락 했어요. 결제해주세요`);
+        sendMessage(
+          `${item.nickname}님의 묶음을 승락 했어요. 결제해주세요`,
+          "ACCEPT"
+        );
         getSuggest();
       },
       () => {
