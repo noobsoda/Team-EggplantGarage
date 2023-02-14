@@ -81,8 +81,8 @@ export default function ChatInput({ liveId }) {
       return;
     }
     connect(); //연결
-    scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
-    scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    // scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+    // scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
   }, []);
 
   useEffect(() => {
@@ -121,7 +121,7 @@ export default function ChatInput({ liveId }) {
     if (message.type === "JOIN") {
       setMessageContent("[" + message.sender + "] 님이 입장하셨습니다.");
     } else {
-      setMessageContent("[" + message.sender + "] " + message.content);
+      setMessageContent("[" + message.sender + "]  " + message.content);
     }
   };
 
@@ -141,7 +141,7 @@ export default function ChatInput({ liveId }) {
         {},
         JSON.stringify(chatMessage)
       );
-      scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
+      // scrollRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
     setMessage("");
   };
@@ -167,11 +167,9 @@ export default function ChatInput({ liveId }) {
   return (
     <FlexBox>
       <StyledChatting ref={scrollRef}>
-        <StyledMessage>
-          {messageList.map((msg, i) => (
-            <MessageLive key={i + msg} message={msg} />
-          ))}
-        </StyledMessage>
+        {messageList.map((msg, i) => (
+          <MessageLive key={i + msg} message={msg} />
+        ))}
       </StyledChatting>
 
       <StyledContainer>
