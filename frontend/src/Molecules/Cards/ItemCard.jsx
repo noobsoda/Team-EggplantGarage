@@ -15,15 +15,14 @@ const StyledItemCard = styled.div`
   width: calc(100% -6px);
   height: 72px;
   border-radius: 12px;
-  border: 1px solid ${({ theme }) => theme.color.lightgrey};
+  border: 2px solid ${({ theme }) => theme.color.lightgrey};
   /* box-sizing: border-box; */
   background-color: ${({ theme }) => theme.color.white};
   display: flex;
   flex-direction: row;
   column-gap: 8px;
   justify-content: space-between;
-  box-shadow: 0px 0px 20px ${({ theme }) => theme.color.lightgrey};
-  // overflow: hidden;
+  // box-shadow: 0px 0px 20px ${({ theme }) => theme.color.lightgrey};
 `;
 const Mask = styled.div`
   position: absolute;
@@ -133,6 +132,7 @@ export default function ItemCard({
           {buttonType === "purchasedhistory" ? (
             <ExtraSmallButton
               name="대화하기"
+              color="white"
               buttonClick={() => {
                 if (chatRoomId === 0) {
                   createChatRoomAndMove(item.otherId);
@@ -155,6 +155,7 @@ export default function ItemCard({
           {buttonType === "purchasedhistory" && isReview ? (
             <ExtraSmallButton
               name="후기작성"
+              color="white"
               buttonClick={() => {
                 navigate("/writereview", {
                   state: { productId: item.id, isSeller: isSeller },
@@ -167,6 +168,7 @@ export default function ItemCard({
           {buttonType === "purchasedhistory" && !isReview ? (
             <ExtraSmallButton
               name="후기열람"
+              color="white"
               buttonClick={() => {
                 navigate("/review", {
                   state: {

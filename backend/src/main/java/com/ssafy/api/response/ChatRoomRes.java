@@ -38,7 +38,7 @@ public class ChatRoomRes {
         ChatRoomRes res = ChatRoomRes.builder()
                 .chatRoomId(chatRoom.getId())
                 .receiverId(receiver.getId())
-                .receiverName(receiver.getName())
+                .receiverName(receiver.getNickname())
                 .lastSendMessage(chatRoom.getLastSendMessage())
                 .lastSendTime(chatRoom.getLastSendTime())
                 .build();
