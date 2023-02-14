@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.response.LiveHistoryRes;
 import com.ssafy.api.response.ProductHistoryRes;
+import com.ssafy.common.error.ErrorCode;
 import com.ssafy.common.exception.CustomException;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
@@ -50,7 +51,10 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public List<ProductHistoryRes> getProductHistoryByBuyerId(long buyerId) {
-        List<Product> productList = productRepository.findByIsPaidTrueAndBuyerIdOrderByCreatedAtDesc(buyerId).get();
+        List<Product> productList = productRepository.findByIsPaidTrueAndBuyerIdOrderByCreatedAtDesc(buyerId);
+        if(productList.isEmpty())
+            throw new CustomException(PRODUCT_NOT_FOUND);
+
         List<ProductHistoryRes> resList = new ArrayList<>();
         for (Product product : productList) {
             Review myReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId()).orElse(null);;
@@ -69,7 +73,10 @@ public class HistoryServiceImpl implements HistoryService{
 
     @Override
     public List<ProductHistoryRes> getProductHistoryByLiveId(long liveId) {
-        List<Product> productList = productRepository.findByIsPaidTrueAndLive_IdOrderByCreatedAtDesc(liveId).get();
+        List<Product> productList = productRepository.findByIsPaidTrueAndLive_IdOrderByCreatedAtDesc(liveId);
+        if(productList.isEmpty())
+            throw new CustomException(PRODUCT_NOT_FOUND);
+
         List<ProductHistoryRes> resList = new ArrayList<>();
         for (Product product : productList) {
             Review myReview = reviewRepository.findOneByProduct_IdAndIsSellerTrue(product.getId()).orElse(null);
@@ -77,7 +84,7 @@ public class HistoryServiceImpl implements HistoryService{
             Review otherReview  = reviewRepository.findOneByProduct_IdAndIsSellerFalse(product.getId()).orElse(null);;
             long otherReviewId = (otherReview == null) ? 0 : otherReview.getId();
 
-            User buyer = userRepository.findById(product.getBuyerId()).orElse(null);
+            User buyer = userRepository.findById(product.getBuyerId()).orElseThrow(()->new CustomException(USER_NOT_FOUND));
             long sellerId = product.getLive().getUser().getId();
             ChatRoom chatRoom = chatRoomRepository.findOneByUsersId(buyer.getId(), sellerId).orElse(null);
             long chatRoomId = (chatRoom == null) ? 0 : chatRoom.getId();

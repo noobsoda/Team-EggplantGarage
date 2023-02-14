@@ -13,7 +13,7 @@ const color = {
   graypurple: "#9C89B3",
   lightpurple: "#D6C6E9",
   lightpink: "#FDF7FF",
-  whitegray: "#F1F3F5",
+  whitegray: "#EBEBEB",
 };
 const theme = {
   fontSize,

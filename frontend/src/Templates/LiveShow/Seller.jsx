@@ -21,7 +21,7 @@ const StyledLive = styled.div`
   /* display */
 `;
 
-export default function Seller({ liveId, isCamera, isMic, isFlipped }) {
+export default function Seller({ liveId, isCamera, isMic, isFlipped, exit }) {
   const userInfo = useSelector(checkUserInfo);
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름
@@ -116,7 +116,7 @@ export default function Seller({ liveId, isCamera, isMic, isFlipped }) {
             resolution: `${window.innerWidth}x${window.innerHeight}`,
             frameRate: 30, // The frame rate of your video
             insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-            mirror: false, // Whether to mirror your local video or not
+            mirror: true, // Whether to mirror your local video or not
           });
 
           // --- 6)

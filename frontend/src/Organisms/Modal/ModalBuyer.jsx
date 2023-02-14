@@ -27,11 +27,12 @@ const FlexBox = styled.div`
   justify-content: flex-end;
 `;
 export default function ModalBuyer({
+  sendMessage,
   productList,
   bundleList,
   setModalOpen,
   isSeller,
-  userId,
+  userInfo,
   liveId,
   getSuggest,
   getApprovSuggest,
@@ -79,25 +80,25 @@ export default function ModalBuyer({
         </FlexBox>
         {isPay ? (
           <PayList
-            liveId={liveId}
-            userId={userId}
             payList={payList}
             getPayList={getApprovSuggest}
+            sendMessage={sendMessage}
           />
         ) : isSuggestion ? (
           <SalesList
             liveId={liveId}
-            userId={userId}
+            userInfo={userInfo}
             isSeller={isSeller}
             productList={productList}
+            sendMessage={sendMessage}
           />
         ) : (
           <SuggestionList
-            liveId={liveId}
-            userId={userId}
+            userInfo={userInfo}
             isSeller={isSeller}
             suggestList={bundleList}
             getSuggest={getSuggest}
+            sendMessage={sendMessage}
           />
         )}
       </ModalBody>
