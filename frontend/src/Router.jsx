@@ -1,5 +1,6 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 
 //라우터에 맞는 페이지 지정
 import Main from "./Pages/Main/Main";
@@ -55,7 +56,9 @@ const Router = () => {
   ]);
   return (
     <>
-      <RouterProvider router={router} />
+      <AnimatePresence>
+        <RouterProvider router={router} />
+      </AnimatePresence>
     </>
   );
 };
