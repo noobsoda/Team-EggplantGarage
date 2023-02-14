@@ -31,10 +31,10 @@ const ReceivedBox = styled.div`
   padding: 12px;
   border-radius: 8px;
   // border: solid 2px ${({ theme }) => theme.color.graypurple};
-  background-color: #eeeeee;
+  background-color: ${({ theme }) => theme.color.whitegray};;
 `;
 const DateBox = styled.div`
-  color: ${({ theme }) => theme.color.graypurple};
+  color: ${({ theme }) => theme.color.grey};
   display: flex;
   justify-content: center;
   align-items: flex-end;
