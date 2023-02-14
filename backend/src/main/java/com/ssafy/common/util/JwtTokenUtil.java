@@ -62,7 +62,7 @@ public class JwtTokenUtil {
     public static String getRefreshToken(String userEmail) {
         Date refreshExpires = JwtTokenUtil.getTokenExpiration(refreshExpirationTime);
         return JWT.create()
-                .withSubject(userEmail)
+                /*.withSubject(userEmail)*/
                 .withExpiresAt(refreshExpires)
                 .withIssuer(ISSUER)
                 .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
