@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
 const StyledBox = styled.div`
   display: flex;
@@ -8,20 +8,29 @@ const StyledBox = styled.div`
   row-gap: 8px;
   /* justify-content: ; */
   width: calc(100% - 41x);
-  height: 56px;
-  padding: 16px;
-  border-radius: 16px;
-  border: solid 2px;
-  border-color: ${({ theme }) => theme.color.red};
+  height: 48px;
+  padding: 20px;
+  border-radius: 12px;
+  background-color: ${({ theme }) => theme.color.whitegray};
+  // border: solid 1px ${({ theme }) => theme.color.lightgrey};
 `;
 
-export default function ChattingItem({
-  id,
-  receiverId,
-  receiverName,
-  lastSendTime,
-  lastSendMessage,
-}) {
+const StyledRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+  alignitems: flex-end;
+  flex-direction: row;
+`;
+
+const StyledText = styled.div`
+${(props) =>
+  props.color === "purple" &&
+  css`
+    color: ${({ theme }) => theme.color.purple};
+  `} ;
+`;
+
+export default function ChattingItem({ id, receiverId, receiverName, lastSendTime, lastSendMessage }) {
   const navigate = useNavigate();
 
   const room = () => {
@@ -36,27 +45,14 @@ export default function ChattingItem({
   };
   return (
     <StyledBox onClick={room}>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-end",
-        }}
-      >
-        <div className="body1-header">{receiverName}</div>
-        <div>{lastSendTime}</div>
-      </div>
-      <div>
-        {lastSendMessage !== null ? (
-          lastSendMessage.length < 15 ? (
-            lastSendMessage
-          ) : (
-            lastSendMessage.slice(0, 15) + "..."
-          )
-        ) : (
-          <div></div>
-        )}
-      </div>
+      
+      <StyledRow>
+        <StyledText className="body1-header">
+          {receiverName}
+        </StyledText>
+        <StyledText className="body1-header" color="purple">{lastSendTime}</StyledText>
+        </StyledRow>
+      <div>{lastSendMessage !== null ? lastSendMessage.length < 15 ? lastSendMessage : lastSendMessage.slice(0, 15) + "..." : <div></div>}</div>
     </StyledBox>
   );
 }
