@@ -37,7 +37,7 @@ const Mask = styled.div`
   border-radius: 8px;
   align-items: center;
   background-color: rgb(10, 10, 10, 0.7);
-  color: red;
+  color: #BE2E22;
 `;
 const ItemImage = styled.div`
   border-radius: 10px 0px 0px 10px;
