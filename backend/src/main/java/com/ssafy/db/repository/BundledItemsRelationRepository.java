@@ -10,6 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface BundledItemsRelationRepository extends JpaRepository<BundledItemsRelation, Long> {
-    Optional<List<BundledItemsRelation>> findAllByBundle_Id(Long id);
+    List<BundledItemsRelation> findAllByBundle_Id(Long id);
     Optional<List<BundledItemsRelation>> findByBundle_Id(Long id);
 }
