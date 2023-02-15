@@ -3,7 +3,7 @@ import styled from "styled-components";
 import Button from "../../Atoms/Buttons/ExtraSmallBtn";
 
 const StyledBox = styled.div`
-  height: 640px;
+  height: 100%;
   width: 100%;
   /* flex: 1 1; */
   /* margin: 24px 40px; */
