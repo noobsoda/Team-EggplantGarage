@@ -2,7 +2,7 @@ import React from "react";
 import InputBox from "../../Atoms/Inputs/BigInput";
 import CategorySelect from "../../Molecules/Category/CategorySelect";
 import styled from "styled-components";
-import { categories } from "../../util/category";
+import { categorySelect } from "../../util/category";
 
 const StyledBox = styled.div`
   width: 100%;
@@ -33,7 +33,7 @@ export default function TitleCategoryBox({
         inputValue={onTitleChange}
       />
       <CategorySelect
-        options={categories}
+        options={categorySelect}
         onChange={onCategoryChange}
         categorys={categorys}
         delCategory={delCategory}

@@ -69,7 +69,6 @@ const getWebcam = (callback) => {
     };
     navigator.mediaDevices.getUserMedia(constraints).then(callback);
   } catch (err) {
-    console.log(err);
     return undefined;
   }
 };

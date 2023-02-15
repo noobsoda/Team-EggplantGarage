@@ -18,14 +18,12 @@ export default function Review() {
   const [otherName, setOtherName] = useState(undefined);
   useEffect(() => {
     if (initLocation.state !== null) {
-      console.log(initLocation.state);
       setMyReviewId(initLocation.state.myReviewId);
       setOtherReviewId(initLocation.state.otherReviewId);
       setOtherName(initLocation.state.otherName);
     }
 
     getReviewMine(initLocation.state.myReviewId, ({ data }) => {
-      // console.log(data);
       setMyReviewContent(data);
     });
     if (initLocation.state.otherReviewId !== 0)

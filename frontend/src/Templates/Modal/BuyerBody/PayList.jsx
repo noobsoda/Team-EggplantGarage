@@ -23,7 +23,6 @@ export default function PayList({ payList, getPayList, sendMessage }) {
   return (
     <>
       {payList.map((items, i) => {
-        console.log(items);
         return (
           <BundleBox
             key={i}

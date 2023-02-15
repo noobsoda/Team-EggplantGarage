@@ -64,16 +64,16 @@ export default function SalesList({
   function bundle() {
     //제안 가격에 숫자만 입력햇는지 확인
     let price = 0;
-    if (
-      bundlePrice !== 0 &&
-      bundlePrice !== "" &&
-      !(bundlePrice + "").match(isNumber)
-    ) {
-      alert("숫자만 입력해주세요");
-      return;
-    }
     console.log(bundlePrice);
-    price = bundlePrice;
+    if (bundlePrice === "") {
+      price = 0;
+    } else {
+      if (!(bundlePrice + "").match(isNumber)) {
+        alert("숫자만 입력해주세요");
+        return;
+      }
+      price = bundlePrice;
+    }
     postBundle(
       {
         productIdList: productCheck
