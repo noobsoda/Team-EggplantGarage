@@ -61,6 +61,9 @@ export default function CropBox({
    * @param {*} height
    */
   function CropImage(img) {
+    if (!resultCtx) {
+      return;
+    }
     resultCtx.drawImage(
       img,
       startPos[0], //이미지 x좌표
