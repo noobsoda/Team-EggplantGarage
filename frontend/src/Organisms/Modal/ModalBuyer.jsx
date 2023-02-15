@@ -60,6 +60,7 @@ export default function ModalBuyer({
               checked = {isPay}
               buttonClick={() => {
                 setIsPay(true);
+                setIsSuggestion(false);
               }}
             />
           )}
