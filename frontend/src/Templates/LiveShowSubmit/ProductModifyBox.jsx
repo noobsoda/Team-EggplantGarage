@@ -24,6 +24,8 @@ export default function ProductModifyBox({
   const [price, setPrice] = useState(""); //수정하는 제품의 가격
   const [goCrop, setGoCrop] = useState(true); //자르기 진행
 
+  const formatter = new Intl.NumberFormat("ko-KR");
+
   useEffect(() => {
     setModifyData(modifyProduct);
     setName(modifyProduct.productName);
@@ -39,7 +41,19 @@ export default function ProductModifyBox({
     if (key === "name") {
       setName(data);
     } else if (key === "price") {
-      setPrice(data);
+      const value = data.replace(/\,/g, "");
+
+      if (value === "") {
+        setPrice(0);
+        return;
+      }
+      console.log(value);
+      if (!(value + "").match(isNumber)) {
+        alert("숫자만 입력해주세요");
+        return;
+      }
+
+      setPrice(value);
     }
   }
 
@@ -50,12 +64,6 @@ export default function ProductModifyBox({
     //제목 확인
     if (name === "") {
       alert("제목을 입력해주세요");
-      return;
-    }
-    //가격 숫자만 입력
-    //숫자만 입력햇는지 확인
-    if (!(price + "").match(isNumber)) {
-      alert("숫자만 입력해주세요");
       return;
     }
 
@@ -98,7 +106,7 @@ export default function ProductModifyBox({
       <InputBox
         placehold="즉시구매가를 입력하세요"
         inputValue={(e) => changeData({ key: "price", data: e.target.value })}
-        value={price || ""}
+        value={formatter.format(price)}
       />
     </StyledBox>
   );

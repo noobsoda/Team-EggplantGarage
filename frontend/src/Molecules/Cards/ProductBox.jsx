@@ -40,6 +40,8 @@ export default function ProductBox({
   leftTopY,
   rightBottomY,
 }) {
+  const formatter = new Intl.NumberFormat("ko-KR");
+
   return (
     <StyledBox>
       <ImageBox
@@ -52,7 +54,7 @@ export default function ProductBox({
       />
       <StyledInfoBox>
         <p className="body1-header">{name}</p>
-        <p className="body2-bold">{price}원</p>
+        <p className="body2-bold">{formatter.format(price)}원</p>
       </StyledInfoBox>
       <StyledButtonBox>
         <Button name="수정" buttonClick={() => onModifyClick(id)}></Button>
