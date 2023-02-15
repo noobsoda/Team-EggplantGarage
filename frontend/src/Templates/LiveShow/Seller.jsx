@@ -57,7 +57,7 @@ export default function Seller({ liveId, isCamera, isMic, isFlipped, exit }) {
     setSubscribers([]);
     setMainStreamManager(undefined);
 
-    closeLive(liveId);
+    exit();
     closeSession();
   }, [session]);
 
@@ -143,7 +143,7 @@ export default function Seller({ liveId, isCamera, isMic, isFlipped, exit }) {
           setMainStreamManager(publisher);
         })
         .catch((error) => {
-          console.log(
+          console.warn(
             "There was an error connecting to the session:",
             error.code,
             error.message

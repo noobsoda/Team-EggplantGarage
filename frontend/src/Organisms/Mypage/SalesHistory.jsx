@@ -11,7 +11,6 @@ export default function SalesHistory() {
   const myId = useSelector((state) => state.user.userInfo.id);
   useEffect(() => {
     getSalesHistory(myId, ({ data }) => {
-      // console.log(data);
       //우선 뭐들어오는지 보고
       setLives(data);
     });

@@ -1,8 +1,8 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.LiveCategoriesReq;
-import com.ssafy.api.request.LiveUserJoinReq;
 import com.ssafy.api.request.LiveRegisterPostReq;
+import com.ssafy.api.request.LiveUserJoinReq;
 import com.ssafy.api.request.Location;
 import com.ssafy.api.response.LiveContent;
 import com.ssafy.api.response.LiveDetailGetRes;
@@ -16,8 +16,6 @@ public interface LiveService {
     Live CreateLive(LiveRegisterPostReq liveRegisterInfo, User user);
 
     LiveDetailGetRes getLiveDetailBySessionId(Long liveId);
-
-    boolean getLiveCheckSessionIdBySessionId(String url);
 
     boolean postLiveByThumbnailUrl(Long liveId, String thumbnailUrl);
 

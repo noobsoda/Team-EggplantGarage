@@ -44,7 +44,7 @@ export default function ModalBuyer({
   const apply = () => {
     closeModal();
   };
-  const [isSuggestion, setIsSuggestion] = useState(false);
+  const [isSuggestion, setIsSuggestion] = useState(true);
   const [isPay, setIsPay] = useState(false);
   return (
     <Modal>
@@ -57,14 +57,17 @@ export default function ModalBuyer({
           {payList !== undefined && (
             <SmallBtn
               name="구매 목록"
+              checked = {isPay}
               buttonClick={() => {
                 setIsPay(true);
+                setIsSuggestion(false);
               }}
             />
           )}
 
           <SmallBtn
             name="제안목록"
+            checked = {!isSuggestion && !isPay}
             buttonClick={() => {
               setIsPay(false);
               setIsSuggestion(false);
@@ -72,6 +75,7 @@ export default function ModalBuyer({
           />
           <SmallBtn
             name="판매목록"
+            checked = {isSuggestion}
             buttonClick={() => {
               setIsPay(false);
               setIsSuggestion(true);

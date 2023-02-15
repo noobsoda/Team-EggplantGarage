@@ -7,7 +7,6 @@ import com.ssafy.db.entity.Live;
 import com.ssafy.db.entity.Product;
 import com.ssafy.db.repository.LiveRepository;
 import com.ssafy.db.repository.ProductRepository;
-import com.ssafy.db.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.ssafy.common.error.ErrorCode.*;
+import static com.ssafy.common.error.ErrorCode.LIVE_NOT_FOUND;
 
 @Service("productService")
 @RequiredArgsConstructor

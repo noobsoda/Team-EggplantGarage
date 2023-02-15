@@ -36,9 +36,7 @@ export default function LiveshowItem({ isSearch, isViewer, show, isHistory }) {
   function goTo() {
     if (isViewer) {
       const joinReq = { userId: user.id, liveId: show.id };
-      console.log(joinReq);
       joinLive(joinReq);
-      console.log(show);
       navigate(`/liveshow/${show.id}`);
     } else {
       navigate("/liveshowdetail", { state: show.liveId });

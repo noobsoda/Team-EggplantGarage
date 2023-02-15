@@ -31,7 +31,7 @@ const Background = styled.div`
 `;
 
 const StyledHr = styled.hr`
-  background-color: #DDDDDD;
+  background-color: #dddddd;
   padding: 0;
   margin: 0px -24px 4px -24px;
   border: 0;
@@ -84,8 +84,6 @@ export default function Search() {
       title: keyword,
     };
     getLives(searchCondition, ({ data }) => {
-      console.log(searchCondition);
-      console.log(data.liveContentList);
       setLives(data.liveContentList);
     });
   }, [category, location, sort, keyword, isNational]);
@@ -93,20 +91,16 @@ export default function Search() {
   //카테고리 설정 자식 컴포넌트에서 받아온 callback 함수로받아온걸 데이터로 쏘기
   const selectedCategory = (data) => {
     setCategory(data);
-    console.log("카테고리 선택 : " + data);
   };
   const selectedLocation = (data) => {
     setLocation(data);
     SetIsNational(false);
-    console.log(data);
   };
   const sortCallback = (data) => {
     setSort(data);
-    console.log(data);
   };
   const keywordValue = (e) => {
     setKeyword(e.target.value);
-    // console.log(e.target.value);
   };
   const search = () => {
     setIsResult(true);
@@ -121,7 +115,7 @@ export default function Search() {
             <SmallSelect name="카테고리" buttonClick={showModal_2} />
             <SmallSelect name="정렬방법" buttonClick={showModal_3} />
           </FlexBox>
-          <StyledHr/>
+          <StyledHr />
           {/* isSearch가 True일때만 영상들이 뽑혀나오게 하자 */}
           {isResult ? <SearchBody lives={lives} /> : <></>}
         </Body>

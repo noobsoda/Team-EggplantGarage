@@ -9,17 +9,12 @@ import com.ssafy.common.exception.CustomException;
 import com.ssafy.common.model.response.CommonResponse;
 import com.ssafy.common.model.response.ResponseService;
 import com.ssafy.db.entity.Bundle;
-import com.ssafy.db.entity.BundledItemsRelation;
 import com.ssafy.db.repository.BundleRepository;
-import com.ssafy.db.repository.BundledItemsRelationRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -37,12 +32,11 @@ public class KakaoPayController {
 
     @PostMapping()
     public String kakaoPay(@RequestBody KakaoPayReq kakaoPayReq) {
-//        log.info("POST: kakaoPay 결제 준비");
+        log.info("POST: kakaoPay 결제 준비");
 
         Optional<Bundle> oBundle = bundleRepository.findById(kakaoPayReq.getBundleId());
         Bundle bundle = oBundle.orElseThrow(()->new CustomException(ErrorCode.BUNDLE_NOT_FOUND));
 
-        System.out.println(bundle);
         KakaoPayReadyRes kakaoPayReadyRes = kakaoPayService.KakaoPayReady(bundle);
 
         kakaoPayApprovalRes = new KakaoPayApprovalRes(
@@ -57,7 +51,7 @@ public class KakaoPayController {
 
     @GetMapping("/success")
     public ResponseEntity<? extends CommonResponse> kakaoPaySuccess(@RequestParam("pg_token") String pg_token) {
-//        log.info("GET: kakaoPaySuccess 결제 승인");
+        log.info("GET: kakaoPaySuccess 결제 승인");
 
         ResponseEntity<KakaoPayApprovalRes> kakaoPResponseEntity = kakaoPayService.kakaoPaySuccess(kakaoPayApprovalRes, pg_token);
 

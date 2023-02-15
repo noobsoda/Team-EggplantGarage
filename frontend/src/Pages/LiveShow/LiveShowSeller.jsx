@@ -127,10 +127,9 @@ export default function LiveshowSeller(toggleCamera) {
   }, 2000);
 
   const exit = () => {
-    // if (isExit) {
-    closeLive(liveId, (data) => {});
-    navigate("/");
-    // }
+    closeLive(liveId, () => {
+      navigate("/");
+    });
   };
 
   function getSuggest() {
@@ -293,8 +292,6 @@ export default function LiveshowSeller(toggleCamera) {
             />
             <ExitBtn
               buttonClick={() => {
-                // setIsExit(true);
-                // console.log(isExit);
                 exit();
               }}
             />

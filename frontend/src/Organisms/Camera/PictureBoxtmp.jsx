@@ -57,7 +57,6 @@ const getWebcam = (callback) => {
     };
     navigator.mediaDevices.getUserMedia(constraints).then(callback);
   } catch (err) {
-    console.log(err);
     return undefined;
   }
 };
@@ -128,7 +127,6 @@ export default function PictureBox({ setOriImgSrc }) {
     setImgSrc(canvasRef2.current.toDataURL("image/webp"));
     setOriImgSrc(canvasRef2.current.toDataURL("image/webp"));
     startOrStop(); //촬영 정지
-    console.log(`${canvasRef2.current.width}, ${canvasRef2.current.height}`);
   }
 
   return (

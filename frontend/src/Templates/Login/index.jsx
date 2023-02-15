@@ -28,6 +28,12 @@ const StyledHead = styled.h1`
   padding-bottom: 8px;
 `;
 
+const StyledImg= styled.img`
+  margin-top: 40px;
+  padding-bottom: 8px;
+  width: 80%;
+`;
+
 const StyledColumnDirection = styled.div`
   display: flex;
   flex-direction: column;
@@ -91,7 +97,7 @@ export default function Login() {
   return (
     <StyledLoginBox>
       <StyledRowCenter>
-        <StyledHead className="page-header">가지가라지</StyledHead>
+      <StyledImg src="/image/logo.png" alt="" />
       </StyledRowCenter>
       <StyledColumnDirection>
         <LoginBox>

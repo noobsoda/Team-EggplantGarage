@@ -21,7 +21,7 @@ const StyledBox = styled.div`
 const StyledRow = styled.div`
   display: flex;
   justify-content: space-between;
-  alignitems: flex-end;
+  align-items: flex-end;
   flex-direction: row;
 `;
 
@@ -40,7 +40,13 @@ const StyledText = styled.div`
   }};
 `;
 
-export default function ChattingItem({ id, receiverId, receiverName, lastSendTime, lastSendMessage }) {
+export default function ChattingItem({
+  id,
+  receiverId,
+  receiverName,
+  lastSendTime,
+  lastSendMessage,
+}) {
   const navigate = useNavigate();
 
   const room = () => {
@@ -62,7 +68,17 @@ export default function ChattingItem({ id, receiverId, receiverName, lastSendTim
           {format(lastSendTime, "ko")}
         </StyledText>
       </StyledRow>
-      <div>{lastSendMessage !== null ? lastSendMessage.length < 15 ? lastSendMessage : lastSendMessage.slice(0, 15) + "..." : <div></div>}</div>
+      <div>
+        {lastSendMessage !== null ? (
+          lastSendMessage.length < 15 ? (
+            lastSendMessage
+          ) : (
+            lastSendMessage.slice(0, 15) + "..."
+          )
+        ) : (
+          <div></div>
+        )}
+      </div>
     </StyledBox>
   );
 }

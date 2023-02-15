@@ -14,8 +14,6 @@ export default function Like() {
 
   useEffect(() => {
     getFavoriteLives(userInfo.id, ({ data }) => {
-      console.log(userInfo.id);
-      console.log(data.liveContentList);
       setLives(data.liveContentList);
     });
   }, [userInfo]);

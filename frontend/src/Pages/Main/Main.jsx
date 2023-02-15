@@ -50,7 +50,7 @@ export default function Main() {
       setLng(position.coords.longitude);
     });
     let aroundSearchCondition = {
-      category: selected === "인기" ? "" : "",
+      category: selected === "인기" ? "" : selected,
       title: "",
       joinUserSort: "",
       distanceSort: "ASC",
@@ -59,9 +59,6 @@ export default function Main() {
       national: false,
     };
     getLives(aroundSearchCondition, ({ data }) => {
-      // console.log("주변지역");
-      // console.log(lat + "//////" + lng);
-      // console.log(data.liveContentList);
       setAroundLives(data.liveContentList);
     });
 
@@ -75,8 +72,6 @@ export default function Main() {
       national: true,
     };
     getLives(nationalSearchCondition, ({ data }) => {
-      // console.log(data.liveContentList);
-      // console.log(nationalSearchCondition);
       setAllLives(data.liveContentList);
     });
     let location = { lat: lat, lng: lng };

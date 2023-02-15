@@ -31,7 +31,6 @@ public class ChatRoomRes {
     LocalDateTime lastSendTime;
 
     public static ChatRoomRes of(ChatRoom chatRoom, long senderId)  {
-        System.out.println(chatRoom);
         if(chatRoom == null) return null;
 
         User receiver = (chatRoom.getFirstUser().getId() != senderId) ? chatRoom.getFirstUser() : chatRoom.getSecondUser();

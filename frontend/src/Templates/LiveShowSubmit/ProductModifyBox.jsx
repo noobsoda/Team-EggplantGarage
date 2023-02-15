@@ -54,7 +54,7 @@ export default function ProductModifyBox({
     }
     //가격 숫자만 입력
     //숫자만 입력햇는지 확인
-    if (price !== "" && !price.match(isNumber)) {
+    if (!(price + "").match(isNumber)) {
       alert("숫자만 입력해주세요");
       return;
     }

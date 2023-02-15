@@ -92,7 +92,7 @@ public class FavoriteServiceImpl implements FavoriteService {
         Optional<Live> oLive = liveRepository.findById(liveId);
         Live live = oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
 
-        List<Favorite> favoriteList = favoriteRepository.findByUser_idAndLive_id(userId, liveId);
+        List<Favorite> favoriteList = favoriteRepository.findByUser_idAndLive_id(user.getId(), live.getId());
 
         if (favoriteList == null || favoriteList.isEmpty()) {
             throw new CustomException(FAVORITE_NOT_FOUND);

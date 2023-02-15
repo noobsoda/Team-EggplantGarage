@@ -3,12 +3,10 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.UserDeleteReq;
 import com.ssafy.api.request.UserInfoPatchReq;
 import com.ssafy.api.request.UserRegisterPostReq;
-import com.ssafy.common.error.ErrorCode;
 import com.ssafy.common.exception.CustomException;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,22 +21,12 @@ import static com.ssafy.common.error.ErrorCode.*;
  */
 @Service("userService")
 public class UserServiceImpl implements UserService {
-
-    private final Logger logger;
-
     private final UserRepository userRepository;
-
-    /*
-     * @Autowired
-     * UserRepositorySupport userRepositorySupport;
-     */
-
     @Autowired
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserServiceImpl(Logger logger, UserRepository userRepository) {
-        this.logger = logger;
+    public UserServiceImpl(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -47,9 +35,8 @@ public class UserServiceImpl implements UserService {
 
         Optional<User> oUserEmail = userRepository.findByEmail(userRegisterInfo.getEmail());
         Optional<User> oUserNickname = userRepository.findByNickname(userRegisterInfo.getNickname());
-        if(oUserEmail.isPresent() || oUserNickname.isPresent())
+        if (oUserEmail.isPresent() || oUserNickname.isPresent())
             throw new CustomException(ALREADY_SAVED_USER);
-
 
 
         User user = new User();
@@ -78,7 +65,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByEmail(String email) {
         // 디비에 유저 정보 조회 (userId 를 통한 조회).
-        // User user = userRepository.findByUserEmail(userEmail).get();
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
             return user.get();

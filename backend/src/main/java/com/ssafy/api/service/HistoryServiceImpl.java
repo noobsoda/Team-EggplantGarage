@@ -2,38 +2,26 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.response.LiveHistoryRes;
 import com.ssafy.api.response.ProductHistoryRes;
-import com.ssafy.common.error.ErrorCode;
 import com.ssafy.common.exception.CustomException;
 import com.ssafy.db.entity.*;
 import com.ssafy.db.repository.*;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.ssafy.common.error.ErrorCode.*;
 
+@RequiredArgsConstructor
 @Service("historyService")
 public class HistoryServiceImpl implements HistoryService{
-    private final Logger logger;
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final LiveRepository liveRepository;
     private final ReviewRepository reviewRepository;
     private final ChatRoomRepository chatRoomRepository;
 
-    @Autowired
-    public HistoryServiceImpl(Logger logger, UserRepository userRepository, ProductRepository productRepository, LiveRepository liveRepository, ReviewRepository reviewRepository, ChatRoomRepository chatRoomRepository) {
-        this.logger = logger;
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
-        this.liveRepository = liveRepository;
-        this.reviewRepository = reviewRepository;
-        this.chatRoomRepository = chatRoomRepository;
-    }
 
     @Override
     public List<LiveHistoryRes> getLiveHistoryBySellerId(long sellerId) {

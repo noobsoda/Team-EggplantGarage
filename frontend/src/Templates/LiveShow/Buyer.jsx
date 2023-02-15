@@ -2,7 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { OpenVidu } from "openvidu-browser";
 import UserVideoComponent from "../../Atoms/Video/LiveVideo";
-import { getToken, closeSession } from "../../util/api/liveApi";
+import { getToken, exitLive } from "../../util/api/liveApi";
 import styled from "styled-components";
 
 const FlexBox = styled.div`
@@ -13,7 +13,7 @@ const FlexBox = styled.div`
   justify-content: center;
 `;
 
-export default function Buyer({ liveId }) {
+export default function Buyer({ liveId, isExit, exit }) {
   //해당 세션 아이디를 받아서 해당 라이브로 접속하기
   //seller는 방송하기를 위한 카메라세팅, 카메라 접근권한이 필요하다.
 
@@ -25,6 +25,13 @@ export default function Buyer({ liveId }) {
   const [subscribers, setSubscribers] = useState([]);
 
   const [OV] = useState(new OpenVidu());
+
+  useEffect(() => {
+    if (isExit) {
+      leaveSession();
+    }
+  }, [isExit]);
+
   const leaveSession = useCallback(() => {
     // --- 7) 세션에서 나옴
     const mySession = session;
@@ -34,7 +41,10 @@ export default function Buyer({ liveId }) {
     // Empty all properties...
     setSubscribers([]);
     setMainStreamManager(undefined);
+    exit();
   }, [session]);
+
+  //나가기로 자동으로 나가기 진행
   useEffect(() => {
     const onbeforeunload = () => {
       leaveSession();
@@ -98,7 +108,7 @@ export default function Buyer({ liveId }) {
           setMainStreamManager(publisher);
         })
         .catch((error) => {
-          console.log(
+          console.warn(
             "There was an error connecting to the session:",
             error.code,
             error.message
