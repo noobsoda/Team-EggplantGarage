@@ -39,7 +39,7 @@ async function createToken(sessionId, role) {
     "/openvidu/api/sessions/" + sessionId + "/connection",
     data
   ).catch((e) => {
-    console.log(e);
+    console.warn(e);
   });
   return response.data.token; // The token
 }
@@ -198,7 +198,6 @@ async function setLiveImage(data, success, fail) {
  * @returns
  */
 async function getLiveDetail(id, success, fail) {
-  console.log(id);
   return await api
     .post(`/api/v1/lives/detail`, { liveId: id })
     .then(success)

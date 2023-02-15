@@ -16,13 +16,10 @@ const MapContainer = ({ selectedLocation }) => {
       let addr = document.getElementById("addr");
       let callback = function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
-          console.log("지역 명칭 : " + result[0].address_name);
           let location = { lng: result[0].x, lat: result[0].y };
           selectedLocation(location);
           //x가 lng 경도 , y 가 lat 위도
           addr.innerHTML = result[0].address_name;
-          //   console.log("행정구역 코드 : " + result[0].code);
-          //   console.log(result[0]);
         }
       };
       //위도, 경도로 변환 및 마커표시
@@ -33,7 +30,6 @@ const MapContainer = ({ selectedLocation }) => {
         navigator.geolocation.getCurrentPosition(function (position) {
           let lat = position.coords.latitude, // 위도
             lng = position.coords.longitude; // 경도
-          //   console.log(lat + " " + lng);
           var moveLatLon = new kakao.maps.LatLng(lat, lng);
           // 지도 중심을 이동 시킵니다
           map.setCenter(moveLatLon);

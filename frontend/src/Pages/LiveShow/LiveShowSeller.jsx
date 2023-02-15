@@ -292,8 +292,6 @@ export default function LiveshowSeller(toggleCamera) {
             />
             <ExitBtn
               buttonClick={() => {
-                // setIsExit(true);
-                // console.log(isExit);
                 exit();
               }}
             />

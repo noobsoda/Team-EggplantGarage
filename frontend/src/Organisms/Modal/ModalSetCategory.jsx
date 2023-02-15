@@ -42,7 +42,6 @@ export default function ModalSetCategory({ setModalOpen, select }) {
     setModalOpen(false);
   };
   const apply = () => {
-    // console.log(selected);
     select(selected); // 적용시에 parent가 받을 값
     closeModal();
   };

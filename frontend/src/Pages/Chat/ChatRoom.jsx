@@ -46,7 +46,6 @@ const ChatBody = styled.div`
 `;
 
 export default function ChatRoom() {
-  // console.log(useLocation().state);
   const userInfo = useSelector(checkUserInfo);
   const senderId = userInfo.id;
   const receiverId = useLocation().state.receiverId;
@@ -74,8 +73,8 @@ export default function ChatRoom() {
           addMessage(newMessage);
         });
       },
-      (error) => {
-        console.log(error);
+      () => {
+        console.warn("message fail");
       }
     );
   }

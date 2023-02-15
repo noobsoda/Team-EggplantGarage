@@ -34,11 +34,9 @@ export default function WriteReview() {
       seller: isSeller,
       visible: true,
     };
-    postReview(review, ({ data }) => {
-      console.log(review);
-      console.log(data); // 입력 성공인지 체크해보자
+    postReview(review, () => {
+      navigate("/mypage");
     });
-    navigate("/mypage");
   };
   return (
     <Page>

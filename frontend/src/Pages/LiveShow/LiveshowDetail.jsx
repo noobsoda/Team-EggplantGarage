@@ -10,19 +10,15 @@ import { getSalesItemHistory } from "../../util/api/productApi";
 
 export default function LiveshowDetail() {
   const { state } = useLocation();
-  // console.log(state); // in this state liveshow id 담겨있음
   //axios 통신후 데이터 뿌리기
   const [live, setLive] = useState(undefined);
   const [productList, setProductList] = useState(undefined);
   useEffect(() => {
     getLiveDetail(state, ({ data }) => {
-      // console.log(data);
       setLive(data);
-      // setProductList(data.liveProductInfoList);
     });
     //이게 돼야 리뷰 관리가 가능함.
     getSalesItemHistory(state, ({ data }) => {
-      console.log(data);
       setProductList(data);
     });
   }, []);

@@ -72,7 +72,6 @@ export default function SalesList({
       alert("숫자만 입력해주세요");
       return;
     }
-    console.log(bundlePrice);
     price = bundlePrice;
     postBundle(
       {

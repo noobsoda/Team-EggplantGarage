@@ -108,7 +108,7 @@ export default function Buyer({ liveId, isExit, exit }) {
           setMainStreamManager(publisher);
         })
         .catch((error) => {
-          console.log(
+          console.warn(
             "There was an error connecting to the session:",
             error.code,
             error.message
