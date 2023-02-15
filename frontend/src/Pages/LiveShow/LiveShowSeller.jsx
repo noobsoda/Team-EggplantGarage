@@ -87,6 +87,9 @@ export default function LiveshowSeller(toggleCamera) {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState(""); // 입력 메세지
 
+  //종료 여부
+  const [isExit, setIsExit] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -128,6 +131,7 @@ export default function LiveshowSeller(toggleCamera) {
 
   const exit = () => {
     closeLive(liveId, () => {
+      setIsExit(true);
       navigate("/");
     });
   };
@@ -253,6 +257,7 @@ export default function LiveshowSeller(toggleCamera) {
         isMic={isMic}
         isFlipped={isFlipped}
         exit={exit}
+        isExit={isExit}
       />
       <LiveLayout>
         <StyledHeader>

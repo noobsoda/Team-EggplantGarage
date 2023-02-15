@@ -21,7 +21,14 @@ const StyledLive = styled.div`
   /* display */
 `;
 
-export default function Seller({ liveId, isCamera, isMic, isFlipped, exit }) {
+export default function Seller({
+  liveId,
+  isCamera,
+  isMic,
+  isFlipped,
+  exit,
+  isExit,
+}) {
   const userInfo = useSelector(checkUserInfo);
 
   const [myUserName] = useState("admin"); //방생성한 사람 이름
@@ -35,6 +42,12 @@ export default function Seller({ liveId, isCamera, isMic, isFlipped, exit }) {
   useEffect(() => {
     joinSession();
   }, []);
+
+  useEffect(() => {
+    if (isExit) {
+      leaveSession();
+    }
+  }, [isExit]);
 
   useEffect(() => {
     if (publisher) {
