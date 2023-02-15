@@ -21,7 +21,7 @@ services:
       - --character-set-server=utf8 
       - --collation-server=utf8_general_ci
     networks:
-      - test_network
+      - eggplant_network
 
   application:
     build:
@@ -40,7 +40,7 @@ services:
     depends_on:
       - database-mysql
     networks:
-      - test_network
+      - eggplant_network
 
   web:
     container_name: nginx
@@ -53,7 +53,7 @@ services:
     depends_on:
       - application
     networks:
-      - test_network
+      - eggplant_network
 
 networks:
-  test_network:
+  eggplant_network:
