@@ -113,7 +113,7 @@ export default function LiveshowSeller(toggleCamera) {
     getSuggest();
   }, 10000);
 
-  //2초마다 아...유저수만 받아오게 하고싶긴한데
+  //10초마다 방 정보 확인
   useInterval(() => {
     getLiveDetail(
       liveId,
@@ -124,7 +124,7 @@ export default function LiveshowSeller(toggleCamera) {
         console.warn("live info fail");
       }
     );
-  }, 2000);
+  }, 5000);
 
   const exit = () => {
     closeLive(liveId, () => {

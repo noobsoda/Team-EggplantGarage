@@ -136,6 +136,7 @@ export default function LiveshowBuyer() {
     getApprovSuggest();
   }, 10000);
 
+  //10초마다 방정보 확인
   useInterval(() => {
     getLiveDetail(
       liveId,
@@ -146,7 +147,7 @@ export default function LiveshowBuyer() {
         console.warn("live info fail");
       }
     );
-  }, 2000);
+  }, 10000);
 
   //라이브 나가기
   const exit = () => {
