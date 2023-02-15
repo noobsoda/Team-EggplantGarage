@@ -50,7 +50,7 @@ export default function Main() {
       setLng(position.coords.longitude);
     });
     let aroundSearchCondition = {
-      category: selected === "인기" ? "" : "",
+      category: selected === "인기" ? "" : selected,
       title: "",
       joinUserSort: "",
       distanceSort: "ASC",
