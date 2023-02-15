@@ -54,7 +54,7 @@ public class ProductHistoryRes {
                 .rightBottomY(product.getRightBottomY())
                 .imageUrl(product.getImageUrl())
                 .otherId(user.getId())
-                .otherName(user.getName())
+                .otherName(user.getNickname())
                 .myReviewId(myReviewId)
                 .otherReviewId(otherReviewId)
                 .chatRoomId(chatRoomId)

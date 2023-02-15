@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
-const StyledModal = styled.div`
+const StyledModal = styled(motion.div)`
   width: 100%;
   height: calc(40vh - 48px);
   padding: 24px 0;
@@ -19,5 +20,20 @@ const StyledModal = styled.div`
 `;
 
 export default function ModalSmall(props) {
-  return <StyledModal>{props.children}</StyledModal>;
+  return (
+    <StyledModal
+      initial={{ y: 50, opacity: 0 }}
+      animate={{
+        y: 0,
+        opacity: 1,
+      }}
+      exit={{
+        y: -50,
+        opacity: 0,
+      }}
+      transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+    >
+      {props.children}
+    </StyledModal>
+  );
 }
