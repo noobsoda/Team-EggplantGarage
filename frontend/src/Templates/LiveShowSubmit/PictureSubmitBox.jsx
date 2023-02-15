@@ -11,6 +11,7 @@ const StyledBox = styled.div`
 const StyledGreenBox = styled.div`
   color: ${({ theme }) => theme.color.green};
   padding-bottom: 56px;
+  font-size: 14px;
 `;
 
 const StyledHead = styled.h1`
@@ -26,13 +27,12 @@ export default function PictureSubmitBox({ imgSrc, cameraEvent }) {
   return (
     <StyledBox>
       <StyledHead className="page-header">물품 등록</StyledHead>
-
       <StyledGreenBox className="body2-bold">
         <p>
-          라이브쇼에서 판매할 물건들을 모아서 찍어주세요.
+          판매할 물건들을 모아서 찍어주세요.
           <br />
           <br />
-          사진 내 물품을 선택 후 물품 등록이시작됩니다.
+          사진 속 물품을 선택 후 물품을 등록합니다.
         </p>
       </StyledGreenBox>
 
