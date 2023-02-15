@@ -147,7 +147,7 @@ export default function LiveshowBuyer() {
         console.warn("live info fail");
       }
     );
-  }, 10000);
+  }, 5000);
 
   //라이브 나가기
   const exit = () => {
