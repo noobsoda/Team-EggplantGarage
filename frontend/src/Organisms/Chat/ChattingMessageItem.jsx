@@ -45,7 +45,7 @@ export default function ChattingMessageItem({ message, sendDate, isMine }) {
   return (
     <Message>
       {isMine ? ( // 보낸 메시지
-        <FlexBox1 positionTransition initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, transition: { duration: 0.15 } }}>
+        <FlexBox1  initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, transition: { duration: 0.15 } }}>
           <DateBox className="body3-bold">{format(sendDate, "ko")}</DateBox>
           <SendBox>
             <div>{message}</div>
@@ -54,7 +54,7 @@ export default function ChattingMessageItem({ message, sendDate, isMine }) {
       ) : (
         // 받은 메시지
 
-        <FlexBox2 positionTransition initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, transition: { duration: 0.15 } }}>
+        <FlexBox2  initial={{ opacity: 0, y: 100 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, transition: { duration: 0.15 } }}>
           <ReceivedBox>
             <div>{message}</div>
           </ReceivedBox>
