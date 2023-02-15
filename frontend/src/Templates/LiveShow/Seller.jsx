@@ -57,7 +57,7 @@ export default function Seller({ liveId, isCamera, isMic, isFlipped, exit }) {
     setSubscribers([]);
     setMainStreamManager(undefined);
 
-    closeLive(liveId);
+    exit();
     closeSession();
   }, [session]);
 

@@ -94,6 +94,9 @@ export default function LiveshowBuyer() {
   const [bundleList, setBundleList] = useState([]);
   const [payList, setPayList] = useState([]);
 
+  //종료 여부
+  const [isExit, setIsExit] = useState(false);
+
   //메시지
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState(""); // 입력 메세지
@@ -148,8 +151,10 @@ export default function LiveshowBuyer() {
   //라이브 나가기
   const exit = () => {
     const exitReq = { userId: userInfo.id, liveId: liveId };
-    exitLive(exitReq);
-    navigate("/");
+    exitLive(exitReq, () => {
+      setIsExit(true);
+      navigate("/");
+    });
   };
 
   //묶음 제안 확인
@@ -305,7 +310,7 @@ export default function LiveshowBuyer() {
 
   return (
     <StyledPage>
-      <Buyer liveId={liveId} />
+      <Buyer liveId={liveId} exit={exit} isExit={isExit} />
       <LiveLayout>
         <StyledHeader>
           <div
