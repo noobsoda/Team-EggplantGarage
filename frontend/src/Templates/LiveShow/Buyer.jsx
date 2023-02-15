@@ -128,7 +128,9 @@ export default function Buyer({ liveId, isExit, exit }) {
       }
       if (getNicknameTag(streamManager) === "admin") {
         alert("방송이 종료되었습니다.");
-        navigate("/home");
+        setTimeout(() => {
+          navigate("/");
+        }, 5000);
       }
     },
     [subscribers, navigate]

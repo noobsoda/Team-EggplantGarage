@@ -87,6 +87,9 @@ export default function LiveshowSeller(toggleCamera) {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState(""); // 입력 메세지
 
+  //종료 여부
+  const [isExit, setIsExit] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -113,7 +116,7 @@ export default function LiveshowSeller(toggleCamera) {
     getSuggest();
   }, 10000);
 
-  //2초마다 아...유저수만 받아오게 하고싶긴한데
+  //10초마다 방 정보 확인
   useInterval(() => {
     getLiveDetail(
       liveId,
@@ -124,10 +127,11 @@ export default function LiveshowSeller(toggleCamera) {
         console.warn("live info fail");
       }
     );
-  }, 2000);
+  }, 5000);
 
   const exit = () => {
     closeLive(liveId, () => {
+      setIsExit(true);
       navigate("/");
     });
   };
@@ -253,6 +257,7 @@ export default function LiveshowSeller(toggleCamera) {
         isMic={isMic}
         isFlipped={isFlipped}
         exit={exit}
+        isExit={isExit}
       />
       <LiveLayout>
         <StyledHeader>

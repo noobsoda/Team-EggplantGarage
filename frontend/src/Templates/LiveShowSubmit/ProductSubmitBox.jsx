@@ -55,6 +55,8 @@ export default function ProductSubmitBox({
   const [check, setCheck] = useState(false);
   const [id, setId] = useState(0);
 
+  const formatter = new Intl.NumberFormat("ko-KR");
+
   useEffect(() => {
     const img = new Image();
     img.src = imgSrc;
@@ -159,7 +161,18 @@ export default function ProductSubmitBox({
    * 제품 가격
    */
   function onProductPrice(e) {
-    setProductPrice(e.target.value);
+    const value = e.target.value.replace(/\,/g, "");
+    if (value === "") {
+      setProductPrice(0);
+      return;
+    }
+
+    //숫자만 입력햇는지 확인
+    if (!(value + "").match(isNumber)) {
+      alert("숫자만 입력해주세요");
+      return;
+    }
+    setProductPrice(value);
   }
 
   /**
@@ -192,16 +205,6 @@ export default function ProductSubmitBox({
     //즉시구매가 확인
     let price = 0; //기본 0원
     if (check) {
-      if (productPrice === "") {
-        alert("구매가를 입력해주세요");
-        return;
-      }
-
-      //숫자만 입력햇는지 확인
-      if (!(productPrice + "").match(isNumber)) {
-        alert("숫자만 입력해주세요");
-        return;
-      }
       price = productPrice;
     }
 
@@ -242,6 +245,7 @@ export default function ProductSubmitBox({
     if (e.target.checked) {
       setCheck(true);
     } else {
+      setProductPrice(0);
       setCheck(false);
     }
   }
@@ -294,7 +298,7 @@ export default function ProductSubmitBox({
           <InputBox
             placehold="즉시구매가를 입력하세요"
             onChange={onProductPrice}
-            value={productPrice}
+            value={formatter.format(productPrice)}
             disabled={!check}
           />
         </div>
