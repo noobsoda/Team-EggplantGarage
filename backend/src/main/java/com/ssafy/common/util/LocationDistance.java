@@ -21,12 +21,13 @@ public class LocationDistance {
 
         if ("kilometer".equals(unit)) {
             dist = dist * 1.609344;
-        } else if("meter".equals(unit)){
+        } else if ("meter".equals(unit)) {
             dist = dist * 1609.344;
         }
 
         return (dist);
     }
+
     // This function converts decimal degrees to radians
     private static double deg2rad(double deg) {
         return (deg * Math.PI / 180.0);
@@ -37,16 +38,16 @@ public class LocationDistance {
         return (rad * 180 / Math.PI);
     }
 
-    public static List<LiveContent> distanceSort(List<DistanceModule> moduleList, String distanceSort){
+    public static List<LiveContent> distanceSort(List<DistanceModule> moduleList, String distanceSort) {
         List<LiveContent> liveContentList = new ArrayList<>();
-        if(distanceSort.equals("ASC")){
+        if (distanceSort.equals("ASC")) {
             Collections.sort(moduleList, new Comparator<DistanceModule>() {
                 @Override
                 public int compare(DistanceModule o1, DistanceModule o2) {
                     return Double.compare(o1.getDistance(), o2.getDistance());
                 }
             });
-        }else if(distanceSort.equals("DESC")){
+        } else if (distanceSort.equals("DESC")) {
             Collections.sort(moduleList, new Comparator<DistanceModule>() {
                 @Override
                 public int compare(DistanceModule o1, DistanceModule o2) {
@@ -55,7 +56,7 @@ public class LocationDistance {
             });
 
         }//그 외일 때는 그냥 리턴
-        for(DistanceModule distanceModule : moduleList){
+        for (DistanceModule distanceModule : moduleList) {
             liveContentList.add(distanceModule.getLiveContent());
         }
 

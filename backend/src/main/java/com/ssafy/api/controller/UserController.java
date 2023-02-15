@@ -2,27 +2,20 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.request.UserDeleteReq;
 import com.ssafy.api.request.UserInfoPatchReq;
-import com.ssafy.common.model.response.CommonResponse;
-import com.ssafy.common.model.response.ResponseService;
-import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.*;
-
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.UserRes;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.model.response.CommonResponse;
+import com.ssafy.common.model.response.ResponseService;
 import com.ssafy.db.entity.User;
-//import com.ssafy.db.repository.UserRepositorySupport;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**

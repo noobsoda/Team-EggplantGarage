@@ -1,7 +1,10 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.*;
-import com.ssafy.api.response.*;
+import com.ssafy.api.response.LiveContent;
+import com.ssafy.api.response.LiveDetailGetRes;
+import com.ssafy.api.response.LiveProductInfo;
+import com.ssafy.api.response.UserEntryRes;
 import com.ssafy.common.exception.CustomException;
 import com.ssafy.common.util.DistanceModule;
 import com.ssafy.common.util.LocationDistance;
@@ -10,7 +13,10 @@ import com.ssafy.db.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static com.ssafy.common.error.ErrorCode.*;
 
@@ -61,18 +67,6 @@ public class LiveServiceImpl implements LiveService {
         liveRepository.save(live);
 
         return live;
-    }
-
-    /**
-     * sessionId 중복을 체크하는 메서드
-     */
-    // url 중복 체크할 메서드
-    public boolean getLiveCheckSessionIdBySessionId(String sessionId) {
-        // 디비에 방송 url 정보 조회
-        Optional<Live> oLive = liveRepository.findBySessionId(sessionId);
-        Live live = oLive.orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
-
-        return true;
     }
 
     /**
@@ -288,7 +282,7 @@ public class LiveServiceImpl implements LiveService {
      */
     @Override
     public List<DistanceModule> searchLocationLiveList(List<LiveContent> liveContentList, Location location,
-            boolean isNational) {
+                                                       boolean isNational) {
         List<DistanceModule> distanceModuleList = new ArrayList<>();
         for (LiveContent liveContent : liveContentList) {
             // 라이브 아이디로 lat,lon 조회
@@ -347,7 +341,7 @@ public class LiveServiceImpl implements LiveService {
         int size = liveContentListInfo.size();
 
         if (size <= page * MAX_PAGE && size <= (page - 1) * MAX_PAGE) {
-            return null;
+            return Collections.emptyList();
         } else if (size > (page - 1) * MAX_PAGE && size < page * MAX_PAGE) {
             for (int i = ((page - 1) * MAX_PAGE); i < liveContentListInfo.size(); i++) {
                 liveContentList.add(liveContentListInfo.get(i));

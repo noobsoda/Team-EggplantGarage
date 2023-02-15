@@ -5,7 +5,6 @@ import com.ssafy.api.response.ReviewRes;
 import com.ssafy.api.service.ReviewService;
 import com.ssafy.common.model.response.CommonResponse;
 import com.ssafy.common.model.response.ResponseService;
-import com.ssafy.db.entity.Review;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

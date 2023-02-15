@@ -6,10 +6,8 @@ import com.ssafy.api.service.ChatService;
 import com.ssafy.db.entity.ChatMessage;
 import com.ssafy.db.entity.ChatRoom;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -28,20 +26,17 @@ public class StompController {
         ChatRoom chatRoom = chatService.updateChatRoom(chatMessage);
         // 클라이언트에서 "/pub/message"의 경로로 메시지를 보내는 요청을 하면,
         // StompChatController가 받아서 "/sub/chat/room/{chatRoomId}"를 구독하고 있는 클라이언트에게 메시지를 전달.
-        // template.convertAndSend("/sub/chat/room/" + chatRoom.getId(), ChatRoomDetailRes.of(chatRoom, chatMessageSendReq.getSenderId()));
         template.convertAndSend("/sub/room/" + chatRoom.getId(), chatMessageSendReq);
     }
 
     @MessageMapping("/live/message/{roomId}")
     public void sendMessageToLive(@Payload LiveChatReq liveChatReq) {
-        System.out.println("controller: sendMessage");
         // @Payload: 헤더와 메타 데이터를 제외한 실제 사용에 있어서 필요한 데이터
         template.convertAndSend("/sub/live/" + liveChatReq.getRoomId(), liveChatReq);
     }
 
     @MessageMapping("/live/addUser/{roomId}")
     public void addUser(@Payload LiveChatReq liveChatReq) {
-        System.out.println("controller: addUser");
         template.convertAndSend("/sub/live/" + liveChatReq.getRoomId(), liveChatReq);
     }
 }

@@ -9,8 +9,7 @@ import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.ChatMessageRepository;
 import com.ssafy.db.repository.ChatRoomRepository;
 import com.ssafy.db.repository.UserRepository;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -18,19 +17,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service("chatService")
+@RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
-    private final Logger logger;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final UserRepository userRepository;
-
-    @Autowired
-    public ChatServiceImpl(Logger logger, ChatRoomRepository chatRoomRepository, ChatMessageRepository chatMessageRepository, UserRepository userRepository) {
-        this.logger = logger;
-        this.chatRoomRepository = chatRoomRepository;
-        this.chatMessageRepository = chatMessageRepository;
-        this.userRepository = userRepository;
-    }
 
     @Override
     public ChatRoomRes createChatRoom(long senderId, long receiverId) {
