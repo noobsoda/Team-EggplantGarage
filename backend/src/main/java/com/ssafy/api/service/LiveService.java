@@ -17,8 +17,6 @@ public interface LiveService {
 
     LiveDetailGetRes getLiveDetailBySessionId(Long liveId);
 
-    boolean getLiveCheckSessionIdBySessionId(String url);
-
     boolean postLiveByThumbnailUrl(Long liveId, String thumbnailUrl);
 
     boolean postLiveByCategories(LiveCategoriesReq liveCategoriesReq);

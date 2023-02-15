@@ -70,18 +70,6 @@ public class LiveServiceImpl implements LiveService {
     }
 
     /**
-     * sessionId 중복을 체크하는 메서드
-     */
-    // url 중복 체크할 메서드
-    public boolean getLiveCheckSessionIdBySessionId(String sessionId) {
-        // 디비에 방송 url 정보 조회
-        liveRepository.findBySessionId(sessionId)
-                .orElseThrow(() -> new CustomException(LIVE_NOT_FOUND));
-
-        return true;
-    }
-
-    /**
      * 라이브 아이디에 썸네일 이미지 주소를 넣어주는 메소드
      */
 
