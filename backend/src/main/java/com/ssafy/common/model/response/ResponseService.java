@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 public class ResponseService {
 
     //응답 데이터가 없는 경우
-    public CommonResponse getSuccessResponse(int StatusCode, String message){
+    public CommonResponse getSuccessResponse(int StatusCode, String message) {
         CommonResponse response = new CommonResponse();
         response.setIsSuccess(true);
         response.setStatusCode(StatusCode);
@@ -18,7 +18,7 @@ public class ResponseService {
 
 
     //예외 응답
-    public CommonResponse getExceptionResponse(ErrorCode errorCode){
+    public CommonResponse getExceptionResponse(ErrorCode errorCode) {
         CommonResponse response = new CommonResponse();
         response.setIsSuccess(errorCode.isSuccess());
         response.setStatusCode(errorCode.getStatus());

@@ -28,7 +28,7 @@ public class BundleServiceImpl implements BundleService {
 
     @Override
     public Long addBundle(BundleReq bundleReq) {
-//        log.info("ServiceImpl: 묶음 상품 Bundle DB에 저장(제안)");
+        log.info("ServiceImpl: 묶음 상품 Bundle DB에 저장(제안)");
         int quantity = bundleReq.getProductIdList().size();
 
         Bundle bundle = new Bundle();
@@ -49,7 +49,7 @@ public class BundleServiceImpl implements BundleService {
 
         Long bundleId = bundleRepository.save(bundle).getId();
 
-//        log.info("ServiceImpl: 각각의 묶음 상품들 BundledItemsRelation DB에 저장");
+        log.info("ServiceImpl: 각각의 묶음 상품들 BundledItemsRelation DB에 저장");
         for (int i = 0; i < quantity; i++) {
             BundledItemsRelation bundledItemsRelation = new BundledItemsRelation();
 

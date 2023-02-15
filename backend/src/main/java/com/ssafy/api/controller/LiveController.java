@@ -50,12 +50,6 @@ public class LiveController {
         Map<String, Object> resMap = new HashMap<>();
         //유저 확인
         User user = userService.getUserById(liveRegisterInfo.getSellerId());
-        //세션아이디 중복 체크
-        /*if (liveService.getLiveCheckSessionIdBySessionId(liveRegisterInfo.getSessionId())) {
-            resMap.put("statusCode", 409);
-            resMap.put("message", "세션 ID가 중복됩니다");
-            return ResponseEntity.status(409).body(resMap);
-        }*/
         //db에 저장 및 생성
         Live live = liveService.CreateLive(liveRegisterInfo, user);
         resMap.put("liveId", live.getId());
