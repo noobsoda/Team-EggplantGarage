@@ -14,7 +14,7 @@ public class LiveChatReq {
         JOIN,
         LEAVE,
         REJECT,
-        ACCEP,
+        ACCEPT,
         PAY,
         SUGGEST
     }
