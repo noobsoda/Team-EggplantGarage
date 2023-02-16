@@ -188,6 +188,7 @@ export default function LiveshowSeller(toggleCamera) {
           break;
         case "ACCEPT":
           getSuggest();
+          getLiveInfo();
           color = "green";
           break;
         case "PAY":

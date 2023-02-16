@@ -243,11 +243,14 @@ export default function LiveshowBuyer() {
       //REJECT, ACCEP,PAY,SUGGEST, CHAT
       switch (messageRecv.type) {
         case "REJECT":
+          getSuggest();
           getApprovSuggest();
           color = "red";
           break;
         case "ACCEPT":
+          getLiveInfo();
           getSuggest();
+          getApprovSuggest();
           color = "green";
           break;
         case "PAY":
