@@ -144,65 +144,67 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 > - volumes를 통해 컨테이너와 파일 공유
 >
 > ```
-> version: '3'
->
-> services:
->  database-mysql:
->    container_name: database-mysql
->    image: mysql/mysql-server:5.7
->
->    environment:
->      MYSQL_ROOT_PASSWORD: 'root'
->      MYSQL_ROOT_HOST: '%'
->      MYSQL_DATABASE: 'ssafy_web_db'
->      TZ: Asia/Seoul
->
->    volumes:
->      - ./mysql-init.d:/docker-entrypoint-initdb.d
->
->    ports:
->      - '13306:3306'
->
->    command:
->      - --character-set-server=utf8
->      - --collation-server=utf8_general_ci
->    networks:
->      - eggplant_network
->
->  application:
->    build:
->      context: ./backend
->      dockerfile: Dockerfile
->    restart: always
->    container_name: eggplant_app
->    ports:
->      - 8000:8000
->    environment:
->      SPRING_DATASOURCE_URL: jdbc:mysql://database-mysql:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
->      SPRING_DATASOURCE_USERNAME: root
->      SPRING_DATASOURCE_PASSWORD: root
->    volumes:
->      - ./pictures:/root/pictures
->    depends_on:
->      - database-mysql
->    networks:
->      - eggplant_network
->
->  web:
->    container_name: nginx
->    image: nginx
->    ports:
->      - "443:443"
->    volumes:
->      - ./nginx/conf.d:/etc/nginx/conf.d
->      - /etc/letsencrypt:/etc/letsencrypt
->    depends_on:
->      - application
->    networks:
->      - eggplant_network
->
-> networks:
->  eggplant_network:
+>version: '3'
+
+services:
+  database-mysql:
+    container_name: database-mysql
+    image: mysql/mysql-server:5.7
+
+    environment:
+      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: 'ssafy_web_db'
+      TZ: Asia/Seoul
+
+    volumes:
+      - ./db/mysql-init.d:/docker-entrypoint-initdb.d
+
+    ports:
+      - '13306:3306'
+
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - eggplant_network
+
+  application:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: always
+    container_name: eggplant_app
+    ports:
+      - 8000:8000
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database-mysql:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      TZ: Asia/Seoul
+    volumes:
+      - ./pictures:/root/pictures
+    depends_on:
+      - database-mysql
+    networks:
+      - eggplant_network
+
+  web:
+    container_name: nginx
+    image: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d
+      - /etc/letsencrypt:/etc/letsencrypt
+    depends_on:
+      - application
+    networks:
+      - eggplant_network
+
+networks:
+  eggplant_network:
+
 >
 > ```
 
