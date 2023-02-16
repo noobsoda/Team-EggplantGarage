@@ -74,16 +74,16 @@ export default function Seller({
     closeSession();
   }, [session]);
 
-  // useEffect(() => {
-  //   const onbeforeunload = () => {
-  //     leaveSession();
-  //   };
+  useEffect(() => {
+    const onbeforeunload = () => {
+      leaveSession();
+    };
 
-  //   window.addEventListener("beforeunload", onbeforeunload); // componentDidMount
-  //   return () => {
-  //     window.removeEventListener("beforeunload", onbeforeunload);
-  //   };
-  // }, [leaveSession]);
+    window.addEventListener("beforeunload", onbeforeunload); // componentDidMount
+    return () => {
+      window.removeEventListener("beforeunload", onbeforeunload);
+    };
+  }, [leaveSession]);
 
   function joinSession() {
     //const OVidu = new OpenVidu(); //오픈비두 생성
