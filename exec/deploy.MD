@@ -252,7 +252,71 @@ COPY    ${JAR_FILE} app.jar
 ENTRYPOINT ["java", "-jar", "/app.jar"]
 ```
 
-## Openvidu 설정
+## Openvidu Deployment
+
+> openvidu on premises 설정
+
+openvidu on premises를 사용하면 OpenVidu를 Docker Compose로 관리하는 Docker 컨테이너로 쉽게 배포할 수 있습니다. 설치되는 항목은 다음과 같습니다
+
+- OpenVidu Server (openvidu-server): OpenVidu 플랫폼의 뇌 역할을 합니다. 시그널링 플레인을 담당합니다.
+- Kurento Media Server (kms): OpenVidu 플랫폼의 핵심 역할을 합니다. 미디어 플레인을 담당합니다.
+- Coturn (coturn): 특정 특별한 네트워크에서 브라우저와 미디어 통신을 허용하는 데 사용되는 서버입니다.
+- Redis (redis): Coturn 서버에서 사용자를 관리하는 데 사용되는 데이터베이스입니다.
+- Nginx (nginx): SSL 인증서를 구성하고 OpenVidu Server와 Application을 표준 HTTPS 포트 (443)에서 모두 제공할 수 있도록 하는 리버스 프록시입니다.
+- Videoconference Application (app): OpenVidu Call 애플리케이션 또는 다른 애플리케이션입니다. 선택적으로 사용 가능합니다.
+
+OpenVidu를 배포하려면 루트 권한 필요 EC2에서
+
+```
+sudo su
+```
+
+OpenVidu 설치 권장 폴더는 /opt
+
+```
+cd /opt
+```
+
+다음 명령어를 통해 설치 스크립트 다운
+
+```
+curl https://s3-eu-west-1.amazonaws.com/aws.openvidu.io/install_openvidu_latest.sh | bash
+```
+
+OpenVidu 폴더로 이동
+
+```
+cd openvidu
+```
+
+env 파일 설정
+
+```
+nano .env
+```
+
+```
+
+#DOMAIN_OR_PUBLIC_IP=[도메인]
+Example : xxxxxx.x.xxxxx.io
+
+#OPENVIDU_SECRET=[암호]
+OPENVIDU_SECRET=MY_SECRET
+
+
+#암호화 방식 설정
+CERTIFICATE_TYPE=letsencrypt
+
+LETSENCRYPT_EMAIL=[이메일]
+LETSENCRYPT_EMAIL=11111@ssafy.edu
+
+
+#80포트를 사용하고 있기 때문에 다른 포트로 설정 포트 충돌 안나게
+HTTP_PORT=100
+
+#openvidu 포트를 8443으로 설정 443은 사용중
+HTTPS_PORT=8443
+```
 
 # Prerequisites
 
