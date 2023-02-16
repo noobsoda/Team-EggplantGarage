@@ -247,7 +247,7 @@ docker-compose down
 
 ### 1대1 채팅
 
-| ![image](https://user-images.githubusercontent.com/24247768/219421586-c7028a94-8e51-40e9-ac52-5c163acdd6d5.png) | <img src="https://user-images.githubusercontent.com/119313897/219428673-008c1d6e-f130-4155-bcf5-3769b8b08b9b.gif"> |
+| ![image](https://user-images.githubusercontent.com/24247768/219421586-c7028a94-8e51-40e9-ac52-5c163acdd6d5.png) | <img src="https://user-images.githubusercontent.com/119313897/219439016-184eeb9d-34b9-4507-92ce-94dc6a746914.gif"> |
 | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
 | 1대1 채팅방<br> 채팅방의 목록을 조회                                                                            | 1대1 채팅화면                                                                                                      |
 
