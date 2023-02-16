@@ -101,6 +101,11 @@ export default function LiveshowBuyer() {
   const [messageList, setMessageList] = useState([]);
   const [message, setMessage] = useState(""); // 입력 메세지
 
+  //5초마다 정보 불러오기
+  useInterval(() => {
+    getLiveInfo();
+  }, 5000);
+
   useEffect(() => {
     getLiveInfo(); //누군가 접속, 판매가 되는 경우
     // //현재 유저의 좋아요 유무
