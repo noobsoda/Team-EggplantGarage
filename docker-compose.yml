@@ -35,6 +35,9 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://database-mysql:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: root
+      TZ: Asia/Seoul
+    volumes:
+      - ./pictures:/root/pictures
     depends_on:
       - database-mysql
     networks:

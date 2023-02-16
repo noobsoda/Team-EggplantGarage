@@ -31,6 +31,9 @@ public class BundleServiceImpl implements BundleService {
         log.info("ServiceImpl: 묶음 상품 Bundle DB에 저장(제안)");
         int quantity = bundleReq.getProductIdList().size();
 
+        if(bundleReq.getProductIdList().isEmpty())
+            throw new CustomException(PRODUCT_NOT_FOUND);
+
         Bundle bundle = new Bundle();
         Optional<User> oUser = userRepository.findById(bundleReq.getBuyerId());
         Optional<Live> oLive = liveRepository.findById(bundleReq.getLiveId());
