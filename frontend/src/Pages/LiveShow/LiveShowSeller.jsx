@@ -92,6 +92,11 @@ export default function LiveshowSeller(toggleCamera) {
 
   const navigate = useNavigate();
 
+  //5초마다 정보 불러오기
+  useInterval(() => {
+    getLiveInfo();
+  }, 5000);
+
   useEffect(() => {
     getLiveInfo();
     getSuggest();
