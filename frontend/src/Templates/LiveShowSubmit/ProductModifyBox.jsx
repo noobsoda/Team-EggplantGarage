@@ -47,7 +47,6 @@ export default function ProductModifyBox({
         setPrice(0);
         return;
       }
-      console.log(value);
       if (!(value + "").match(isNumber)) {
         alert("숫자만 입력해주세요");
         return;
