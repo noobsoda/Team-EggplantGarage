@@ -1,10 +1,12 @@
 # Project : 가지가라지
 
-This project demonstrates how to port a web application stack consisting of nginx, openvidu, mysql, and myapp using Jenkins and Docker Compose.
+가리가라지 프로젝트의 배포 방식은 Docker Container에 올린 Jenkins를 활용한 CI/CD 자동화 환경으로 구성되어 있습니다. Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트를 통해 미리 설정한 Pipeline 흐름을 통해 Frontend와 Backend를 Gradle로 통합빌드하고 Dockerfile을 통해 Image를 생성한 후 다른 이미지들과 연계되어 Docker compose를 통해 배포하는 방식을 사용하고 있습니다.
 
 ## Port Number
 
-표 넣기
+| 제목    | 내용    |
+| ------- | ------- |
+| 테스트1 | 테스트2 |
 
 # Configuration
 
@@ -307,7 +309,7 @@ OPENVIDU_SECRET=MY_SECRET
 #암호화 방식 설정
 CERTIFICATE_TYPE=letsencrypt
 
-LETSENCRYPT_EMAIL=[이메일]
+#LETSENCRYPT_EMAIL=[이메일]
 LETSENCRYPT_EMAIL=11111@ssafy.edu
 
 
@@ -321,17 +323,8 @@ HTTPS_PORT=8443
 # Prerequisites
 
 - Docker
-  - Jenkins
 - Docker Compose
-  - Nginx, Mysql, MyApp, OpenVidu
-- Git
-
-# Getting Started
-
-1. Clone this repository to your local machine.
-2. Open a terminal in the project root directory and run docker-compose up -d to start the application stack.
-3. Open your web browser and go to http://localhost:8000 to access the application.
-4. To shut down the application stack, run docker-compose down in the terminal.
+- GitLab
 
 ### Jenkins Pipeline
 
@@ -397,11 +390,3 @@ HTTPS_PORT=8443
 > 3.  Jenkins가 NodeJS build중 Eslint에서 뜨는 warning을 오류로 받아들이지 않게 CI 설정
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/0f066fa0e65a3db0874660a93879a6d9/image.png" width="50%" height="50%"/>
-
-# Contributing
-
-If you would like to contribute to this project, feel free to submit a pull request. Contributions are always welcome!
-
-# License
-
-This project is licensed under the MIT License.
