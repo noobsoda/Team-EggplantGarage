@@ -72,7 +72,6 @@ export default function SalesList({
   function bundle() {
     //제안 가격에 숫자만 입력햇는지 확인
     let price = 0;
-    console.log(bundlePrice);
     if (bundlePrice === "") {
       price = 0;
     } else {
