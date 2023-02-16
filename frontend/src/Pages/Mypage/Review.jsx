@@ -45,7 +45,7 @@ export default function Review() {
             }}
           />
         ) : (
-          <ReviewReceived otherName={otherName} review={otherReviewContent} />
+          <ReviewReceived review={otherReviewContent} otherName={otherName} />
         )}
       </Body>
     </Page>
