@@ -400,3 +400,10 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 > **3. Jenkins가 NodeJS build중 Eslint에서 뜨는 warning을 오류로 받아들이지 않게 CI 설정**
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/0f066fa0e65a3db0874660a93879a6d9/image.png" width="50%" height="50%"/>
+
+# Getting Started
+>
+>1. Clone this repository to your local machine.
+>2. Open a terminal in the project root directory and run docker-compose up -d to start the application stack.
+>3. Open your web browser and go to http://localhost:8000 to access the application.
+>4. To shut down the application stack, run docker-compose down in the terminal.
