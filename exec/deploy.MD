@@ -4,19 +4,15 @@ This project demonstrates how to port a web application stack consisting of ngin
 
 ## Port Number
 
----
-
 표 넣기
 
 # Configuration
 
 ## Integrated Development Build
 
----
-
 > 리액트 통합 빌드 설정
 >
-> `build.gradle`
+> > `build.gradle`
 >
 > ```
 > def frontendDir = "$projectDir/../frontend"
@@ -62,17 +58,17 @@ This project demonstrates how to port a web application stack consisting of ngin
 > }
 > ```
 >
-> > `api.config.WebMvcConfig.java`
->
 > 리소스 핸들러 매핑 설정
+>
+> > `api.config.WebMvcConfig.java`
 >
 > ```java
 >    registry.addResourceHandler("/**").addResourceLocations("classpath:/dist/");
 > ```
 >
-> `api.controller.WebController.java`
->
 > 리액트 url 라우팅 설정
+>
+> > `api.controller.WebController.java`
 >
 > ```java
 >    @GetMapping(value = {"", "/home", "/submit", "/seller/**", "/login", "/signup", "/signupemail", "/search", "/like", "/chat/**", "/mypage", "category"
@@ -84,13 +80,11 @@ This project demonstrates how to port a web application stack consisting of ngin
 
 ## Connect to EC2 instance using SSH.
 
----
-
 > ```
 > ssh -i [암호키].pem ubuntu@[도메인]
 > ```
 >
-> Example
+> > Example
 >
 > ```
 > ssh -i XXXX.pem ubuntu@XXXXXX.p.XXXXX.io
@@ -124,8 +118,6 @@ This project demonstrates how to port a web application stack consisting of ngin
 
 ## How to obtain an SSL certificate with Let's Encrypt
 
----
-
 > ```
 > sudo apt-get install letsencrypt
 > sudo letsencrypt certonly --standalone -d 도메인
@@ -134,8 +126,6 @@ This project demonstrates how to port a web application stack consisting of ngin
 > ```
 
 ## Docker-compose 설정
-
----
 
 - Mysql, Integrated Build App, Nginx을 docker compose로 묶어서 배포
   - networks를 사용하여 컨테이너 간의 네트워크를 연결
@@ -206,8 +196,6 @@ networks:
 
 ## Nginx 설정
 
----
-
 80포트로 들어오면 443으로 리다이렉트
 
 443포트에 SSL 적용
@@ -251,8 +239,6 @@ server {
 
 ## Dockerfile
 
----
-
 openjdk8로 빌드
 
 build/libe안에 있는 jar파일을 app.jar로 복사
@@ -268,9 +254,7 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 
 ## Openvidu 설정
 
----
-
-## Prerequisites
+# Prerequisites
 
 - Docker
   - Jenkins
@@ -278,14 +262,14 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
   - Nginx, Mysql, MyApp, OpenVidu
 - Git
 
-## Getting Started
+# Getting Started
 
 1. Clone this repository to your local machine.
 2. Open a terminal in the project root directory and run docker-compose up -d to start the application stack.
 3. Open your web browser and go to http://localhost:8000 to access the application.
 4. To shut down the application stack, run docker-compose down in the terminal.
 
-## Jenkins Pipeline
+### Jenkins Pipeline
 
 > ```
 > docker run -d -p 9090:8080 -u root -p 50000:50000 -v /var/jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock --name jenkins jenkins/jenkins:lts-jdk11
@@ -350,14 +334,10 @@ ENTRYPOINT ["java", "-jar", "/app.jar"]
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/0f066fa0e65a3db0874660a93879a6d9/image.png" width="50%" height="50%"/>
 
-## Configuration
-
-The application stack can be configured using the docker-compose.yml file in the project root directory. This file defines the services that make up the application stack and their configurations.
-
-## Contributing
+# Contributing
 
 If you would like to contribute to this project, feel free to submit a pull request. Contributions are always welcome!
 
-## License
+# License
 
 This project is licensed under the MIT License.
