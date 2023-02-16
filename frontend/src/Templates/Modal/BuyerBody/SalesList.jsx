@@ -30,9 +30,8 @@ export default function SalesList({
 
   useEffect(() => {
     setProductCheck(
-      productList.map((ele) => {
-        ele["check"] = false;
-        return ele;
+      productList.map((ele, i) => {
+        return { ...productCheck[i] };
       })
     );
   }, [productList]);
