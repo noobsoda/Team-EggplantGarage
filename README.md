@@ -30,3 +30,10 @@ Web RTC를 활용한 비대면 Garage Sale
 ### 허진선
 
 백엔드 개발(1:1 채팅, 마이페이지)
+
+# Getting Started
+
+1. Clone this repository to your local machine.
+2. Open a terminal in the project root directory and run docker-compose up -d to start the application stack.
+3. Open your web browser and go to http://localhost:8000 to access the application.
+4. To shut down the application stack, run docker-compose down in the terminal.

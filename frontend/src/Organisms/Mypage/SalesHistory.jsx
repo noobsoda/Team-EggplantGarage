@@ -22,7 +22,7 @@ export default function SalesHistory() {
           lives.map((show) => {
             return (
               <LiveshowItem
-                key={show.id}
+                key={show.liveId}
                 show={show}
                 isSearch={true}
                 isHistory={true}
