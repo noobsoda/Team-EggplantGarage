@@ -108,6 +108,13 @@ export default function LiveshowSeller(toggleCamera) {
           navigate("/");
           return;
         }
+
+        //내가 주인인지 확인
+        if (data.seller_id !== userInfo.id) {
+          alert("잘못된 접근입니다.");
+          navigate("/");
+          return;
+        }
         setLiveInfo(data);
       },
       () => {
