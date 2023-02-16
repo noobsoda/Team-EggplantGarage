@@ -357,29 +357,29 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 
 ---
 
-> 1.  Secret Token에서 토큰을 받기
+> **1. Secret Token에서 토큰을 받기**
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/9ff55f96503b986c6d0c702020143f4e/image.png" width="50%" height="50%"/>
 >
-> 2.  빌드 웹훅 체크하고 URL 받기
+> **2. 빌드 웹훅 체크하고 URL 받기**
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/5b6bc13765cb4da547b6ceea308bbe2c/image.png" width="50%" height="50%"/>
 >
-> 3.  어떤 브랜치에서 받아올지 설정하기
+> **3. 어떤 브랜치에서 받아올지 설정하기**
 >
 > - Example `*/release*` release라는 이름이 붙은 모든 브랜치에 웹훅을 설정 release-1, release-2...
 >
 >  <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/1f217f4bbe170da43011f0b0f43c4945/image.png" width="50%" height="50%"/>
 >
-> 4.  깃랩 웹훅 설정
+> **4. 깃랩 웹훅 설정**
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/2e5c30d8eb910ab3466bebe2690546c4/image.png" width="50%" height="50%"/>
 >
-> 5.  URL과 Secret Token 설정 후 만약 Push 이벤트가 일어났을 때 어떤 브랜치에서 이벤트가 일어났을 때 보내는지 설정
+> **5. URL과 Secret Token 설정 후 만약 Push 이벤트가 일어났을 때 어떤 브랜치에서 이벤트가 일어났을 때 보내는지 설정**
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/e90b5f53cc3ec4e2426e19c72283ca3f/image.png" width="50%" height="50%"/>
 >
-> 6.  Enable SSL verification을 설정한다면 Jenkins에서도 CSRF 설정을 해야한다.
+> **6. Enable SSL verification을 설정한다면 Jenkins에서도 CSRF 설정을 해야한다.**
 >
 > - Jenkins관리 -> Configure Global Security -> CSRF 설정
 >
@@ -389,14 +389,14 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 
 > ---
 >
-> 1.  Jenkins NodeJs 설정
+> **1. Jenkins NodeJs 설정**
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/95f1ba21f9ddd3881bbda935dcc4cf5a/image.png" width="25%" height="25%"/>
 >
-> 2.  Jenkins Gradle 설정
+> **2. Jenkins Gradle 설정**
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/a9520b2a224d5680cf949d51b4009a6c/image.png" width="25%" height="25%"/>
 >
-> 3.  Jenkins가 NodeJS build중 Eslint에서 뜨는 warning을 오류로 받아들이지 않게 CI 설정
+> **3. Jenkins가 NodeJS build중 Eslint에서 뜨는 warning을 오류로 받아들이지 않게 CI 설정**
 >
 >   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/0f066fa0e65a3db0874660a93879a6d9/image.png" width="50%" height="50%"/>
