@@ -102,6 +102,23 @@ export default function LiveshowBuyer() {
   const [message, setMessage] = useState(""); // 입력 메세지
 
   useEffect(() => {
+    getLiveInfo(); //누군가 접속, 판매가 되는 경우
+    // //현재 유저의 좋아요 유무
+    isFavoriteLive(
+      { liveId: liveId, userId: userInfo.id },
+      ({ data }) => {
+        setIsLiked(data.favorite);
+      },
+      () => {
+        console.warn("favor info fail");
+      }
+    );
+    getSuggest();
+    getApprovSuggest();
+    connect();
+  }, []);
+
+  function getLiveInfo() {
     getLiveDetail(
       liveId,
       ({ data }) => {
@@ -117,37 +134,7 @@ export default function LiveshowBuyer() {
         console.warn("live info fail");
       }
     );
-    // //현재 유저의 좋아요 유무
-    isFavoriteLive(
-      { liveId: liveId, userId: userInfo.id },
-      ({ data }) => {
-        setIsLiked(data.favorite);
-      },
-      () => {
-        console.warn("favor info fail");
-      }
-    );
-    connect();
-  }, []);
-
-  //10초마다 묶음 제안 요청 왔는지 확인
-  useInterval(() => {
-    getSuggest();
-    getApprovSuggest();
-  }, 10000);
-
-  //10초마다 방정보 확인
-  useInterval(() => {
-    getLiveDetail(
-      liveId,
-      ({ data }) => {
-        setLiveInfo(data);
-      },
-      () => {
-        console.warn("live info fail");
-      }
-    );
-  }, 5000);
+  }
 
   //라이브 나가기
   const exit = () => {
@@ -244,6 +231,7 @@ export default function LiveshowBuyer() {
     const messageRecv = JSON.parse(payload.body);
     let color = "";
     if (messageRecv.type === "JOIN") {
+      getLiveInfo();
       setMessageList((prevItems) => [
         ...prevItems,
         {
@@ -255,15 +243,23 @@ export default function LiveshowBuyer() {
       //REJECT, ACCEP,PAY,SUGGEST, CHAT
       switch (messageRecv.type) {
         case "REJECT":
+          getSuggest();
+          getApprovSuggest();
           color = "red";
           break;
         case "ACCEPT":
+          getLiveInfo();
+          getSuggest();
+          getApprovSuggest();
           color = "green";
           break;
         case "PAY":
+          getLiveInfo();
+          getApprovSuggest();
           color = "green";
           break;
         case "SUGGEST":
+          getSuggest();
           color = "purple";
           break;
         default:

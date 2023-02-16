@@ -93,6 +93,12 @@ export default function LiveshowSeller(toggleCamera) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    getLiveInfo();
+    getSuggest();
+    connect();
+  }, []);
+
+  function getLiveInfo() {
     getLiveDetail(
       liveId,
       ({ data }) => {
@@ -102,32 +108,20 @@ export default function LiveshowSeller(toggleCamera) {
           navigate("/");
           return;
         }
+
+        //내가 주인인지 확인
+        if (data.seller_id !== userInfo.id) {
+          alert("잘못된 접근입니다.");
+          navigate("/");
+          return;
+        }
         setLiveInfo(data);
       },
       () => {
         console.warn("live info fail");
       }
     );
-    connect();
-  }, []);
-
-  //10초마다 묶음 제안 요청 왔는지 확인
-  useInterval(() => {
-    getSuggest();
-  }, 10000);
-
-  //10초마다 방 정보 확인
-  useInterval(() => {
-    getLiveDetail(
-      liveId,
-      ({ data }) => {
-        setLiveInfo(data);
-      },
-      () => {
-        console.warn("live info fail");
-      }
-    );
-  }, 5000);
+  }
 
   const exit = () => {
     closeLive(liveId, () => {
@@ -183,6 +177,7 @@ export default function LiveshowSeller(toggleCamera) {
   const onMessageReceived = (payload) => {
     const messageRecv = JSON.parse(payload.body);
     if (messageRecv.type === "JOIN") {
+      getLiveInfo();
       setMessageList((prevItems) => [
         ...prevItems,
         {
@@ -195,15 +190,20 @@ export default function LiveshowSeller(toggleCamera) {
       let color = "";
       switch (messageRecv.type) {
         case "REJECT":
+          getSuggest();
           color = "red";
           break;
         case "ACCEPT":
+          getSuggest();
+          getLiveInfo();
           color = "green";
           break;
         case "PAY":
+          getLiveInfo();
           color = "green";
           break;
         case "SUGGEST":
+          getSuggest();
           color = "purple";
           break;
         default:
