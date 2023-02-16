@@ -13,7 +13,7 @@ export default function InfoEdit() {
         <div className="body1-header">닉네임</div>
         <BigInput placehold="새로운 닉네임" />
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <ExtraSmallButton name="수정" color="white"/>
+          <ExtraSmallButton name="수정" color="white" />
         </div>
         <div className="body1-header">비밀번호</div>
         <BigInput placehold="현재 비밀번호" />
@@ -22,12 +22,12 @@ export default function InfoEdit() {
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
           <ExtraSmallButton name="수정" color="white" />
         </div>
-        <div className="body1-header">비밀번호</div>
+        <div className="body1-header">계좌</div>
         {/* <BigSelect /> */}
         <BigInput placehold="은행명" />
         <BigInput placehold="계좌번호" />
         <div style={{ display: "flex", justifyContent: "flex-end" }}>
-          <ExtraSmallButton name="등록/수정" color="white"/>
+          <ExtraSmallButton name="등록/수정" color="white" />
         </div>
       </Body>
     </Page>
