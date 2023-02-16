@@ -145,65 +145,67 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 >
 > ```
 >version: '3'
+>
+>services:
+>  database-mysql:
+>    container_name: database-mysql
+>    image: mysql/mysql-server:5.7
+>
+>    environment:
+>      MYSQL_ROOT_PASSWORD: 'root'
+>      MYSQL_ROOT_HOST: '%'
+>      MYSQL_DATABASE: 'ssafy_web_db'
+>      TZ: Asia/Seoul
+>
+>    volumes:
+>      - ./db/mysql-init.d:/docker-entrypoint-initdb.d
+>
+>    ports:
+>      - '13306:3306'
+>
+>    command:
+>      - --character-set-server=utf8mb4
+>      - --collation-server=utf8mb4_unicode_ci
+>    networks:
+>      - eggplant_network
+>
+>  application:
+>    build:
+>      context: ./backend
+>      dockerfile: Dockerfile
+>    restart: always
+>    container_name: eggplant_app
+>    ports:
+>      - 8000:8000
+>    environment:
+>      SPRING_DATASOURCE_URL: jdbc:mysql://database-mysql:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+>      SPRING_DATASOURCE_USERNAME: root
+>      SPRING_DATASOURCE_PASSWORD: root
+>      TZ: Asia/Seoul
+>    volumes:
+>      - ./pictures:/root/pictures
+>    depends_on:
+>      - database-mysql
+>    networks:
+>      - eggplant_network
+>
+>  web:
+>    container_name: nginx
+>    image: nginx
+>    ports:
+>      - "80:80"
+>      - "443:443"
+>    volumes:
+>      - ./nginx/conf.d:/etc/nginx/conf.d
+>      - /etc/letsencrypt:/etc/letsencrypt
+>    depends_on:
+>      - application
+>    networks:
+>      - eggplant_network
+>
+>networks:
+>  eggplant_network:
 
-services:
-  database-mysql:
-    container_name: database-mysql
-    image: mysql/mysql-server:5.7
-
-    environment:
-      MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_ROOT_HOST: '%'
-      MYSQL_DATABASE: 'ssafy_web_db'
-      TZ: Asia/Seoul
-
-    volumes:
-      - ./db/mysql-init.d:/docker-entrypoint-initdb.d
-
-    ports:
-      - '13306:3306'
-
-    command:
-      - --character-set-server=utf8mb4
-      - --collation-server=utf8mb4_unicode_ci
-    networks:
-      - eggplant_network
-
-  application:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    restart: always
-    container_name: eggplant_app
-    ports:
-      - 8000:8000
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://database-mysql:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
-      SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: root
-      TZ: Asia/Seoul
-    volumes:
-      - ./pictures:/root/pictures
-    depends_on:
-      - database-mysql
-    networks:
-      - eggplant_network
-
-  web:
-    container_name: nginx
-    image: nginx
-    ports:
-      - "443:443"
-    volumes:
-      - ./nginx/conf.d:/etc/nginx/conf.d
-      - /etc/letsencrypt:/etc/letsencrypt
-    depends_on:
-      - application
-    networks:
-      - eggplant_network
-
-networks:
-  eggplant_network:
 
 >
 > ```
@@ -219,12 +221,17 @@ networks:
 > ```
 >
 >
-> server {
+>server{
 >    listen 80;
+>    listen [::]:80;
 >    server_name i8b105.p.ssafy.io;
->    return 301 https://$server_name$request_uri;
-> }
-> server {
+>    server_tokens off;
+>
+>    location / {
+>        proxy_pass https://i8b105.p.ssafy.io:8000;
+>    }
+>}
+>server {
 >    listen 443 ssl;
 >    server_name i8b105.p.ssafy.io;
 >
@@ -237,7 +244,7 @@ networks:
 >        proxy_http_version 1.1;
 >        proxy_set_header Upgrade $http_upgrade;
 >        proxy_set_header Connection "upgrade";
->            proxy_set_header Origin "";
+>            proxy_set_header Origin ""; 
 >
 >            proxy_set_header X-Real-IP $remote_addr;
 >        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -245,10 +252,10 @@ networks:
 >    }
 >    location /openlive {
 >        proxy_pass https://i8b105.p.ssafy.io:8443;
->
->    }
->
-> }
+>        
+>    }      
+>    
+>}
 > ```
 
 ## Dockerfile
