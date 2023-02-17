@@ -5,7 +5,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
-ssafy-web.log
+ssafy-web.log**
 
 ### STS ###
 .apt_generated
@@ -18,7 +18,7 @@ ssafy-web.log
 bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
-!**/src/main/resources/dist/
+**/src/main/resources/dist/
 
 ### IntelliJ IDEA ###
 .idea

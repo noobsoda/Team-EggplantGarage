@@ -1,14 +1,28 @@
 import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
-const StyledBody = styled.div`
-  padding: 8px 40px 8px;
-  width: 280px;
-  height: 508px;
-  border-top: solid 0.5px;
-  border-top-color: ${({ theme }) => theme.color.lightgrey};
+const StyledBody = styled(motion.div)`
+  padding: 8px 24px 8px;
+  width: calc(100% - 48px);
+  height: calc(100% - 128.8px);
+  // overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  /* overflow: hidden; */
+  row-gap: 8px;
 `;
 
 export default function Body(props) {
-  return <StyledBody>{props.children}</StyledBody>;
+  return (
+    <StyledBody
+      className={props.className}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      {props.children}
+    </StyledBody>
+  );
 }

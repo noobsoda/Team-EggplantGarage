@@ -1,68 +1,103 @@
-import React from "react";
+import React, { Fragment } from "react";
 import Header from "../../Templates/Layout/Header";
 import Page from "../../Templates/Layout/Page";
 import Body from "../../Templates/Layout/Body";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import PurchasedHistory from "../../Organisms/Mypage/PurchasedHistory";
 import { useState } from "react";
 import SalesHistory from "../../Organisms/Mypage/SalesHistory";
 import { useNavigate } from "react-router-dom";
+import ExtraSmallBtn from "../../Atoms/Buttons/ExtraSmallBtn";
+//redux
+import { logoutAction } from "../../store/user";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 const Info = styled.div`
-  width: 280px;
   height: 64px;
-  border-bottom: solid;
-  border-bottom-color: ${({ theme }) => theme.color.lightgrey};
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  width: 100%;
+  justify-content: center;
+  margin: 20px 0px 12px 0px;
 `;
 const InfoFlex = styled.div`
+  width: 100%;
   display: flex;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-between;
   height: 24px;
 `;
-const InfoEditBtn = styled.button`
-  width: 24px;
-  height: 24px;
-  background: url("/image/edit.svg") no-repeat 0px 0px;
-`;
 const SelectBar = styled.div`
+  margin-top: 12px;
   height: 40px;
-  width: 280px;
+  width: 100%;
   display: flex;
+  border-radius: 4px;
   justify-content: space-around;
+  align-items: center;
   border-bottom: solid;
   border-bottom-color: ${({ theme }) => theme.color.lightgrey};
+  border-top: solid;
+  border-top-color: ${({ theme }) => theme.color.lightgrey};
+`;
+
+const StyledBtn = styled.button`
+  height: 80%;
+  width: 50%;
+  color: ${({ theme }) => theme.color.lightgrey};
+  ${(props) =>
+    props.selected &&
+    css`
+      color: black;
+    `};
+`;
+
+const StyledDiv = styled.div`
+  display: flex;
+  flex-direction: row;
 `;
 
 export default function Mypage() {
   const [isPurchase, setisPurchase] = useState(true);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user.userInfo);
+
   function goInfoEdit() {
     navigate("/infoedit");
   }
+
+  function logoutClick() {
+    dispatch(logoutAction(navigate));
+  }
   return (
     <Page>
-      <Header isName="True" headerName="마이페이지" />
+      <Header isName={true} headerName="마이페이지" />
       <Body>
         <Info>
           <InfoFlex>
-            <div className="page-header">닉네임</div>
-            <div>
-              <span className="body1-regular" style={{ height: "24px" }}>
-                회원정보수정
-              </span>
-              <InfoEditBtn onClick={goInfoEdit}></InfoEditBtn>
-            </div>
+            <StyledDiv>
+              <img src="/image/category/19.png" width="24px"></img>
+              <div className="page-header">{user.nickname}</div>
+            </StyledDiv>
+            <ExtraSmallBtn name="로그아웃" buttonClick={logoutClick}></ExtraSmallBtn>
           </InfoFlex>
-          <img src="/image/star.svg" alt="" />
-          <span className="body1-regular">5.0</span>
+          <InfoFlex>
+            <div>　</div>
+            <ExtraSmallBtn name="정보수정" buttonClick={goInfoEdit}></ExtraSmallBtn>
+          </InfoFlex>
         </Info>
+
         <SelectBar>
-          <button className="body1-header" onClick={() => setisPurchase(true)}>
+          <StyledBtn className="body1-header" onClick={() => setisPurchase(true)} selected={isPurchase}>
             구매내역
-          </button>
-          <button className="body1-header" onClick={() => setisPurchase(false)}>
+          </StyledBtn>
+          <StyledBtn className="body1-header" onClick={() => setisPurchase(false)} selected={!isPurchase}>
             판매내역
-          </button>
+          </StyledBtn>
         </SelectBar>
         {/* 이부분 따로 컴포넌트화 시켜서 빼서 켜고 닫히게 해야함 */}
         {isPurchase === true ? <PurchasedHistory /> : <SalesHistory />}

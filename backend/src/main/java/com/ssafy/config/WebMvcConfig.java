@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.Filter;
+import java.util.Objects;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -59,18 +60,28 @@ public class WebMvcConfig implements WebMvcConfigurer {
          * Front-end에서 참조하는 URL을 /dist로 매핑
          *
          */
-        /*registry.addResourceHandler("/static/css/**")
-                .addResourceLocations("classpath:/dist/static/css/");
-        registry.addResourceHandler("/static/fonts/**")
-                .addResourceLocations("classpath:/dist/static/fonts/");
-        registry.addResourceHandler("/static/icons/**")
-                .addResourceLocations("classpath:/dist/static/icons/");
-        registry.addResourceHandler("/static/image/**")
-                .addResourceLocations("classpath:/dist/static/image/");
-        registry.addResourceHandler("/static/js/**")
-                .addResourceLocations("classpath:/dist/static/js/");*/
-        registry.addResourceHandler("/**")
-                .addResourceLocations("classpath:/dist/");
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations("classpath:/dist/static/");
+        registry.addResourceHandler("/image/**")
+                .addResourceLocations("classpath:/dist/image/");
+        registry.addResourceHandler("/index.html")
+                .addResourceLocations("classpath:/dist/index.html");
+        registry.addResourceHandler("/asset-manifest.json")
+                .addResourceLocations("classpath:/dist/asset-manifest.json");
+        registry.addResourceHandler("/favicon.ico")
+                .addResourceLocations("classpath:/dist/favicon.ico");
+        registry.addResourceHandler("/gazi.ico")
+                .addResourceLocations("classpath:/dist/gazi.ico");
+        registry.addResourceHandler("/logo192.png")
+                .addResourceLocations("classpath:/dist/logo192.png");
+        registry.addResourceHandler("/logo512.png")
+                .addResourceLocations("classpath:/dist/logo512.png");
+        registry.addResourceHandler("/manifest.json")
+                .addResourceLocations("classpath:/dist/manifest.json");
+        registry.addResourceHandler("/robots.txt")
+                .addResourceLocations("classpath:/dist/robots.txt");
+        /*registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/dist/");*/
 
     }
 
@@ -94,6 +105,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     Logger logger(InjectionPoint injectionPoint) {
-        return LoggerFactory.getLogger((injectionPoint.getMethodParameter().getContainingClass()));
+        return LoggerFactory.getLogger((Objects.requireNonNull(injectionPoint.getMethodParameter()).getContainingClass()));
     }
 }

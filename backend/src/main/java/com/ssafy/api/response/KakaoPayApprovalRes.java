@@ -12,16 +12,15 @@ import java.util.Date;
 public class KakaoPayApprovalRes {
     private String aid, tid, cid, sid;
     private String partner_order_id, partner_user_id, payment_method_type;
-    private AmountRes amount;
-    private CardRes card_info;
     private String item_name, item_code, payload;
-    private Integer quantity, tax_free_amount, vat_amount;
+    private Integer quantity;
     private Date created_at, approved_at;
 
-    public KakaoPayApprovalRes(String tid, String partner_order_id, String partner_user_id) {
+    public KakaoPayApprovalRes(String tid, String partner_order_id, String partner_user_id, String item_code) {
         this.tid = tid;
         this.partner_order_id = partner_order_id;
         this.partner_user_id = partner_user_id;
+        this.item_code = item_code;
     }
 
 }

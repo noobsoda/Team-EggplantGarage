@@ -3,12 +3,10 @@ import OpenViduVideoComponent from "./OvVideo";
 
 export default function LiveVideo({ streamManager }) {
   return (
-    <div>
+    <>
       {streamManager !== undefined ? (
-        <div className="streamcomponent">
-          <OpenViduVideoComponent streamManager={streamManager} />
-        </div>
+        <OpenViduVideoComponent streamManager={streamManager} />
       ) : null}
-    </div>
+    </>
   );
 }

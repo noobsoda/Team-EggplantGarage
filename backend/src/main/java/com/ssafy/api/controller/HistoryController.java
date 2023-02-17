@@ -4,26 +4,23 @@ import com.ssafy.api.response.LiveHistoryRes;
 import com.ssafy.api.response.ProductHistoryRes;
 import com.ssafy.api.service.HistoryService;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Api(value = "내역 API", tags = {"History."})
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/history")
 public class HistoryController {
     private final Logger logger;
-
-    @Autowired
-    public HistoryController(Logger logger) {
-        this.logger = logger;
-    }
-
-    @Autowired
-    HistoryService historyService;
+    private final HistoryService historyService;
 
     @GetMapping("/buyer/{buyerId}")
     @ApiOperation(value = "구매 내역 조회", notes = "구매 내역 정보를 응답한다.")

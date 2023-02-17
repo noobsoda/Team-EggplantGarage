@@ -1,182 +1,333 @@
-import { OpenVidu } from "openvidu-browser";
-import React, { useCallback, useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import UserVideoComponent from "../../Atoms/Video/LiveVideo";
-import { getToken } from "../../util/api/liveApi";
+import styled from "styled-components";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { checkUserInfo } from "../../store/user";
 
-export default function LiveShowSeller() {
-  const { sessionId } = useParams(); //방 아이디
+import ModalSeller from "../../Organisms/Modal/ModalBuyer";
+import LiveChatBox from "../../Molecules/Box/LiveChatBox";
+import BigMenuBtn from "../../Atoms/IconButtons/liveshow/BigMenuBtn";
+import MicBtn from "../../Atoms/IconButtons/liveshow/MicBtn";
+import CameraBtn from "../../Atoms/IconButtons/liveshow/CameraBtn";
+import FlipBtn from "../../Atoms/IconButtons/liveshow/FlipBtn";
+import ExitBtn from "../../Atoms/IconButtons/liveshow/ExitBtn";
+import { closeLive } from "../../util/api/liveApi";
 
-  const [myUserName] = useState("admin"); //방생성한 사람 이름
-  const [session, setSession] = useState(undefined);
-  const [, setMainStreamManager] = useState(undefined); // Main video of the page. Will be the 'publisher' or one of the 'subscribers'
-  const [publisher, setPublisher] = useState(undefined);
-  const [subscribers, setSubscribers] = useState([]);
-  const [, setCurrentVideoDevice] = useState(undefined);
+import Seller from "../../Templates/LiveShow/Seller";
 
-  const [OV] = useState(new OpenVidu());
+import { getLiveDetail } from "../../util/api/liveApi";
+import { getSellerSuggestList } from "../../util/api/productApi";
+
+import useInterval from "../../hook/useInterval";
+import ViewerCntBox from "../../Molecules/Box/ViewerCntBox";
+
+import getStompClient from "../../util/socket";
+
+const StyledPage = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: grey;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+//일단은 컴포넌트들이랑 바텀시트 구현해놓자.
+const StyledSide = styled.div`
+  width: 40px;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+`;
+const StyledHeader = styled.div`
+  width: calc(100% - 48px);
+  padding: 40px 24px;
+  display: flex;
+  justify-content: space-between;
+`;
+const StyledBody = styled.div`
+  height: 50%;
+  width: 100%;
+  //264+ padding값
+  padding: 0 24px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  row-gap: 24px;
+  position: absolute;
+  bottom: 0;
+`;
+const Title = styled.div`
+  color: white;
+`;
+const LiveLayout = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+`;
+export default function LiveshowSeller(toggleCamera) {
+  const { liveId } = useParams(); //방 아이디
+  const userInfo = useSelector(checkUserInfo); //현재 유저의 정보
+
+  const [isMic, setIsMic] = useState(true);
+  const [isCamera, setIsCamera] = useState(true);
+  const [isFlipped, setIsFlipped] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const [liveInfo, setLiveInfo] = useState({});
+  const [bundleList, setBundleList] = useState([]);
+
+  //소켓
+  const [stompClient] = useState(getStompClient()); //소켓
+  //메시지
+  const [messageList, setMessageList] = useState([]);
+  const [message, setMessage] = useState(""); // 입력 메세지
+
+  //종료 여부
+  const [isExit, setIsExit] = useState(false);
+
+  const navigate = useNavigate();
+
+  //5초마다 정보 불러오기
+  useInterval(() => {
+    getLiveInfo();
+  }, 5000);
 
   useEffect(() => {
-    //판매자가 방 생성
-    joinSession();
+    getLiveInfo();
+    getSuggest();
+    connect();
   }, []);
 
-  const leaveSession = useCallback(() => {
-    // --- 7) 세션에서 나옴
-    const mySession = session;
-    if (mySession) {
-      mySession.disconnect();
-    }
-    // Empty all properties...
-    setSubscribers([]);
-    setMainStreamManager(undefined);
-  }, [session]);
+  function getLiveInfo() {
+    getLiveDetail(
+      liveId,
+      ({ data }) => {
+        //라이브 중인지 확인
+        if (!data.live) {
+          alert("종료된 방입니다.");
+          navigate("/");
+          return;
+        }
 
-  useEffect(() => {
-    const onbeforeunload = () => {
-      leaveSession();
-    };
-    window.addEventListener("beforeunload", onbeforeunload); // componentDidMount
-    return () => {
-      window.removeEventListener("beforeunload", onbeforeunload);
-    };
-  }, [leaveSession]);
-
-  function joinSession() {
-    //const OVidu = new OpenVidu(); //오픈비두 생성
-    // --- 2) Init a session ---
-    let mySession = OV.initSession(); //세션 만들기 세션?
-    setSession(mySession); //세션을미리 저장
-
-    //스트림 생성
-    mySession.on("streamCreated", (event) => {
-      var subscriber = mySession.subscribe(event.stream, undefined);
-      var mySubscribers = subscribers;
-
-      mySubscribers.push(subscriber);
-
-      setSubscribers(mySubscribers);
-    });
-
-    // On every Stream destroyed...
-    mySession.on("streamDestroyed", (event) => {
-      // Remove the stream from 'subscribers' array
-      deleteSubscriber(event.stream.streamManager);
-    });
-
-    // On every asynchronous exception...
-    mySession.on("exception", (exception) => {
-      console.warn(exception);
-    });
-
-    // --- 4) 토큰을 받아서 연결을 한다.
-    getToken(sessionId).then((token) => {
-      mySession
-        .connect(token, { clientData: myUserName }) //해당 토큰을 가지고 유저명과 함께 연결을 진행
-        .then(async () => {
-          // --- 5) 카메라 세팅 ---
-
-          //퍼블리셔의 정보
-          let publisher = await OV.initPublisherAsync(undefined, {
-            audioSource: undefined, // The source of audio. If undefined default microphone
-            videoSource: undefined, // The source of video. If undefined default webcam
-            publishAudio: true, // Whether you want to start publishing with your audio unmuted or not
-            publishVideo: true, // Whether you want to start publishing with your video enabled or not
-            resolution: "1280x720", // The resolution of your video
-            frameRate: 30, // The frame rate of your video
-            insertMode: "APPEND", // How the video is inserted in the target element 'video-container'
-            mirror: false, // Whether to mirror your local video or not
-          });
-
-          // --- 6)
-          //판매자가 방송 시작
-          mySession.publish(publisher);
-
-          // 장비를 받는다.
-          var devices = await OV.getDevices();
-          var videoDevices = devices.filter(
-            (device) => device.kind === "videoinput"
-          );
-          //현재 판매자의 방송 장비를 확인
-          var currentVideoDeviceId = publisher.stream
-            .getMediaStream()
-            .getVideoTracks()[0]
-            .getSettings().deviceId;
-          var currentVideoDevice = videoDevices.find(
-            (device) => device.deviceId === currentVideoDeviceId
-          );
-
-          // 퍼블리셔 설정
-          setCurrentVideoDevice(currentVideoDevice);
-          setPublisher(publisher);
-          setMainStreamManager(publisher);
-        })
-        .catch((error) => {
-          console.log(
-            "There was an error connecting to the session:",
-            error.code,
-            error.message
-          );
-        });
-    });
-  }
-
-  //참가자 배열에서 제거
-  const deleteSubscriber = useCallback(
-    (streamManager) => {
-      let tmp_subscribers = subscribers;
-      let index = tmp_subscribers.indexOf(streamManager, 0);
-      if (index > -1) {
-        tmp_subscribers.splice(index, 1);
-        setSubscribers(tmp_subscribers); // 이거 안 되면 구조분해할당으로 업데이트 할 것
+        //내가 주인인지 확인
+        if (data.seller_id !== userInfo.id) {
+          alert("잘못된 접근입니다.");
+          navigate("/");
+          return;
+        }
+        setLiveInfo(data);
+      },
+      () => {
+        console.warn("live info fail");
       }
-    },
-    [subscribers]
-  );
-  // async function switchCamera() {
-  //   try {
-  //     const devices = await OV.getDevices();
-  //     var videoDevices = devices.filter(
-  //       (device) => device.kind === "videoinput"
-  //     );
-
-  //     if (videoDevices && videoDevices.length > 1) {
-  //       var newVideoDevice = videoDevices.filter(
-  //         (device) => device.deviceId !== currentVideoDevice.deviceId
-  //       );
-
-  //       if (newVideoDevice.length > 0) {
-  //         // Creating a new publisher with specific videoSource
-  //         // In mobile devices the default and first camera is the front one
-  //         var newPublisher = OV.initPublisher(undefined, {
-  //           videoSource: newVideoDevice[0].deviceId,
-  //           publishAudio: true,
-  //           publishVideo: true,
-  //           mirror: true,
-  //         });
-
-  //         //newPublisher.once("accessAllowed", () => {
-  //         await session.unpublish(mainStreamManager);
-
-  //         await session.publish(newPublisher);
-  //         setCurrentVideoDevice(newVideoDevice[0]);
-  //         setMainStreamManager(newPublisher);
-  //         setPublisher(newPublisher);
-  //       }
-  //     }
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // }
-
-  function getNicknameTag(streamManager) {
-    // Gets the nickName of the user
-    return JSON.parse(streamManager.stream.connection.data).clientData;
+    );
   }
+
+  const exit = () => {
+    closeLive(liveId, () => {
+      setIsExit(true);
+      navigate("/");
+    });
+  };
+
+  function getSuggest() {
+    getSellerSuggestList(
+      liveId,
+      ({ data }) => {
+        setBundleList(data);
+      },
+      () => {
+        console.warn("bundle load fail");
+      }
+    );
+  }
+
+  //** 소켓 관련
+  //연결
+  const connect = () => {
+    stompClient.connect({}, connectSuccess, connectError);
+  };
+  /**
+   * 연결 성공
+   */
+  const connectSuccess = () => {
+    stompClient.subscribe("/sub/live/" + liveId, onMessageReceived);
+    stompClient.send(
+      "/pub/live/addUser/" + liveId,
+      {},
+      JSON.stringify({
+        sender: userInfo.nickname,
+        type: "JOIN",
+        roomId: liveId,
+      })
+    );
+  };
+
+  /**
+   * 연결 실패
+   */
+  const connectError = () => {
+    console.warn("connectError!");
+  };
+
+  /**
+   * 메시지 받음
+   * @param {*} payload
+   */
+  const onMessageReceived = (payload) => {
+    const messageRecv = JSON.parse(payload.body);
+    if (messageRecv.type === "JOIN") {
+      getLiveInfo();
+      setMessageList((prevItems) => [
+        ...prevItems,
+        {
+          color: "white",
+          content: "[" + messageRecv.sender + "] 님이 입장하셨습니다.",
+        },
+      ]);
+    } else {
+      //REJECT, ACCEP,PAY,SUGGEST, CHAT
+      let color = "";
+      switch (messageRecv.type) {
+        case "REJECT":
+          getSuggest();
+          color = "red";
+          break;
+        case "ACCEPT":
+          getSuggest();
+          getLiveInfo();
+          color = "green";
+          break;
+        case "PAY":
+          getLiveInfo();
+          color = "green";
+          break;
+        case "SUGGEST":
+          getSuggest();
+          color = "purple";
+          break;
+        default:
+          color = "white";
+          break;
+      }
+
+      setMessageList((prevItems) => [
+        ...prevItems,
+        {
+          color: color,
+          content: `[${
+            messageRecv.type === "CHAT" ? messageRecv.sender : "INFO"
+          }] ${messageRecv.content}`,
+        },
+      ]);
+    }
+  };
+
+  /**
+   * 메시지 전송
+   */
+  const sendMessage = (msg, type) => {
+    if (msg && stompClient) {
+      var chatMessage = {
+        sender: userInfo.nickname,
+        roomId: liveId,
+        content: msg,
+        type: type,
+      };
+      stompClient.send(
+        "/pub/live/message/" + liveId,
+        {},
+        JSON.stringify(chatMessage)
+      );
+    }
+    setMessage("");
+  };
+
+  //채팅 입력
+  const chatMessage = () => {
+    sendMessage(message, "CHAT");
+    setMessage("");
+  };
 
   return (
-    <div className="container">
-      <UserVideoComponent streamManager={publisher} />
-    </div>
+    <StyledPage>
+      <Seller
+        liveId={liveId}
+        isCamera={isCamera}
+        isMic={isMic}
+        isFlipped={isFlipped}
+        exit={exit}
+        isExit={isExit}
+      />
+      <LiveLayout>
+        <StyledHeader>
+          <div
+            style={{ display: "flex", flexDirection: "column", rowGap: "16px" }}
+          >
+            <Title className="show-header">{liveInfo.title}</Title>
+            <ViewerCntBox
+              viewerCnt={
+                liveInfo.userEntryResList && liveInfo.userEntryResList.length
+              }
+            />
+          </div>
+          <StyledSide>
+            <BigMenuBtn
+              buttonClick={() => {
+                setModalOpen(true);
+              }}
+            />
+            <div>　</div>
+            <FlipBtn
+              buttonClick={() => {
+                setIsFlipped((cur) => !cur);
+              }}
+            />
+            <CameraBtn
+              buttonClick={() => {
+                setIsCamera((cur) => !cur);
+              }}
+              isClicked={!isCamera}
+            />
+            <MicBtn
+              buttonClick={() => {
+                setIsMic((cur) => !cur);
+              }}
+              isClicked={!isMic}
+            />
+            <ExitBtn
+              buttonClick={() => {
+                exit();
+              }}
+            />
+          </StyledSide>
+        </StyledHeader>
+        <StyledBody>
+          <LiveChatBox
+            message={message}
+            setMessage={setMessage}
+            messageList={messageList}
+            sendMessage={chatMessage}
+            stompClient={stompClient}
+          />
+        </StyledBody>
+      </LiveLayout>
+
+      {modalOpen && (
+        <ModalSeller
+          sendMessage={sendMessage}
+          productList={liveInfo.liveProductInfoList}
+          bundleList={bundleList}
+          setModalOpen={setModalOpen}
+          isSeller={true}
+          getSuggest={getSuggest}
+        />
+      )}
+    </StyledPage>
   );
 }

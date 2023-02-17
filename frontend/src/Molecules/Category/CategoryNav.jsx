@@ -1,23 +1,45 @@
-import React from "react";
-import styled from "styled-components";
+import React, { useState } from "react";
 import CategoryNavBtn from "../../Atoms/Buttons/CategoryNavBtn";
+import Container from "../../Templates/Layout/Container";
+import styled from "styled-components";
+import { categories } from "../../util/category";
 
-const StyledCategoryNav = styled.div`
-  width: 280px;
-  height: 40px;
+const StyledContainer = styled.div`
   display: flex;
+  // box-sizing: border-box;
+  // row-gap: 8px;
+  column-gap: 8px;
+  overflow-x: scroll;
+  margin: auto 0;
+  // height: 16px;
+  /* &::-webkit-scrollbar  */
+  /* display: none; */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 /*
 	live 내부에 thumbnail, viewercnt , seller_nickname,liveshow_title 등등 뽑혀야됨  
 */
-export default function CategoryNav({ liveshow, buttonClick }) {
+export default function CategoryNav({ setSelected }) {
   //useState , event
+  const [select, setSelect] = useState("인기");
+
   return (
-    <StyledCategoryNav>
-      <CategoryNavBtn></CategoryNavBtn>
-      <CategoryNavBtn></CategoryNavBtn>
-      <CategoryNavBtn></CategoryNavBtn>
-      <CategoryNavBtn></CategoryNavBtn>
-    </StyledCategoryNav>
+    <StyledContainer>
+      {categories.map((name) => {
+        return (
+          <CategoryNavBtn
+            key={name}
+            name={name}
+            buttonClick={() => {
+              setSelected(name);
+              setSelect(name);
+            }}
+            isSelected={name === select}
+          />
+        );
+      })}
+    </StyledContainer>
   );
 }

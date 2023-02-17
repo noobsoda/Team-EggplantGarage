@@ -25,7 +25,8 @@ const GlobalStyle = createGlobalStyle`
         padding: 0;
         border: 0;
         font-size: 100%;
-        font: inherit;
+        /* font: inherit; */
+        font-family: 'Noto Sans KR', sans-serif;
         vertical-align: baseline;
     }
     /* HTML5 display-role reset for older browsers */
@@ -65,8 +66,15 @@ const GlobalStyle = createGlobalStyle`
 
 
     // garage typography
-    .page-header{
+    .show-header{
         font-family: 'Inter';
+        font-style: normal;
+        font-weight: 900;
+        font-size: 28px;
+        line-height: 24px;
+    }
+    .page-header{
+        font-family: 'Noto Sans KR', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 20px;
@@ -74,7 +82,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     .body1-header{
-        font-family: 'Inter';
+        font-family: 'Noto Sans KR', sans-serif;
         font-style: normal;
         font-weight: 700;
         font-size: 16px;
@@ -82,7 +90,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     .body1-regular{
-        font-family: 'Inter';
+        font-family: 'Noto Sans KR', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
@@ -90,7 +98,7 @@ const GlobalStyle = createGlobalStyle`
     }
 
     .body1-link{
-        font-family: 'Inter';
+        font-family: 'Noto Sans KR', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 16px;
@@ -101,31 +109,31 @@ const GlobalStyle = createGlobalStyle`
     }
 
     .body2-regular{
-        font-family: 'Inter';
+        font-family: 'Noto Sans KR', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 12px;
         line-height: 16px;
     }
     .tapbar{
-        font-family: 'Inter';
+        font-family: 'Noto Sans KR', sans-serif;
         font-style: normal;
         font-weight: 400;
         font-size: 10px;
         line-height: 16px;
     }
     .body2-bold{
-        font-family: 'Inter';
+        font-family: 'Noto Sans KR', sans-serif;
         font-style: normal;
-        font-weight: 700;
+        font-weight: 500;
         font-size: 12px;
         line-height: 15px;
     }
 
     .body3-bold{
-        font-family: 'Inter';
+        font-family: 'Noto Sans KR', sans-serif;
         font-style: normal;
-        font-weight: 700;
+        font-weight: 500;
         font-size: 8px;
         line-height: 16px;
     }

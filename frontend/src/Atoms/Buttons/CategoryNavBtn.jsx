@@ -1,19 +1,34 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-const StyledCategoryBtn = styled.button`
-  // 이부분이 잘모르겠는게 안에 텍스트 내용에 따라서 사이즈가 바뀔것.
-  width: 64px;
-  height: 24px;
-  border-radius: 8px;
-  background-color: ${({ theme }) => theme.color.red};
-  color: ${({ theme }) => theme.color.white};
+const StyledCategoryBtn = styled.div`
+  height: 16.5px;
+  padding: 1.5px 10px 0;
+  border-radius: 12px;
+  background-color: ${({ theme }) => theme.color.white};
+  border: 2px solid;
+  /* box-sizing: border-box; */
+  border-color: ${({ theme }) => theme.color.graypurple};
+  color: ${({ theme }) => theme.color.graypurple};
+  flex: 0 0 auto;
+  text-align: center;
+  vertical-align: middle;
+  margin: 4px 0px;
+
+  ${(props) =>
+    props.selected === true &&
+    css`
+      background-color: ${({ theme }) => theme.color.graypurple};
+      color: ${({ theme }) => theme.color.white};
+    `};
 `;
 
-export default function CategoryNavBtn({ name, buttonClick }) {
+export default function CategoryNavBtn({ name = "전체", buttonClick, isSelected }) {
   return (
-    <StyledCategoryBtn className="body2-bold" onClick={buttonClick}>
-      카테고리
-    </StyledCategoryBtn>
+    <>
+      <StyledCategoryBtn className="body2-bold" onClick={buttonClick} selected={isSelected}>
+        {name}
+      </StyledCategoryBtn>
+    </>
   );
 }
