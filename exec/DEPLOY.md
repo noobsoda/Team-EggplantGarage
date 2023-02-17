@@ -412,7 +412,7 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 
 ## Jenkins shell 설정
 
-> docker-compose down --volumes
+> docker-compose down -v
 > docker-compose up --build -d
 
 # Getting Started
