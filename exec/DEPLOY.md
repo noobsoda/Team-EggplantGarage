@@ -410,6 +410,11 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 >
 >   <img src = "https://user-images.githubusercontent.com/76441040/219577571-0feeefc8-21d6-4ce5-8d24-a1afb8ac24f4.png" width="50%" height="50%"/>
 
+## Jenkins shell 설정
+
+> docker-compose down --volumes
+> docker-compose up --build -d
+
 # Getting Started
 
 > 1.  Clone this repository to your local machine.
