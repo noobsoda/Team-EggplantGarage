@@ -144,9 +144,9 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 > - volumes를 통해 컨테이너와 파일 공유
 >
 > ```
->version: '3'
+> version: '3'
 >
->services:
+> services:
 >  database-mysql:
 >    container_name: database-mysql
 >    image: mysql/mysql-server:5.7
@@ -203,10 +203,11 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 >    networks:
 >      - eggplant_network
 >
->networks:
+> networks:
 >  eggplant_network:
+> ```
 
-
+> ```
 >
 > ```
 
@@ -221,7 +222,7 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 > ```
 >
 >
->server{
+> server{
 >    listen 80;
 >    listen [::]:80;
 >    server_name i8b105.p.ssafy.io;
@@ -230,8 +231,8 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 >    location / {
 >        proxy_pass https://i8b105.p.ssafy.io:8000;
 >    }
->}
->server {
+> }
+> server {
 >    listen 443 ssl;
 >    server_name i8b105.p.ssafy.io;
 >
@@ -244,7 +245,7 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 >        proxy_http_version 1.1;
 >        proxy_set_header Upgrade $http_upgrade;
 >        proxy_set_header Connection "upgrade";
->            proxy_set_header Origin ""; 
+>            proxy_set_header Origin "";
 >
 >            proxy_set_header X-Real-IP $remote_addr;
 >        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -252,10 +253,10 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 >    }
 >    location /openlive {
 >        proxy_pass https://i8b105.p.ssafy.io:8443;
->        
->    }      
->    
->}
+>
+>    }
+>
+> }
 > ```
 
 ## Dockerfile
@@ -368,31 +369,30 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 
 > **1. Secret Token에서 토큰을 받기**
 >
->   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/9ff55f96503b986c6d0c702020143f4e/image.png" width="50%" height="50%"/>
+>   <img src = "https://user-images.githubusercontent.com/76441040/219575983-e4fbdf2b-3601-43c1-8341-e5a20c9d7d9a.png" width="50%" height="50%"/>
 >
 > **2. 빌드 웹훅 체크하고 URL 받기**
 >
->   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/5b6bc13765cb4da547b6ceea308bbe2c/image.png" width="50%" height="50%"/>
+>   <img src = "https://user-images.githubusercontent.com/76441040/219576759-fdfc3686-313d-40c7-8c92-97331c0c71b1.png" width="50%" height="50%"/>
 >
 > **3. 어떤 브랜치에서 받아올지 설정하기**
 >
 > - Example `*/release*` release라는 이름이 붙은 모든 브랜치에 웹훅을 설정 release-1, release-2...
 >
->  <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/1f217f4bbe170da43011f0b0f43c4945/image.png" width="50%" height="50%"/>
->
+>  <img src = "https://user-images.githubusercontent.com/76441040/219576858-4a391824-393e-444e-8961-abe28ac6ba2d.png" width="50%" height="50%"/>
 > **4. 깃랩 웹훅 설정**
 >
->   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/2e5c30d8eb910ab3466bebe2690546c4/image.png" width="50%" height="50%"/>
+>   <img src = "https://user-images.githubusercontent.com/76441040/219576968-1d31872c-db87-4851-bcd2-b58c1c3f3da6.png" width="50%" height="50%"/>
 >
 > **5. URL과 Secret Token 설정 후 만약 Push 이벤트가 일어났을 때 어떤 브랜치에서 이벤트가 일어났을 때 보내는지 설정**
 >
->   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/e90b5f53cc3ec4e2426e19c72283ca3f/image.png" width="50%" height="50%"/>
+>   <img src = "https://user-images.githubusercontent.com/76441040/219577092-d2709dbd-d989-4bcb-afa5-35b735df5751.png" width="50%" height="50%"/>
 >
 > **6. Enable SSL verification을 설정한다면 Jenkins에서도 CSRF 설정을 해야한다.**
 >
 > - Jenkins관리 -> Configure Global Security -> CSRF 설정
 >
->  <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/998a34441469e9fcc7903ae7d92fa7e7/image.png" width="50%" height="50%"/>
+>  <img src = "https://user-images.githubusercontent.com/76441040/219577206-68fdc931-5763-4173-9e1c-095efa703f25.png" width="50%" height="50%"/>
 
 ## Jenkins Build 설정
 
@@ -400,19 +400,19 @@ Webhook이 설정되어 있어 Gitlab 특정 브랜치에 Push한 프로젝트�
 >
 > **1. Jenkins NodeJs 설정**
 >
->   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/95f1ba21f9ddd3881bbda935dcc4cf5a/image.png" width="25%" height="25%"/>
+>   <img src = "https://user-images.githubusercontent.com/76441040/219577301-e2775e81-401f-439e-8a62-a455f980244d.png" width="25%" height="25%"/>
 >
 > **2. Jenkins Gradle 설정**
 >
->   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/a9520b2a224d5680cf949d51b4009a6c/image.png" width="25%" height="25%"/>
+>   <img src = "https://user-images.githubusercontent.com/76441040/219577448-e4d54756-ed8a-47d0-8837-6fb3c2e7c840.png" width="25%" height="25%"/>
 >
 > **3. Jenkins가 NodeJS build중 Eslint에서 뜨는 warning을 오류로 받아들이지 않게 CI 설정**
 >
->   <img src = "https://lab.ssafy.com/s08-webmobile1-sub2/S08P12B105/uploads/0f066fa0e65a3db0874660a93879a6d9/image.png" width="50%" height="50%"/>
+>   <img src = "https://user-images.githubusercontent.com/76441040/219577571-0feeefc8-21d6-4ce5-8d24-a1afb8ac24f4.png" width="50%" height="50%"/>
 
 # Getting Started
->
->1. Clone this repository to your local machine.
->2. Open a terminal in the project root directory and run docker-compose up -d to start the application stack.
->3. Open your web browser and go to http://localhost:8000 to access the application.
->4. To shut down the application stack, run docker-compose down in the terminal.
+
+> 1.  Clone this repository to your local machine.
+> 2.  Open a terminal in the project root directory and run docker-compose up -d to start the application stack.
+> 3.  Open your web browser and go to http://localhost:8000 to access the application.
+> 4.  To shut down the application stack, run docker-compose down in the terminal.
